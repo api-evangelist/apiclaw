@@ -1,0 +1,2257 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Budget & Spend Tracking API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Budget & Spend Tracking
+paths:
+  /user/daily/activity:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Get User Daily Activity
+      description: '[BETA] This is a beta endpoint. It will change.
+
+
+        Meant to optimize querying spend data for analytics for a user.
+
+
+        Reads daily spend records that only ever accumulate and are never affected by budget
+
+        resets. Their total can legitimately exceed the `spend` field returned by
+
+        `/v2/user/info`, which is a running budget counter that every budget reset sets back
+
+        to zero (or to the overage above `max_budget` when `budget_rollover` is enabled).
+
+
+        Returns:
+
+        (by date)
+
+        - spend
+
+        - prompt_tokens
+
+        - completion_tokens
+
+        - cache_read_input_tokens
+
+        - cache_creation_input_tokens
+
+        - total_tokens
+
+        - api_requests
+
+        - breakdown by model, api_key, provider'
+      operationId: get_user_daily_activity_user_daily_activity_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Start date in YYYY-MM-DD format
+          title: Start Date
+        description: Start date in YYYY-MM-DD format
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: End date in YYYY-MM-DD format
+          title: End Date
+        description: End date in YYYY-MM-DD format
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific model
+          title: Model
+        description: Filter by specific model
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific API key
+          title: Api Key
+        description: Filter by specific API key
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+          title: User Id
+        description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number for pagination
+          default: 1
+          title: Page
+        description: Page number for pagination
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: Items per page
+          default: 50
+          title: Page Size
+        description: Items per page
+      - name: timezone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+          title: Timezone
+        description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+      - name: include_current_utc_day
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+          default: false
+          title: Include Current Utc Day
+        description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpendAnalyticsPaginatedResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user/daily/activity/aggregated:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Get User Daily Activity Aggregated
+      description: 'Aggregated analytics for a user''s daily activity without pagination.
+
+        Returns the same response shape as the paginated endpoint with page metadata set to single-page.
+
+
+        Reads daily spend records that only ever accumulate and are never affected by budget
+
+        resets. Their total can legitimately exceed the `spend` field returned by
+
+        `/v2/user/info`, which is a running budget counter that every budget reset sets back
+
+        to zero (or to the overage above `max_budget` when `budget_rollover` is enabled).'
+      operationId: get_user_daily_activity_aggregated_user_daily_activity_aggregated_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Start date in YYYY-MM-DD format
+          title: Start Date
+        description: Start date in YYYY-MM-DD format
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: End date in YYYY-MM-DD format
+          title: End Date
+        description: End date in YYYY-MM-DD format
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific model
+          title: Model
+        description: Filter by specific model
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific API key
+          title: Api Key
+        description: Filter by specific API key
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+          title: User Id
+        description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+      - name: timezone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+          title: Timezone
+        description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+      - name: include_current_utc_day
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+          default: false
+          title: Include Current Utc Day
+        description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpendAnalyticsPaginatedResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /management/v1/spend_logs/end_users:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: List Spend Log End Users
+      description: 'The distinct end users appearing in spend logs over a time window, for the logs
+
+        page filter dropdown.
+
+
+        Scoped like `/spend/logs/ui`: a proxy admin sees every end user in the window,
+
+        anyone else sees only end users from their own requests or from teams they
+
+        administer (or hold the `/spend/logs` permission on).
+
+
+        The window is required and the inner scan is capped at SPEND_LOGS_FACET_SCAN_CAP
+
+        rows, so the query cannot degrade into a full-table scan the way
+
+        `/global/all_end_users` does.
+
+
+        Example curl:
+
+        ```
+
+        curl --location --globoff ''http://0.0.0.0:4000/management/v1/spend_logs/end_users?filter[startTime][gte]=2026-07-23T00:00:00Z&filter[startTime][lte]=2026-07-24T00:00:00Z&page_size=50&q=acme'' --header ''Authorization: Bearer sk-1234''
+
+        ```'
+      operationId: list_spend_log_end_users_management_v1_spend_logs_end_users_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: filter[startTime][gte]
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+          description: Window start (UTC when no offset is given)
+          title: Filter[Starttime][Gte]
+        description: Window start (UTC when no offset is given)
+      - name: filter[startTime][lte]
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+          description: Window end (UTC when no offset is given)
+          title: Filter[Starttime][Lte]
+        description: Window end (UTC when no offset is given)
+      - name: q
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Case-insensitive partial match on the end user id
+          title: Q
+        description: Case-insensitive partial match on the end user id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number
+          default: 1
+          title: Page
+        description: Page number
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Page size
+          default: 50
+          title: Page Size
+        description: Page size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacetListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /management/v1/spend_logs/users:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: List Spend Log Users
+      description: The distinct internal users appearing in spend logs the caller can read.
+      operationId: list_spend_log_users_management_v1_spend_logs_users_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: filter[startTime][gte]
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+          description: Window start (UTC when no offset is given)
+          title: Filter[Starttime][Gte]
+        description: Window start (UTC when no offset is given)
+      - name: filter[startTime][lte]
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+          description: Window end (UTC when no offset is given)
+          title: Filter[Starttime][Lte]
+        description: Window end (UTC when no offset is given)
+      - name: q
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Case-insensitive partial match on the internal user id
+          title: Q
+        description: Case-insensitive partial match on the internal user id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number
+          default: 1
+          title: Page
+        description: Page number
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Page size
+          default: 50
+          title: Page Size
+        description: Page size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FacetListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /spend/tags:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: View Spend Tags
+      description: 'LiteLLM Enterprise - View Spend Per Request Tag
+
+
+        Example Request:
+
+        ```
+
+        curl -X GET "http://0.0.0.0:8000/spend/tags" -H "Authorization: Bearer sk-1234"
+
+        ```
+
+
+        Spend with Start Date and End Date
+
+        ```
+
+        curl -X GET "http://0.0.0.0:8000/spend/tags?start_date=2022-01-01&end_date=2022-02-01" -H "Authorization: Bearer sk-1234"
+
+        ```'
+      operationId: view_spend_tags_spend_tags_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time from which to start viewing key spend
+          title: Start Date
+        description: Time from which to start viewing key spend
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time till which to view key spend
+          title: End Date
+        description: Time till which to view key spend
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LiteLLM_SpendLogs'
+                title: Response 200 View Spend Tags Spend Tags Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /global/spend/report:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Get Global Spend Report
+      description: 'Get Daily Spend per Team, based on specific startTime and endTime. Per team, view usage by each key, model
+
+        [
+
+        {
+
+        "group-by-day": "2024-05-10",
+
+        "teams": [
+
+        {
+
+        "team_name": "team-1"
+
+        "spend": 10,
+
+        "keys": [
+
+        "key": "1213",
+
+        "usage": {
+
+        "model-1": {
+
+        "cost": 12.50,
+
+        "input_tokens": 1000,
+
+        "output_tokens": 5000,
+
+        "requests": 100
+
+        },
+
+        "audio-modelname1": {
+
+        "cost": 25.50,
+
+        "seconds": 25,
+
+        "requests": 50
+
+        },
+
+        }
+
+        }
+
+        ]
+
+        ]
+
+        }'
+      operationId: get_global_spend_report_global_spend_report_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time from which to start viewing spend
+          title: Start Date
+        description: Time from which to start viewing spend
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time till which to view spend
+          title: End Date
+        description: Time till which to view spend
+      - name: group_by
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - enum:
+            - team
+            - customer
+            - api_key
+            type: string
+          - type: 'null'
+          description: Group spend by internal team or customer or api_key
+          default: team
+          title: Group By
+        description: Group spend by internal team or customer or api_key
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: View spend for a specific api_key. Pass the key's sha256 hash so the raw key stays out of URLs and access logs. Example api_key='d5345c0ecc68ae6295c69f91926b2bd379e25481a40c34b5884d157a9f65d8fa'
+          title: Api Key
+        description: View spend for a specific api_key. Pass the key's sha256 hash so the raw key stays out of URLs and access logs. Example api_key='d5345c0ecc68ae6295c69f91926b2bd379e25481a40c34b5884d157a9f65d8fa'
+      - name: internal_user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: View spend for a specific internal_user_id. Example internal_user_id='1234
+          title: Internal User Id
+        description: View spend for a specific internal_user_id. Example internal_user_id='1234
+      - name: team_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: View spend for a specific team_id. Example team_id='1234
+          title: Team Id
+        description: View spend for a specific team_id. Example team_id='1234
+      - name: customer_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: View spend for a specific customer_id. Example customer_id='1234. Can be used in conjunction with team_id as well.
+          title: Customer Id
+        description: View spend for a specific customer_id. Example customer_id='1234. Can be used in conjunction with team_id as well.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LiteLLM_SpendLogs'
+                title: Response 200 Get Global Spend Report Global Spend Report Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /key/spend/report:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Get Key Spend Report
+      description: 'Get spend for the calling api_key over a date range, with a per-model breakdown.
+
+
+        Same row shape as `/global/spend/report?api_key=...`, but callable by any key:
+
+        non-admin callers are always scoped to their own api_key, while proxy admins
+
+        may pass `?api_key=` to view any key.'
+      operationId: get_key_spend_report_key_spend_report_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time from which to start viewing spend (YYYY-MM-DD)
+          title: Start Date
+        description: Time from which to start viewing spend (YYYY-MM-DD)
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time till which to view spend (YYYY-MM-DD)
+          title: End Date
+        description: Time till which to view spend (YYYY-MM-DD)
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: View spend for a specific api_key. Proxy admin only; other callers are scoped to their own key. Pass the key's sha256 hash so the raw key stays out of URLs and access logs. Example api_key='d5345c0ecc68ae6295c69f91926b2bd379e25481a40c34b5884d157a9f65d8fa'
+          title: Api Key
+        description: View spend for a specific api_key. Proxy admin only; other callers are scoped to their own key. Pass the key's sha256 hash so the raw key stays out of URLs and access logs. Example api_key='d5345c0ecc68ae6295c69f91926b2bd379e25481a40c34b5884d157a9f65d8fa'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+                title: Response Get Key Spend Report Key Spend Report Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user/spend/report:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Get User Spend Report
+      description: 'Get spend for the calling user over a date range, grouped by api_key with a per-model breakdown.
+
+
+        Same row shape as `/global/spend/report?internal_user_id=...`, but callable by
+
+        any key with a user: non-admin callers are always scoped to their own user_id,
+
+        while proxy admins may pass `?internal_user_id=` to view any user.'
+      operationId: get_user_spend_report_user_spend_report_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time from which to start viewing spend (YYYY-MM-DD)
+          title: Start Date
+        description: Time from which to start viewing spend (YYYY-MM-DD)
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time till which to view spend (YYYY-MM-DD)
+          title: End Date
+        description: Time till which to view spend (YYYY-MM-DD)
+      - name: internal_user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: View spend for a specific internal_user_id. Proxy admin only; other callers are scoped to their own user_id.
+          title: Internal User Id
+        description: View spend for a specific internal_user_id. Proxy admin only; other callers are scoped to their own user_id.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+                title: Response Get User Spend Report User Spend Report Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /team/spend/report:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Get Team Spend Report
+      description: 'Get spend for the calling key''s team over a date range, grouped by api_key with a per-model breakdown.
+
+
+        Callable by any key that belongs to a team: non-admin callers are always
+
+        scoped to their key''s team_id, while proxy admins may pass `?team_id=` to
+
+        view any team.'
+      operationId: get_team_spend_report_team_spend_report_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time from which to start viewing spend (YYYY-MM-DD)
+          title: Start Date
+        description: Time from which to start viewing spend (YYYY-MM-DD)
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time till which to view spend (YYYY-MM-DD)
+          title: End Date
+        description: Time till which to view spend (YYYY-MM-DD)
+      - name: team_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: View spend for a specific team_id. Proxy admin only; other callers are scoped to their key's team.
+          title: Team Id
+        description: View spend for a specific team_id. Proxy admin only; other callers are scoped to their key's team.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+                title: Response Get Team Spend Report Team Spend Report Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /organization/spend/report:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Get Organization Spend Report
+      description: 'Get spend for an organization over a date range, grouped by api_key with a per-model and per-team breakdown.
+
+
+        Covers spend logged against the organization directly and against any of its
+
+        teams. Callable by proxy admins (any organization) and org admins (their own
+
+        organizations). Defaults to the calling key''s organization_id when
+
+        `?organization_id=` is omitted.'
+      operationId: get_organization_spend_report_organization_spend_report_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time from which to start viewing spend (YYYY-MM-DD)
+          title: Start Date
+        description: Time from which to start viewing spend (YYYY-MM-DD)
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time till which to view spend (YYYY-MM-DD)
+          title: End Date
+        description: Time till which to view spend (YYYY-MM-DD)
+      - name: organization_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: View spend for a specific organization_id. Proxy admins may pass any organization; org admins are scoped to organizations they administer.
+          title: Organization Id
+        description: View spend for a specific organization_id. Proxy admins may pass any organization; org admins are scoped to organizations they administer.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+                title: Response Get Organization Spend Report Organization Spend Report Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /global/spend/tags:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Global View Spend Tags
+      description: 'LiteLLM Enterprise - View Spend Per Request Tag. Used by LiteLLM UI
+
+
+        Example Request:
+
+        ```
+
+        curl -X GET "http://0.0.0.0:4000/spend/tags" -H "Authorization: Bearer sk-1234"
+
+        ```
+
+
+        Spend with Start Date and End Date
+
+        ```
+
+        curl -X GET "http://0.0.0.0:4000/spend/tags?start_date=2022-01-01&end_date=2022-02-01" -H "Authorization: Bearer sk-1234"
+
+        ```'
+      operationId: global_view_spend_tags_global_spend_tags_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time from which to start viewing key spend
+          title: Start Date
+        description: Time from which to start viewing key spend
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time till which to view key spend
+          title: End Date
+        description: Time till which to view key spend
+      - name: tags
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: comman separated tags to filter on
+          title: Tags
+        description: comman separated tags to filter on
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LiteLLM_SpendLogs'
+                title: Response 200 Global View Spend Tags Global Spend Tags Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /spend/calculate:
+    post:
+      tags:
+      - Budget & Spend Tracking
+      summary: Calculate Spend
+      description: 'Accepts all the params of completion_cost.
+
+
+        Calculate spend **before** making call:
+
+
+        Note: If you see a spend of $0.0 you need to set custom_pricing for your model: https://docs.litellm.ai/docs/proxy/custom_pricing
+
+
+        ```
+
+        curl --location ''http://localhost:4000/spend/calculate''
+
+        --header ''Authorization: Bearer sk-1234''
+
+        --header ''Content-Type: application/json''
+
+        --data ''{
+
+        "model": "anthropic.claude-v2",
+
+        "messages": [{"role": "user", "content": "Hey, how''''''s it going?"}]
+
+        }''
+
+        ```
+
+
+        Calculate spend **after** making call:
+
+
+        ```
+
+        curl --location ''http://localhost:4000/spend/calculate''
+
+        --header ''Authorization: Bearer sk-1234''
+
+        --header ''Content-Type: application/json''
+
+        --data ''{
+
+        "completion_response": {
+
+        "id": "chatcmpl-123",
+
+        "object": "chat.completion",
+
+        "created": 1677652288,
+
+        "model": "gpt-3.5-turbo-0125",
+
+        "system_fingerprint": "fp_44709d6fcb",
+
+        "choices": [{
+
+        "index": 0,
+
+        "message": {
+
+        "role": "assistant",
+
+        "content": "Hello there, how may I assist you today?"
+
+        },
+
+        "logprobs": null,
+
+        "finish_reason": "stop"
+
+        }]
+
+        "usage": {
+
+        "prompt_tokens": 9,
+
+        "completion_tokens": 12,
+
+        "total_tokens": 21
+
+        }
+
+        }
+
+        }''
+
+        ```'
+      operationId: calculate_spend_spend_calculate_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SpendCalculateRequest'
+        required: true
+      responses:
+        '200':
+          description: The calculated cost
+          content:
+            application/json:
+              schema:
+                properties:
+                  cost:
+                    type: number
+                    description: The calculated cost
+                    example: 0.0
+                type: object
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /spend/logs/v2:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Ui View Spend Logs
+      description: 'View spend logs with pagination support.
+
+        Available at both `/spend/logs/v2` (public API) and `/spend/logs/ui` (internal UI).
+
+
+        Returns paginated response with data, total, page, page_size, and total_pages.
+
+
+        Example:
+
+        ```
+
+        curl -X GET "http://0.0.0.0:8000/spend/logs/v2?start_date=2025-11-25%2000:00:00&end_date=2025-11-26%2023:59:59&page=1&page_size=50" -H "Authorization: Bearer sk-1234"
+
+        ```'
+      operationId: ui_view_spend_logs_spend_logs_v2_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Get spend logs based on api key
+          title: Api Key
+        description: Get spend logs based on api key
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Get spend logs based on user_id
+          title: User Id
+        description: Get spend logs based on user_id
+      - name: request_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: request_id to get spend logs for specific request_id
+          title: Request Id
+        description: request_id to get spend logs for specific request_id
+      - name: session_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter spend logs by session_id (partial string match)
+          title: Session Id
+        description: Filter spend logs by session_id (partial string match)
+      - name: team_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter spend logs by team_id
+          title: Team Id
+        description: Filter spend logs by team_id
+      - name: min_spend
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Filter logs with spend greater than or equal to this value
+          title: Min Spend
+        description: Filter logs with spend greater than or equal to this value
+      - name: max_spend
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Filter logs with spend less than or equal to this value
+          title: Max Spend
+        description: Filter logs with spend less than or equal to this value
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time from which to start viewing key spend
+          title: Start Date
+        description: Time from which to start viewing key spend
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time till which to view key spend
+          title: End Date
+        description: Time till which to view key spend
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number for pagination
+          default: 1
+          title: Page
+        description: Page number for pagination
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: Number of items per page
+          default: 50
+          title: Page Size
+        description: Number of items per page
+      - name: status_filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter logs by status (e.g., success, failure)
+          title: Status Filter
+        description: Filter logs by status (e.g., success, failure)
+      - name: cache_hit_filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Filter logs by cache state: ''hit'' or ''miss''. Miss includes legacy rows with a null/unknown cache state'
+          title: Cache Hit Filter
+        description: 'Filter logs by cache state: ''hit'' or ''miss''. Miss includes legacy rows with a null/unknown cache state'
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter logs by model
+          title: Model
+        description: Filter logs by model
+      - name: model_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter logs by model ID (litellm model deployment id)
+          title: Model Id
+        description: Filter logs by model ID (litellm model deployment id)
+      - name: model_group
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter logs by model group
+          title: Model Group
+        description: Filter logs by model group
+      - name: key_alias
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter logs by key alias
+          title: Key Alias
+        description: Filter logs by key alias
+      - name: end_user
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter logs by end user
+          title: End User
+        description: Filter logs by end user
+      - name: error_code
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter logs by error code (e.g., '404', '500')
+          title: Error Code
+        description: Filter logs by error code (e.g., '404', '500')
+      - name: error_message
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter logs by error message (partial string match)
+          title: Error Message
+        description: Filter logs by error message (partial string match)
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Sort logs by field: spend, total_tokens, startTime, endTime, request_duration_ms, model, or ttft_ms'
+          default: startTime
+          title: Sort By
+        description: 'Sort logs by field: spend, total_tokens, startTime, endTime, request_duration_ms, model, or ttft_ms'
+      - name: sort_order
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Sort order: asc or desc'
+          default: desc
+          title: Sort Order
+        description: 'Sort order: asc or desc'
+      - name: exclude_internal_health_checks
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Exclude LiteLLM internal health check requests from results
+          default: false
+          title: Exclude Internal Health Checks
+        description: Exclude LiteLLM internal health check requests from results
+      - name: group_by_session
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: 'Paginate over sessions instead of raw logs: one representative row per session, total counts sessions'
+          default: false
+          title: Group By Session
+        description: 'Paginate over sessions instead of raw logs: one representative row per session, total counts sessions'
+      - name: session_cursor
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Keyset cursor '<last_activity>|<api_key>|<session_key>' from a previous group_by_session page. UI route only, honored when sorting by startTime
+          title: Session Cursor
+        description: Keyset cursor '<last_activity>|<api_key>|<session_key>' from a previous group_by_session page. UI route only, honored when sorting by startTime
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Match a log whose request_id, api_key (hash), team_id, user, end_user, session_id, or model_id equals this value. request_id matches across all time; the other columns match inside start_date/end_date, which stay required
+          title: Search
+        description: Match a log whose request_id, api_key (hash), team_id, user, end_user, session_id, or model_id equals this value. request_id matches across all time; the other columns match inside start_date/end_date, which stay required
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response 200 Ui View Spend Logs Spend Logs V2 Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /spend/logs:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: View Spend Logs
+      description: '[DEPRECATED] This endpoint is not paginated and can cause performance issues.
+
+        Please use `/spend/logs/v2` instead for paginated access to spend logs.
+
+
+        Row results are capped at 10,000 most recent entries per response.
+
+
+        View all spend logs, if request_id is provided, only logs for that request_id will be returned
+
+
+        When start_date and end_date are provided:
+
+        - summarize=true (default): Returns aggregated spend data grouped by date (maintains backward compatibility)
+
+        - summarize=false: Returns filtered individual log entries within the date range
+
+
+        Example Request for all logs
+
+        ```
+
+        curl -X GET "http://0.0.0.0:8000/spend/logs" -H "Authorization: Bearer sk-1234"
+
+        ```
+
+
+        Example Request for specific request_id
+
+        ```
+
+        curl -X GET "http://0.0.0.0:8000/spend/logs?request_id=chatcmpl-6dcb2540-d3d7-4e49-bb27-291f863f112e" -H "Authorization: Bearer sk-1234"
+
+        ```
+
+
+        Example Request for specific api_key
+
+        ```
+
+        curl -X GET "http://0.0.0.0:8000/spend/logs?api_key=d5345c0ecc68ae6295c69f91926b2bd379e25481a40c34b5884d157a9f65d8fa" -H "Authorization: Bearer sk-1234"
+
+        ```
+
+
+        Example Request for specific user_id
+
+        ```
+
+        curl -X GET "http://0.0.0.0:8000/spend/logs?user_id=ishaan@berri.ai" -H "Authorization: Bearer sk-1234"
+
+        ```
+
+
+        Example Request for date range with individual logs (unsummarized)
+
+        ```
+
+        curl -X GET "http://0.0.0.0:8000/spend/logs?start_date=2024-01-01&end_date=2024-01-02&summarize=false" -H "Authorization: Bearer sk-1234"
+
+        ```'
+      operationId: view_spend_logs_spend_logs_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Get spend logs based on api key
+          title: Api Key
+        description: Get spend logs based on api key
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Get spend logs based on user_id
+          title: User Id
+        description: Get spend logs based on user_id
+      - name: request_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: request_id to get spend logs for specific request_id. If none passed then pass spend logs for all requests
+          title: Request Id
+        description: request_id to get spend logs for specific request_id. If none passed then pass spend logs for all requests
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time from which to start viewing key spend
+          title: Start Date
+        description: Time from which to start viewing key spend
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Time till which to view key spend
+          title: End Date
+        description: Time till which to view key spend
+      - name: summarize
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When start_date and end_date are provided, summarize=true returns aggregated data by date (legacy behavior), summarize=false returns filtered individual logs
+          default: true
+          title: Summarize
+        description: When start_date and end_date are provided, summarize=true returns aggregated data by date (legacy behavior), summarize=false returns filtered individual logs
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LiteLLM_SpendLogs'
+                title: Response 200 View Spend Logs Spend Logs Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /global/spend/reset:
+    post:
+      tags:
+      - Budget & Spend Tracking
+      summary: Global Spend Reset
+      description: 'ADMIN ONLY / MASTER KEY Only Endpoint
+
+
+        Globally reset spend for All API Keys and Teams, maintain LiteLLM_SpendLogs
+
+
+        1. LiteLLM_SpendLogs will maintain the logs on spend, no data gets deleted from there
+
+        2. LiteLLM_VerificationTokens spend will be set = 0
+
+        3. LiteLLM_TeamTable spend will be set = 0'
+      operationId: global_spend_reset_global_spend_reset_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /add/allowed_ip:
+    post:
+      tags:
+      - Budget & Spend Tracking
+      summary: Add Allowed Ip
+      operationId: add_allowed_ip_add_allowed_ip_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IPAddress'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /delete/allowed_ip:
+    post:
+      tags:
+      - Budget & Spend Tracking
+      summary: Delete Allowed Ip
+      operationId: delete_allowed_ip_delete_allowed_ip_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IPAddress'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /gateway/daily/activity:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Get Gateway Daily Activity
+      description: 'Successful and failed gateway requests, counted at the ASGI edge.
+
+
+        Deployment-wide: the underlying table has no per-key or per-user dimension,
+
+        so this is admin-only.'
+      operationId: get_gateway_daily_activity_gateway_daily_activity_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Start date in YYYY-MM-DD format
+          title: Start Date
+        description: Start date in YYYY-MM-DD format
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: End date in YYYY-MM-DD format
+          title: End Date
+        description: End date in YYYY-MM-DD format
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayRequestActivityResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    GatewayRequestActivityResponse:
+      properties:
+        total_successful_requests:
+          type: integer
+          title: Total Successful Requests
+          default: 0
+        total_failed_requests:
+          type: integer
+          title: Total Failed Requests
+          default: 0
+        by_date:
+          items:
+            $ref: '#/components/schemas/GatewayRequestDailyEntry'
+          type: array
+          title: By Date
+          default: []
+        by_route:
+          items:
+            $ref: '#/components/schemas/GatewayRequestBreakdownEntry'
+          type: array
+          title: By Route
+          default: []
+      type: object
+      title: GatewayRequestActivityResponse
+      description: Response for GET /gateway/daily/activity.
+    GatewayRequestBreakdownEntry:
+      properties:
+        category:
+          type: string
+          title: Category
+        route:
+          type: string
+          title: Route
+        successful_requests:
+          type: integer
+          title: Successful Requests
+          default: 0
+        failed_requests:
+          type: integer
+          title: Failed Requests
+          default: 0
+      type: object
+      required:
+      - category
+      - route
+      title: GatewayRequestBreakdownEntry
+    GatewayRequestDailyEntry:
+      properties:
+        date:
+          type: string
+          title: Date
+        successful_requests:
+          type: integer
+          title: Successful Requests
+          default: 0
+        failed_requests:
+          type: integer
+          title: Failed Requests
+          default: 0
+      type: object
+      required:
+      - date
+      title: GatewayRequestDailyEntry
+    BreakdownMetrics:
+      properties:
+        mcp_servers:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Mcp Servers
+        models:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Models
+        model_groups:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Model Groups
+        providers:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Providers
+        endpoints:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Endpoints
+        api_keys:
+          additionalProperties:
+            $ref: '#/components/schemas/KeyMetricWithMetadata'
+          type: object
+          title: Api Keys
+        entities:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Entities
+      type: object
+      title: BreakdownMetrics
+      description: Breakdown of spend by different dimensions
+    DailySpendData:
+      properties:
+        date:
+          type: string
+          format: date
+          title: Date
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        breakdown:
+          $ref: '#/components/schemas/BreakdownMetrics'
+      type: object
+      required:
+      - date
+      - metrics
+      title: DailySpendData
+    LiteLLM_SpendLogs:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        api_key:
+          type: string
+          title: Api Key
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+          default: ''
+        api_base:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Base
+          default: ''
+        call_type:
+          type: string
+          title: Call Type
+        spend:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Spend
+          default: 0.0
+        total_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Tokens
+          default: 0
+        prompt_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Prompt Tokens
+          default: 0
+        completion_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Completion Tokens
+          default: 0
+        startTime:
+          anyOf:
+          - type: string
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Starttime
+        endTime:
+          anyOf:
+          - type: string
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Endtime
+        user:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User
+          default: ''
+        metadata:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Metadata
+          default: {}
+        cache_hit:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cache Hit
+          default: 'False'
+        cache_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cache Key
+        request_tags:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Request Tags
+        requester_ip_address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Requester Ip Address
+        messages:
+          anyOf:
+          - type: string
+          - items: {}
+            type: array
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Messages
+        response:
+          anyOf:
+          - type: string
+          - items: {}
+            type: array
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Response
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+      type: object
+      required:
+      - request_id
+      - api_key
+      - call_type
+      - startTime
+      - endTime
+      - messages
+      - response
+      title: LiteLLM_SpendLogs
+    PageLinks:
+      properties:
+        self:
+          type: string
+          title: Self
+        prev:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev
+        next:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next
+      type: object
+      required:
+      - self
+      title: PageLinks
+      description: 'Hypermedia for a paginated list. No `first`/`last`: without a total count the last page is unknown.'
+    KeyMetadata:
+      properties:
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+      type: object
+      title: KeyMetadata
+      description: Metadata for a key
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    KeyMetricWithMetadata:
+      properties:
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        metadata:
+          $ref: '#/components/schemas/KeyMetadata'
+      type: object
+      required:
+      - metrics
+      title: KeyMetricWithMetadata
+      description: Base class for metrics with additional metadata
+    SpendMetrics:
+      properties:
+        spend:
+          type: number
+          title: Spend
+          default: 0.0
+        flat_cost:
+          type: number
+          title: Flat Cost
+          default: 0.0
+        prompt_tokens:
+          type: integer
+          title: Prompt Tokens
+          default: 0
+        completion_tokens:
+          type: integer
+          title: Completion Tokens
+          default: 0
+        cache_read_input_tokens:
+          type: integer
+          title: Cache Read Input Tokens
+          default: 0
+        cache_creation_input_tokens:
+          type: integer
+          title: Cache Creation Input Tokens
+          default: 0
+        compression_saved_tokens:
+          type: integer
+          title: Compression Saved Tokens
+          default: 0
+        compression_savings_spend:
+          type: number
+          title: Compression Savings Spend
+          default: 0.0
+        prompt_caching_savings_spend:
+          type: number
+          title: Prompt Caching Savings Spend
+          default: 0.0
+        gateway_injected_caching_savings_spend:
+          type: number
+          title: Gateway Injected Caching Savings Spend
+          default: 0.0
+        autorouter_savings_spend:
+          type: number
+          title: Autorouter Savings Spend
+          default: 0.0
+        total_tokens:
+          type: integer
+          title: Total Tokens
+          default: 0
+        successful_requests:
+          type: integer
+          title: Successful Requests
+          default: 0
+        failed_requests:
+          type: integer
+          title: Failed Requests
+          default: 0
+        api_requests:
+          type: integer
+          title: Api Requests
+          default: 0
+      type: object
+      title: SpendMetrics
+    IPAddress:
+      properties:
+        ip:
+          type: string
+          title: Ip
+      type: object
+      required:
+      - ip
+      title: IPAddress
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    MetricWithMetadata:
+      properties:
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+        api_key_breakdown:
+          additionalProperties:
+            $ref: '#/components/schemas/KeyMetricWithMetadata'
+          type: object
+          title: Api Key Breakdown
+      type: object
+      required:
+      - metrics
+      title: MetricWithMetadata
+    SpendAnalyticsPaginatedResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/DailySpendData'
+          type: array
+          title: Results
+        metadata:
+          $ref: '#/components/schemas/DailySpendMetadata'
+      type: object
+      required:
+      - results
+      title: SpendAnalyticsPaginatedResponse
+    DailySpendMetadata:
+      properties:
+        total_spend:
+          type: number
+          title: Total Spend
+          default: 0.0
+        total_flat_cost:
+          type: number
+          title: Total Flat Cost
+          default: 0.0
+        total_prompt_tokens:
+          type: integer
+          title: Total Prompt Tokens
+          default: 0
+        total_completion_tokens:
+          type: integer
+          title: Total Completion Tokens
+          default: 0
+        total_tokens:
+          type: integer
+          title: Total Tokens
+          default: 0
+        total_api_requests:
+          type: integer
+          title: Total Api Requests
+          default: 0
+        total_successful_requests:
+          type: integer
+          title: Total Successful Requests
+          default: 0
+        total_failed_requests:
+          type: integer
+          title: Total Failed Requests
+          default: 0
+        total_cache_read_input_tokens:
+          type: integer
+          title: Total Cache Read Input Tokens
+          default: 0
+        total_cache_creation_input_tokens:
+          type: integer
+          title: Total Cache Creation Input Tokens
+          default: 0
+        total_compression_saved_tokens:
+          type: integer
+          title: Total Compression Saved Tokens
+          default: 0
+        total_compression_savings_spend:
+          type: number
+          title: Total Compression Savings Spend
+          default: 0.0
+        total_prompt_caching_savings_spend:
+          type: number
+          title: Total Prompt Caching Savings Spend
+          default: 0.0
+        total_gateway_injected_caching_savings_spend:
+          type: number
+          title: Total Gateway Injected Caching Savings Spend
+          default: 0.0
+        total_autorouter_savings_spend:
+          type: number
+          title: Total Autorouter Savings Spend
+          default: 0.0
+        page:
+          type: integer
+          title: Page
+          default: 1
+        total_pages:
+          type: integer
+          title: Total Pages
+          default: 1
+        has_more:
+          type: boolean
+          title: Has More
+          default: false
+      type: object
+      title: DailySpendMetadata
+    SpendCalculateRequest:
+      properties:
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+        messages:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Messages
+        completion_response:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Completion Response
+      type: object
+      title: SpendCalculateRequest
+    PageMeta:
+      properties:
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        has_more:
+          type: boolean
+          title: Has More
+      type: object
+      required:
+      - page
+      - page_size
+      - has_more
+      title: PageMeta
+      description: '`has_more` rather than `total_count`, which would need a COUNT(*) over the whole match set per keystroke.'
+    FacetListResponse:
+      properties:
+        data:
+          items:
+            type: string
+          type: array
+          title: Data
+        meta:
+          $ref: '#/components/schemas/PageMeta'
+        links:
+          $ref: '#/components/schemas/PageLinks'
+      type: object
+      required:
+      - data
+      - meta
+      - links
+      title: FacetListResponse
+      description: The distinct values one column takes over a filtered query. `data` holds bare values, not entity rows.
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

@@ -1,0 +1,746 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM APIClaw Referrals API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: APIClaw Referrals
+paths:
+  /apiclaw/referrals/me:
+    get:
+      tags:
+      - APIClaw Referrals
+      summary: Referrals Me
+      operationId: referrals_me_apiclaw_referrals_me_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ReferralMeOut'
+      security:
+      - APIKeyHeader: []
+  /apiclaw/referrals/me/referred:
+    get:
+      tags:
+      - APIClaw Referrals
+      summary: Referrals Me Referred
+      operationId: referrals_me_referred_apiclaw_referrals_me_referred_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 25
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ReferredListOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /apiclaw/referrals/me/ledger:
+    get:
+      tags:
+      - APIClaw Referrals
+      summary: Referrals Me Ledger
+      operationId: referrals_me_ledger_apiclaw_referrals_me_ledger_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 25
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_LedgerListOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /apiclaw/admin/referrals/summary:
+    get:
+      tags:
+      - APIClaw Referrals
+      summary: Admin Referrals Summary
+      operationId: admin_referrals_summary_apiclaw_admin_referrals_summary_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_AdminSummaryOut'
+      security:
+      - APIKeyHeader: []
+  /apiclaw/admin/referrals/leaderboard:
+    get:
+      tags:
+      - APIClaw Referrals
+      summary: Admin Referrals Leaderboard
+      operationId: admin_referrals_leaderboard_apiclaw_admin_referrals_leaderboard_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 25
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ReferrerListOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /apiclaw/admin/referrals/referrers:
+    get:
+      tags:
+      - APIClaw Referrals
+      summary: Admin Referrals Referrers
+      operationId: admin_referrals_referrers_apiclaw_admin_referrals_referrers_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Search
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 25
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_ReferrerListOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /apiclaw/admin/referrals/user:
+    get:
+      tags:
+      - APIClaw Referrals
+      summary: Admin Referrals User Lookup
+      operationId: admin_referrals_user_lookup_apiclaw_admin_referrals_user_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 3
+          title: Email
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 25
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_AdminUserLookupOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /apiclaw/admin/referrals/wallet/adjust:
+    post:
+      tags:
+      - APIClaw Referrals
+      summary: Admin Referrals Wallet Adjust
+      operationId: admin_referrals_wallet_adjust_apiclaw_admin_referrals_wallet_adjust_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_WalletAdjustRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_WalletAdjustOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /apiclaw/admin/referrals/recent:
+    get:
+      tags:
+      - APIClaw Referrals
+      summary: Admin Referrals Recent
+      operationId: admin_referrals_recent_apiclaw_admin_referrals_recent_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 25
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_RecentListOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    _LedgerListOut:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/_LedgerEntryOut'
+          type: array
+          title: Results
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+      type: object
+      required:
+      - results
+      - total
+      - page
+      - page_size
+      - total_pages
+      title: _LedgerListOut
+    _RecentListOut:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/_RecentReferralOut'
+          type: array
+          title: Results
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+      type: object
+      required:
+      - results
+      - total
+      - page
+      - page_size
+      - total_pages
+      title: _RecentListOut
+    _ReferralMeOut:
+      properties:
+        referral_link:
+          type: string
+          title: Referral Link
+        referral_code:
+          type: string
+          title: Referral Code
+        balance_usd:
+          type: number
+          title: Balance Usd
+        lifetime_earned_usd:
+          type: number
+          title: Lifetime Earned Usd
+        total_referred:
+          type: integer
+          title: Total Referred
+        total_settled:
+          type: integer
+          title: Total Settled
+        withdraw_eligible:
+          type: boolean
+          title: Withdraw Eligible
+        withdrawal_minimum_usd:
+          type: number
+          title: Withdrawal Minimum Usd
+      type: object
+      required:
+      - referral_link
+      - referral_code
+      - balance_usd
+      - lifetime_earned_usd
+      - total_referred
+      - total_settled
+      - withdraw_eligible
+      - withdrawal_minimum_usd
+      title: _ReferralMeOut
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    _ReferredListOut:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/_ReferredUserOut'
+          type: array
+          title: Results
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+      type: object
+      required:
+      - results
+      - total
+      - page
+      - page_size
+      - total_pages
+      title: _ReferredListOut
+    _WalletAdjustRequest:
+      properties:
+        user_email:
+          type: string
+          maxLength: 320
+          minLength: 3
+          title: User Email
+        delta_usd:
+          type: number
+          maximum: 100000.0
+          minimum: -100000.0
+          title: Delta Usd
+        note:
+          type: string
+          maxLength: 500
+          minLength: 1
+          title: Note
+      type: object
+      required:
+      - user_email
+      - delta_usd
+      - note
+      title: _WalletAdjustRequest
+    _AdminSummaryOut:
+      properties:
+        referrer_count:
+          type: integer
+          title: Referrer Count
+        total_referrals:
+          type: integer
+          title: Total Referrals
+        total_paid_usd:
+          type: number
+          title: Total Paid Usd
+        pending_count:
+          type: integer
+          title: Pending Count
+      type: object
+      required:
+      - referrer_count
+      - total_referrals
+      - total_paid_usd
+      - pending_count
+      title: _AdminSummaryOut
+    _ReferredUserOut:
+      properties:
+        referee_user_id:
+          type: string
+          title: Referee User Id
+        referred_at:
+          type: string
+          title: Referred At
+        plan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Plan Id
+        commission_amount_usd:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Commission Amount Usd
+        commission_status:
+          type: string
+          title: Commission Status
+      type: object
+      required:
+      - referee_user_id
+      - referred_at
+      - plan_id
+      - commission_amount_usd
+      - commission_status
+      title: _ReferredUserOut
+    _ReferrerStatsOut:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+        referral_count:
+          type: integer
+          title: Referral Count
+        settled_count:
+          type: integer
+          title: Settled Count
+        pending_count:
+          type: integer
+          title: Pending Count
+        lifetime_earned_usd:
+          type: number
+          title: Lifetime Earned Usd
+        balance_usd:
+          type: number
+          title: Balance Usd
+      type: object
+      required:
+      - user_id
+      - user_email
+      - referral_count
+      - settled_count
+      - pending_count
+      - lifetime_earned_usd
+      - balance_usd
+      title: _ReferrerStatsOut
+    _RecentReferralOut:
+      properties:
+        referee_user_id:
+          type: string
+          title: Referee User Id
+        referee_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referee Email
+        referrer_user_id:
+          type: string
+          title: Referrer User Id
+        referrer_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referrer Email
+        referred_at:
+          type: string
+          title: Referred At
+        commission_status:
+          type: string
+          title: Commission Status
+        commission_amount_usd:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Commission Amount Usd
+        plan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Plan Id
+      type: object
+      required:
+      - referee_user_id
+      - referee_email
+      - referrer_user_id
+      - referrer_email
+      - referred_at
+      - commission_status
+      - commission_amount_usd
+      - plan_id
+      title: _RecentReferralOut
+    _ReferrerListOut:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/_ReferrerStatsOut'
+          type: array
+          title: Results
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+      type: object
+      required:
+      - results
+      - total
+      - page
+      - page_size
+      - total_pages
+      title: _ReferrerListOut
+    _AdminUserLookupOut:
+      properties:
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        stats:
+          anyOf:
+          - $ref: '#/components/schemas/_ReferrerStatsOut'
+          - type: 'null'
+        referred:
+          items:
+            $ref: '#/components/schemas/_RecentReferralOut'
+          type: array
+          title: Referred
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+      type: object
+      required:
+      - user_id
+      - stats
+      - referred
+      - total
+      - page
+      - page_size
+      - total_pages
+      title: _AdminUserLookupOut
+    _LedgerEntryOut:
+      properties:
+        ledger_id:
+          type: string
+          title: Ledger Id
+        delta_usd:
+          type: number
+          title: Delta Usd
+        balance_after_usd:
+          type: number
+          title: Balance After Usd
+        entry_type:
+          type: string
+          title: Entry Type
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        created_at:
+          type: string
+          title: Created At
+      type: object
+      required:
+      - ledger_id
+      - delta_usd
+      - balance_after_usd
+      - entry_type
+      - note
+      - created_at
+      title: _LedgerEntryOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    _WalletAdjustOut:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        balance_usd:
+          type: number
+          title: Balance Usd
+      type: object
+      required:
+      - user_id
+      - balance_usd
+      title: _WalletAdjustOut
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

@@ -1,0 +1,1049 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Responses API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Responses
+paths:
+  /openai/v1/responses:
+    post:
+      tags:
+      - Responses
+      summary: Responses Api
+      description: 'Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses
+
+
+        Supports background mode with polling_via_cache for partial response retrieval.
+
+        When background=true and polling_via_cache is enabled, returns a polling_id immediately
+
+        and streams the response in the background, updating Redis cache.
+
+
+        ```bash
+
+        # Normal request
+
+        curl -X POST http://localhost:4000/v1/responses -H "Content-Type: application/json" -H "Authorization: Bearer sk-1234" -d ''{
+
+        "model": "gpt-4o",
+
+        "input": "Tell me about AI"
+
+        }''
+
+
+        # Background request with polling
+
+        curl -X POST http://localhost:4000/v1/responses -H "Content-Type: application/json" -H "Authorization: Bearer sk-1234" -d ''{
+
+        "model": "gpt-4o",
+
+        "input": "Tell me about AI",
+
+        "background": true
+
+        }''
+
+        ```'
+      operationId: responses_api_openai_v1_responses_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /responses:
+    post:
+      tags:
+      - Responses
+      summary: Responses Api
+      description: 'Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses
+
+
+        Supports background mode with polling_via_cache for partial response retrieval.
+
+        When background=true and polling_via_cache is enabled, returns a polling_id immediately
+
+        and streams the response in the background, updating Redis cache.
+
+
+        ```bash
+
+        # Normal request
+
+        curl -X POST http://localhost:4000/v1/responses -H "Content-Type: application/json" -H "Authorization: Bearer sk-1234" -d ''{
+
+        "model": "gpt-4o",
+
+        "input": "Tell me about AI"
+
+        }''
+
+
+        # Background request with polling
+
+        curl -X POST http://localhost:4000/v1/responses -H "Content-Type: application/json" -H "Authorization: Bearer sk-1234" -d ''{
+
+        "model": "gpt-4o",
+
+        "input": "Tell me about AI",
+
+        "background": true
+
+        }''
+
+        ```'
+      operationId: responses_api_responses_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /v1/responses:
+    post:
+      tags:
+      - Responses
+      summary: Responses Api
+      description: 'Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses
+
+
+        Supports background mode with polling_via_cache for partial response retrieval.
+
+        When background=true and polling_via_cache is enabled, returns a polling_id immediately
+
+        and streams the response in the background, updating Redis cache.
+
+
+        ```bash
+
+        # Normal request
+
+        curl -X POST http://localhost:4000/v1/responses -H "Content-Type: application/json" -H "Authorization: Bearer sk-1234" -d ''{
+
+        "model": "gpt-4o",
+
+        "input": "Tell me about AI"
+
+        }''
+
+
+        # Background request with polling
+
+        curl -X POST http://localhost:4000/v1/responses -H "Content-Type: application/json" -H "Authorization: Bearer sk-1234" -d ''{
+
+        "model": "gpt-4o",
+
+        "input": "Tell me about AI",
+
+        "background": true
+
+        }''
+
+        ```'
+      operationId: responses_api_v1_responses_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /cursor/v1/models:
+    get:
+      tags:
+      - Responses
+      summary: Cursor Model List
+      description: 'OpenAI-compatible model listing for the Cursor BYOK base URL.
+
+
+        Clients pointed at `/cursor` as an OpenAI-compatible base URL resolve and
+
+        verify models via `GET {base}/models` (the OpenAI SDK contract). Without this
+
+        route those requests fall through to the Cursor Cloud Agents passthrough, which
+
+        demands a Cursor API key and 401s, so key verification silently fails before any
+
+        chat request is ever sent. Delegates to the standard `/v1/models` handler.'
+      operationId: cursor_model_list_cursor_v1_models_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /cursor/models:
+    get:
+      tags:
+      - Responses
+      summary: Cursor Model List
+      description: 'OpenAI-compatible model listing for the Cursor BYOK base URL.
+
+
+        Clients pointed at `/cursor` as an OpenAI-compatible base URL resolve and
+
+        verify models via `GET {base}/models` (the OpenAI SDK contract). Without this
+
+        route those requests fall through to the Cursor Cloud Agents passthrough, which
+
+        demands a Cursor API key and 401s, so key verification silently fails before any
+
+        chat request is ever sent. Delegates to the standard `/v1/models` handler.'
+      operationId: cursor_model_list_cursor_models_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /cursor/chat/completions:
+    post:
+      tags:
+      - Responses
+      summary: Cursor Chat Completions
+      description: 'Cursor BYOK endpoint. Accepts both request shapes Cursor sends to its OpenAI-compatible
+
+        base URL and always answers in chat completions format.
+
+
+        Cursor agent mode sends Responses API format bodies (`input`, flat tool defs, `reasoning`,
+
+        custom tools) to the chat/completions path while expecting chat completions responses;
+
+        those are routed through the Responses API pipeline and converted back. Genuine chat
+
+        completions bodies (`messages` present) are routed through the standard chat completions
+
+        pipeline, after normalizing each level of the `tools` array and `tool_choice` to the chat
+
+        completions shapes OpenAI requires. Cursor mixes Responses API shapes into chat bodies
+
+        per level, independently: a flat tool def (`{"type": "custom", "name": "ApplyPatch", ...}`)
+
+        gets nested under `custom`, and a flat grammar format
+
+        (`{"type": "grammar", "definition", "syntax"}`) gets wrapped as
+
+        `{"type": "grammar", "grammar": {...}}` wherever it appears, including inside tool defs
+
+        Cursor already sent pre-nested.
+
+
+        ```bash
+
+        curl -X POST http://localhost:4000/cursor/chat/completions -H "Content-Type: application/json" -H "Authorization: Bearer sk-1234" -d ''{
+
+        "model": "gpt-4o",
+
+        "input": [{"role": "user", "content": "Hello"}]
+
+        }''
+
+        Responds back in chat completions format.
+
+        ```'
+      operationId: cursor_chat_completions_cursor_chat_completions_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /openai/v1/responses/{response_id}:
+    get:
+      tags:
+      - Responses
+      summary: Get Response
+      description: 'Get a response by ID.
+
+
+        Supports both:
+
+        - Polling IDs (litellm_poll_*): Returns cumulative cached content from background responses
+
+        - Provider response IDs: Passes through to provider API
+
+
+        Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses/get
+
+
+        ```bash
+
+        # Get polling response
+
+        curl -X GET http://localhost:4000/v1/responses/litellm_poll_abc123 -H "Authorization: Bearer sk-1234"
+
+
+        # Get provider response
+
+        curl -X GET http://localhost:4000/v1/responses/resp_abc123 -H "Authorization: Bearer sk-1234"
+
+        ```'
+      operationId: get_response_openai_v1_responses__response_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: response_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Response Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Responses
+      summary: Delete Response
+      description: 'Delete a response by ID.
+
+
+        Supports both:
+
+        - Polling IDs (litellm_poll_*): Deletes from Redis cache
+
+        - Provider response IDs: Passes through to provider API
+
+
+        Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses/delete
+
+
+        ```bash
+
+        curl -X DELETE http://localhost:4000/v1/responses/resp_abc123 -H "Authorization: Bearer sk-1234"
+
+        ```'
+      operationId: delete_response_openai_v1_responses__response_id__delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: response_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Response Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /responses/{response_id}:
+    get:
+      tags:
+      - Responses
+      summary: Get Response
+      description: 'Get a response by ID.
+
+
+        Supports both:
+
+        - Polling IDs (litellm_poll_*): Returns cumulative cached content from background responses
+
+        - Provider response IDs: Passes through to provider API
+
+
+        Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses/get
+
+
+        ```bash
+
+        # Get polling response
+
+        curl -X GET http://localhost:4000/v1/responses/litellm_poll_abc123 -H "Authorization: Bearer sk-1234"
+
+
+        # Get provider response
+
+        curl -X GET http://localhost:4000/v1/responses/resp_abc123 -H "Authorization: Bearer sk-1234"
+
+        ```'
+      operationId: get_response_responses__response_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: response_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Response Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Responses
+      summary: Delete Response
+      description: 'Delete a response by ID.
+
+
+        Supports both:
+
+        - Polling IDs (litellm_poll_*): Deletes from Redis cache
+
+        - Provider response IDs: Passes through to provider API
+
+
+        Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses/delete
+
+
+        ```bash
+
+        curl -X DELETE http://localhost:4000/v1/responses/resp_abc123 -H "Authorization: Bearer sk-1234"
+
+        ```'
+      operationId: delete_response_responses__response_id__delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: response_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Response Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/responses/{response_id}:
+    get:
+      tags:
+      - Responses
+      summary: Get Response
+      description: 'Get a response by ID.
+
+
+        Supports both:
+
+        - Polling IDs (litellm_poll_*): Returns cumulative cached content from background responses
+
+        - Provider response IDs: Passes through to provider API
+
+
+        Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses/get
+
+
+        ```bash
+
+        # Get polling response
+
+        curl -X GET http://localhost:4000/v1/responses/litellm_poll_abc123 -H "Authorization: Bearer sk-1234"
+
+
+        # Get provider response
+
+        curl -X GET http://localhost:4000/v1/responses/resp_abc123 -H "Authorization: Bearer sk-1234"
+
+        ```'
+      operationId: get_response_v1_responses__response_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: response_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Response Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Responses
+      summary: Delete Response
+      description: 'Delete a response by ID.
+
+
+        Supports both:
+
+        - Polling IDs (litellm_poll_*): Deletes from Redis cache
+
+        - Provider response IDs: Passes through to provider API
+
+
+        Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses/delete
+
+
+        ```bash
+
+        curl -X DELETE http://localhost:4000/v1/responses/resp_abc123 -H "Authorization: Bearer sk-1234"
+
+        ```'
+      operationId: delete_response_v1_responses__response_id__delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: response_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Response Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /openai/v1/responses/{response_id}/input_items:
+    get:
+      tags:
+      - Responses
+      summary: Get Response Input Items
+      description: List input items for a response.
+      operationId: get_response_input_items_openai_v1_responses__response_id__input_items_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: response_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Response Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /responses/{response_id}/input_items:
+    get:
+      tags:
+      - Responses
+      summary: Get Response Input Items
+      description: List input items for a response.
+      operationId: get_response_input_items_responses__response_id__input_items_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: response_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Response Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/responses/{response_id}/input_items:
+    get:
+      tags:
+      - Responses
+      summary: Get Response Input Items
+      description: List input items for a response.
+      operationId: get_response_input_items_v1_responses__response_id__input_items_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: response_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Response Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /openai/v1/responses/compact:
+    post:
+      tags:
+      - Responses
+      summary: Compact Response
+      description: 'Compact a response by running a compaction pass over a conversation.
+
+
+        Returns encrypted, opaque items that can be used to reduce context size.
+
+
+        Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses/compact
+
+
+        ```bash
+
+        curl -X POST http://localhost:4000/v1/responses/compact -H "Content-Type: application/json" -H "Authorization: Bearer sk-1234" -d ''{
+
+        "model": "gpt-4o",
+
+        "input": [{"role": "user", "content": "Hello"}]
+
+        }''
+
+        ```'
+      operationId: compact_response_openai_v1_responses_compact_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /responses/compact:
+    post:
+      tags:
+      - Responses
+      summary: Compact Response
+      description: 'Compact a response by running a compaction pass over a conversation.
+
+
+        Returns encrypted, opaque items that can be used to reduce context size.
+
+
+        Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses/compact
+
+
+        ```bash
+
+        curl -X POST http://localhost:4000/v1/responses/compact -H "Content-Type: application/json" -H "Authorization: Bearer sk-1234" -d ''{
+
+        "model": "gpt-4o",
+
+        "input": [{"role": "user", "content": "Hello"}]
+
+        }''
+
+        ```'
+      operationId: compact_response_responses_compact_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /v1/responses/compact:
+    post:
+      tags:
+      - Responses
+      summary: Compact Response
+      description: 'Compact a response by running a compaction pass over a conversation.
+
+
+        Returns encrypted, opaque items that can be used to reduce context size.
+
+
+        Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses/compact
+
+
+        ```bash
+
+        curl -X POST http://localhost:4000/v1/responses/compact -H "Content-Type: application/json" -H "Authorization: Bearer sk-1234" -d ''{
+
+        "model": "gpt-4o",
+
+        "input": [{"role": "user", "content": "Hello"}]
+
+        }''
+
+        ```'
+      operationId: compact_response_v1_responses_compact_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /openai/v1/responses/input_tokens:
+    post:
+      tags:
+      - Responses
+      summary: Responses Input Tokens
+      description: 'Count the input tokens of a Responses API request without calling the model.
+
+
+        Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses/input-tokens
+
+
+        ```bash
+
+        curl -X POST http://localhost:4000/v1/responses/input_tokens -H "Content-Type: application/json" -H "Authorization: Bearer sk-1234" -d ''{
+
+        "model": "gpt-4o",
+
+        "input": "Hello, how are you?"
+
+        }''
+
+        ```
+
+
+        Returns: `{"object": "response.input_tokens", "input_tokens": }`'
+      operationId: responses_input_tokens_openai_v1_responses_input_tokens_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /responses/input_tokens:
+    post:
+      tags:
+      - Responses
+      summary: Responses Input Tokens
+      description: 'Count the input tokens of a Responses API request without calling the model.
+
+
+        Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses/input-tokens
+
+
+        ```bash
+
+        curl -X POST http://localhost:4000/v1/responses/input_tokens -H "Content-Type: application/json" -H "Authorization: Bearer sk-1234" -d ''{
+
+        "model": "gpt-4o",
+
+        "input": "Hello, how are you?"
+
+        }''
+
+        ```
+
+
+        Returns: `{"object": "response.input_tokens", "input_tokens": }`'
+      operationId: responses_input_tokens_responses_input_tokens_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /v1/responses/input_tokens:
+    post:
+      tags:
+      - Responses
+      summary: Responses Input Tokens
+      description: 'Count the input tokens of a Responses API request without calling the model.
+
+
+        Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses/input-tokens
+
+
+        ```bash
+
+        curl -X POST http://localhost:4000/v1/responses/input_tokens -H "Content-Type: application/json" -H "Authorization: Bearer sk-1234" -d ''{
+
+        "model": "gpt-4o",
+
+        "input": "Hello, how are you?"
+
+        }''
+
+        ```
+
+
+        Returns: `{"object": "response.input_tokens", "input_tokens": }`'
+      operationId: responses_input_tokens_v1_responses_input_tokens_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /openai/v1/responses/{response_id}/cancel:
+    post:
+      tags:
+      - Responses
+      summary: Cancel Response
+      description: 'Cancel a response by ID.
+
+
+        Supports both:
+
+        - Polling IDs (litellm_poll_*): Cancels background response and updates status in Redis
+
+        - Provider response IDs: Passes through to provider API
+
+
+        Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses/cancel
+
+
+        ```bash
+
+        # Cancel polling response
+
+        curl -X POST http://localhost:4000/v1/responses/litellm_poll_abc123/cancel -H "Authorization: Bearer sk-1234"
+
+
+        # Cancel provider response
+
+        curl -X POST http://localhost:4000/v1/responses/resp_abc123/cancel -H "Authorization: Bearer sk-1234"
+
+        ```'
+      operationId: cancel_response_openai_v1_responses__response_id__cancel_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: response_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Response Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /responses/{response_id}/cancel:
+    post:
+      tags:
+      - Responses
+      summary: Cancel Response
+      description: 'Cancel a response by ID.
+
+
+        Supports both:
+
+        - Polling IDs (litellm_poll_*): Cancels background response and updates status in Redis
+
+        - Provider response IDs: Passes through to provider API
+
+
+        Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses/cancel
+
+
+        ```bash
+
+        # Cancel polling response
+
+        curl -X POST http://localhost:4000/v1/responses/litellm_poll_abc123/cancel -H "Authorization: Bearer sk-1234"
+
+
+        # Cancel provider response
+
+        curl -X POST http://localhost:4000/v1/responses/resp_abc123/cancel -H "Authorization: Bearer sk-1234"
+
+        ```'
+      operationId: cancel_response_responses__response_id__cancel_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: response_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Response Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/responses/{response_id}/cancel:
+    post:
+      tags:
+      - Responses
+      summary: Cancel Response
+      description: 'Cancel a response by ID.
+
+
+        Supports both:
+
+        - Polling IDs (litellm_poll_*): Cancels background response and updates status in Redis
+
+        - Provider response IDs: Passes through to provider API
+
+
+        Follows the OpenAI Responses API spec: https://platform.openai.com/docs/api-reference/responses/cancel
+
+
+        ```bash
+
+        # Cancel polling response
+
+        curl -X POST http://localhost:4000/v1/responses/litellm_poll_abc123/cancel -H "Authorization: Bearer sk-1234"
+
+
+        # Cancel provider response
+
+        curl -X POST http://localhost:4000/v1/responses/resp_abc123/cancel -H "Authorization: Bearer sk-1234"
+
+        ```'
+      operationId: cancel_response_v1_responses__response_id__cancel_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: response_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Response Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

@@ -1,0 +1,34 @@
+generated: '2026-09-27'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://apiclaw.biz/#pricing
+sources:
+- https://apiclaw.biz/#pricing
+- https://apiclaw.biz/public/plans
+name: APIClaw pricing
+audience: developer-api
+pricing_basis: flat-platform
+plans:
+- name: Plus
+  price_text: $19 /mo
+  price: 19
+- name: Pro
+  price_text: $39 /mo
+  price: 39
+- name: Max
+  price_text: $59 /mo
+  price: 59
+- name: Ultimate
+  price_text: $69 /mo
+  price: 69
+- name: Ultimate Plus
+  price_text: $89 /mo
+  price: 89
+- name: Ultimate Pro
+  price_text: $99 /mo
+  price: 99
+- name: Ultimate Max
+  price_text: $129 /mo
+  price: 129
+docs: https://apiclaw.biz/#pricing
+note: 1 extracted row(s) were dropped because their quote was not on the page.

@@ -1,0 +1,283 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM APIClaw Admin Overview API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: APIClaw Admin Overview
+paths:
+  /apiclaw/admin/overview:
+    get:
+      tags:
+      - APIClaw Admin Overview
+      summary: Admin Overview
+      operationId: admin_overview_apiclaw_admin_overview_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminOverviewOut'
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    PlatformOut:
+      properties:
+        maintenance_enabled:
+          type: boolean
+          title: Maintenance Enabled
+        paused_deployments:
+          type: integer
+          title: Paused Deployments
+        cooling_api_keys:
+          type: integer
+          title: Cooling Api Keys
+        referrers:
+          type: integer
+          title: Referrers
+        referrals:
+          type: integer
+          title: Referrals
+        pending_commissions:
+          type: integer
+          title: Pending Commissions
+        commissions_paid_usd:
+          type: number
+          title: Commissions Paid Usd
+      type: object
+      required:
+      - maintenance_enabled
+      - paused_deployments
+      - cooling_api_keys
+      - referrers
+      - referrals
+      - pending_commissions
+      - commissions_paid_usd
+      title: PlatformOut
+    DailyOut:
+      properties:
+        day:
+          type: string
+          title: Day
+        signups:
+          type: integer
+          title: Signups
+        purchases:
+          type: integer
+          title: Purchases
+      type: object
+      required:
+      - day
+      - signups
+      - purchases
+      title: DailyOut
+    RevenueOut:
+      properties:
+        total_usd:
+          type: number
+          title: Total Usd
+        today_usd:
+          type: number
+          title: Today Usd
+        last_7d_usd:
+          type: number
+          title: Last 7D Usd
+        last_30d_usd:
+          type: number
+          title: Last 30D Usd
+        purchases_total:
+          type: integer
+          title: Purchases Total
+        purchases_today:
+          type: integer
+          title: Purchases Today
+        purchases_7d:
+          type: integer
+          title: Purchases 7D
+        purchases_30d:
+          type: integer
+          title: Purchases 30D
+        waiting_checkouts:
+          type: integer
+          title: Waiting Checkouts
+        expired_checkouts:
+          type: integer
+          title: Expired Checkouts
+        checkout_conversion_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Checkout Conversion Percent
+        estimated_mrr_usd:
+          type: integer
+          title: Estimated Mrr Usd
+      type: object
+      required:
+      - total_usd
+      - today_usd
+      - last_7d_usd
+      - last_30d_usd
+      - purchases_total
+      - purchases_today
+      - purchases_7d
+      - purchases_30d
+      - waiting_checkouts
+      - expired_checkouts
+      - checkout_conversion_percent
+      - estimated_mrr_usd
+      title: RevenueOut
+    CapacityOut:
+      properties:
+        sanctioned_daily_requests:
+          type: integer
+          title: Sanctioned Daily Requests
+        sanctioned_monthly_requests:
+          type: integer
+          title: Sanctioned Monthly Requests
+        active_subscriptions:
+          type: integer
+          title: Active Subscriptions
+        expired_subscriptions:
+          type: integer
+          title: Expired Subscriptions
+        expiring_within_7d:
+          type: integer
+          title: Expiring Within 7D
+      type: object
+      required:
+      - sanctioned_daily_requests
+      - sanctioned_monthly_requests
+      - active_subscriptions
+      - expired_subscriptions
+      - expiring_within_7d
+      title: CapacityOut
+    PlanRowOut:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        price_usd:
+          type: integer
+          title: Price Usd
+        daily_request_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Daily Request Limit
+        active:
+          type: integer
+          title: Active
+        expired:
+          type: integer
+          title: Expired
+        sanctioned_daily_requests:
+          type: integer
+          title: Sanctioned Daily Requests
+        monthly_value_usd:
+          type: integer
+          title: Monthly Value Usd
+      type: object
+      required:
+      - id
+      - name
+      - price_usd
+      - daily_request_limit
+      - active
+      - expired
+      - sanctioned_daily_requests
+      - monthly_value_usd
+      title: PlanRowOut
+    UsersOut:
+      properties:
+        total:
+          type: integer
+          title: Total
+        paying:
+          type: integer
+          title: Paying
+        trial:
+          type: integer
+          title: Trial
+        signups_today:
+          type: integer
+          title: Signups Today
+        signups_7d:
+          type: integer
+          title: Signups 7D
+        signups_30d:
+          type: integer
+          title: Signups 30D
+        blocked:
+          type: integer
+          title: Blocked
+        virtual_keys:
+          type: integer
+          title: Virtual Keys
+      type: object
+      required:
+      - total
+      - paying
+      - trial
+      - signups_today
+      - signups_7d
+      - signups_30d
+      - blocked
+      - virtual_keys
+      title: UsersOut
+    AdminOverviewOut:
+      properties:
+        generated_at:
+          type: string
+          title: Generated At
+        cache_ttl_seconds:
+          type: integer
+          title: Cache Ttl Seconds
+        users:
+          $ref: '#/components/schemas/UsersOut'
+        capacity:
+          $ref: '#/components/schemas/CapacityOut'
+        plans:
+          items:
+            $ref: '#/components/schemas/PlanRowOut'
+          type: array
+          title: Plans
+        revenue:
+          $ref: '#/components/schemas/RevenueOut'
+        daily:
+          items:
+            $ref: '#/components/schemas/DailyOut'
+          type: array
+          title: Daily
+        platform:
+          $ref: '#/components/schemas/PlatformOut'
+      type: object
+      required:
+      - generated_at
+      - cache_ttl_seconds
+      - users
+      - capacity
+      - plans
+      - revenue
+      - daily
+      - platform
+      title: AdminOverviewOut
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

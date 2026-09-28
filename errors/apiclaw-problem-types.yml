@@ -1,0 +1,76 @@
+generated: '2026-09-28'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/apiclaw.json
+format: custom
+envelope:
+  media_type: application/json
+  schema: HTTPValidationError
+coverage:
+  operations: 900
+  statuses_declared: 9
+problems:
+- status: 400
+  title: Bad Request
+  description: ContentPolicyViolationError
+  operations: 1
+  media_types:
+  - application/json
+  schema: ErrorResponse
+- status: 401
+  title: Unauthorized
+  description: AuthenticationError
+  operations: 1
+  media_types:
+  - application/json
+  schema: ErrorResponse
+- status: 403
+  title: Forbidden
+  description: PermissionDeniedError
+  operations: 1
+  media_types:
+  - application/json
+  schema: ErrorResponse
+- status: 404
+  title: Not Found
+  description: NotFoundError
+  operations: 2
+  media_types:
+  - application/json
+  schema: ErrorResponse
+- status: 408
+  title: Request Timeout
+  description: Timeout
+  operations: 1
+  media_types:
+  - application/json
+  schema: ErrorResponse
+- status: 422
+  title: Unprocessable Content
+  description: Validation Error
+  operations: 696
+  media_types:
+  - application/json
+  schema: HTTPValidationError
+- status: 429
+  title: Too Many Requests
+  description: Unified rate-limit error.
+  operations: 1
+  media_types:
+  - application/json
+  schema: ErrorResponse
+- status: 500
+  title: Internal Server Error
+  description: JSONSchemaValidationError
+  operations: 2
+  media_types:
+  - application/json
+  schema: ErrorResponse
+- status: 503
+  title: Service Unavailable
+  description: APIConnectionError
+  operations: 1
+  media_types:
+  - application/json
+  schema: ErrorResponse

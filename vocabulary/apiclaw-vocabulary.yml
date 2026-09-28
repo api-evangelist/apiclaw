@@ -1,0 +1,430 @@
+generated: '2026-09-28'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/apiclaw.json
+vocabulary:
+  name: APIClaw Domain Vocabulary
+  description: 'Terms declared by APIClaw''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-09-28'
+  terms:
+  - term: APIKeySecurityScheme
+    definition: Defines a security scheme using an API key.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/APIKeySecurityScheme
+  - term: AccessControl_UI_AccessMode
+    definition: Model for Controlling UI Access Mode via SSO Groups
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AccessControl_UI_AccessMode
+  - term: AccessGroupBudget
+    definition: 'Object declared by the contract with fields: budget_id, max_budget, soft_budget, budget_duration, budget_reset_at.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AccessGroupBudget
+  - term: AccessGroupBudgetRequest
+    definition: 'Object declared by the contract with fields: budget_id, max_budget, soft_budget, budget_duration.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AccessGroupBudgetRequest
+  - term: AccessGroupBudgetResponse
+    definition: 'Object declared by the contract with fields: access_group, spend, budget.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AccessGroupBudgetResponse
+  - term: AccessGroupInfo
+    definition: 'Object declared by the contract with fields: access_group, model_names, deployment_count, spend, budget.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AccessGroupInfo
+  - term: ActiveUsersAnalyticsResponse
+    definition: Response for active users analytics
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/ActiveUsersAnalyticsResponse
+  - term: AdaptiveRouterWeights
+    definition: 'Object declared by the contract with fields: quality, cost.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AdaptiveRouterWeights
+  - term: AddTeamCallback
+    definition: 'Object declared by the contract with fields: callback_name, callback_type, callback_vars.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AddTeamCallback
+  - term: AdminOverviewOut
+    definition: 'Object declared by the contract with fields: generated_at, cache_ttl_seconds, users, capacity, plans, revenue, daily, platform.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AdminOverviewOut
+  - term: AgentCapabilities
+    definition: Defines optional capabilities supported by an agent.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentCapabilities
+  - term: AgentCard
+    definition: The AgentCard is a self-describing manifest for an agent. It provides essential metadata including the agent's identity, capabilities,
+      skills, supported communication methods, and security requirements.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentCard
+  - term: AgentCardSignature
+    definition: Represents a JWS signature of an AgentCard.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentCardSignature
+  - term: AgentConfig
+    definition: 'Object declared by the contract with fields: agent_name, agent_card_params, litellm_params, object_permission, tpm_limit, rpm_limit,
+      session_tpm_limit, session_rpm_limit, static_headers, extra_headers.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentConfig
+  - term: AgentCreateInfo
+    definition: 'Object declared by the contract with fields: agent_type, agent_type_display_name, description, logo_url, credential_fields, litellm_params_template,
+      model_template.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentCreateInfo
+  - term: AgentCredentialField
+    definition: 'Object declared by the contract with fields: key, label, placeholder, tooltip, required, field_type, options, default_value,
+      include_in_litellm_params, validation_pattern, validation_message.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentCredentialField
+  - term: AgentExtension
+    definition: A declaration of a protocol extension supported by an Agent.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentExtension
+  - term: AgentInterface
+    definition: Declares a combination of a target URL and a transport protocol.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentInterface
+  - term: AgentKeySummary
+    definition: 'Object declared by the contract with fields: token, key_alias, key_name.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentKeySummary
+  - term: AgentMakePublicResponse
+    definition: 'Object declared by the contract with fields: message, public_agent_groups, updated_by.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentMakePublicResponse
+  - term: AgentObjectPermission
+    definition: 'Object declared by the contract with fields: mcp_servers, mcp_access_groups, mcp_toolsets, mcp_tool_permissions, models, agents.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentObjectPermission
+  - term: AgentProvider
+    definition: Represents the service provider of an agent.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentProvider
+  - term: AgentResponse
+    definition: 'Object declared by the contract with fields: agent_id, agent_name, litellm_params, agent_card_params, object_permission, spend,
+      tpm_limit, rpm_limit, session_tpm_limit, session_rpm_limit, static_headers, extra_headers. (6 more)'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentResponse
+  - term: AgentSkill
+    definition: Represents a distinct capability or function that an agent can perform.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentSkill
+  - term: AgentSkillsIndex
+    definition: 'Object declared by the contract with fields: $schema, skills.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentSkillsIndex
+  - term: AgentSkillsIndexEntry
+    definition: 'Object declared by the contract with fields: name, type, description, url, digest.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AgentSkillsIndexEntry
+  - term: AllowedVectorStoreIndexItem
+    definition: 'Object declared by the contract with fields: index_name, index_permissions.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AllowedVectorStoreIndexItem
+  - term: ApplyGuardrailRequest
+    definition: 'Object declared by the contract with fields: guardrail_name, text, language, entities, input_type, messages, metadata.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/ApplyGuardrailRequest
+  - term: ApplyGuardrailResponse
+    definition: 'Object declared by the contract with fields: response_text.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/ApplyGuardrailResponse
+  - term: AuditLogResponse
+    definition: Response model for a single audit log entry
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AuditLogResponse
+  - term: AutoRouterBenchmarkGroup
+    definition: One auto-router's slice of the benchmarks.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AutoRouterBenchmarkGroup
+  - term: AutoRouterBenchmarkTotals
+    definition: Session-shape and savings aggregates over auto-routed traffic in the window.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AutoRouterBenchmarkTotals
+  - term: AutoRouterBenchmarksResponse
+    definition: Benchmarks for the auto-router dashboard, aggregated from the per-session rollup.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AutoRouterBenchmarksResponse
+  - term: AutoRouterCacheBucket
+    definition: One prompt-caching bucket of turns, with how often those turns hit the cache.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AutoRouterCacheBucket
+  - term: AutoRouterCacheStats
+    definition: 'Prompt-caching behaviour of auto-routed turns, bucketed by what the router did. Every in-order turn falls in exactly one bucket:
+      the session stayed on the same model, visited a model for the first time (cold by design), or returned to a model it had already used. Out-of-order
+      turns (cross-pod flush races) are counted but not bucketed.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AutoRouterCacheStats
+  - term: AutoRouterClassifierDefaultPromptResponse
+    definition: The built-in system prompt an auto-router's LLM classifier uses when none is configured. Served so the dashboard's prompt editor
+      prefills the rubric the proxy actually sends, rather than a copy in the frontend that drifts the moment the rubric is edited.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AutoRouterClassifierDefaultPromptResponse
+  - term: AutoRouterClassifierPromptPreviewRequest
+    definition: 'A POST rather than query params: the classification sections are the operator''s own text, which must not reach access logs through
+      a URL.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AutoRouterClassifierPromptPreviewRequest
+  - term: AutoRouterPresetConfig
+    definition: The complexity_router_config a preset prefills. Only tiers is validated, because every dashboard consumer dereferences it; everything
+      else passes through verbatim with unknown fields kept (extra="allow"), so a catalog published after this proxy shipped still serves its
+      new fields intact.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AutoRouterPresetConfig
+  - term: AutoRouterPresetRecord
+    definition: One auto-router preset as served to the dashboard's template picker.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AutoRouterPresetRecord
+  - term: AutoRouterPresetTiers
+    definition: 'Exactly the four built-in tiers the dashboard''s preset prefill can apply. extra="forbid" on purpose: a tier name this dashboard
+      cannot apply would grey out or crash the picker, so such a catalog is rejected wholesale and the bundled one serves instead.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AutoRouterPresetTiers
+  - term: AutoRouterRoutingTestRequest
+    definition: 'A single request to classify against a complexity-router config that need not be saved yet. Carries the same fields the serving
+      path carries, so a dry run classifies what a real turn would classify. `messages`, `system` and `tools` are forwarded to the routing hook
+      untranslated, which is why they are typed loosely: the hook reads whatever dialect the surface produced, and validating them against o'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AutoRouterRoutingTestRequest
+  - term: AutoRouterRoutingTestResponse
+    definition: Where one prompt would have been routed, and why.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AutoRouterRoutingTestResponse
+  - term: AutoRouterSessionResponse
+    definition: 'One auto-routed session as its own key sees it: what the last turn ran on, and what the session cost against the router''s savings
+      baseline (the priciest model in its hardest tier).'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AutoRouterSessionResponse
+  - term: AwsSessionTag
+    definition: 'Object declared by the contract with fields: Key, Value.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/AwsSessionTag
+  - term: BaseLitellmParams
+    definition: 'Object declared by the contract with fields: patterns, blocked_words, blocked_words_file, categories, severity_threshold, pattern_redaction_format,
+      keyword_redaction_tag, api_key, api_base, experimental_use_latest_role_message_only, only_scan_new_messages, skip_system_message_in_guardrail.
+      (33 more)'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BaseLitellmParams
+  - term: BedrockChecksConfigModel
+    definition: Inline `checks` config for the resource-less Bedrock InvokeGuardrailChecks API. Include only the checks you want to run; at least
+      one must be set.
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BedrockChecksConfigModel
+  - term: BedrockChecksContentFilterCategoryItem
+    definition: 'Object declared by the contract with fields: category.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BedrockChecksContentFilterCategoryItem
+  - term: BedrockChecksContentFilterModel
+    definition: 'Object declared by the contract with fields: categories.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BedrockChecksContentFilterModel
+  - term: BedrockChecksPromptAttackCategoryItem
+    definition: 'Object declared by the contract with fields: category.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BedrockChecksPromptAttackCategoryItem
+  - term: BedrockChecksPromptAttackModel
+    definition: 'Object declared by the contract with fields: categories.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BedrockChecksPromptAttackModel
+  - term: BedrockChecksSensitiveInformationEntityItem
+    definition: 'Object declared by the contract with fields: type.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BedrockChecksSensitiveInformationEntityItem
+  - term: BedrockChecksSensitiveInformationModel
+    definition: 'Object declared by the contract with fields: entities.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BedrockChecksSensitiveInformationModel
+  - term: BlockKeyRequest
+    definition: 'Object declared by the contract with fields: key.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BlockKeyRequest
+  - term: BlockModelRequest
+    definition: 'Object declared by the contract with fields: model_id.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BlockModelRequest
+  - term: BlockTeamRequest
+    definition: 'Object declared by the contract with fields: team_id.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BlockTeamRequest
+  - term: BlockUnpricedModelsRequest
+    definition: 'Object declared by the contract with fields: enabled.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BlockUnpricedModelsRequest
+  - term: BlockUnpricedModelsResponse
+    definition: 'Object declared by the contract with fields: enabled.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BlockUnpricedModelsResponse
+  - term: BlockUsers
+    definition: 'Object declared by the contract with fields: user_ids.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BlockUsers
+  - term: BlockUsersResponse
+    definition: 'Object declared by the contract with fields: blocked_users.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BlockUsersResponse
+  - term: BlockedWord
+    definition: Represents a blocked word with its action and optional description
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BlockedWord
+  - term: BlogPost
+    definition: 'Object declared by the contract with fields: title, description, date, url.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BlogPost
+  - term: BlogPostsResponse
+    definition: 'Object declared by the contract with fields: posts.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/BlogPostsResponse
+  - term: Body_apiclaw_test_model_connection_health_test_connection_post
+    definition: 'Object declared by the contract with fields: mode, litellm_params, model_info.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_apiclaw_test_model_connection_health_test_connection_post
+  - term: Body_audio_transcriptions_audio_transcriptions_post
+    definition: 'Object declared by the contract with fields: file.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_audio_transcriptions_audio_transcriptions_post
+  - term: Body_audio_transcriptions_v1_audio_transcriptions_post
+    definition: 'Object declared by the contract with fields: file.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_audio_transcriptions_v1_audio_transcriptions_post
+  - term: Body_authorize_complete_authorize_complete_post
+    definition: 'Object declared by the contract with fields: flow, delivery, team_id, decision.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_authorize_complete_authorize_complete_post
+  - term: Body_convert_prompt_file_to_json_utils_dotprompt_json_converter_post
+    definition: 'Object declared by the contract with fields: file.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_convert_prompt_file_to_json_utils_dotprompt_json_converter_post
+  - term: Body_create_file__provider__v1_files_post
+    definition: 'Object declared by the contract with fields: purpose, target_model_names, target_storage, custom_llm_provider, file, litellm_metadata.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_create_file__provider__v1_files_post
+  - term: Body_create_file_files_post
+    definition: 'Object declared by the contract with fields: purpose, target_model_names, target_storage, custom_llm_provider, file, litellm_metadata.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_create_file_files_post
+  - term: Body_create_file_v1_files_post
+    definition: 'Object declared by the contract with fields: purpose, target_model_names, target_storage, custom_llm_provider, file, litellm_metadata.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_create_file_v1_files_post
+  - term: Body_image_edit_api_images_edits_post
+    definition: 'Object declared by the contract with fields: image, image[], mask, mask[].'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_image_edit_api_images_edits_post
+  - term: Body_image_edit_api_openai_deployments__model__images_edits_post
+    definition: 'Object declared by the contract with fields: image, image[], mask, mask[].'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_image_edit_api_openai_deployments__model__images_edits_post
+  - term: Body_image_edit_api_v1_images_edits_post
+    definition: 'Object declared by the contract with fields: image, image[], mask, mask[].'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_image_edit_api_v1_images_edits_post
+  - term: Body_introspect_endpoint_introspect_post
+    definition: 'Object declared by the contract with fields: token.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_introspect_endpoint_introspect_post
+  - term: Body_revoke_endpoint_revoke_post
+    definition: 'Object declared by the contract with fields: token, client_id.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_revoke_endpoint_revoke_post
+  - term: Body_token_endpoint__mcp_server_name__token_post
+    definition: 'Object declared by the contract with fields: grant_type, code, redirect_uri, client_id, client_secret, code_verifier, refresh_token,
+      scope, resource.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_token_endpoint__mcp_server_name__token_post
+  - term: Body_token_endpoint_token_post
+    definition: 'Object declared by the contract with fields: grant_type, code, redirect_uri, client_id, client_secret, code_verifier, refresh_token,
+      scope, resource.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_token_endpoint_token_post
+  - term: Body_upload_logo_upload_logo_post
+    definition: 'Object declared by the contract with fields: file.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_upload_logo_upload_logo_post
+  - term: Body_video_create_character_v1_videos_characters_post
+    definition: 'Object declared by the contract with fields: video, name.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_video_create_character_v1_videos_characters_post
+  - term: Body_video_create_character_videos_characters_post
+    definition: 'Object declared by the contract with fields: video, name.'
+    tags:
+    - Object
+    source: openapi/apiclaw.json#/components/schemas/Body_video_create_character_videos_characters_post

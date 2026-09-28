@@ -1,0 +1,606 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Cost Tracking API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Cost Tracking
+paths:
+  /config/cost_discount_config:
+    get:
+      tags:
+      - Cost Tracking
+      summary: Get Cost Discount Config
+      description: 'Get current cost discount configuration.
+
+
+        Returns the cost_discount_config from litellm_settings.'
+      operationId: get_cost_discount_config_config_cost_discount_config_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+    patch:
+      tags:
+      - Cost Tracking
+      summary: Update Cost Discount Config
+      description: 'Update cost discount configuration.
+
+
+        Updates the cost_discount_config in litellm_settings.
+
+        Discounts should be between 0 and 1 (e.g., 0.05 = 5% discount).
+
+
+        Example:
+
+        ```json
+
+        {
+
+        "vertex_ai": 0.05,
+
+        "gemini": 0.05,
+
+        "openai": 0.01
+
+        }
+
+        ```'
+      operationId: update_cost_discount_config_config_cost_discount_config_patch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties:
+                type: number
+              type: object
+              title: Cost Discount Config
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /config/cost_margin_config:
+    get:
+      tags:
+      - Cost Tracking
+      summary: Get Cost Margin Config
+      description: 'Get current cost margin configuration.
+
+
+        Returns the cost_margin_config from litellm_settings.'
+      operationId: get_cost_margin_config_config_cost_margin_config_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+    patch:
+      tags:
+      - Cost Tracking
+      summary: Update Cost Margin Config
+      description: 'Update cost margin configuration.
+
+
+        Updates the cost_margin_config in litellm_settings.
+
+        Margins can be:
+
+        - Percentage: {"openai": 0.10} = 10% margin
+
+        - Fixed amount: {"openai": {"fixed_amount": 0.001}} = $0.001 per request
+
+        - Combined: {"vertex_ai": {"percentage": 0.08, "fixed_amount": 0.0005}}
+
+        - Global: {"global": 0.05} = 5% global margin on all providers
+
+
+        Example:
+
+        ```json
+
+        {
+
+        "global": 0.05,
+
+        "openai": 0.10,
+
+        "anthropic": {"fixed_amount": 0.001},
+
+        "vertex_ai": {"percentage": 0.08, "fixed_amount": 0.0005}
+
+        }
+
+        ```'
+      operationId: update_cost_margin_config_config_cost_margin_config_patch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties:
+                anyOf:
+                - type: number
+                - additionalProperties:
+                    type: number
+                  type: object
+              type: object
+              title: Cost Margin Config
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /config/block_requests_for_models_without_pricing:
+    get:
+      tags:
+      - Cost Tracking
+      summary: Get Block Requests For Models Without Pricing
+      operationId: get_block_requests_for_models_without_pricing_config_block_requests_for_models_without_pricing_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockUnpricedModelsResponse'
+      security:
+      - APIKeyHeader: []
+    patch:
+      tags:
+      - Cost Tracking
+      summary: Update Block Requests For Models Without Pricing
+      operationId: update_block_requests_for_models_without_pricing_config_block_requests_for_models_without_pricing_patch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockUnpricedModelsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockUnpricedModelsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /cost/estimate:
+    post:
+      tags:
+      - Cost Tracking
+      summary: Estimate Cost
+      description: 'Estimate cost for a given model and token counts.
+
+
+        This endpoint uses the same cost calculation logic as actual requests,
+
+        including any configured margins and discounts.
+
+
+        Parameters:
+
+        - model: Model name (e.g., "gpt-4", "claude-3-opus")
+
+        - input_tokens: Expected input tokens per request
+
+        - output_tokens: Expected output tokens per request
+
+        - cache_read_input_tokens: Cache-read tokens per request, counted within input_tokens (optional)
+
+        - cache_creation_input_tokens: Cache-write tokens per request, counted within input_tokens (optional)
+
+        - reasoning_tokens: Reasoning tokens per request, counted within output_tokens (optional)
+
+        - num_requests_per_day: Number of requests per day (optional)
+
+        - num_requests_per_month: Number of requests per month (optional)
+
+
+        Returns cost breakdown including:
+
+        - Per-request costs (input, output, margin, plus the cache-read, cache-write and reasoning shares)
+
+        - Daily costs (if num_requests_per_day provided)
+
+        - Monthly costs (if num_requests_per_month provided)
+
+
+        Example:
+
+        ```json
+
+        {
+
+        "model": "gpt-4",
+
+        "input_tokens": 1000,
+
+        "cache_read_input_tokens": 800,
+
+        "output_tokens": 500,
+
+        "reasoning_tokens": 200,
+
+        "num_requests_per_day": 100,
+
+        "num_requests_per_month": 3000
+
+        }
+
+        ```'
+      operationId: estimate_cost_cost_estimate_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CostEstimateRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CostEstimateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    BlockUnpricedModelsRequest:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+      type: object
+      required:
+      - enabled
+      title: BlockUnpricedModelsRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CostEstimateResponse:
+      properties:
+        model:
+          type: string
+          title: Model
+        input_tokens:
+          type: integer
+          title: Input Tokens
+        output_tokens:
+          type: integer
+          title: Output Tokens
+        cache_read_input_tokens:
+          type: integer
+          title: Cache Read Input Tokens
+          default: 0
+        cache_creation_input_tokens:
+          type: integer
+          title: Cache Creation Input Tokens
+          default: 0
+        reasoning_tokens:
+          type: integer
+          title: Reasoning Tokens
+          default: 0
+        num_requests_per_day:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Num Requests Per Day
+        num_requests_per_month:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Num Requests Per Month
+        cost_per_request:
+          type: number
+          title: Cost Per Request
+          description: Total cost per request (includes margin)
+        input_cost_per_request:
+          type: number
+          title: Input Cost Per Request
+          description: Input token cost per request (before margin)
+        output_cost_per_request:
+          type: number
+          title: Output Cost Per Request
+          description: Output token cost per request (before margin)
+        margin_cost_per_request:
+          type: number
+          title: Margin Cost Per Request
+          description: Margin/fee added per request
+          default: 0.0
+        cache_read_cost_per_request:
+          type: number
+          title: Cache Read Cost Per Request
+          description: Cache-read share of input_cost_per_request
+          default: 0.0
+        cache_creation_cost_per_request:
+          type: number
+          title: Cache Creation Cost Per Request
+          description: Cache-write share of input_cost_per_request
+          default: 0.0
+        reasoning_cost_per_request:
+          type: number
+          title: Reasoning Cost Per Request
+          description: Reasoning share of output_cost_per_request
+          default: 0.0
+        daily_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Daily Cost
+          description: Total daily cost (includes margin)
+        daily_input_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Daily Input Cost
+          description: Daily input token cost
+        daily_output_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Daily Output Cost
+          description: Daily output token cost
+        daily_margin_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Daily Margin Cost
+          description: Daily margin/fee
+        daily_cache_read_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Daily Cache Read Cost
+          description: Cache-read share of daily_input_cost
+        daily_cache_creation_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Daily Cache Creation Cost
+          description: Cache-write share of daily_input_cost
+        daily_reasoning_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Daily Reasoning Cost
+          description: Reasoning share of daily_output_cost
+        monthly_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Monthly Cost
+          description: Total monthly cost (includes margin)
+        monthly_input_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Monthly Input Cost
+          description: Monthly input token cost
+        monthly_output_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Monthly Output Cost
+          description: Monthly output token cost
+        monthly_margin_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Monthly Margin Cost
+          description: Monthly margin/fee
+        monthly_cache_read_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Monthly Cache Read Cost
+          description: Cache-read share of monthly_input_cost
+        monthly_cache_creation_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Monthly Cache Creation Cost
+          description: Cache-write share of monthly_input_cost
+        monthly_reasoning_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Monthly Reasoning Cost
+          description: Reasoning share of monthly_output_cost
+        input_cost_per_token:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Input Cost Per Token
+          description: Rate billed per input token
+        output_cost_per_token:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Output Cost Per Token
+          description: Rate billed per output token
+        cache_read_input_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Cache Read Input Token Cost
+          description: Rate billed per cache-read token
+        cache_creation_input_token_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Cache Creation Input Token Cost
+          description: Rate billed per cache-write token
+        output_cost_per_reasoning_token:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Output Cost Per Reasoning Token
+          description: Rate billed per reasoning token
+        provider:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Provider
+      type: object
+      required:
+      - model
+      - input_tokens
+      - output_tokens
+      - cost_per_request
+      - input_cost_per_request
+      - output_cost_per_request
+      title: CostEstimateResponse
+      description: Response body for /cost/estimate endpoint.
+    BlockUnpricedModelsResponse:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+      type: object
+      required:
+      - enabled
+      title: BlockUnpricedModelsResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CostEstimateRequest:
+      properties:
+        model:
+          type: string
+          title: Model
+          description: Model name (from /model_group/info)
+        input_tokens:
+          type: integer
+          minimum: 0.0
+          title: Input Tokens
+          description: Expected input tokens per request
+        output_tokens:
+          type: integer
+          minimum: 0.0
+          title: Output Tokens
+          description: Expected output tokens per request
+        cache_read_input_tokens:
+          type: integer
+          minimum: 0.0
+          title: Cache Read Input Tokens
+          description: Input tokens read from the prompt cache; counted within input_tokens
+          default: 0
+        cache_creation_input_tokens:
+          type: integer
+          minimum: 0.0
+          title: Cache Creation Input Tokens
+          description: Input tokens written to the prompt cache; counted within input_tokens
+          default: 0
+        reasoning_tokens:
+          type: integer
+          minimum: 0.0
+          title: Reasoning Tokens
+          description: Reasoning tokens the model emits; counted within output_tokens
+          default: 0
+        num_requests_per_day:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Num Requests Per Day
+          description: Number of requests per day
+        num_requests_per_month:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Num Requests Per Month
+          description: Number of requests per month
+      type: object
+      required:
+      - model
+      - input_tokens
+      - output_tokens
+      title: CostEstimateRequest
+      description: Request body for /cost/estimate endpoint.
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

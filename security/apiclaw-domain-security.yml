@@ -1,0 +1,17 @@
+generated: '2026-09-27'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: apiclaw.biz
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Nov 21 17:04:55 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+domains:
+- domain: apiclaw.biz
+  dnssec: false
+  caa: []
+  spf: false
+  dmarc: true
+  dmarc_policy: quarantine

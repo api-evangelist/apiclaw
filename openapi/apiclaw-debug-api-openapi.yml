@@ -1,0 +1,43 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Debug API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Debug
+paths:
+  /debug/asyncio-tasks:
+    get:
+      summary: Get Active Tasks Stats
+      description: 'Returns:
+
+        total_active_tasks: int
+
+        by_name: { coroutine_name: count }'
+      operationId: get_active_tasks_stats_debug_asyncio_tasks_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+      tags:
+      - Debug
+components:
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

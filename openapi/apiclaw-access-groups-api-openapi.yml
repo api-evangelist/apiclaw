@@ -1,0 +1,522 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Access Groups API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: access_groups
+paths:
+  /v1/access_group:
+    get:
+      operationId: list_access_groups_v1_access_group_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/AccessGroupResponse'
+                title: Response List Access Groups V1 Access Group Get
+                type: array
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: List Access Groups
+      tags:
+      - access_groups
+    post:
+      operationId: create_access_group_v1_access_group_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccessGroupCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessGroupResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Create Access Group
+      tags:
+      - access_groups
+  /v1/access_group/{access_group_id}:
+    delete:
+      operationId: delete_access_group_v1_access_group__access_group_id__delete
+      parameters:
+      - in: path
+        name: access_group_id
+        required: true
+        schema:
+          title: Access Group Id
+          type: string
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Delete Access Group
+      tags:
+      - access_groups
+    get:
+      operationId: get_access_group_v1_access_group__access_group_id__get
+      parameters:
+      - in: path
+        name: access_group_id
+        required: true
+        schema:
+          title: Access Group Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessGroupResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Get Access Group
+      tags:
+      - access_groups
+    put:
+      operationId: update_access_group_v1_access_group__access_group_id__put
+      parameters:
+      - in: path
+        name: access_group_id
+        required: true
+        schema:
+          title: Access Group Id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccessGroupUpdateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessGroupResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Update Access Group
+      tags:
+      - access_groups
+  /v1/unified_access_group:
+    get:
+      operationId: list_access_groups_v1_unified_access_group_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/AccessGroupResponse'
+                title: Response List Access Groups V1 Unified Access Group Get
+                type: array
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: List Access Groups
+      tags:
+      - access_groups
+    post:
+      operationId: create_access_group_v1_unified_access_group_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccessGroupCreateRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessGroupResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Create Access Group
+      tags:
+      - access_groups
+  /v1/unified_access_group/{access_group_id}:
+    delete:
+      operationId: delete_access_group_v1_unified_access_group__access_group_id__delete
+      parameters:
+      - in: path
+        name: access_group_id
+        required: true
+        schema:
+          title: Access Group Id
+          type: string
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Delete Access Group
+      tags:
+      - access_groups
+    get:
+      operationId: get_access_group_v1_unified_access_group__access_group_id__get
+      parameters:
+      - in: path
+        name: access_group_id
+        required: true
+        schema:
+          title: Access Group Id
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessGroupResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Get Access Group
+      tags:
+      - access_groups
+    put:
+      operationId: update_access_group_v1_unified_access_group__access_group_id__put
+      parameters:
+      - in: path
+        name: access_group_id
+        required: true
+        schema:
+          title: Access Group Id
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccessGroupUpdateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessGroupResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Update Access Group
+      tags:
+      - access_groups
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AccessGroupResource:
+      description: A resource referenced by an access group. `name` is null when the id no longer resolves or has no alias.
+      properties:
+        id:
+          title: Id
+          type: string
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      required:
+      - id
+      - name
+      title: AccessGroupResource
+      type: object
+    AccessGroupResponse:
+      properties:
+        access_agent_ids:
+          items:
+            type: string
+          title: Access Agent Ids
+          type: array
+        access_agents:
+          items:
+            $ref: '#/components/schemas/AccessGroupResource'
+          title: Access Agents
+          type: array
+        access_group_id:
+          title: Access Group Id
+          type: string
+        access_group_name:
+          title: Access Group Name
+          type: string
+        access_mcp_server_ids:
+          items:
+            type: string
+          title: Access Mcp Server Ids
+          type: array
+        access_mcp_servers:
+          items:
+            $ref: '#/components/schemas/AccessGroupResource'
+          title: Access Mcp Servers
+          type: array
+        access_model_names:
+          items:
+            type: string
+          title: Access Model Names
+          type: array
+        assigned_key_ids:
+          items:
+            type: string
+          title: Assigned Key Ids
+          type: array
+        assigned_keys:
+          items:
+            $ref: '#/components/schemas/AccessGroupResource'
+          title: Assigned Keys
+          type: array
+        assigned_team_ids:
+          items:
+            type: string
+          title: Assigned Team Ids
+          type: array
+        assigned_teams:
+          items:
+            $ref: '#/components/schemas/AccessGroupResource'
+          title: Assigned Teams
+          type: array
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        created_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        updated_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated By
+      required:
+      - access_group_id
+      - access_group_name
+      - access_model_names
+      - access_mcp_server_ids
+      - access_agent_ids
+      - assigned_team_ids
+      - assigned_key_ids
+      - access_mcp_servers
+      - access_agents
+      - assigned_teams
+      - assigned_keys
+      - created_at
+      - updated_at
+      title: AccessGroupResponse
+      type: object
+    AccessGroupCreateRequest:
+      properties:
+        access_agent_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Access Agent Ids
+        access_group_name:
+          title: Access Group Name
+          type: string
+        access_mcp_server_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Access Mcp Server Ids
+        access_model_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Access Model Names
+        assigned_key_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Assigned Key Ids
+        assigned_team_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Assigned Team Ids
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+      required:
+      - access_group_name
+      title: AccessGroupCreateRequest
+      type: object
+    AccessGroupUpdateRequest:
+      properties:
+        access_agent_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Access Agent Ids
+        access_group_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Group Name
+        access_mcp_server_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Access Mcp Server Ids
+        access_model_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Access Model Names
+        assigned_key_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Assigned Key Ids
+        assigned_team_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Assigned Team Ids
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+      title: AccessGroupUpdateRequest
+      type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

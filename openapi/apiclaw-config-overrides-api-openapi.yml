@@ -1,0 +1,435 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Config Overrides API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: config_overrides
+paths:
+  /config_overrides/cyberark:
+    delete:
+      description: Delete CyberArk Conjur configuration. Idempotent.
+      operationId: delete_cyberark_config_config_overrides_cyberark_delete
+      parameters:
+      - description: The litellm-changed-by header enables tracking of actions performed by authorized users on behalf of other users, providing an audit trail for accountability
+        in: header
+        name: litellm-changed-by
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The litellm-changed-by header enables tracking of actions performed by authorized users on behalf of other users, providing an audit trail for accountability
+          title: Litellm-Changed-By
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+                title: Response Delete Cyberark Config Config Overrides Cyberark Delete
+                type: object
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Delete Cyberark Config
+      tags:
+      - config_overrides
+    get:
+      description: 'Get current CyberArk Conjur configuration.
+
+        Returns decrypted values from DB, or falls back to current env vars.
+
+        Sensitive fields are masked before leaving the server.'
+      operationId: get_cyberark_config_config_overrides_cyberark_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigOverrideSettingsResponse'
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: Get Cyberark Config
+      tags:
+      - config_overrides
+    post:
+      description: 'Update CyberArk Conjur secret manager configuration.
+
+        Sets environment variables, encrypts sensitive fields, and stores in DB.
+
+        Reinitializes the secret manager on this pod.'
+      operationId: update_cyberark_config_config_overrides_cyberark_post
+      parameters:
+      - description: The litellm-changed-by header enables tracking of actions performed by authorized users on behalf of other users, providing an audit trail for accountability
+        in: header
+        name: litellm-changed-by
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The litellm-changed-by header enables tracking of actions performed by authorized users on behalf of other users, providing an audit trail for accountability
+          title: Litellm-Changed-By
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CyberArkConfig'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+                title: Response Update Cyberark Config Config Overrides Cyberark Post
+                type: object
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Update Cyberark Config
+      tags:
+      - config_overrides
+  /config_overrides/cyberark/test_connection:
+    post:
+      description: 'Test the connection to the currently configured CyberArk Conjur server.
+
+        Uses the already-initialized secret manager client. Does not modify any state.'
+      operationId: test_cyberark_connection_config_overrides_cyberaREDACTED_STRIPE_KEY_post
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+                title: Response Test Cyberark Connection Config Overrides Cyberark Test Connection Post
+                type: object
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: Test Cyberark Connection
+      tags:
+      - config_overrides
+  /config_overrides/hashicorp_vault:
+    delete:
+      description: Delete Hashicorp Vault configuration. Idempotent.
+      operationId: delete_hashicorp_vault_config_config_overrides_hashicorp_vault_delete
+      parameters:
+      - description: The litellm-changed-by header enables tracking of actions performed by authorized users on behalf of other users, providing an audit trail for accountability
+        in: header
+        name: litellm-changed-by
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The litellm-changed-by header enables tracking of actions performed by authorized users on behalf of other users, providing an audit trail for accountability
+          title: Litellm-Changed-By
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Delete Hashicorp Vault Config
+      tags:
+      - config_overrides
+    get:
+      description: 'Get current Hashicorp Vault configuration.
+
+        Returns decrypted values from DB, or falls back to current env vars.'
+      operationId: get_hashicorp_vault_config_config_overrides_hashicorp_vault_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigOverrideSettingsResponse'
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: Get Hashicorp Vault Config
+      tags:
+      - config_overrides
+    post:
+      description: 'Update Hashicorp Vault secret manager configuration.
+
+        Sets environment variables, encrypts sensitive fields, and stores in DB.
+
+        Reinitializes the secret manager on this pod.'
+      operationId: update_hashicorp_vault_config_config_overrides_hashicorp_vault_post
+      parameters:
+      - description: The litellm-changed-by header enables tracking of actions performed by authorized users on behalf of other users, providing an audit trail for accountability
+        in: header
+        name: litellm-changed-by
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The litellm-changed-by header enables tracking of actions performed by authorized users on behalf of other users, providing an audit trail for accountability
+          title: Litellm-Changed-By
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HashicorpVaultConfig'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Update Hashicorp Vault Config
+      tags:
+      - config_overrides
+  /config_overrides/hashicorp_vault/test_connection:
+    post:
+      description: 'Test the connection to the currently configured Hashicorp Vault.
+
+        Uses the already-initialized secret manager client. Does not modify any state.'
+      operationId: test_hashicorp_vault_connection_config_overrides_hashicorp_vault_test_connection_post
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: Test Hashicorp Vault Connection
+      tags:
+      - config_overrides
+components:
+  schemas:
+    ConfigOverrideSettingsResponse:
+      description: Response model for config override settings GET endpoints.
+      properties:
+        config_type:
+          description: The type of config override
+          title: Config Type
+          type: string
+        field_schema:
+          additionalProperties: true
+          description: Schema information for UI rendering
+          title: Field Schema
+          type: object
+        values:
+          additionalProperties: true
+          description: Current configuration values (sensitive fields decrypted)
+          title: Values
+          type: object
+      required:
+      - config_type
+      - values
+      - field_schema
+      title: ConfigOverrideSettingsResponse
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CyberArkConfig:
+      description: Configuration for CyberArk Conjur secret manager integration.
+      properties:
+        client_cert:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Path to the client TLS certificate for certificate-based authentication
+          title: Client Cert
+        client_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Path to the client TLS private key for certificate-based authentication
+          title: Client Key
+        cyberark_account:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The Conjur organization account name
+          title: Cyberark Account
+        cyberark_api_base:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The address of the CyberArk Conjur server (e.g., https://conjur.example.com)
+          title: Cyberark Api Base
+        cyberark_api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key for Conjur API-key authentication
+          title: Cyberark Api Key
+        cyberark_username:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The Conjur username (login) to authenticate as
+          title: Cyberark Username
+        refresh_interval:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Auth token cache TTL in seconds (default: 300)'
+          title: Refresh Interval
+        ssl_verify:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Set to false to disable SSL verification (e.g., for self-signed certificates)
+          title: Ssl Verify
+      title: CyberArkConfig
+      type: object
+    HashicorpVaultConfig:
+      description: Configuration for Hashicorp Vault secret manager integration.
+      properties:
+        approle_mount_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Mount path for the AppRole auth method (default: approle)'
+          title: Approle Mount Path
+        approle_role_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Role ID for Vault AppRole authentication
+          title: Approle Role Id
+        approle_secret_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Secret ID for Vault AppRole authentication
+          title: Approle Secret Id
+        client_cert:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Path to the client TLS certificate for Vault
+          title: Client Cert
+        client_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Path to the client TLS private key for Vault
+          title: Client Key
+        vault_addr:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The address of the Vault server (e.g., https://vault.example.com:8200)
+          title: Vault Addr
+        vault_cert_role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Certificate role name for TLS cert authentication
+          title: Vault Cert Role
+        vault_mount_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'KV engine mount name (default: secret)'
+          title: Vault Mount Name
+        vault_namespace:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Vault namespace (for multi-tenant Vault, sent as X-Vault-Namespace header)
+          title: Vault Namespace
+        vault_path_prefix:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Optional path prefix for secrets (e.g., myapp -> secret/data/myapp/{secret_name})
+          title: Vault Path Prefix
+        vault_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Token for Vault token-based authentication
+          title: Vault Token
+      title: HashicorpVaultConfig
+      type: object
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

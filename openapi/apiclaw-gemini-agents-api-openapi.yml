@@ -1,0 +1,281 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Gemini Agents API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: gemini_agents
+paths:
+  /v1beta/agents:
+    get:
+      description: 'List all custom agents on the Gemini side.
+
+
+        Pass per-request Gemini credentials via the JSON-encoded
+
+        ``litellm_params_template`` query parameter. Flat query parameters
+
+        (e.g. ``?api_key=AIza...``) are intentionally ignored — see
+
+        ``_merge_query_params_into_data`` for the rationale.
+
+
+        ```bash
+
+        curl "http://localhost:4000/v1beta/agents?litellm_params_template=%7B%22api_key%22%3A%22AIza...%22%7D" \
+
+        -H "Authorization: Bearer sk-..."
+
+        ```'
+      operationId: list_gemini_agents_v1beta_agents_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: List Gemini Agents
+      tags:
+      - gemini_agents
+    post:
+      description: 'Create a named custom agent on the Gemini side.
+
+
+        Example:
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1beta/agents" \
+
+        -H "Authorization: Bearer sk-..." \
+
+        -H "Content-Type: application/json" \
+
+        -d ''{
+
+        "name": "my-custom-slides-agent",
+
+        "base_agent": "waverunner",
+
+        "instructions": "You are a helpful assistant that creates slides.",
+
+        "base_environment": {
+
+        "type": "remote",
+
+        "sources": [
+
+        {"type": "gcs", "source": "gs://eap-templates/slides-skill",
+
+        "target": "/.agents/skills/slides-skill"}
+
+        ]
+
+        }
+
+        }''
+
+        ```'
+      operationId: create_gemini_agent_v1beta_agents_post
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: Create Gemini Agent
+      tags:
+      - gemini_agents
+  /v1beta/agents/{name}:
+    delete:
+      description: 'Delete a custom agent by name.
+
+
+        Pass per-request Gemini credentials via the JSON-encoded
+
+        ``litellm_params_template`` query parameter. Flat query parameters
+
+        (e.g. ``?api_key=AIza...``) are intentionally ignored — see
+
+        ``_merge_query_params_into_data`` for the rationale.
+
+
+        ```bash
+
+        curl -X DELETE "http://localhost:4000/v1beta/agents/my-custom-slides-agent?litellm_params_template=%7B%22api_key%22%3A%22AIza...%22%7D" \
+
+        -H "Authorization: Bearer sk-..."
+
+        ```'
+      operationId: delete_gemini_agent_v1beta_agents__name__delete
+      parameters:
+      - in: path
+        name: name
+        required: true
+        schema:
+          title: Name
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Delete Gemini Agent
+      tags:
+      - gemini_agents
+    get:
+      description: 'Get a specific custom agent by name.
+
+
+        Pass per-request Gemini credentials via the JSON-encoded
+
+        ``litellm_params_template`` query parameter. Flat query parameters
+
+        (e.g. ``?api_key=AIza...``) are intentionally ignored — see
+
+        ``_merge_query_params_into_data`` for the rationale.
+
+
+        ```bash
+
+        curl "http://localhost:4000/v1beta/agents/my-custom-slides-agent?litellm_params_template=%7B%22api_key%22%3A%22AIza...%22%7D" \
+
+        -H "Authorization: Bearer sk-..."
+
+        ```'
+      operationId: get_gemini_agent_v1beta_agents__name__get
+      parameters:
+      - in: path
+        name: name
+        required: true
+        schema:
+          title: Name
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Get Gemini Agent
+      tags:
+      - gemini_agents
+  /v1beta/agents/{name}/versions:
+    get:
+      description: 'List versions of a custom agent.
+
+
+        Pass per-request Gemini credentials via the JSON-encoded
+
+        ``litellm_params_template`` query parameter. Flat query parameters
+
+        (e.g. ``?api_key=AIza...``) are intentionally ignored — see
+
+        ``_merge_query_params_into_data`` for the rationale.
+
+
+        ```bash
+
+        curl "http://localhost:4000/v1beta/agents/my-custom-slides-agent/versions?litellm_params_template=%7B%22api_key%22%3A%22AIza...%22%7D" \
+
+        -H "Authorization: Bearer sk-..."
+
+        ```'
+      operationId: list_gemini_agent_versions_v1beta_agents__name__versions_get
+      parameters:
+      - in: path
+        name: name
+        required: true
+        schema:
+          title: Name
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: List Gemini Agent Versions
+      tags:
+      - gemini_agents
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

@@ -1,0 +1,3115 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Internal User management API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Internal User management
+paths:
+  /user/new:
+    post:
+      tags:
+      - Internal User management
+      summary: New User
+      description: Use this to create a new INTERNAL user with a budget.
+      operationId: new_user_user_new_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewUserRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewUserResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /user/info:
+    get:
+      tags:
+      - Internal User management
+      summary: User Info
+      description: '[10/07/2024]
+
+        Note: To get all users (+pagination), use `/user/list` endpoint.
+
+
+        Use this to get user information. (user row + all user key info)
+
+
+        Example request
+
+        ```
+
+        curl -X GET ''http://localhost:4000/user/info?user_id=krrish7%40berri.ai'' --header ''Authorization: Bearer sk-1234''
+
+        ```'
+      operationId: user_info_user_info_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: User ID in the request parameters
+          title: User Id
+        description: User ID in the request parameters
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v2/user/info:
+    get:
+      tags:
+      - Internal User management
+      summary: User Info V2
+      description: 'Lightweight endpoint to get user info. Returns only the user object — no keys, no teams objects.
+
+
+        This is the v2 replacement for /user/info, designed to avoid the "god endpoint" problem
+
+        where the old endpoint loaded all keys and teams into memory.
+
+
+        Note on `spend`: this is the user''s running budget counter, which the budget reset job
+
+        resets whenever `budget_reset_at` elapses (see `budget_duration`): to zero by default,
+
+        or to the overage above `max_budget` when `budget_rollover` is enabled. It is NOT
+
+        lifetime or per-period historical spend. For historical spend over a date range, use
+
+        `/user/daily/activity` or `/user/daily/activity/aggregated`, which read daily spend
+
+        records that only ever accumulate and are never reset. The two values are expected to
+
+        diverge once a budget reset has occurred within the queried period.
+
+
+        Access control:
+
+        - Proxy admins can query any user
+
+        - Team admins can query users within their teams
+
+        - Internal users can only query themselves (omit user_id or pass own)
+
+        - Returns 404 for non-existent users or unauthorized access
+
+
+        Example request:
+
+        ```
+
+        curl -X GET ''http://localhost:4000/v2/user/info?user_id=user123'' \
+
+        --header ''Authorization: Bearer sk-1234''
+
+        ```'
+      operationId: user_info_v2_v2_user_info_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: User ID in the request parameters
+          title: User Id
+        description: User ID in the request parameters
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoV2Response'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user/update:
+    post:
+      tags:
+      - Internal User management
+      summary: User Update
+      description: 'Example curl
+
+
+        ```
+
+        curl --location ''http://0.0.0.0:4000/user/update'' --header ''Authorization: Bearer sk-1234'' --header ''Content-Type: application/json'' --data ''{
+
+        "user_id": "test-litellm-user-4",
+
+        "user_role": "proxy_admin_viewer"
+
+        }''
+
+        ```
+
+
+        Parameters:
+
+        - user_id: Optional[str] - Specify a user id.'
+      operationId: user_update_user_update_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /user/bulk_update:
+    post:
+      tags:
+      - Internal User management
+      summary: Bulk User Update
+      description: 'Bulk update multiple users at once.
+
+
+        This endpoint allows updating multiple users in a single request. Each user update
+
+        is processed independently - if some updates fail, others will still succeed.
+
+
+        Parameters:
+
+        - users: Optional[List[UpdateUserRequest]] - List of specific user update requests
+
+        - all_users: Optional[bool] - Set to true to update all users in the system
+
+        - user_updates: Optional[UpdateUserRequest] - Updates to apply when all_users=True
+
+
+        Returns:
+
+        - results: List of individual update results
+
+        - total_requested: Total number of users requested for update
+
+        - successful_updates: Number of successful updates
+
+        - failed_updates: Number of failed updates
+
+
+        Example request for specific users:
+
+        ```bash
+
+        curl --location ''http://0.0.0.0:4000/user/bulk_update'' --header ''Authorization: Bearer sk-1234'' --header ''Content-Type: application/json'' --data ''{
+
+        "users": [
+
+        {
+
+        "user_id": "user1",
+
+        "user_role": "internal_user",
+
+        "max_budget": 100.0
+
+        },
+
+        {
+
+        "user_email": "user2@example.com",
+
+        "user_role": "internal_user_viewer",
+
+        "max_budget": 50.0
+
+        }
+
+        ]
+
+        }''
+
+        ```
+
+
+        Example request for all users:
+
+        ```bash
+
+        curl --location ''http://0.0.0.0:4000/user/bulk_update'' --header ''Authorization: Bearer sk-1234'' --header ''Content-Type: application/json'' --data ''{
+
+        "all_users": true,
+
+        "user_updates": {
+
+        "user_role": "internal_user",
+
+        "max_budget": 50.0
+
+        }
+
+        }''
+
+        ```'
+      operationId: bulk_user_update_user_bulk_update_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: litellm-changed-by
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The litellm-changed-by header enables tracking of actions performed by authorized users on behalf of other users, providing an audit trail for accountability
+          title: Litellm-Changed-By
+        description: The litellm-changed-by header enables tracking of actions performed by authorized users on behalf of other users, providing an audit trail for accountability
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkUpdateUserRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkUpdateUserResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user/list:
+    get:
+      tags:
+      - Internal User management
+      summary: Get Users
+      description: 'Get a paginated list of users with filtering and sorting options.
+
+
+        Parameters:
+
+        role: Optional[str]
+
+        Filter users by role. Can be one of:
+
+        - proxy_admin
+
+        - proxy_admin_viewer
+
+        - internal_user
+
+        - internal_user_viewer
+
+        user_ids: Optional[str]
+
+        Get list of users by user_ids. Comma separated list of user_ids.
+
+        sso_ids: Optional[str]
+
+        Get list of users by sso_ids. Comma separated list of sso_ids.
+
+        user_email: Optional[str]
+
+        Filter users by partial email match
+
+        search: Optional[str]
+
+        Combined search: matches users whose user_id or user_email contains the value (case-insensitive)
+
+        team: Optional[str]
+
+        Filter users by team id. Will match if user has this team in their teams array.
+
+        page: int
+
+        The page number to return
+
+        page_size: int
+
+        The number of items per page
+
+        sort_by: Optional[str]
+
+        Column to sort by (e.g. ''user_id'', ''user_email'', ''created_at'', ''spend'')
+
+        sort_order: Optional[str]
+
+        Sort order (''asc'' or ''desc'')'
+      operationId: get_users_user_list_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: role
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter users by role
+          title: Role
+        description: Filter users by role
+      - name: user_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Get list of users by user_ids
+          title: User Ids
+        description: Get list of users by user_ids
+      - name: sso_user_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Get list of users by sso_user_id
+          title: Sso User Ids
+        description: Get list of users by sso_user_id
+      - name: user_email
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter users by partial email match
+          title: User Email
+        description: Filter users by partial email match
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Combined search: matches users whose ''user_id'' or ''user_email'' contains the value (case-insensitive).'
+          title: Search
+        description: 'Combined search: matches users whose ''user_id'' or ''user_email'' contains the value (case-insensitive).'
+      - name: team
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter users by team id
+          title: Team
+        description: Filter users by team id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number
+          default: 1
+          title: Page
+        description: Page number
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          description: Number of items per page
+          default: 25
+          title: Page Size
+        description: Number of items per page
+      - name: sort_by
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Column to sort by (e.g. 'user_id', 'user_email', 'created_at', 'spend')
+          title: Sort By
+        description: Column to sort by (e.g. 'user_id', 'user_email', 'created_at', 'spend')
+      - name: sort_order
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Sort order ('asc' or 'desc')
+          default: asc
+          title: Sort Order
+        description: Sort order ('asc' or 'desc')
+      - name: organization_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter users by organization membership. Comma-separated list of org IDs.
+          title: Organization Ids
+        description: Filter users by organization membership. Comma-separated list of org IDs.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user/delete:
+    post:
+      tags:
+      - Internal User management
+      summary: Delete User
+      description: 'delete user and associated user keys
+
+
+        ```
+
+        curl --location ''http://0.0.0.0:4000/user/delete''
+
+        --header ''Authorization: Bearer sk-1234''
+
+        --header ''Content-Type: application/json''
+
+        --data-raw ''{
+
+        "user_ids": ["45e3e396-ee08-4a61-a88e-16b3ce7e0849"]
+
+        }''
+
+        ```
+
+
+        Parameters:
+
+        - user_ids: List[str] - The list of user id''s to be deleted.'
+      operationId: delete_user_user_delete_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: litellm-changed-by
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The litellm-changed-by header enables tracking of actions performed by authorized users on behalf of other users, providing an audit trail for accountability
+          title: Litellm-Changed-By
+        description: The litellm-changed-by header enables tracking of actions performed by authorized users on behalf of other users, providing an audit trail for accountability
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteUserRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user/daily/activity:
+    get:
+      tags:
+      - Internal User management
+      summary: Get User Daily Activity
+      description: '[BETA] This is a beta endpoint. It will change.
+
+
+        Meant to optimize querying spend data for analytics for a user.
+
+
+        Reads daily spend records that only ever accumulate and are never affected by budget
+
+        resets. Their total can legitimately exceed the `spend` field returned by
+
+        `/v2/user/info`, which is a running budget counter that every budget reset sets back
+
+        to zero (or to the overage above `max_budget` when `budget_rollover` is enabled).
+
+
+        Returns:
+
+        (by date)
+
+        - spend
+
+        - prompt_tokens
+
+        - completion_tokens
+
+        - cache_read_input_tokens
+
+        - cache_creation_input_tokens
+
+        - total_tokens
+
+        - api_requests
+
+        - breakdown by model, api_key, provider'
+      operationId: get_user_daily_activity_user_daily_activity_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Start date in YYYY-MM-DD format
+          title: Start Date
+        description: Start date in YYYY-MM-DD format
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: End date in YYYY-MM-DD format
+          title: End Date
+        description: End date in YYYY-MM-DD format
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific model
+          title: Model
+        description: Filter by specific model
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific API key
+          title: Api Key
+        description: Filter by specific API key
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+          title: User Id
+        description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          description: Page number for pagination
+          default: 1
+          title: Page
+        description: Page number for pagination
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: Items per page
+          default: 50
+          title: Page Size
+        description: Items per page
+      - name: timezone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+          title: Timezone
+        description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+      - name: include_current_utc_day
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+          default: false
+          title: Include Current Utc Day
+        description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpendAnalyticsPaginatedResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user/daily/activity/aggregated:
+    get:
+      tags:
+      - Internal User management
+      summary: Get User Daily Activity Aggregated
+      description: 'Aggregated analytics for a user''s daily activity without pagination.
+
+        Returns the same response shape as the paginated endpoint with page metadata set to single-page.
+
+
+        Reads daily spend records that only ever accumulate and are never affected by budget
+
+        resets. Their total can legitimately exceed the `spend` field returned by
+
+        `/v2/user/info`, which is a running budget counter that every budget reset sets back
+
+        to zero (or to the overage above `max_budget` when `budget_rollover` is enabled).'
+      operationId: get_user_daily_activity_aggregated_user_daily_activity_aggregated_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Start date in YYYY-MM-DD format
+          title: Start Date
+        description: Start date in YYYY-MM-DD format
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: End date in YYYY-MM-DD format
+          title: End Date
+        description: End date in YYYY-MM-DD format
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific model
+          title: Model
+        description: Filter by specific model
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific API key
+          title: Api Key
+        description: Filter by specific API key
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+          title: User Id
+        description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+      - name: timezone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+          title: Timezone
+        description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+      - name: include_current_utc_day
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+          default: false
+          title: Include Current Utc Day
+        description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpendAnalyticsPaginatedResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user/available_users:
+    get:
+      tags:
+      - Internal User management
+      summary: Available Enterprise Users
+      description: For keys with `max_users` set, return the list of users that are allowed to use the key.
+      operationId: available_enterprise_users_user_available_users_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    UpdateRouterConfig:
+      properties:
+        routing_strategy_args:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Routing Strategy Args
+        routing_strategy:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Routing Strategy
+        routing_groups:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RoutingGroup'
+            type: array
+          - type: 'null'
+          title: Routing Groups
+        retry_policy:
+          anyOf:
+          - $ref: '#/components/schemas/RetryPolicy'
+          - type: 'null'
+        model_group_retry_policy:
+          anyOf:
+          - additionalProperties:
+              $ref: '#/components/schemas/RetryPolicy'
+            type: object
+          - type: 'null'
+          title: Model Group Retry Policy
+        model_group_affinity_config:
+          anyOf:
+          - additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+          - type: 'null'
+          title: Model Group Affinity Config
+        allowed_fails:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Allowed Fails
+        cooldown_time:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Cooldown Time
+        num_retries:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Num Retries
+        timeout:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Timeout
+        max_retries:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Retries
+        retry_after:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Retry After
+        fallbacks:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Fallbacks
+        context_window_fallbacks:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Context Window Fallbacks
+        model_group_alias:
+          anyOf:
+          - additionalProperties:
+              anyOf:
+              - type: string
+              - additionalProperties: true
+                type: object
+            type: object
+          - type: 'null'
+          title: Model Group Alias
+          default: {}
+        enable_tag_filtering:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enable Tag Filtering
+        tag_routing_prefix:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tag Routing Prefix
+        optional_pre_call_checks:
+          anyOf:
+          - items:
+              type: string
+              enum:
+              - prompt_caching
+              - router_budget_limiting
+              - responses_api_deployment_check
+              - deployment_affinity
+              - session_affinity
+              - forward_client_headers_by_model_group
+              - enforce_model_rate_limits
+              - encrypted_content_affinity
+            type: array
+          - type: 'null'
+          title: Optional Pre Call Checks
+      type: object
+      title: UpdateRouterConfig
+      description: Set of params that you can modify via `router.update_settings()`.
+    UserListResponse:
+      properties:
+        users:
+          items:
+            $ref: '#/components/schemas/LiteLLM_UserTableWithKeyCount'
+          type: array
+          title: Users
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+      type: object
+      required:
+      - users
+      - total
+      - page
+      - page_size
+      - total_pages
+      title: UserListResponse
+      description: Response model for the user list endpoint
+    NewUserResponse:
+      properties:
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+        duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Duration
+        models:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Models
+          default: []
+        spend:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Spend
+          default: 0
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        agent_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Agent Id
+        max_parallel_requests:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Parallel Requests
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          default: {}
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        budget_limits:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/BudgetLimitEntry'
+            type: array
+          - type: 'null'
+          title: Budget Limits
+        allowed_cache_controls:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Allowed Cache Controls
+          default: []
+        config:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Config
+          default: {}
+        permissions:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Permissions
+          default: {}
+        model_max_budget:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Max Budget
+        budget_fallbacks:
+          anyOf:
+          - additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+          - type: 'null'
+          title: Budget Fallbacks
+        model_rpm_limit:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Rpm Limit
+        model_tpm_limit:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Tpm Limit
+        mcp_rpm_limit:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Mcp Rpm Limit
+        tag_rpm_limit:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Tag Rpm Limit
+        guardrails:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Guardrails
+        policies:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Policies
+        prompts:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Prompts
+        blocked:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Blocked
+        aliases:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Aliases
+          default: {}
+        object_permission:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionBase'
+          - type: 'null'
+        key:
+          type: string
+          title: Key
+        default_estimated_output_tokens:
+          anyOf:
+          - type: integer
+            exclusiveMinimum: 0.0
+          - type: 'null'
+          title: Default Estimated Output Tokens
+        default_estimated_output_tokens_per_model:
+          anyOf:
+          - additionalProperties:
+              type: integer
+              exclusiveMinimum: 0.0
+            type: object
+          - type: 'null'
+          title: Default Estimated Output Tokens Per Model
+        budget_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Id
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        disable_global_guardrails:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Disable Global Guardrails
+        enable_prompt_caching:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enable Prompt Caching
+        throttle_on_budget_exceeded:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Throttle On Budget Exceeded
+        enforced_params:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Enforced Params
+        allowed_routes:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Allowed Routes
+          default: []
+        allowed_passthrough_routes:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Allowed Passthrough Routes
+        allowed_vector_store_indexes:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/AllowedVectorStoreIndexItem'
+            type: array
+          - type: 'null'
+          title: Allowed Vector Store Indexes
+        rpm_limit_type:
+          anyOf:
+          - type: string
+            enum:
+            - guaranteed_throughput
+            - best_effort_throughput
+            - dynamic
+          - type: 'null'
+          title: Rpm Limit Type
+        tpm_limit_type:
+          anyOf:
+          - type: string
+            enum:
+            - guaranteed_throughput
+            - best_effort_throughput
+            - dynamic
+          - type: 'null'
+          title: Tpm Limit Type
+        router_settings:
+          anyOf:
+          - $ref: '#/components/schemas/UpdateRouterConfig'
+          - type: 'null'
+        access_group_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Access Group Ids
+        key_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Name
+        key_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Type
+        expires:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Expires
+        token_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Token Id
+        organization_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Organization Id
+        project_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Project Id
+        litellm_budget_table:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Litellm Budget Table
+        token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Token
+        created_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By
+        updated_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated By
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+        user_role:
+          anyOf:
+          - type: string
+            enum:
+            - proxy_admin
+            - proxy_admin_viewer
+            - internal_user
+            - internal_user_viewer
+          - type: 'null'
+          title: User Role
+        teams:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Teams
+        user_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Alias
+      type: object
+      required:
+      - key
+      title: NewUserResponse
+    NewUserRequest:
+      properties:
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+        duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Duration
+        models:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Models
+          default: []
+        spend:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Spend
+          default: 0
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        agent_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Agent Id
+        max_parallel_requests:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Parallel Requests
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+          default: {}
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        budget_limits:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/BudgetLimitEntry'
+            type: array
+          - type: 'null'
+          title: Budget Limits
+        allowed_cache_controls:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Allowed Cache Controls
+          default: []
+        config:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Config
+          default: {}
+        permissions:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Permissions
+          default: {}
+        model_max_budget:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Max Budget
+          default: {}
+        budget_fallbacks:
+          anyOf:
+          - additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+          - type: 'null'
+          title: Budget Fallbacks
+        model_rpm_limit:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Rpm Limit
+        model_tpm_limit:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Tpm Limit
+        mcp_rpm_limit:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Mcp Rpm Limit
+        tag_rpm_limit:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Tag Rpm Limit
+        guardrails:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Guardrails
+        policies:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Policies
+        prompts:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Prompts
+        blocked:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Blocked
+        aliases:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Aliases
+          default: {}
+        object_permission:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionBase'
+          - type: 'null'
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+        user_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Alias
+        user_role:
+          anyOf:
+          - type: string
+            enum:
+            - proxy_admin
+            - proxy_admin_viewer
+            - internal_user
+            - internal_user_viewer
+          - type: 'null'
+          title: User Role
+        teams:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - items:
+              $ref: '#/components/schemas/NewUserRequestTeam'
+            type: array
+          - type: 'null'
+          title: Teams
+        auto_create_key:
+          type: boolean
+          title: Auto Create Key
+          default: true
+        send_invite_email:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Send Invite Email
+        sso_user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sso User Id
+        organizations:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Organizations
+      type: object
+      title: NewUserRequest
+    BaseModel:
+      properties: {}
+      type: object
+      title: BaseModel
+    UserUpdateResult:
+      properties:
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+        success:
+          type: boolean
+          title: Success
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+        updated_user:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Updated User
+      type: object
+      required:
+      - success
+      title: UserUpdateResult
+      description: Result of a single user update operation
+    LiteLLM_BudgetTable:
+      properties:
+        budget_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Id
+        soft_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Soft Budget
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        max_parallel_requests:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Parallel Requests
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
+        model_max_budget:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Max Budget
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        allowed_models:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allowed Models
+      type: object
+      title: LiteLLM_BudgetTable
+      description: 'Represents user-controllable params for a LiteLLM_BudgetTable record.
+
+
+        Budget-write paths use `model_fields.keys()` on this class as an allowlist
+
+        for user input. Keep server-managed fields (e.g. `budget_reset_at`) on
+
+        `LiteLLM_BudgetTableFull` so they aren''t user-settable.'
+    BreakdownMetrics:
+      properties:
+        mcp_servers:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Mcp Servers
+        models:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Models
+        model_groups:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Model Groups
+        providers:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Providers
+        endpoints:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Endpoints
+        api_keys:
+          additionalProperties:
+            $ref: '#/components/schemas/KeyMetricWithMetadata'
+          type: object
+          title: Api Keys
+        entities:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Entities
+      type: object
+      title: BreakdownMetrics
+      description: Breakdown of spend by different dimensions
+    LiteLLM_OrganizationMembershipTable:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        organization_id:
+          type: string
+          title: Organization Id
+        user_role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Role
+        spend:
+          type: number
+          title: Spend
+          default: 0.0
+        budget_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        user:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: User
+        litellm_budget_table:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_BudgetTable'
+          - type: 'null'
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+      type: object
+      required:
+      - user_id
+      - organization_id
+      - created_at
+      - updated_at
+      title: LiteLLM_OrganizationMembershipTable
+      description: Tracks which organizations a user belongs to and their spend within it.
+    DailySpendData:
+      properties:
+        date:
+          type: string
+          format: date
+          title: Date
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        breakdown:
+          $ref: '#/components/schemas/BreakdownMetrics'
+      type: object
+      required:
+      - date
+      - metrics
+      title: DailySpendData
+    LiteLLM_UserTableWithKeyCount:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        user_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Alias
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        sso_user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sso User Id
+        organization_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Organization Id
+        object_permission_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Object Permission Id
+        teams:
+          items:
+            type: string
+          type: array
+          title: Teams
+          default: []
+        user_role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Role
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        spend:
+          type: number
+          title: Spend
+          default: 0.0
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+        models:
+          items: {}
+          type: array
+          title: Models
+          default: []
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+        max_parallel_requests:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Parallel Requests
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        budget_reset_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Budget Reset At
+        allowed_cache_controls:
+          items:
+            type: string
+          type: array
+          title: Allowed Cache Controls
+          default: []
+        policies:
+          items:
+            type: string
+          type: array
+          title: Policies
+          default: []
+        model_spend:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Spend
+          default: {}
+        model_max_budget:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Max Budget
+          default: {}
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+        organization_memberships:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/LiteLLM_OrganizationMembershipTable'
+            type: array
+          - type: 'null'
+          title: Organization Memberships
+        object_permission:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionTable'
+          - type: 'null'
+        key_count:
+          type: integer
+          title: Key Count
+          default: 0
+      type: object
+      required:
+      - user_id
+      title: LiteLLM_UserTableWithKeyCount
+    KeyMetadata:
+      properties:
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+      type: object
+      title: KeyMetadata
+      description: Metadata for a key
+    UpdateUserRequest:
+      properties:
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+        duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Duration
+        models:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Models
+          default: []
+        spend:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Spend
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        agent_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Agent Id
+        max_parallel_requests:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Parallel Requests
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        budget_limits:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/BudgetLimitEntry'
+            type: array
+          - type: 'null'
+          title: Budget Limits
+        allowed_cache_controls:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Allowed Cache Controls
+          default: []
+        config:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Config
+          default: {}
+        permissions:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Permissions
+          default: {}
+        model_max_budget:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Max Budget
+          default: {}
+        budget_fallbacks:
+          anyOf:
+          - additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+          - type: 'null'
+          title: Budget Fallbacks
+        model_rpm_limit:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Rpm Limit
+        model_tpm_limit:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Tpm Limit
+        mcp_rpm_limit:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Mcp Rpm Limit
+        tag_rpm_limit:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Tag Rpm Limit
+        guardrails:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Guardrails
+        policies:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Policies
+        prompts:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Prompts
+        blocked:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Blocked
+        aliases:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Aliases
+          default: {}
+        object_permission:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionBase'
+          - type: 'null'
+        password:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Password
+        user_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Alias
+        user_role:
+          anyOf:
+          - type: string
+            enum:
+            - proxy_admin
+            - proxy_admin_viewer
+            - internal_user
+            - internal_user_viewer
+          - type: 'null'
+          title: User Role
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+      type: object
+      title: UpdateUserRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SpendMetrics:
+      properties:
+        spend:
+          type: number
+          title: Spend
+          default: 0.0
+        flat_cost:
+          type: number
+          title: Flat Cost
+          default: 0.0
+        prompt_tokens:
+          type: integer
+          title: Prompt Tokens
+          default: 0
+        completion_tokens:
+          type: integer
+          title: Completion Tokens
+          default: 0
+        cache_read_input_tokens:
+          type: integer
+          title: Cache Read Input Tokens
+          default: 0
+        cache_creation_input_tokens:
+          type: integer
+          title: Cache Creation Input Tokens
+          default: 0
+        compression_saved_tokens:
+          type: integer
+          title: Compression Saved Tokens
+          default: 0
+        compression_savings_spend:
+          type: number
+          title: Compression Savings Spend
+          default: 0.0
+        prompt_caching_savings_spend:
+          type: number
+          title: Prompt Caching Savings Spend
+          default: 0.0
+        gateway_injected_caching_savings_spend:
+          type: number
+          title: Gateway Injected Caching Savings Spend
+          default: 0.0
+        autorouter_savings_spend:
+          type: number
+          title: Autorouter Savings Spend
+          default: 0.0
+        total_tokens:
+          type: integer
+          title: Total Tokens
+          default: 0
+        successful_requests:
+          type: integer
+          title: Successful Requests
+          default: 0
+        failed_requests:
+          type: integer
+          title: Failed Requests
+          default: 0
+        api_requests:
+          type: integer
+          title: Api Requests
+          default: 0
+      type: object
+      title: SpendMetrics
+    KeyMetricWithMetadata:
+      properties:
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        metadata:
+          $ref: '#/components/schemas/KeyMetadata'
+      type: object
+      required:
+      - metrics
+      title: KeyMetricWithMetadata
+      description: Base class for metrics with additional metadata
+    RoutingGroup:
+      properties:
+        group_name:
+          type: string
+          title: Group Name
+        models:
+          items:
+            type: string
+          type: array
+          title: Models
+        routing_strategy:
+          type: string
+          title: Routing Strategy
+        routing_strategy_args:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Routing Strategy Args
+      type: object
+      required:
+      - group_name
+      - models
+      - routing_strategy
+      title: RoutingGroup
+      description: A group of models that share a routing strategy.
+    BudgetLimitEntry:
+      properties:
+        budget_duration:
+          type: string
+          title: Budget Duration
+        max_budget:
+          type: number
+          title: Max Budget
+        reset_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Reset At
+      type: object
+      required:
+      - budget_duration
+      - max_budget
+      title: BudgetLimitEntry
+      description: A single budget window with its own limit and independent reset schedule.
+    UpdateUserRequestNoUserIDorEmail:
+      properties:
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+        duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Duration
+        models:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Models
+          default: []
+        spend:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Spend
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        agent_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Agent Id
+        max_parallel_requests:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Parallel Requests
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        budget_limits:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/BudgetLimitEntry'
+            type: array
+          - type: 'null'
+          title: Budget Limits
+        allowed_cache_controls:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Allowed Cache Controls
+          default: []
+        config:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Config
+          default: {}
+        permissions:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Permissions
+          default: {}
+        model_max_budget:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Max Budget
+          default: {}
+        budget_fallbacks:
+          anyOf:
+          - additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+          - type: 'null'
+          title: Budget Fallbacks
+        model_rpm_limit:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Rpm Limit
+        model_tpm_limit:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Tpm Limit
+        mcp_rpm_limit:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Mcp Rpm Limit
+        tag_rpm_limit:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Tag Rpm Limit
+        guardrails:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Guardrails
+        policies:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Policies
+        prompts:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Prompts
+        blocked:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Blocked
+        aliases:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Aliases
+          default: {}
+        object_permission:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionBase'
+          - type: 'null'
+        password:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Password
+        user_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Alias
+        user_role:
+          anyOf:
+          - type: string
+            enum:
+            - proxy_admin
+            - proxy_admin_viewer
+            - internal_user
+            - internal_user_viewer
+          - type: 'null'
+          title: User Role
+      type: object
+      title: UpdateUserRequestNoUserIDorEmail
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    MetricWithMetadata:
+      properties:
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+        api_key_breakdown:
+          additionalProperties:
+            $ref: '#/components/schemas/KeyMetricWithMetadata'
+          type: object
+          title: Api Key Breakdown
+      type: object
+      required:
+      - metrics
+      title: MetricWithMetadata
+    LiteLLM_ObjectPermissionTable:
+      properties:
+        object_permission_id:
+          type: string
+          title: Object Permission Id
+        mcp_servers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Servers
+          default: []
+        mcp_access_groups:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Access Groups
+          default: []
+        mcp_tool_permissions:
+          anyOf:
+          - additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+          - type: 'null'
+          title: Mcp Tool Permissions
+        vector_stores:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Vector Stores
+          default: []
+        agents:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Agents
+          default: []
+        agent_access_groups:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Agent Access Groups
+          default: []
+        models:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Models
+          default: []
+        mcp_toolsets:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Toolsets
+        blocked_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Blocked Tools
+          default: []
+        search_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Search Tools
+          default: []
+        mcp_tool_search_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Mcp Tool Search Enabled
+        skills:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Skills
+      type: object
+      required:
+      - object_permission_id
+      title: LiteLLM_ObjectPermissionTable
+      description: Represents a LiteLLM_ObjectPermissionTable record
+    BulkUpdateUserResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/UserUpdateResult'
+          type: array
+          title: Results
+        total_requested:
+          type: integer
+          title: Total Requested
+        successful_updates:
+          type: integer
+          title: Successful Updates
+        failed_updates:
+          type: integer
+          title: Failed Updates
+      type: object
+      required:
+      - results
+      - total_requested
+      - successful_updates
+      - failed_updates
+      title: BulkUpdateUserResponse
+      description: Response for bulk user update operations
+    DeleteUserRequest:
+      properties:
+        user_ids:
+          items:
+            type: string
+          type: array
+          title: User Ids
+      type: object
+      required:
+      - user_ids
+      title: DeleteUserRequest
+    SpendAnalyticsPaginatedResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/DailySpendData'
+          type: array
+          title: Results
+        metadata:
+          $ref: '#/components/schemas/DailySpendMetadata'
+      type: object
+      required:
+      - results
+      title: SpendAnalyticsPaginatedResponse
+    AllowedVectorStoreIndexItem:
+      properties:
+        index_name:
+          type: string
+          title: Index Name
+        index_permissions:
+          items:
+            type: string
+            enum:
+            - read
+            - write
+          type: array
+          title: Index Permissions
+      type: object
+      required:
+      - index_name
+      - index_permissions
+      title: AllowedVectorStoreIndexItem
+    DailySpendMetadata:
+      properties:
+        total_spend:
+          type: number
+          title: Total Spend
+          default: 0.0
+        total_flat_cost:
+          type: number
+          title: Total Flat Cost
+          default: 0.0
+        total_prompt_tokens:
+          type: integer
+          title: Total Prompt Tokens
+          default: 0
+        total_completion_tokens:
+          type: integer
+          title: Total Completion Tokens
+          default: 0
+        total_tokens:
+          type: integer
+          title: Total Tokens
+          default: 0
+        total_api_requests:
+          type: integer
+          title: Total Api Requests
+          default: 0
+        total_successful_requests:
+          type: integer
+          title: Total Successful Requests
+          default: 0
+        total_failed_requests:
+          type: integer
+          title: Total Failed Requests
+          default: 0
+        total_cache_read_input_tokens:
+          type: integer
+          title: Total Cache Read Input Tokens
+          default: 0
+        total_cache_creation_input_tokens:
+          type: integer
+          title: Total Cache Creation Input Tokens
+          default: 0
+        total_compression_saved_tokens:
+          type: integer
+          title: Total Compression Saved Tokens
+          default: 0
+        total_compression_savings_spend:
+          type: number
+          title: Total Compression Savings Spend
+          default: 0.0
+        total_prompt_caching_savings_spend:
+          type: number
+          title: Total Prompt Caching Savings Spend
+          default: 0.0
+        total_gateway_injected_caching_savings_spend:
+          type: number
+          title: Total Gateway Injected Caching Savings Spend
+          default: 0.0
+        total_autorouter_savings_spend:
+          type: number
+          title: Total Autorouter Savings Spend
+          default: 0.0
+        page:
+          type: integer
+          title: Page
+          default: 1
+        total_pages:
+          type: integer
+          title: Total Pages
+          default: 1
+        has_more:
+          type: boolean
+          title: Has More
+          default: false
+      type: object
+      title: DailySpendMetadata
+    BulkUpdateUserRequest:
+      properties:
+        users:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/UpdateUserRequest'
+            type: array
+          - type: 'null'
+          title: Users
+        all_users:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: All Users
+          default: false
+        user_updates:
+          anyOf:
+          - $ref: '#/components/schemas/UpdateUserRequestNoUserIDorEmail'
+          - type: 'null'
+      type: object
+      title: BulkUpdateUserRequest
+      description: Request for bulk user updates
+    UserInfoResponse:
+      properties:
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        user_info:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - $ref: '#/components/schemas/BaseModel'
+          - type: 'null'
+          title: User Info
+        keys:
+          items: {}
+          type: array
+          title: Keys
+        teams:
+          items: {}
+          type: array
+          title: Teams
+      type: object
+      required:
+      - user_id
+      - user_info
+      - keys
+      - teams
+      title: UserInfoResponse
+    RetryPolicy:
+      properties:
+        BadRequestErrorRetries:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Badrequesterrorretries
+        AuthenticationErrorRetries:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Authenticationerrorretries
+        TimeoutErrorRetries:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Timeouterrorretries
+        RateLimitErrorRetries:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Ratelimiterrorretries
+        ContentPolicyViolationErrorRetries:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Contentpolicyviolationerrorretries
+        InternalServerErrorRetries:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Internalservererrorretries
+        ServiceUnavailableErrorRetries:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Serviceunavailableerrorretries
+        DefaultRetries:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Defaultretries
+      type: object
+      title: RetryPolicy
+      description: 'Use this to set a custom number of retries per exception type
+
+        If RateLimitErrorRetries = 3, then 3 retries will be made for RateLimitError
+
+        Mapping of Exception type to number of retries
+
+        https://docs.litellm.ai/docs/exception_mapping'
+    NewUserRequestTeam:
+      properties:
+        team_id:
+          type: string
+          title: Team Id
+        max_budget_in_team:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget In Team
+        user_role:
+          type: string
+          enum:
+          - user
+          - admin
+          title: User Role
+          default: user
+      type: object
+      required:
+      - team_id
+      title: NewUserRequestTeam
+    LiteLLM_ObjectPermissionBase:
+      properties:
+        mcp_servers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Servers
+        mcp_access_groups:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Access Groups
+        mcp_tool_permissions:
+          anyOf:
+          - additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+          - type: 'null'
+          title: Mcp Tool Permissions
+        mcp_toolsets:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Toolsets
+        blocked_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Blocked Tools
+        vector_stores:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Vector Stores
+        agents:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Agents
+        agent_access_groups:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Agent Access Groups
+        models:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Models
+        search_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Search Tools
+        mcp_tool_search_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Mcp Tool Search Enabled
+        skills:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Skills
+      type: object
+      title: LiteLLM_ObjectPermissionBase
+    UserInfoV2Response:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+        user_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Alias
+        user_role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Role
+        spend:
+          type: number
+          title: Spend
+          default: 0.0
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        models:
+          items:
+            type: string
+          type: array
+          title: Models
+          default: []
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        budget_reset_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Budget Reset At
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+        sso_user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sso User Id
+        teams:
+          items:
+            type: string
+          type: array
+          title: Teams
+          default: []
+        object_permission:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionTable'
+          - type: 'null'
+        model_max_budget:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Max Budget
+        model_max_budget_usage:
+          anyOf:
+          - additionalProperties:
+              additionalProperties: true
+              type: object
+            type: object
+          - type: 'null'
+          title: Model Max Budget Usage
+      type: object
+      required:
+      - user_id
+      title: UserInfoV2Response
+      description: 'Response model for GET /v2/user/info
+
+
+        Returns ONLY the user object - no keys, no teams objects.
+
+        This is a lightweight alternative to UserInfoResponse.'
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

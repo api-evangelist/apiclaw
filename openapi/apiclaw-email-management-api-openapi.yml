@@ -1,0 +1,160 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM email management API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Email Management
+paths:
+  /email/event_settings:
+    get:
+      tags:
+      - Email Management
+      summary: Get Email Event Settings
+      description: Get all email event settings
+      operationId: get_email_event_settings_email_event_settings_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailEventSettingsResponse'
+      security:
+      - APIKeyHeader: []
+    patch:
+      tags:
+      - Email Management
+      summary: Update Event Settings
+      description: Update the settings for email events
+      operationId: update_event_settings_email_event_settings_patch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailEventSettingsUpdateRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /email/event_settings/reset:
+    post:
+      tags:
+      - Email Management
+      summary: Reset Event Settings
+      description: Reset all email event settings to default (new user invitations on, virtual key creation off)
+      operationId: reset_event_settings_email_event_settings_reset_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    EmailEventSettingsUpdateRequest:
+      properties:
+        settings:
+          items:
+            $ref: '#/components/schemas/EmailEventSettings'
+          type: array
+          title: Settings
+      type: object
+      required:
+      - settings
+      title: EmailEventSettingsUpdateRequest
+    EmailEventSettingsResponse:
+      properties:
+        settings:
+          items:
+            $ref: '#/components/schemas/EmailEventSettings'
+          type: array
+          title: Settings
+      type: object
+      required:
+      - settings
+      title: EmailEventSettingsResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    EmailEvent:
+      type: string
+      enum:
+      - Virtual Key Created
+      - New User Invitation
+      - Virtual Key Rotated
+      - Soft Budget Crossed
+      - Max Budget Alert
+      title: EmailEvent
+    EmailEventSettings:
+      properties:
+        event:
+          $ref: '#/components/schemas/EmailEvent'
+        enabled:
+          type: boolean
+          title: Enabled
+      type: object
+      required:
+      - event
+      - enabled
+      title: EmailEventSettings
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

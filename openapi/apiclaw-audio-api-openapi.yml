@@ -1,0 +1,176 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Audio API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Audio
+paths:
+  /audio/speech:
+    post:
+      tags:
+      - Audio
+      summary: Audio Speech
+      description: 'Same params as:
+
+
+        https://platform.openai.com/docs/api-reference/audio/createSpeech'
+      operationId: audio_speech_audio_speech_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /v1/audio/speech:
+    post:
+      tags:
+      - Audio
+      summary: Audio Speech
+      description: 'Same params as:
+
+
+        https://platform.openai.com/docs/api-reference/audio/createSpeech'
+      operationId: audio_speech_v1_audio_speech_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /audio/transcriptions:
+    post:
+      tags:
+      - Audio
+      summary: Audio Transcriptions
+      description: 'Same params as:
+
+
+        https://platform.openai.com/docs/api-reference/audio/createTranscription?lang=curl'
+      operationId: audio_transcriptions_audio_transcriptions_post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_audio_transcriptions_audio_transcriptions_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /v1/audio/transcriptions:
+    post:
+      tags:
+      - Audio
+      summary: Audio Transcriptions
+      description: 'Same params as:
+
+
+        https://platform.openai.com/docs/api-reference/audio/createTranscription?lang=curl'
+      operationId: audio_transcriptions_v1_audio_transcriptions_post
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_audio_transcriptions_v1_audio_transcriptions_post'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Body_audio_transcriptions_v1_audio_transcriptions_post:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+      type: object
+      required:
+      - file
+      title: Body_audio_transcriptions_v1_audio_transcriptions_post
+    Body_audio_transcriptions_audio_transcriptions_post:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+      type: object
+      required:
+      - file
+      title: Body_audio_transcriptions_audio_transcriptions_post
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

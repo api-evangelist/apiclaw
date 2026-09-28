@@ -1,0 +1,166 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Router Settings API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Router Settings
+paths:
+  /router/settings:
+    get:
+      tags:
+      - Router Settings
+      summary: Get Router Settings
+      description: 'Get router configuration and available settings.
+
+
+        Returns:
+
+        - fields: List of all configurable router settings with their metadata (type, description, default, options)
+
+        The routing_strategy field includes available options extracted from the Router class
+
+        - current_values: Current values of router settings from config'
+      operationId: get_router_settings_router_settings_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouterSettingsResponse'
+      security:
+      - APIKeyHeader: []
+  /router/fields:
+    get:
+      tags:
+      - Router Settings
+      summary: Get Router Fields
+      description: 'Get router settings field definitions without values.
+
+
+        Returns only the field metadata (type, description, default, options) without
+
+        populating field_value. This is useful for UI components that need to know
+
+        what fields to render, but will get the actual values from a different endpoint.
+
+
+        Returns:
+
+        - fields: List of all configurable router settings with their metadata (type, description, default, options)
+
+        The routing_strategy field includes available options extracted from the Router class
+
+        Note: field_value will be None for all fields
+
+        - routing_strategy_descriptions: Descriptions for each routing strategy option'
+      operationId: get_router_fields_router_fields_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouterFieldsResponse'
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    RouterFieldsResponse:
+      properties:
+        fields:
+          items:
+            $ref: '#/components/schemas/RouterSettingsField'
+          type: array
+          title: Fields
+          description: List of all configurable router settings with metadata (without field values)
+        routing_strategy_descriptions:
+          additionalProperties:
+            type: string
+          type: object
+          title: Routing Strategy Descriptions
+          description: Descriptions for each routing strategy option
+      type: object
+      required:
+      - fields
+      - routing_strategy_descriptions
+      title: RouterFieldsResponse
+    RouterSettingsResponse:
+      properties:
+        fields:
+          items:
+            $ref: '#/components/schemas/RouterSettingsField'
+          type: array
+          title: Fields
+          description: List of all configurable router settings with metadata
+        current_values:
+          additionalProperties: true
+          type: object
+          title: Current Values
+          description: Current values of router settings
+        routing_strategy_descriptions:
+          additionalProperties:
+            type: string
+          type: object
+          title: Routing Strategy Descriptions
+          description: Descriptions for each routing strategy option
+      type: object
+      required:
+      - fields
+      - current_values
+      - routing_strategy_descriptions
+      title: RouterSettingsResponse
+    RouterSettingsField:
+      properties:
+        field_name:
+          type: string
+          title: Field Name
+        field_type:
+          type: string
+          title: Field Type
+        field_value:
+          title: Field Value
+        field_description:
+          type: string
+          title: Field Description
+        field_default:
+          title: Field Default
+        options:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Options
+        ui_field_name:
+          type: string
+          title: Ui Field Name
+        link:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Link
+      type: object
+      required:
+      - field_name
+      - field_type
+      - field_value
+      - field_description
+      - ui_field_name
+      title: RouterSettingsField
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

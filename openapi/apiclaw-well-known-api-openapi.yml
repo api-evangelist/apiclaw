@@ -1,0 +1,96 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM .well Known API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: .well Known
+paths:
+  /.well-known/litellm-ui-config:
+    get:
+      summary: Get Ui Config
+      operationId: get_ui_config__well_known_litellm_ui_config_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UiDiscoveryEndpoints'
+      tags:
+      - .well Known
+components:
+  schemas:
+    WorkerRegistryEntry:
+      properties:
+        worker_id:
+          type: string
+          title: Worker Id
+        name:
+          type: string
+          title: Name
+        url:
+          type: string
+          title: Url
+      type: object
+      required:
+      - worker_id
+      - name
+      - url
+      title: WorkerRegistryEntry
+    UiDiscoveryEndpoints:
+      properties:
+        server_root_path:
+          type: string
+          title: Server Root Path
+        proxy_base_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Proxy Base Url
+        auto_redirect_to_sso:
+          type: boolean
+          title: Auto Redirect To Sso
+        admin_ui_disabled:
+          type: boolean
+          title: Admin Ui Disabled
+        sso_configured:
+          type: boolean
+          title: Sso Configured
+        hide_default_credentials_hint:
+          type: boolean
+          title: Hide Default Credentials Hint
+          default: false
+        is_control_plane:
+          type: boolean
+          title: Is Control Plane
+          default: false
+        workers:
+          items:
+            $ref: '#/components/schemas/WorkerRegistryEntry'
+          type: array
+          title: Workers
+          default: []
+      type: object
+      required:
+      - server_root_path
+      - proxy_base_url
+      - auto_redirect_to_sso
+      - admin_ui_disabled
+      - sso_configured
+      title: UiDiscoveryEndpoints
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

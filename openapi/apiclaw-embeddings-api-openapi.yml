@@ -1,0 +1,572 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Embeddings API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Embeddings
+paths:
+  /openai/deployments/{model}/embeddings:
+    post:
+      tags:
+      - Embeddings
+      summary: Embeddings
+      description: 'Follows the exact same API spec as `OpenAI''s Embeddings API https://platform.openai.com/docs/api-reference/embeddings`
+
+
+        ```bash
+
+        curl -X POST http://localhost:4000/v1/embeddings
+
+        -H "Content-Type: application/json"
+
+        -H "Authorization: Bearer sk-1234"
+
+        -d ''{
+
+        "model": "text-embedding-ada-002",
+
+        "input": "The quick brown fox jumps over the lazy dog"
+
+        }''
+
+        ```'
+      operationId: embeddings_openai_deployments__model__embeddings_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: model
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - model
+              properties:
+                model:
+                  title: Model
+                  type: string
+                input:
+                  default: []
+                  items:
+                    type: string
+                  title: Input
+                  type: array
+                timeout:
+                  default: 600
+                  title: Timeout
+                  type: integer
+                api_base:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Base
+                api_version:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Version
+                api_key:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Key
+                api_type:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Type
+                caching:
+                  default: false
+                  title: Caching
+                  type: boolean
+                user:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: User
+                custom_llm_provider:
+                  anyOf:
+                  - type: string
+                  - additionalProperties: true
+                    type: object
+                  - type: 'null'
+                  default: null
+                  title: Custom Llm Provider
+                litellm_call_id:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Litellm Call Id
+                litellm_logging_obj:
+                  anyOf:
+                  - additionalProperties: true
+                    type: object
+                  - type: 'null'
+                  default: null
+                  title: Litellm Logging Obj
+                logger_fn:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Logger Fn
+  /engines/{model}/embeddings:
+    post:
+      tags:
+      - Embeddings
+      summary: Embeddings
+      description: 'Follows the exact same API spec as `OpenAI''s Embeddings API https://platform.openai.com/docs/api-reference/embeddings`
+
+
+        ```bash
+
+        curl -X POST http://localhost:4000/v1/embeddings
+
+        -H "Content-Type: application/json"
+
+        -H "Authorization: Bearer sk-1234"
+
+        -d ''{
+
+        "model": "text-embedding-ada-002",
+
+        "input": "The quick brown fox jumps over the lazy dog"
+
+        }''
+
+        ```'
+      operationId: embeddings_engines__model__embeddings_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: model
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - model
+              properties:
+                model:
+                  title: Model
+                  type: string
+                input:
+                  default: []
+                  items:
+                    type: string
+                  title: Input
+                  type: array
+                timeout:
+                  default: 600
+                  title: Timeout
+                  type: integer
+                api_base:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Base
+                api_version:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Version
+                api_key:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Key
+                api_type:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Type
+                caching:
+                  default: false
+                  title: Caching
+                  type: boolean
+                user:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: User
+                custom_llm_provider:
+                  anyOf:
+                  - type: string
+                  - additionalProperties: true
+                    type: object
+                  - type: 'null'
+                  default: null
+                  title: Custom Llm Provider
+                litellm_call_id:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Litellm Call Id
+                litellm_logging_obj:
+                  anyOf:
+                  - additionalProperties: true
+                    type: object
+                  - type: 'null'
+                  default: null
+                  title: Litellm Logging Obj
+                logger_fn:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Logger Fn
+  /embeddings:
+    post:
+      tags:
+      - Embeddings
+      summary: Embeddings
+      description: 'Follows the exact same API spec as `OpenAI''s Embeddings API https://platform.openai.com/docs/api-reference/embeddings`
+
+
+        ```bash
+
+        curl -X POST http://localhost:4000/v1/embeddings
+
+        -H "Content-Type: application/json"
+
+        -H "Authorization: Bearer sk-1234"
+
+        -d ''{
+
+        "model": "text-embedding-ada-002",
+
+        "input": "The quick brown fox jumps over the lazy dog"
+
+        }''
+
+        ```'
+      operationId: embeddings_embeddings_post
+      security:
+      - APIKeyHeader: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - model
+              properties:
+                model:
+                  title: Model
+                  type: string
+                input:
+                  default: []
+                  items:
+                    type: string
+                  title: Input
+                  type: array
+                timeout:
+                  default: 600
+                  title: Timeout
+                  type: integer
+                api_base:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Base
+                api_version:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Version
+                api_key:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Key
+                api_type:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Type
+                caching:
+                  default: false
+                  title: Caching
+                  type: boolean
+                user:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: User
+                custom_llm_provider:
+                  anyOf:
+                  - type: string
+                  - additionalProperties: true
+                    type: object
+                  - type: 'null'
+                  default: null
+                  title: Custom Llm Provider
+                litellm_call_id:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Litellm Call Id
+                litellm_logging_obj:
+                  anyOf:
+                  - additionalProperties: true
+                    type: object
+                  - type: 'null'
+                  default: null
+                  title: Litellm Logging Obj
+                logger_fn:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Logger Fn
+  /v1/embeddings:
+    post:
+      tags:
+      - Embeddings
+      summary: Embeddings
+      description: 'Follows the exact same API spec as `OpenAI''s Embeddings API https://platform.openai.com/docs/api-reference/embeddings`
+
+
+        ```bash
+
+        curl -X POST http://localhost:4000/v1/embeddings
+
+        -H "Content-Type: application/json"
+
+        -H "Authorization: Bearer sk-1234"
+
+        -d ''{
+
+        "model": "text-embedding-ada-002",
+
+        "input": "The quick brown fox jumps over the lazy dog"
+
+        }''
+
+        ```'
+      operationId: embeddings_v1_embeddings_post
+      security:
+      - APIKeyHeader: []
+      parameters: []
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - model
+              properties:
+                model:
+                  title: Model
+                  type: string
+                input:
+                  default: []
+                  items:
+                    type: string
+                  title: Input
+                  type: array
+                timeout:
+                  default: 600
+                  title: Timeout
+                  type: integer
+                api_base:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Base
+                api_version:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Version
+                api_key:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Key
+                api_type:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Api Type
+                caching:
+                  default: false
+                  title: Caching
+                  type: boolean
+                user:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: User
+                custom_llm_provider:
+                  anyOf:
+                  - type: string
+                  - additionalProperties: true
+                    type: object
+                  - type: 'null'
+                  default: null
+                  title: Custom Llm Provider
+                litellm_call_id:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Litellm Call Id
+                litellm_logging_obj:
+                  anyOf:
+                  - additionalProperties: true
+                    type: object
+                  - type: 'null'
+                  default: null
+                  title: Litellm Logging Obj
+                logger_fn:
+                  anyOf:
+                  - type: string
+                  - type: 'null'
+                  default: null
+                  title: Logger Fn
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

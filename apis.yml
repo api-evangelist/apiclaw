@@ -1,23 +1,1239 @@
 aid: apiclaw
+
 name: APIClaw
-description: 'APIClaw is a company surfaced via the API Evangelist harvest backlog (source: new-submission)
-  and added to the network as a stub for full-pipeline profiling.'
+
+description: APIClaw provides a unified API access to multiple large language models including Claude, GPT, Gemini, and DeepSeek. Users can obtain
+  an OpenAI‑compatible key for a flat‑rate subscription starting at $19 per month, with no per‑token billing or usage caps. The platform offers
+  a developer portal, comprehensive documentation, pricing plans, and a blog, targeting AI developers and businesses seeking cost‑effective multi‑model
+  access.
+
 url: https://raw.githubusercontent.com/api-evangelist/apiclaw/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: harvest:new-submission
-x-tier: stub
-x-tier-reason: harvest
+
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-09-28 (modular-v1; was harvest)
+
 specificationVersion: '0.20'
+
 created: '2026-09-27'
+
 modified: '2026-09-27'
+
 tags:
 - Company
-apis: []
+- AI
+- LLM
+- SaaS
+- API
+- Platform
+
+image: https://apiclaw.biz/favicon.ico
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
 common:
+- type: GettingStarted
+  url: https://apiclaw.biz/claude-code-api-setup/
+- type: AgenticAccess
+  url: agentic-access/apiclaw-agentic-access.yml
+- type: Plans
+  url: plans/apiclaw-plans-pricing.yml
+- type: Spectral
+  url: rules/apiclaw-rules.yml
+- type: JSONLD
+  url: json-ld/apiclaw-context.jsonld
+- type: Vocabulary
+  url: vocabulary/apiclaw-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Webhooks
+  url: asyncapi/apiclaw-webhooks.yml
+- type: DataModel
+  url: data-model/apiclaw-data-model.yml
+- type: Authentication
+  url: authentication/apiclaw-authentication.yml
+- type: ErrorCatalog
+  url: errors/apiclaw-problem-types.yml
+- type: Conformance
+  url: conformance/apiclaw-conformance.yml
+- type: LLMsTxt
+  url: llms/apiclaw-llms.txt
+- type: MCPServer
+  url: mcp/apiclaw-mcp.yml
+- type: WellKnown
+  url: well-known/apiclaw-well-known.yml
+- type: Hosts
+  url: hosts/apiclaw-hosts.yml
+- type: DomainSecurity
+  url: security/apiclaw-domain-security.yml
 - type: Website
   url: https://apiclaw.biz/
+- type: Documentation
+  url: https://apiclaw.biz/docs/
+- type: APIReference
+  url: https://apiclaw.biz/docs/
+- type: Blog
+  url: https://apiclaw.biz/blog/
+- type: Support
+  url: https://apiclaw.biz/ui/login/
+- type: DeveloperPortal
+  url: https://apiclaw.biz/docs/
+- type: SignUp
+  url: https://apiclaw.biz/ui/signup/
+
+apis:
+- name: APIClaw
+  description: >-
+    APIClaw provides a unified API to access multiple large language models via an OpenAI‑compatible interface.
+    See the Quick start documentation for usage.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  aid: apiclaw:apiclaw
+- aid: apiclaw:apiclaw-a2a-api
+  name: APIClaw A2a API
+  description: The a2a API from APIClaw — 5 operation(s) for a2a.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - a2a
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-a2a-api-openapi.yml
+- aid: apiclaw:apiclaw-a2a-registration-api
+  name: APIClaw A2a Registration API
+  description: The a2a_registration API from APIClaw — 1 operation(s) for a2a_registration.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - a2a_registration
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-a2a-registration-api-openapi.yml
+- aid: apiclaw:apiclaw-access-groups-api
+  name: APIClaw Access Groups API
+  description: The access_groups API from APIClaw — 4 operation(s) for access_groups.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - access_groups
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-access-groups-api-openapi.yml
+- aid: apiclaw:apiclaw-adaptive-router-api
+  name: APIClaw Adaptive Router API
+  description: The adaptive_router API from APIClaw — 1 operation(s) for adaptive_router.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - adaptive_router
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-adaptive-router-api-openapi.yml
+- aid: apiclaw:apiclaw-agent-management-api
+  name: APIClaw Agent Management API
+  description: The Agent Management API from APIClaw — 1 operation(s) for agent management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Agent Management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-agent-management-api-openapi.yml
+- aid: apiclaw:apiclaw-agents-api
+  name: APIClaw Agents API
+  description: The Agents API from APIClaw — 1 operation(s) for agents.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Agents
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-agents-api-openapi.yml
+- aid: apiclaw:apiclaw-anthropic-passthrough-api
+  name: APIClaw Anthropic Passthrough API
+  description: The anthropic_passthrough API from APIClaw — 3 operation(s) for anthropic_passthrough.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - anthropic_passthrough
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-anthropic-passthrough-api-openapi.yml
+- aid: apiclaw:apiclaw-anthropic-skills-api
+  name: APIClaw Anthropic Skills API
+  description: The anthropic_skills API from APIClaw — 2 operation(s) for anthropic_skills.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - anthropic_skills
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-anthropic-skills-api-openapi.yml
+- aid: apiclaw:apiclaw-apiclaw-admin-overview-api
+  name: APIClaw APIClaw Admin Overview API
+  description: The APIClaw Admin Overview API from APIClaw — 1 operation(s) for apiclaw admin overview.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - APIClaw Admin Overview
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-apiclaw-admin-overview-api-openapi.yml
+- aid: apiclaw:apiclaw-apiclaw-announcements-api
+  name: APIClaw APIClaw Announcements API
+  description: The APIClaw Announcements API from APIClaw — 3 operation(s) for apiclaw announcements.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - APIClaw Announcements
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-apiclaw-announcements-api-openapi.yml
+- aid: apiclaw:apiclaw-apiclaw-billing-api
+  name: APIClaw APIClaw Billing API
+  description: The APIClaw Billing API from APIClaw — 14 operation(s) for apiclaw billing.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - APIClaw Billing
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-apiclaw-billing-api-openapi.yml
+- aid: apiclaw:apiclaw-apiclaw-blogs-api
+  name: APIClaw APIClaw Blogs API
+  description: The APIClaw Blogs API from APIClaw — 3 operation(s) for apiclaw blogs.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - APIClaw Blogs
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-apiclaw-blogs-api-openapi.yml
+- aid: apiclaw:apiclaw-apiclaw-maintenance-api
+  name: APIClaw APIClaw Maintenance API
+  description: The APIClaw Maintenance API from APIClaw — 1 operation(s) for apiclaw maintenance.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - APIClaw Maintenance
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-apiclaw-maintenance-api-openapi.yml
+- aid: apiclaw:apiclaw-apiclaw-playground-api
+  name: APIClaw APIClaw Playground API
+  description: The APIClaw Playground API from APIClaw — 1 operation(s) for apiclaw playground.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - APIClaw Playground
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-apiclaw-playground-api-openapi.yml
+- aid: apiclaw:apiclaw-apiclaw-referrals-api
+  name: APIClaw APIClaw Referrals API
+  description: The APIClaw Referrals API from APIClaw — 9 operation(s) for apiclaw referrals.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - APIClaw Referrals
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-apiclaw-referrals-api-openapi.yml
+- aid: apiclaw:apiclaw-apply-guardrail-api
+  name: APIClaw Apply Guardrail API
+  description: The Apply Guardrail API from APIClaw — 1 operation(s) for apply guardrail.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Apply Guardrail
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-apply-guardrail-api-openapi.yml
+- aid: apiclaw:apiclaw-assistants-api
+  name: APIClaw Assistants API
+  description: The assistants API from APIClaw — 12 operation(s) for assistants.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - assistants
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-assistants-api-openapi.yml
+- aid: apiclaw:apiclaw-audio-api
+  name: APIClaw Audio API
+  description: The audio API from APIClaw — 4 operation(s) for audio.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - audio
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-audio-api-openapi.yml
+- aid: apiclaw:apiclaw-audit-logging-api
+  name: APIClaw Audit Logging API
+  description: The Audit Logging API from APIClaw — 2 operation(s) for audit logging.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Audit Logging
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-audit-logging-api-openapi.yml
+- aid: apiclaw:apiclaw-auto-router-api
+  name: APIClaw auto router API
+  description: The auto router API from APIClaw — 8 operation(s) for auto router.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - auto router
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-auto-router-api-openapi.yml
+- aid: apiclaw:apiclaw-batch-api
+  name: APIClaw Batch API
+  description: The batch API from APIClaw — 9 operation(s) for batch.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - batch
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-batch-api-openapi.yml
+- aid: apiclaw:apiclaw-beta-a2a-agents-api
+  name: APIClaw [beta] A2A Agents API
+  description: The [beta] A2A Agents API from APIClaw — 4 operation(s) for [beta] a2a agents.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - '[beta] A2A Agents'
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-beta-a2a-agents-api-openapi.yml
+- aid: apiclaw:apiclaw-beta-agents-api
+  name: APIClaw [beta] Agents API
+  description: The [beta] Agents API from APIClaw — 2 operation(s) for [beta] agents.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - '[beta] Agents'
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-beta-agents-api-openapi.yml
+- aid: apiclaw:apiclaw-beta-mcp-api
+  name: APIClaw [beta] MCP API
+  description: The [beta] MCP API from APIClaw — 1 operation(s) for [beta] mcp.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - '[beta] MCP'
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-beta-mcp-api-openapi.yml
+- aid: apiclaw:apiclaw-budget-management-api
+  name: APIClaw budget management API
+  description: The budget management API from APIClaw — 7 operation(s) for budget management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - budget management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-budget-management-api-openapi.yml
+- aid: apiclaw:apiclaw-budget-spend-tracking-api
+  name: APIClaw Budget & Spend Tracking API
+  description: >-
+    The Budget & Spend Tracking API from APIClaw — 18 operation(s) for budget & spend tracking.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Budget & Spend Tracking
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-budget-spend-tracking-api-openapi.yml
+- aid: apiclaw:apiclaw-cache-settings-api
+  name: APIClaw Cache Settings API
+  description: The Cache Settings API from APIClaw — 2 operation(s) for cache settings.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Cache Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-cache-settings-api-openapi.yml
+- aid: apiclaw:apiclaw-caching-api
+  name: APIClaw Caching API
+  description: The caching API from APIClaw — 4 operation(s) for caching.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - caching
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-caching-api-openapi.yml
+- aid: apiclaw:apiclaw-chat-completions-api
+  name: APIClaw Chat/completions API
+  description: The chat/completions API from APIClaw — 4 operation(s) for chat/completions.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - chat/completions
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-chat-completions-api-openapi.yml
+- aid: apiclaw:apiclaw-claude-code-marketplace-api
+  name: APIClaw Claude Code Marketplace API
+  description: >-
+    The Claude Code Marketplace API from APIClaw — 6 operation(s) for claude code marketplace.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Claude Code Marketplace
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-claude-code-marketplace-api-openapi.yml
+- aid: apiclaw:apiclaw-cloudzero-api
+  name: APIClaw Cloudzero API
+  description: The cloudzero API from APIClaw — 5 operation(s) for cloudzero.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - cloudzero
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-cloudzero-api-openapi.yml
+- aid: apiclaw:apiclaw-completions-api
+  name: APIClaw Completions API
+  description: The completions API from APIClaw — 4 operation(s) for completions.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - completions
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-completions-api-openapi.yml
+- aid: apiclaw:apiclaw-compliance-api
+  name: APIClaw Compliance API
+  description: The compliance API from APIClaw — 2 operation(s) for compliance.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - compliance
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-compliance-api-openapi.yml
+- aid: apiclaw:apiclaw-config-api
+  name: APIClaw Config API
+  description: The Config API from APIClaw — 3 operation(s) for config.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Config
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-config-api-openapi.yml
+- aid: apiclaw:apiclaw-config-overrides-api
+  name: APIClaw Config Overrides API
+  description: The config_overrides API from APIClaw — 4 operation(s) for config_overrides.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - config_overrides
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-config-overrides-api-openapi.yml
+- aid: apiclaw:apiclaw-containers-api
+  name: APIClaw Containers API
+  description: The containers API from APIClaw — 10 operation(s) for containers.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - containers
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-containers-api-openapi.yml
+- aid: apiclaw:apiclaw-coordination-redis-settings-api
+  name: APIClaw Coordination Redis Settings API
+  description: >-
+    The Coordination Redis Settings API from APIClaw — 2 operation(s) for coordination redis settings.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Coordination Redis Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-coordination-redis-settings-api-openapi.yml
+- aid: apiclaw:apiclaw-cost-tracking-api
+  name: APIClaw Cost Tracking API
+  description: The Cost Tracking API from APIClaw — 4 operation(s) for cost tracking.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Cost Tracking
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-cost-tracking-api-openapi.yml
+- aid: apiclaw:apiclaw-credential-management-api
+  name: APIClaw credential management API
+  description: The credential management API from APIClaw — 6 operation(s) for credential management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - credential management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-credential-management-api-openapi.yml
+- aid: apiclaw:apiclaw-customer-management-api
+  name: APIClaw Customer Management API
+  description: The Customer Management API from APIClaw — 8 operation(s) for customer management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Customer Management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-customer-management-api-openapi.yml
+- aid: apiclaw:apiclaw-debug-api
+  name: APIClaw Debug API
+  description: The Debug API from APIClaw — 1 operation(s) for debug.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Debug
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-debug-api-openapi.yml
+- aid: apiclaw:apiclaw-email-management-api
+  name: APIClaw email management API
+  description: The email management API from APIClaw — 2 operation(s) for email management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - email management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-email-management-api-openapi.yml
+- aid: apiclaw:apiclaw-embeddings-api
+  name: APIClaw Embeddings API
+  description: The embeddings API from APIClaw — 4 operation(s) for embeddings.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - embeddings
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-embeddings-api-openapi.yml
+- aid: apiclaw:apiclaw-evals-api
+  name: APIClaw Evals API
+  description: The evals API from APIClaw — 5 operation(s) for evals.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - evals
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-evals-api-openapi.yml
+- aid: apiclaw:apiclaw-experimental-api
+  name: APIClaw Experimental API
+  description: The experimental API from APIClaw — 1 operation(s) for experimental.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - experimental
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-experimental-api-openapi.yml
+- aid: apiclaw:apiclaw-fallback-management-api
+  name: APIClaw Fallback Management API
+  description: The Fallback Management API from APIClaw — 2 operation(s) for fallback management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Fallback Management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-fallback-management-api-openapi.yml
+- aid: apiclaw:apiclaw-files-api
+  name: APIClaw Files API
+  description: The files API from APIClaw — 9 operation(s) for files.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - files
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-files-api-openapi.yml
+- aid: apiclaw:apiclaw-fine-tuning-api
+  name: APIClaw Fine Tuning API
+  description: The fine-tuning API from APIClaw — 6 operation(s) for fine-tuning.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - fine-tuning
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-fine-tuning-api-openapi.yml
+- aid: apiclaw:apiclaw-gemini-agents-api
+  name: APIClaw Gemini Agents API
+  description: The gemini_agents API from APIClaw — 3 operation(s) for gemini_agents.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - gemini_agents
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-gemini-agents-api-openapi.yml
+- aid: apiclaw:apiclaw-google-genai-endpoints-api
+  name: APIClaw google genai endpoints API
+  description: >-
+    The google genai endpoints API from APIClaw — 12 operation(s) for google genai endpoints.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - google genai endpoints
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-google-genai-endpoints-api-openapi.yml
+- aid: apiclaw:apiclaw-guardrails-api
+  name: APIClaw Guardrails API
+  description: The Guardrails API from APIClaw — 20 operation(s) for guardrails.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Guardrails
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-guardrails-api-openapi.yml
+- aid: apiclaw:apiclaw-health-api
+  name: APIClaw Health API
+  description: The health API from APIClaw — 17 operation(s) for health.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - health
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-health-api-openapi.yml
+- aid: apiclaw:apiclaw-images-api
+  name: APIClaw Images API
+  description: The images API from APIClaw — 6 operation(s) for images.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - images
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-images-api-openapi.yml
+- aid: apiclaw:apiclaw-interactions-api
+  name: APIClaw Interactions API
+  description: The interactions API from APIClaw — 6 operation(s) for interactions.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - interactions
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-interactions-api-openapi.yml
+- aid: apiclaw:apiclaw-internal-user-management-api
+  name: APIClaw Internal User management API
+  description: >-
+    The Internal User management API from APIClaw — 10 operation(s) for internal user management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Internal User management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-internal-user-management-api-openapi.yml
+- aid: apiclaw:apiclaw-jwt-mappings-api
+  name: APIClaw JWT Mappings API
+  description: The jwt_mappings API from APIClaw — 5 operation(s) for jwt_mappings.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - jwt_mappings
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-jwt-mappings-api-openapi.yml
+- aid: apiclaw:apiclaw-key-management-api
+  name: APIClaw key management API
+  description: The key management API from APIClaw — 15 operation(s) for key management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - key management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-key-management-api-openapi.yml
+- aid: apiclaw:apiclaw-langfuse-passthrough-api
+  name: APIClaw Langfuse Passthrough API
+  description: The langfuse_passthrough API from APIClaw — 1 operation(s) for langfuse_passthrough.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - langfuse_passthrough
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-langfuse-passthrough-api-openapi.yml
+- aid: apiclaw:apiclaw-litellm-api-api
+  name: APIClaw LiteLLM API
+  description: The LiteLLM API API from APIClaw — 1 operation(s) for litellm api.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - LiteLLM API
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-litellm-api-api-openapi.yml
+- aid: apiclaw:apiclaw-litellm-api
+  name: APIClaw Litellm API
+  description: The Litellm API from APIClaw — 1 operation(s) for litellm.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Litellm
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-litellm-api-openapi.yml
+- aid: apiclaw:apiclaw-llm-passthrough-api
+  name: APIClaw Llm Passthrough API
+  description: The llm_passthrough API from APIClaw — 24 operation(s) for llm_passthrough.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - llm_passthrough
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-llm-passthrough-api-openapi.yml
+- aid: apiclaw:apiclaw-llm-utils-api
+  name: APIClaw llm utils API
+  description: The llm utils API from APIClaw — 3 operation(s) for llm utils.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - llm utils
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-llm-utils-api-openapi.yml
+- aid: apiclaw:apiclaw-logging-callbacks-api
+  name: APIClaw Logging Callbacks API
+  description: The Logging Callbacks API from APIClaw — 2 operation(s) for logging callbacks.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Logging Callbacks
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-logging-callbacks-api-openapi.yml
+- aid: apiclaw:apiclaw-mcp-api
+  name: APIClaw MCP API
+  description: The Mcp API from APIClaw — 51 operation(s) for mcp.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Mcp
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-mcp-api-openapi.yml
+- aid: apiclaw:apiclaw-mcp-rest-api
+  name: APIClaw MCP Rest API
+  description: The mcp_rest API from APIClaw — 4 operation(s) for mcp_rest.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - mcp_rest
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-mcp-rest-api-openapi.yml
+- aid: apiclaw:apiclaw-memory-management-api
+  name: APIClaw memory management API
+  description: The memory management API from APIClaw — 2 operation(s) for memory management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - memory management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-memory-management-api-openapi.yml
+- aid: apiclaw:apiclaw-model-management-api
+  name: APIClaw model management API
+  description: The model management API from APIClaw — 32 operation(s) for model management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - model management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-model-management-api-openapi.yml
+- aid: apiclaw:apiclaw-moderations-api
+  name: APIClaw Moderations API
+  description: The moderations API from APIClaw — 2 operation(s) for moderations.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - moderations
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-moderations-api-openapi.yml
+- aid: apiclaw:apiclaw-ocr-api
+  name: APIClaw Ocr API
+  description: The ocr API from APIClaw — 2 operation(s) for ocr.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - ocr
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-ocr-api-openapi.yml
+- aid: apiclaw:apiclaw-openai-pass-through-api
+  name: APIClaw OpenAI Pass-through API
+  description: The OpenAI Pass-through API from APIClaw — 1 operation(s) for openai pass-through.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - OpenAI Pass-through
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-openai-pass-through-api-openapi.yml
+- aid: apiclaw:apiclaw-organization-management-api
+  name: APIClaw organization management API
+  description: >-
+    The organization management API from APIClaw — 10 operation(s) for organization management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - organization management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-organization-management-api-openapi.yml
+- aid: apiclaw:apiclaw-plugins-api
+  name: APIClaw Plugins API
+  description: The plugins API from APIClaw — 2 operation(s) for plugins.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - plugins
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-plugins-api-openapi.yml
+- aid: apiclaw:apiclaw-policies-api
+  name: APIClaw Policies API
+  description: The Policies API from APIClaw — 23 operation(s) for policies.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Policies
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-policies-api-openapi.yml
+- aid: apiclaw:apiclaw-policy-resolve-api
+  name: APIClaw Policy Resolve API
+  description: The policy_resolve API from APIClaw — 2 operation(s) for policy_resolve.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - policy_resolve
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-policy-resolve-api-openapi.yml
+- aid: apiclaw:apiclaw-project-management-api
+  name: APIClaw project management API
+  description: The project management API from APIClaw — 5 operation(s) for project management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - project management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-project-management-api-openapi.yml
+- aid: apiclaw:apiclaw-prompt-management-api
+  name: APIClaw Prompt Management API
+  description: The Prompt Management API from APIClaw — 6 operation(s) for prompt management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Prompt Management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-prompt-management-api-openapi.yml
+- aid: apiclaw:apiclaw-prompts-api
+  name: APIClaw Prompts API
+  description: The prompts API from APIClaw — 1 operation(s) for prompts.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - prompts
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-prompts-api-openapi.yml
+- aid: apiclaw:apiclaw-provider-api
+  name: APIClaw Provider API
+  description: The Provider API from APIClaw — 1 operation(s) for provider.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Provider
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-provider-api-openapi.yml
+- aid: apiclaw:apiclaw-providers-api
+  name: APIClaw Providers API
+  description: The providers API from APIClaw — 2 operation(s) for providers.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - providers
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-providers-api-openapi.yml
+- aid: apiclaw:apiclaw-public-api
+  name: APIClaw Public API
+  description: The public API from APIClaw — 15 operation(s) for public.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - public
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-public-api-openapi.yml
+- aid: apiclaw:apiclaw-rag-api
+  name: APIClaw Rag API
+  description: The rag API from APIClaw — 4 operation(s) for rag.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - rag
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-rag-api-openapi.yml
+- aid: apiclaw:apiclaw-realtime-api
+  name: APIClaw Realtime API
+  description: The realtime API from APIClaw — 6 operation(s) for realtime.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - realtime
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-realtime-api-openapi.yml
+- aid: apiclaw:apiclaw-rerank-api
+  name: APIClaw Rerank API
+  description: The rerank API from APIClaw — 3 operation(s) for rerank.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - rerank
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-rerank-api-openapi.yml
+- aid: apiclaw:apiclaw-responses-api
+  name: APIClaw Responses API
+  description: The responses API from APIClaw — 21 operation(s) for responses.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - responses
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-responses-api-openapi.yml
+- aid: apiclaw:apiclaw-robots-txt-api
+  name: APIClaw Robots.txt API
+  description: The Robots.txt API from APIClaw — 1 operation(s) for robots.txt.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Robots.txt
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-robots-txt-api-openapi.yml
+- aid: apiclaw:apiclaw-router-settings-api
+  name: APIClaw Router Settings API
+  description: The Router Settings API from APIClaw — 2 operation(s) for router settings.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Router Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-router-settings-api-openapi.yml
+- aid: apiclaw:apiclaw-routes-api
+  name: APIClaw Routes API
+  description: The Routes API from APIClaw — 1 operation(s) for routes.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Routes
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-routes-api-openapi.yml
+- aid: apiclaw:apiclaw-rust-control-plane-api
+  name: APIClaw rust control plane API
+  description: The rust control plane API from APIClaw — 1 operation(s) for rust control plane.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - rust control plane
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-rust-control-plane-api-openapi.yml
+- aid: apiclaw:apiclaw-scim-api
+  name: APIClaw SCIM API
+  description: The scim API from APIClaw — 12 operation(s) for scim.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - scim
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-scim-api-openapi.yml
+- aid: apiclaw:apiclaw-search-api
+  name: APIClaw Search API
+  description: The search API from APIClaw — 6 operation(s) for search.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - search
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-search-api-openapi.yml
+- aid: apiclaw:apiclaw-search-tools-api
+  name: APIClaw Search Tools API
+  description: The search_tools API from APIClaw — 5 operation(s) for search_tools.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - search_tools
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-search-tools-api-openapi.yml
+- aid: apiclaw:apiclaw-settings-api
+  name: APIClaw Settings API
+  description: The Settings API from APIClaw — 4 operation(s) for settings.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-settings-api-openapi.yml
+- aid: apiclaw:apiclaw-skills-api
+  name: APIClaw Skills API
+  description: The skills API from APIClaw — 2 operation(s) for skills.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - skills
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-skills-api-openapi.yml
+- aid: apiclaw:apiclaw-sso-settings-api
+  name: APIClaw SSO Settings API
+  description: The SSO Settings API from APIClaw — 6 operation(s) for sso settings.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - SSO Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-sso-settings-api-openapi.yml
+- aid: apiclaw:apiclaw-tag-management-api
+  name: APIClaw tag management API
+  description: The tag management API from APIClaw — 12 operation(s) for tag management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - tag management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-tag-management-api-openapi.yml
+- aid: apiclaw:apiclaw-team-api
+  name: APIClaw Team API
+  description: The Team API from APIClaw — 1 operation(s) for team.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Team
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-team-api-openapi.yml
+- aid: apiclaw:apiclaw-team-management-api
+  name: APIClaw team management API
+  description: The team management API from APIClaw — 27 operation(s) for team management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - team management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-team-management-api-openapi.yml
+- aid: apiclaw:apiclaw-tools-api
+  name: APIClaw Tools API
+  description: The tools API from APIClaw — 8 operation(s) for tools.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - tools
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-tools-api-openapi.yml
+- aid: apiclaw:apiclaw-toolset-api
+  name: APIClaw Toolset API
+  description: The Toolset API from APIClaw — 1 operation(s) for toolset.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Toolset
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-toolset-api-openapi.yml
+- aid: apiclaw:apiclaw-ui-settings-api
+  name: APIClaw UI Settings API
+  description: The UI Settings API from APIClaw — 4 operation(s) for ui settings.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - UI Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-ui-settings-api-openapi.yml
+- aid: apiclaw:apiclaw-ui-theme-settings-api
+  name: APIClaw UI Theme Settings API
+  description: The UI Theme Settings API from APIClaw — 3 operation(s) for ui theme settings.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - UI Theme Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-ui-theme-settings-api-openapi.yml
+- aid: apiclaw:apiclaw-usage-ai-api
+  name: APIClaw Usage AI API
+  description: The usage_ai API from APIClaw — 1 operation(s) for usage_ai.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - usage_ai
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-usage-ai-api-openapi.yml
+- aid: apiclaw:apiclaw-user-agent-analytics-api
+  name: APIClaw user agent analytics API
+  description: The user agent analytics API from APIClaw — 6 operation(s) for user agent analytics.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - user agent analytics
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-user-agent-analytics-api-openapi.yml
+- aid: apiclaw:apiclaw-utils-api
+  name: APIClaw Utils API
+  description: The utils API from APIClaw — 1 operation(s) for utils.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - utils
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-utils-api-openapi.yml
+- aid: apiclaw:apiclaw-vantage-api
+  name: APIClaw Vantage API
+  description: The vantage API from APIClaw — 5 operation(s) for vantage.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - vantage
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-vantage-api-openapi.yml
+- aid: apiclaw:apiclaw-vector-store-management-api
+  name: APIClaw Vector Store Management API
+  description: >-
+    The vector_store_management API from APIClaw — 6 operation(s) for vector_store_management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - vector_store_management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-vector-store-management-api-openapi.yml
+- aid: apiclaw:apiclaw-vector-stores-api
+  name: APIClaw Vector Stores API
+  description: The vector_stores API from APIClaw — 13 operation(s) for vector_stores.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - vector_stores
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-vector-stores-api-openapi.yml
+- aid: apiclaw:apiclaw-videos-api
+  name: APIClaw Videos API
+  description: The videos API from APIClaw — 16 operation(s) for videos.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - videos
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-videos-api-openapi.yml
+- aid: apiclaw:apiclaw-websocket-api
+  name: APIClaw WebSocket API
+  description: The WebSocket API from APIClaw — 6 operation(s) for websocket.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - WebSocket
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-websocket-api-openapi.yml
+- aid: apiclaw:apiclaw-well-known-api
+  name: APIClaw .well Known API
+  description: The .well Known API from APIClaw — 1 operation(s) for .well known.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - .well Known
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-well-known-api-openapi.yml
+- aid: apiclaw:apiclaw-workflow-management-api
+  name: APIClaw workflow management API
+  description: The workflow management API from APIClaw — 4 operation(s) for workflow management.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - workflow management
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-workflow-management-api-openapi.yml
+- aid: apiclaw:apiclaw-passthrough-api
+  name: APIClaw Passthrough API
+  description: The Passthrough API from APIClaw — 1 operation(s) for passthrough.
+  humanURL: https://apiclaw.biz/docs/
+  baseURL: https://apiclaw.biz/v1/
+  tags:
+  - Passthrough
+  properties:
+  - type: OpenAPI
+    url: openapi/apiclaw-passthrough-api-openapi.yml
+x-coverage:
+  state: unreadable
+  reason: no-machine-readable-spec
+  detail: OpenAPI spec at https://apiclaw.biz/openapi.json describes a different product (LiteLLM) and does not belong to APIClaw.
+  evidence:
+  - url: https://apiclaw.biz/openapi.json
+    status: 200
+  checked: '2026-09-28'
+x-enrichment:
+  date: '2026-09-28'
+  status: enriched
+  artifacts_added: 25
+  pass: modular-v1
+  engine: identity=local,contract=local,surfaces=local,docs=local,regulatory=local

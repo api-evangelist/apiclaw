@@ -1,0 +1,266 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Pass Through API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Passthrough
+paths:
+  /openai_passthrough/{endpoint}:
+    put:
+      tags:
+      - Passthrough
+      summary: Openai Passthrough Route
+      description: 'Dedicated pass-through to the OpenAI API with no overlap with LiteLLM''s native
+
+        implementations (e.g. the Responses API at /v1/responses).
+
+
+        Examples:
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_passthrough_route_openai_passthrough__endpoint__put
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - Passthrough
+      summary: Openai Passthrough Route
+      description: 'Dedicated pass-through to the OpenAI API with no overlap with LiteLLM''s native
+
+        implementations (e.g. the Responses API at /v1/responses).
+
+
+        Examples:
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_passthrough_route_openai_passthrough__endpoint__patch
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Passthrough
+      summary: Openai Passthrough Route
+      description: 'Dedicated pass-through to the OpenAI API with no overlap with LiteLLM''s native
+
+        implementations (e.g. the Responses API at /v1/responses).
+
+
+        Examples:
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_passthrough_route_openai_passthrough__endpoint__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - Passthrough
+      summary: Openai Passthrough Route
+      description: 'Dedicated pass-through to the OpenAI API with no overlap with LiteLLM''s native
+
+        implementations (e.g. the Responses API at /v1/responses).
+
+
+        Examples:
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_passthrough_route_openai_passthrough__endpoint__post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Passthrough
+      summary: Openai Passthrough Route
+      description: 'Dedicated pass-through to the OpenAI API with no overlap with LiteLLM''s native
+
+        implementations (e.g. the Responses API at /v1/responses).
+
+
+        Examples:
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_passthrough_route_openai_passthrough__endpoint__delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

@@ -1,0 +1,70 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Moderations API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Moderations
+paths:
+  /moderations:
+    post:
+      tags:
+      - Moderations
+      summary: Moderations
+      description: 'The moderations endpoint is a tool you can use to check whether content complies with an LLM Providers policies.
+
+        Quick Start
+
+        ```
+
+        curl --location ''http://0.0.0.0:4000/moderations'' --header ''Content-Type: application/json'' --header ''Authorization: Bearer sk-1234'' --data ''{"input": "Sample text goes here", "model": "text-moderation-stable"}''
+
+        ```'
+      operationId: moderations_moderations_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /v1/moderations:
+    post:
+      tags:
+      - Moderations
+      summary: Moderations
+      description: 'The moderations endpoint is a tool you can use to check whether content complies with an LLM Providers policies.
+
+        Quick Start
+
+        ```
+
+        curl --location ''http://0.0.0.0:4000/moderations'' --header ''Content-Type: application/json'' --header ''Authorization: Bearer sk-1234'' --data ''{"input": "Sample text goes here", "model": "text-moderation-stable"}''
+
+        ```'
+      operationId: moderations_v1_moderations_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+components:
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

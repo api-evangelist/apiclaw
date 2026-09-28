@@ -1,0 +1,442 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Cloudzero API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: cloudzero
+paths:
+  /cloudzero/delete:
+    delete:
+      description: 'Delete CloudZero settings from the database.
+
+
+        This endpoint removes the CloudZero configuration (API key, connection ID, timezone)
+
+        from the proxy database. Only the CloudZero settings entry will be deleted;
+
+        other configuration values in the database will remain unchanged.
+
+
+        Only admin users can delete CloudZero settings.'
+      operationId: delete_cloudzero_settings_cloudzero_delete_delete
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudZeroInitResponse'
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: Delete Cloudzero Settings
+      tags:
+      - cloudzero
+  /cloudzero/dry-run:
+    post:
+      description: 'Perform a dry run export using the CloudZero logger.
+
+
+        This endpoint uses the CloudZero logger to perform a dry run export,
+
+        which returns the data that would be exported without actually sending it to CloudZero.
+
+
+        Parameters:
+
+        - limit: Optional limit on number of records to process (default: 10000)
+
+
+        Returns:
+
+        - usage_data: Sample of the raw usage data (first 50 records)
+
+        - cbf_data: CloudZero CBF formatted data ready for export
+
+        - summary: Statistics including total cost, tokens, and record counts
+
+
+        Only admin users can perform CloudZero exports.'
+      operationId: cloudzero_dry_run_export_cloudzero_dry_run_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloudZeroExportRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudZeroExportResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Cloudzero Dry Run Export
+      tags:
+      - cloudzero
+  /cloudzero/export:
+    post:
+      description: 'Perform an actual export using the CloudZero logger.
+
+
+        This endpoint uses the CloudZero logger to export usage data to CloudZero AnyCost API.
+
+
+        Parameters:
+
+        - limit: Optional limit on number of records to export
+
+        - operation: CloudZero operation type ("replace_hourly" or "sum", default: "replace_hourly")
+
+
+        Only admin users can perform CloudZero exports.'
+      operationId: cloudzero_export_cloudzero_export_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloudZeroExportRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudZeroExportResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Cloudzero Export
+      tags:
+      - cloudzero
+  /cloudzero/init:
+    post:
+      description: 'Initialize CloudZero settings and store in the database.
+
+
+        This endpoint stores the CloudZero API key, connection ID, and timezone configuration
+
+        in the proxy database for use by the CloudZero logger.
+
+
+        Parameters:
+
+        - api_key: CloudZero API key for authentication
+
+        - connection_id: CloudZero connection ID for data submission
+
+        - timezone: Timezone for date handling (default: UTC)
+
+
+        Only admin users can configure CloudZero settings.'
+      operationId: init_cloudzero_settings_cloudzero_init_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloudZeroInitRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudZeroInitResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Init Cloudzero Settings
+      tags:
+      - cloudzero
+  /cloudzero/settings:
+    get:
+      description: 'View current CloudZero settings.
+
+
+        Returns the current CloudZero configuration with the API key masked for security.
+
+        Only the first 4 and last 4 characters of the API key are shown.
+
+        Returns null/empty values when settings are not configured (consistent with other settings endpoints).
+
+
+        Only admin users (Proxy Admin or Admin Viewer) can view CloudZero settings.'
+      operationId: get_cloudzero_settings_cloudzero_settings_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudZeroSettingsView'
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: Get Cloudzero Settings
+      tags:
+      - cloudzero
+    put:
+      description: 'Update existing CloudZero settings.
+
+
+        Allows updating individual CloudZero configuration fields without requiring all fields.
+
+        Only provided fields will be updated; others will remain unchanged.
+
+
+        Parameters:
+
+        - api_key: (Optional) New CloudZero API key for authentication
+
+        - connection_id: (Optional) New CloudZero connection ID for data submission
+
+        - timezone: (Optional) New timezone for date handling
+
+
+        Only admin users can update CloudZero settings.'
+      operationId: update_cloudzero_settings_cloudzero_settings_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloudZeroSettingsUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudZeroInitResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Update Cloudzero Settings
+      tags:
+      - cloudzero
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CloudZeroSettingsUpdate:
+      description: Request model for updating CloudZero settings
+      properties:
+        api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New CloudZero API key for authentication
+          title: Api Key
+        connection_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New CloudZero connection ID for data submission
+          title: Connection Id
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New timezone for date handling
+          title: Timezone
+      title: CloudZeroSettingsUpdate
+      type: object
+    CloudZeroInitRequest:
+      description: Request model for initializing CloudZero settings
+      properties:
+        api_key:
+          description: CloudZero API key for authentication
+          title: Api Key
+          type: string
+        connection_id:
+          description: CloudZero connection ID for data submission
+          title: Connection Id
+          type: string
+        timezone:
+          default: UTC
+          description: 'Timezone for date handling (default: UTC)'
+          title: Timezone
+          type: string
+      required:
+      - api_key
+      - connection_id
+      title: CloudZeroInitRequest
+      type: object
+    CloudZeroSettingsView:
+      description: Response model for viewing CloudZero settings with masked API key
+      properties:
+        api_key_masked:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Masked API key showing only first 4 and last 4 characters
+          title: Api Key Masked
+        connection_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: CloudZero connection ID for data submission
+          title: Connection Id
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Configuration status
+          title: Status
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Timezone for date handling
+          title: Timezone
+      title: CloudZeroSettingsView
+      type: object
+    CloudZeroExportResponse:
+      description: Response model for CloudZero export operations
+      properties:
+        dry_run_data:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          description: Dry run data including usage data and CBF transformed data
+          title: Dry Run Data
+        message:
+          title: Message
+          type: string
+        records_exported:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Records Exported
+        status:
+          title: Status
+          type: string
+        summary:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          description: Summary statistics for dry run
+          title: Summary
+      required:
+      - message
+      - status
+      title: CloudZeroExportResponse
+      type: object
+    CloudZeroInitResponse:
+      description: Response model for CloudZero initialization
+      properties:
+        message:
+          title: Message
+          type: string
+        status:
+          title: Status
+          type: string
+      required:
+      - message
+      - status
+      title: CloudZeroInitResponse
+      type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CloudZeroExportRequest:
+      description: Request model for CloudZero export operations
+      properties:
+        end_time_utc:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: End time for data export in UTC
+          title: End Time Utc
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Optional limit on number of records to export
+          title: Limit
+        operation:
+          default: replace_hourly
+          description: CloudZero operation type (replace_hourly or sum)
+          title: Operation
+          type: string
+        start_time_utc:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: Start time for data export in UTC
+          title: Start Time Utc
+      title: CloudZeroExportRequest
+      type: object
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

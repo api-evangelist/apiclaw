@@ -1,0 +1,100 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Anthropic Passthrough API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: anthropic_passthrough
+paths:
+  /api/event_logging/batch:
+    post:
+      description: 'Stubbed endpoint for Anthropic event logging batch requests.
+
+
+        This endpoint accepts event logging requests but does nothing with them.
+
+        It exists to prevent 404 errors from Claude Code clients that send telemetry.'
+      operationId: event_logging_batch_api_event_logging_batch_post
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+      summary: Event Logging Batch
+      tags:
+      - anthropic_passthrough
+  /v1/messages:
+    post:
+      description: 'Use `{PROXY_BASE_URL}/anthropic/v1/messages` instead - Docs.
+
+
+        This was a BETA endpoint that calls 100+ LLMs in the anthropic format.'
+      operationId: anthropic_response_v1_messages_post
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: Anthropic Response
+      tags:
+      - anthropic_passthrough
+  /v1/messages/count_tokens:
+    post:
+      description: 'Count tokens for Anthropic Messages API format.
+
+
+        This endpoint follows the Anthropic Messages API token counting specification.
+
+        It accepts the same parameters as the /v1/messages endpoint but returns
+
+        token counts instead of generating a response.
+
+
+        Example usage:
+
+        ```
+
+        curl -X POST "http://localhost:4000/v1/messages/count_tokens?beta=true" -H "Content-Type: application/json" -H "Authorization: Bearer your-key" -d ''{
+
+        "model": "claude-3-sonnet-20240229",
+
+        "messages": [{"role": "user", "content": "Hello Claude!"}]
+
+        }''
+
+        ```
+
+
+        Returns: {"input_tokens": }'
+      operationId: count_tokens_v1_messages_count_tokens_post
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: Count Tokens
+      tags:
+      - anthropic_passthrough
+components:
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

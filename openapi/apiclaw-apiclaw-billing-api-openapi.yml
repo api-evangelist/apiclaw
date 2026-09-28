@@ -1,0 +1,837 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM APIClaw Billing API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: APIClaw Billing
+paths:
+  /billing/plans:
+    get:
+      tags:
+      - APIClaw Billing
+      summary: List Plans
+      operationId: list_plans_billing_plans_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/_PlanOut'
+                type: array
+                title: Response List Plans Billing Plans Get
+      security:
+      - APIKeyHeader: []
+  /billing/me:
+    get:
+      tags:
+      - APIClaw Billing
+      summary: Billing Me
+      operationId: billing_me_billing_me_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BillingMeOut'
+      security:
+      - APIKeyHeader: []
+  /billing/checkout:
+    post:
+      tags:
+      - APIClaw Billing
+      summary: Billing Checkout
+      operationId: billing_checkout_billing_checkout_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_CheckoutRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_CheckoutOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /billing/webhook:
+    post:
+      tags:
+      - APIClaw Billing
+      summary: Billing Webhook
+      operationId: billing_webhook_billing_webhook_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_OkOut'
+  /billing/admin/payments:
+    get:
+      tags:
+      - APIClaw Billing
+      summary: Admin List Payments
+      operationId: admin_list_payments_billing_admin_payments_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: search
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Search
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentRecord'
+                title: Response Admin List Payments Billing Admin Payments Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /billing/admin/user/{user_id}:
+    get:
+      tags:
+      - APIClaw Billing
+      summary: Admin Get User
+      operationId: admin_get_user_billing_admin_user__user_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: User Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_AdminUserOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /billing/admin/users/summary:
+    get:
+      tags:
+      - APIClaw Billing
+      summary: Admin Users Billing Summary
+      operationId: admin_users_billing_summary_billing_admin_users_summary_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_ids
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: User Ids
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/_AdminUserSummaryOut'
+                title: Response Admin Users Billing Summary Billing Admin Users Summary Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /billing/admin/users/by-plan:
+    get:
+      tags:
+      - APIClaw Billing
+      summary: Admin Users By Plan
+      operationId: admin_users_by_plan_billing_admin_users_by_plan_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: plan
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Plan
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_AdminUsersByPlanOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /billing/admin/user/{user_id}/limit:
+    post:
+      tags:
+      - APIClaw Billing
+      summary: Admin Set Limit
+      operationId: admin_set_limit_billing_admin_user__user_id__limit_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: User Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_AdminSetLimitRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_OkOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /billing/admin/user/{user_id}/plan:
+    post:
+      tags:
+      - APIClaw Billing
+      summary: Admin Assign Plan
+      operationId: admin_assign_plan_billing_admin_user__user_id__plan_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: User Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_AdminAssignPlanRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_OkOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /billing/admin/user/{user_id}/block:
+    post:
+      tags:
+      - APIClaw Billing
+      summary: Admin Block User
+      operationId: admin_block_user_billing_admin_user__user_id__block_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: User Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_AdminBlockRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_OkOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /billing/admin/user/{user_id}/reset:
+    post:
+      tags:
+      - APIClaw Billing
+      summary: Admin Reset Subscription
+      operationId: admin_reset_subscription_billing_admin_user__user_id__reset_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: User Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_OkOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /billing/admin/user/{user_id}/reset-usage:
+    post:
+      tags:
+      - APIClaw Billing
+      summary: Admin Reset Usage
+      operationId: admin_reset_usage_billing_admin_user__user_id__reset_usage_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: User Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_OkOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /billing/admin/payments/{payment_id}/activate:
+    post:
+      tags:
+      - APIClaw Billing
+      summary: Admin Activate Payment
+      operationId: admin_activate_payment_billing_admin_payments__payment_id__activate_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: payment_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Payment Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_AdminActivatePaymentRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_OkOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    _AdminAssignPlanRequest:
+      properties:
+        plan:
+          type: string
+          title: Plan
+        daily_request_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Daily Request Limit
+        started_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Started At
+        expires_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Expires At
+      type: object
+      required:
+      - plan
+      title: _AdminAssignPlanRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    _PlanOut:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        daily_request_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Daily Request Limit
+        price_usd:
+          type: integer
+          title: Price Usd
+        kind:
+          type: string
+          title: Kind
+      type: object
+      required:
+      - id
+      - name
+      - daily_request_limit
+      - price_usd
+      - kind
+      title: _PlanOut
+    _OkOut:
+      properties:
+        ok:
+          type: boolean
+          title: Ok
+      type: object
+      required:
+      - ok
+      title: _OkOut
+    _BillingMeOut:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        is_trial:
+          type: boolean
+          title: Is Trial
+        plan:
+          type: string
+          title: Plan
+        plan_name:
+          type: string
+          title: Plan Name
+        status:
+          type: string
+          title: Status
+        daily_request_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Daily Request Limit
+        usage_today:
+          type: integer
+          title: Usage Today
+        started_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Started At
+        expires_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Expires At
+        trial_used:
+          type: integer
+          title: Trial Used
+        trial_limit:
+          type: integer
+          title: Trial Limit
+        quota_used:
+          type: integer
+          title: Quota Used
+        quota_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Quota Limit
+        quota_remaining:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Quota Remaining
+        quota_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Quota Percent
+      type: object
+      required:
+      - user_id
+      - is_trial
+      - plan
+      - plan_name
+      - status
+      - daily_request_limit
+      - usage_today
+      - started_at
+      - expires_at
+      - trial_used
+      - trial_limit
+      - quota_used
+      - quota_limit
+      - quota_remaining
+      - quota_percent
+      title: _BillingMeOut
+    _AdminActivatePaymentRequest:
+      properties:
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+      type: object
+      title: _AdminActivatePaymentRequest
+    _AdminUsersByPlanOut:
+      properties:
+        user_ids:
+          items:
+            type: string
+          type: array
+          title: User Ids
+      type: object
+      required:
+      - user_ids
+      title: _AdminUsersByPlanOut
+    _CheckoutRequest:
+      properties:
+        plan:
+          type: string
+          title: Plan
+      type: object
+      required:
+      - plan
+      title: _CheckoutRequest
+    _AdminBlockRequest:
+      properties:
+        blocked:
+          type: boolean
+          title: Blocked
+      type: object
+      required:
+      - blocked
+      title: _AdminBlockRequest
+    _AdminUserSummaryOut:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        plan:
+          type: string
+          title: Plan
+        plan_name:
+          type: string
+          title: Plan Name
+        status:
+          type: string
+          title: Status
+        effective_daily_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Effective Daily Limit
+        is_trial:
+          type: boolean
+          title: Is Trial
+        usage_today:
+          type: integer
+          title: Usage Today
+        trial_used:
+          type: integer
+          title: Trial Used
+        trial_limit:
+          type: integer
+          title: Trial Limit
+        quota_used:
+          type: integer
+          title: Quota Used
+        quota_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Quota Limit
+      type: object
+      required:
+      - user_id
+      - plan
+      - plan_name
+      - status
+      - effective_daily_limit
+      - is_trial
+      - usage_today
+      - trial_used
+      - trial_limit
+      - quota_used
+      - quota_limit
+      title: _AdminUserSummaryOut
+    _CheckoutOut:
+      properties:
+        invoice_url:
+          type: string
+          title: Invoice Url
+      type: object
+      required:
+      - invoice_url
+      title: _CheckoutOut
+    _AdminUserOut:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        plan:
+          type: string
+          title: Plan
+        plan_name:
+          type: string
+          title: Plan Name
+        status:
+          type: string
+          title: Status
+        daily_request_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Daily Request Limit
+        plan_daily_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Plan Daily Limit
+        effective_daily_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Effective Daily Limit
+        limit_override:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Limit Override
+        usage_today:
+          type: integer
+          title: Usage Today
+        usage_remaining_today:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Usage Remaining Today
+        trial_used:
+          type: integer
+          title: Trial Used
+        trial_limit:
+          type: integer
+          title: Trial Limit
+        is_trial:
+          type: boolean
+          title: Is Trial
+        is_active:
+          type: boolean
+          title: Is Active
+        started_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Started At
+        expires_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Expires At
+        blocked:
+          type: boolean
+          title: Blocked
+      type: object
+      required:
+      - user_id
+      - plan
+      - plan_name
+      - status
+      - daily_request_limit
+      - plan_daily_limit
+      - effective_daily_limit
+      - limit_override
+      - usage_today
+      - usage_remaining_today
+      - trial_used
+      - trial_limit
+      - is_trial
+      - is_active
+      - started_at
+      - expires_at
+      - blocked
+      title: _AdminUserOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PaymentRecord:
+      properties:
+        payment_id:
+          type: string
+          title: Payment Id
+        invoice_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Invoice Id
+        order_id:
+          type: string
+          title: Order Id
+        user_id:
+          type: string
+          title: User Id
+        plan:
+          type: string
+          title: Plan
+        price_amount:
+          type: number
+          title: Price Amount
+        price_currency:
+          type: string
+          title: Price Currency
+        pay_currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pay Currency
+        status:
+          type: string
+          title: Status
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+      - payment_id
+      - invoice_id
+      - order_id
+      - user_id
+      - plan
+      - price_amount
+      - price_currency
+      - pay_currency
+      - status
+      - created_at
+      - updated_at
+      title: PaymentRecord
+    _AdminSetLimitRequest:
+      properties:
+        daily_request_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Daily Request Limit
+      type: object
+      required:
+      - daily_request_limit
+      title: _AdminSetLimitRequest
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

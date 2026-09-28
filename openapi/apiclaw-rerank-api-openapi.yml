@@ -1,0 +1,66 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Rerank API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Rerank
+paths:
+  /rerank:
+    post:
+      tags:
+      - Rerank
+      summary: Rerank
+      operationId: rerank_rerank_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /v1/rerank:
+    post:
+      tags:
+      - Rerank
+      summary: Rerank
+      operationId: rerank_v1_rerank_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /v2/rerank:
+    post:
+      tags:
+      - Rerank
+      summary: Rerank
+      operationId: rerank_v2_rerank_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+components:
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

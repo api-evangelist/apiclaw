@@ -1,0 +1,736 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Search API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Search
+paths:
+  /search:
+    post:
+      tags:
+      - Search
+      summary: Search
+      description: 'Search endpoint for performing web searches.
+
+
+        Follows the Perplexity Search API spec:
+
+        https://docs.perplexity.ai/api-reference/search-post
+
+
+        The search_tool_name can be passed either:
+
+        1. In the URL path: /v1/search/{search_tool_name}
+
+        2. In the request body: {"search_tool_name": "..."}
+
+
+        Example with search_tool_name in URL (recommended - keeps body Perplexity-compatible):
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1/search/litellm-search" -H "Authorization: Bearer sk-1234" -H "Content-Type: application/json" -d ''{
+
+        "query": "latest AI developments 2024",
+
+        "max_results": 5,
+
+        "search_domain_filter": ["arxiv.org", "nature.com"],
+
+        "country": "US"
+
+        }''
+
+        ```
+
+
+        Example with search_tool_name in body:
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1/search" -H "Authorization: Bearer sk-1234" -H "Content-Type: application/json" -d ''{
+
+        "search_tool_name": "litellm-search",
+
+        "query": "latest AI developments 2024",
+
+        "max_results": 5,
+
+        "search_domain_filter": ["arxiv.org", "nature.com"],
+
+        "country": "US"
+
+        }''
+
+        ```
+
+
+        Request Body Parameters (when search_tool_name not in URL):
+
+        - search_tool_name (str, required if not in URL): Name of the search tool configured in router
+
+        - query (str or list[str], required): Search query
+
+        - max_results (int, optional): Maximum number of results (1-20), default 10
+
+        - search_domain_filter (list[str], optional): List of domains to filter (max 20)
+
+        - max_tokens_per_page (int, optional): Max tokens per page, default 1024
+
+        - country (str, optional): Country code filter (e.g., ''US'', ''GB'', ''DE'')
+
+
+        When using URL path parameter, only Perplexity-compatible parameters are needed in body:
+
+        - query (str or list[str], required): Search query
+
+        - max_results (int, optional): Maximum number of results (1-20), default 10
+
+        - search_domain_filter (list[str], optional): List of domains to filter (max 20)
+
+        - max_tokens_per_page (int, optional): Max tokens per page, default 1024
+
+        - country (str, optional): Country code filter (e.g., ''US'', ''GB'', ''DE'')
+
+
+        Response follows Perplexity Search API format:
+
+        ```json
+
+        {
+
+        "object": "search",
+
+        "results": [
+
+        {
+
+        "title": "Result title",
+
+        "url": "https://example.com",
+
+        "snippet": "Result snippet...",
+
+        "date": "2024-01-01",
+
+        "last_updated": "2024-01-01"
+
+        }
+
+        ]
+
+        }
+
+        ```'
+      operationId: search_search_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: search_tool_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Search Tool Name
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/search:
+    post:
+      tags:
+      - Search
+      summary: Search
+      description: 'Search endpoint for performing web searches.
+
+
+        Follows the Perplexity Search API spec:
+
+        https://docs.perplexity.ai/api-reference/search-post
+
+
+        The search_tool_name can be passed either:
+
+        1. In the URL path: /v1/search/{search_tool_name}
+
+        2. In the request body: {"search_tool_name": "..."}
+
+
+        Example with search_tool_name in URL (recommended - keeps body Perplexity-compatible):
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1/search/litellm-search" -H "Authorization: Bearer sk-1234" -H "Content-Type: application/json" -d ''{
+
+        "query": "latest AI developments 2024",
+
+        "max_results": 5,
+
+        "search_domain_filter": ["arxiv.org", "nature.com"],
+
+        "country": "US"
+
+        }''
+
+        ```
+
+
+        Example with search_tool_name in body:
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1/search" -H "Authorization: Bearer sk-1234" -H "Content-Type: application/json" -d ''{
+
+        "search_tool_name": "litellm-search",
+
+        "query": "latest AI developments 2024",
+
+        "max_results": 5,
+
+        "search_domain_filter": ["arxiv.org", "nature.com"],
+
+        "country": "US"
+
+        }''
+
+        ```
+
+
+        Request Body Parameters (when search_tool_name not in URL):
+
+        - search_tool_name (str, required if not in URL): Name of the search tool configured in router
+
+        - query (str or list[str], required): Search query
+
+        - max_results (int, optional): Maximum number of results (1-20), default 10
+
+        - search_domain_filter (list[str], optional): List of domains to filter (max 20)
+
+        - max_tokens_per_page (int, optional): Max tokens per page, default 1024
+
+        - country (str, optional): Country code filter (e.g., ''US'', ''GB'', ''DE'')
+
+
+        When using URL path parameter, only Perplexity-compatible parameters are needed in body:
+
+        - query (str or list[str], required): Search query
+
+        - max_results (int, optional): Maximum number of results (1-20), default 10
+
+        - search_domain_filter (list[str], optional): List of domains to filter (max 20)
+
+        - max_tokens_per_page (int, optional): Max tokens per page, default 1024
+
+        - country (str, optional): Country code filter (e.g., ''US'', ''GB'', ''DE'')
+
+
+        Response follows Perplexity Search API format:
+
+        ```json
+
+        {
+
+        "object": "search",
+
+        "results": [
+
+        {
+
+        "title": "Result title",
+
+        "url": "https://example.com",
+
+        "snippet": "Result snippet...",
+
+        "date": "2024-01-01",
+
+        "last_updated": "2024-01-01"
+
+        }
+
+        ]
+
+        }
+
+        ```'
+      operationId: search_v1_search_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: search_tool_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Search Tool Name
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /search/{search_tool_name}:
+    post:
+      tags:
+      - Search
+      summary: Search
+      description: 'Search endpoint for performing web searches.
+
+
+        Follows the Perplexity Search API spec:
+
+        https://docs.perplexity.ai/api-reference/search-post
+
+
+        The search_tool_name can be passed either:
+
+        1. In the URL path: /v1/search/{search_tool_name}
+
+        2. In the request body: {"search_tool_name": "..."}
+
+
+        Example with search_tool_name in URL (recommended - keeps body Perplexity-compatible):
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1/search/litellm-search" -H "Authorization: Bearer sk-1234" -H "Content-Type: application/json" -d ''{
+
+        "query": "latest AI developments 2024",
+
+        "max_results": 5,
+
+        "search_domain_filter": ["arxiv.org", "nature.com"],
+
+        "country": "US"
+
+        }''
+
+        ```
+
+
+        Example with search_tool_name in body:
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1/search" -H "Authorization: Bearer sk-1234" -H "Content-Type: application/json" -d ''{
+
+        "search_tool_name": "litellm-search",
+
+        "query": "latest AI developments 2024",
+
+        "max_results": 5,
+
+        "search_domain_filter": ["arxiv.org", "nature.com"],
+
+        "country": "US"
+
+        }''
+
+        ```
+
+
+        Request Body Parameters (when search_tool_name not in URL):
+
+        - search_tool_name (str, required if not in URL): Name of the search tool configured in router
+
+        - query (str or list[str], required): Search query
+
+        - max_results (int, optional): Maximum number of results (1-20), default 10
+
+        - search_domain_filter (list[str], optional): List of domains to filter (max 20)
+
+        - max_tokens_per_page (int, optional): Max tokens per page, default 1024
+
+        - country (str, optional): Country code filter (e.g., ''US'', ''GB'', ''DE'')
+
+
+        When using URL path parameter, only Perplexity-compatible parameters are needed in body:
+
+        - query (str or list[str], required): Search query
+
+        - max_results (int, optional): Maximum number of results (1-20), default 10
+
+        - search_domain_filter (list[str], optional): List of domains to filter (max 20)
+
+        - max_tokens_per_page (int, optional): Max tokens per page, default 1024
+
+        - country (str, optional): Country code filter (e.g., ''US'', ''GB'', ''DE'')
+
+
+        Response follows Perplexity Search API format:
+
+        ```json
+
+        {
+
+        "object": "search",
+
+        "results": [
+
+        {
+
+        "title": "Result title",
+
+        "url": "https://example.com",
+
+        "snippet": "Result snippet...",
+
+        "date": "2024-01-01",
+
+        "last_updated": "2024-01-01"
+
+        }
+
+        ]
+
+        }
+
+        ```'
+      operationId: search_search__search_tool_name__post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: search_tool_name
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Search Tool Name
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/search/{search_tool_name}:
+    post:
+      tags:
+      - Search
+      summary: Search
+      description: 'Search endpoint for performing web searches.
+
+
+        Follows the Perplexity Search API spec:
+
+        https://docs.perplexity.ai/api-reference/search-post
+
+
+        The search_tool_name can be passed either:
+
+        1. In the URL path: /v1/search/{search_tool_name}
+
+        2. In the request body: {"search_tool_name": "..."}
+
+
+        Example with search_tool_name in URL (recommended - keeps body Perplexity-compatible):
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1/search/litellm-search" -H "Authorization: Bearer sk-1234" -H "Content-Type: application/json" -d ''{
+
+        "query": "latest AI developments 2024",
+
+        "max_results": 5,
+
+        "search_domain_filter": ["arxiv.org", "nature.com"],
+
+        "country": "US"
+
+        }''
+
+        ```
+
+
+        Example with search_tool_name in body:
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1/search" -H "Authorization: Bearer sk-1234" -H "Content-Type: application/json" -d ''{
+
+        "search_tool_name": "litellm-search",
+
+        "query": "latest AI developments 2024",
+
+        "max_results": 5,
+
+        "search_domain_filter": ["arxiv.org", "nature.com"],
+
+        "country": "US"
+
+        }''
+
+        ```
+
+
+        Request Body Parameters (when search_tool_name not in URL):
+
+        - search_tool_name (str, required if not in URL): Name of the search tool configured in router
+
+        - query (str or list[str], required): Search query
+
+        - max_results (int, optional): Maximum number of results (1-20), default 10
+
+        - search_domain_filter (list[str], optional): List of domains to filter (max 20)
+
+        - max_tokens_per_page (int, optional): Max tokens per page, default 1024
+
+        - country (str, optional): Country code filter (e.g., ''US'', ''GB'', ''DE'')
+
+
+        When using URL path parameter, only Perplexity-compatible parameters are needed in body:
+
+        - query (str or list[str], required): Search query
+
+        - max_results (int, optional): Maximum number of results (1-20), default 10
+
+        - search_domain_filter (list[str], optional): List of domains to filter (max 20)
+
+        - max_tokens_per_page (int, optional): Max tokens per page, default 1024
+
+        - country (str, optional): Country code filter (e.g., ''US'', ''GB'', ''DE'')
+
+
+        Response follows Perplexity Search API format:
+
+        ```json
+
+        {
+
+        "object": "search",
+
+        "results": [
+
+        {
+
+        "title": "Result title",
+
+        "url": "https://example.com",
+
+        "snippet": "Result snippet...",
+
+        "date": "2024-01-01",
+
+        "last_updated": "2024-01-01"
+
+        }
+
+        ]
+
+        }
+
+        ```'
+      operationId: search_v1_search__search_tool_name__post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: search_tool_name
+        in: path
+        required: true
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Search Tool Name
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /search/tools:
+    get:
+      tags:
+      - Search
+      summary: List Search Tools
+      description: 'List all available search tools configured in the router.
+
+
+        This endpoint returns the search tools that are currently loaded and available
+
+        for use with the /v1/search endpoint.
+
+
+        Example:
+
+        ```bash
+
+        curl -X GET "http://localhost:4000/v1/search/tools" -H "Authorization: Bearer sk-1234"
+
+        ```
+
+
+        Response:
+
+        ```json
+
+        {
+
+        "object": "list",
+
+        "data": [
+
+        {
+
+        "search_tool_name": "litellm-search",
+
+        "search_provider": "perplexity",
+
+        "description": "Perplexity search tool"
+
+        }
+
+        ]
+
+        }
+
+        ```'
+      operationId: list_search_tools_search_tools_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /v1/search/tools:
+    get:
+      tags:
+      - Search
+      summary: List Search Tools
+      description: 'List all available search tools configured in the router.
+
+
+        This endpoint returns the search tools that are currently loaded and available
+
+        for use with the /v1/search endpoint.
+
+
+        Example:
+
+        ```bash
+
+        curl -X GET "http://localhost:4000/v1/search/tools" -H "Authorization: Bearer sk-1234"
+
+        ```
+
+
+        Response:
+
+        ```json
+
+        {
+
+        "object": "list",
+
+        "data": [
+
+        {
+
+        "search_tool_name": "litellm-search",
+
+        "search_provider": "perplexity",
+
+        "description": "Perplexity search tool"
+
+        }
+
+        ]
+
+        }
+
+        ```'
+      operationId: list_search_tools_v1_search_tools_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

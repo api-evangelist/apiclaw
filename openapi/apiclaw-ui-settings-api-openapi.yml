@@ -1,0 +1,236 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM UI Settings API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: UI Settings
+paths:
+  /get/ui_settings:
+    get:
+      tags:
+      - UI Settings
+      summary: Get Ui Settings
+      description: 'Get UI-specific configuration flags.
+
+        All authenticated users can fetch these settings for client-side behavior.'
+      operationId: get_ui_settings_get_ui_settings_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UISettingsResponse'
+  /update/ui_settings:
+    patch:
+      tags:
+      - UI Settings
+      summary: Update Ui Settings
+      description: 'Update UI-specific configuration flags.
+
+        Only proxy admins are allowed to modify these settings.'
+      operationId: update_ui_settings_update_ui_settings_patch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: true
+              type: object
+              title: Settings Body
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /get/user_banner:
+    get:
+      tags:
+      - UI Settings
+      summary: Get User Banner
+      description: 'Get the admin-published dashboard banner.
+
+        Readable by any authenticated user; rendered on every dashboard page.'
+      operationId: get_user_banner_get_user_banner_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserBanner'
+      security:
+      - APIKeyHeader: []
+  /update/user_banner:
+    patch:
+      tags:
+      - UI Settings
+      summary: Update User Banner
+      description: 'Publish, edit, or unpublish the dashboard banner.
+
+        Only proxy admins are allowed to modify it.'
+      operationId: update_user_banner_update_user_banner_patch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserBannerUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateUserBannerResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    UISettingsResponse:
+      properties:
+        values:
+          additionalProperties: true
+          type: object
+          title: Values
+        field_schema:
+          additionalProperties: true
+          type: object
+          title: Field Schema
+      type: object
+      required:
+      - values
+      - field_schema
+      title: UISettingsResponse
+      description: Response model for UI settings
+    UserBannerUpdate:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+          description: If true, the banner is shown to all authenticated dashboard users.
+          default: false
+        message:
+          type: string
+          maxLength: 4000
+          title: Message
+          description: Banner text shown to dashboard users. Markdown is supported.
+          default: ''
+        severity:
+          type: string
+          enum:
+          - info
+          - warning
+          - error
+          title: Severity
+          description: Visual style of the banner.
+          default: info
+      type: object
+      title: UserBannerUpdate
+    UpdateUserBannerResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        banner:
+          $ref: '#/components/schemas/UserBanner'
+      type: object
+      required:
+      - message
+      - banner
+      title: UpdateUserBannerResponse
+    UserBanner:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+          description: If true, the banner is shown to all authenticated dashboard users.
+          default: false
+        message:
+          type: string
+          maxLength: 4000
+          title: Message
+          description: Banner text shown to dashboard users. Markdown is supported.
+          default: ''
+        severity:
+          type: string
+          enum:
+          - info
+          - warning
+          - error
+          title: Severity
+          description: Visual style of the banner.
+          default: info
+        revision:
+          type: string
+          title: Revision
+          description: Server-stamped opaque publish identity; a fresh value is generated on every update so clients re-surface dismissed banners on republish.
+          default: ''
+      type: object
+      title: UserBanner
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

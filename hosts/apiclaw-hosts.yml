@@ -1,0 +1,43 @@
+generated: '2026-09-28'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 2
+  own: 2
+  other_domain: 0
+  platform: 0
+  roles:
+  - api
+  - website
+hosts:
+- host: api.apiclaw.biz
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: apiclaw.biz
+  role: api
+  relation: own
+- host: apiclaw.biz
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - docs-index
+  - contract-discovery
+  - well-known
+  types:
+  - Website
+  - Documentation
+  - APIReference
+  - Blog
+  - Support
+  - DeveloperPortal
+  - SignUp
+  serves:
+  - api
+  - docs
+  registrable_domain: apiclaw.biz
+  role: website
+  relation: own

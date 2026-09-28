@@ -1,0 +1,3282 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Llm Passthrough API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: llm_passthrough
+paths:
+  /anthropic/{endpoint}:
+    delete:
+      description: Docs
+      operationId: anthropic_proxy_route_anthropic__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Anthropic Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: Docs
+      operationId: anthropic_proxy_route_anthropic__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Anthropic Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: Docs
+      operationId: anthropic_proxy_route_anthropic__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Anthropic Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: Docs
+      operationId: anthropic_proxy_route_anthropic__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Anthropic Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: Docs
+      operationId: anthropic_proxy_route_anthropic__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Anthropic Proxy Route
+      tags:
+      - llm_passthrough
+  /assemblyai/{endpoint}:
+    delete:
+      operationId: assemblyai_proxy_route_assemblyai__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Assemblyai Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      operationId: assemblyai_proxy_route_assemblyai__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Assemblyai Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      operationId: assemblyai_proxy_route_assemblyai__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Assemblyai Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      operationId: assemblyai_proxy_route_assemblyai__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Assemblyai Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      operationId: assemblyai_proxy_route_assemblyai__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Assemblyai Proxy Route
+      tags:
+      - llm_passthrough
+  /azure/{endpoint}:
+    delete:
+      description: 'Call any azure endpoint using the proxy.
+
+
+        Just use `{PROXY_BASE_URL}/azure/{endpoint:path}`
+
+
+        Checks if the deployment id in the url is a litellm model name. If so, it will route using the llm_router.allm_passthrough_route.'
+      operationId: azure_proxy_route_azure__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Azure Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: 'Call any azure endpoint using the proxy.
+
+
+        Just use `{PROXY_BASE_URL}/azure/{endpoint:path}`
+
+
+        Checks if the deployment id in the url is a litellm model name. If so, it will route using the llm_router.allm_passthrough_route.'
+      operationId: azure_proxy_route_azure__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Azure Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: 'Call any azure endpoint using the proxy.
+
+
+        Just use `{PROXY_BASE_URL}/azure/{endpoint:path}`
+
+
+        Checks if the deployment id in the url is a litellm model name. If so, it will route using the llm_router.allm_passthrough_route.'
+      operationId: azure_proxy_route_azure__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Azure Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: 'Call any azure endpoint using the proxy.
+
+
+        Just use `{PROXY_BASE_URL}/azure/{endpoint:path}`
+
+
+        Checks if the deployment id in the url is a litellm model name. If so, it will route using the llm_router.allm_passthrough_route.'
+      operationId: azure_proxy_route_azure__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Azure Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: 'Call any azure endpoint using the proxy.
+
+
+        Just use `{PROXY_BASE_URL}/azure/{endpoint:path}`
+
+
+        Checks if the deployment id in the url is a litellm model name. If so, it will route using the llm_router.allm_passthrough_route.'
+      operationId: azure_proxy_route_azure__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Azure Proxy Route
+      tags:
+      - llm_passthrough
+  /azure_ai/{endpoint}:
+    delete:
+      description: 'Call any azure endpoint using the proxy.
+
+
+        Just use `{PROXY_BASE_URL}/azure/{endpoint:path}`
+
+
+        Checks if the deployment id in the url is a litellm model name. If so, it will route using the llm_router.allm_passthrough_route.'
+      operationId: azure_proxy_route_azure_ai__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Azure Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: 'Call any azure endpoint using the proxy.
+
+
+        Just use `{PROXY_BASE_URL}/azure/{endpoint:path}`
+
+
+        Checks if the deployment id in the url is a litellm model name. If so, it will route using the llm_router.allm_passthrough_route.'
+      operationId: azure_proxy_route_azure_ai__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Azure Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: 'Call any azure endpoint using the proxy.
+
+
+        Just use `{PROXY_BASE_URL}/azure/{endpoint:path}`
+
+
+        Checks if the deployment id in the url is a litellm model name. If so, it will route using the llm_router.allm_passthrough_route.'
+      operationId: azure_proxy_route_azure_ai__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Azure Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: 'Call any azure endpoint using the proxy.
+
+
+        Just use `{PROXY_BASE_URL}/azure/{endpoint:path}`
+
+
+        Checks if the deployment id in the url is a litellm model name. If so, it will route using the llm_router.allm_passthrough_route.'
+      operationId: azure_proxy_route_azure_ai__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Azure Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: 'Call any azure endpoint using the proxy.
+
+
+        Just use `{PROXY_BASE_URL}/azure/{endpoint:path}`
+
+
+        Checks if the deployment id in the url is a litellm model name. If so, it will route using the llm_router.allm_passthrough_route.'
+      operationId: azure_proxy_route_azure_ai__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Azure Proxy Route
+      tags:
+      - llm_passthrough
+  /bedrock/{endpoint}:
+    delete:
+      description: 'This is the v1 passthrough for Bedrock.
+
+        V2 is handled by the `/bedrock/v2` endpoint.
+
+        Docs'
+      operationId: bedrock_proxy_route_bedrock__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Bedrock Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: 'This is the v1 passthrough for Bedrock.
+
+        V2 is handled by the `/bedrock/v2` endpoint.
+
+        Docs'
+      operationId: bedrock_proxy_route_bedrock__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Bedrock Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: 'This is the v1 passthrough for Bedrock.
+
+        V2 is handled by the `/bedrock/v2` endpoint.
+
+        Docs'
+      operationId: bedrock_proxy_route_bedrock__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Bedrock Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: 'This is the v1 passthrough for Bedrock.
+
+        V2 is handled by the `/bedrock/v2` endpoint.
+
+        Docs'
+      operationId: bedrock_proxy_route_bedrock__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Bedrock Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: 'This is the v1 passthrough for Bedrock.
+
+        V2 is handled by the `/bedrock/v2` endpoint.
+
+        Docs'
+      operationId: bedrock_proxy_route_bedrock__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Bedrock Proxy Route
+      tags:
+      - llm_passthrough
+  /cohere/{endpoint}:
+    delete:
+      description: Docs
+      operationId: cohere_proxy_route_cohere__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Cohere Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: Docs
+      operationId: cohere_proxy_route_cohere__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Cohere Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: Docs
+      operationId: cohere_proxy_route_cohere__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Cohere Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: Docs
+      operationId: cohere_proxy_route_cohere__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Cohere Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: Docs
+      operationId: cohere_proxy_route_cohere__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Cohere Proxy Route
+      tags:
+      - llm_passthrough
+  /comprehendmedical:
+    post:
+      description: 'AWS-SDK-shaped pass-through for Amazon Comprehend Medical: point the SDK''s
+
+        `endpoint_url` at `/comprehendmedical` and the operation is read from the
+
+        `X-Amz-Target` header, per the AWS JSON 1.1 protocol.
+
+
+        Docs'
+      operationId: comprehend_medical_sdk_proxy_route_comprehendmedical_post
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: Comprehend Medical Sdk Proxy Route
+      tags:
+      - llm_passthrough
+  /comprehendmedical/{operation}:
+    post:
+      description: 'Pass-through for Amazon Comprehend Medical, e.g. `POST /comprehendmedical/DetectEntitiesV2`.
+
+
+        The request body is forwarded as-is to the AWS JSON 1.1 API and signed with SigV4
+
+        using the proxy''s AWS credentials.
+
+
+        Docs'
+      operationId: comprehend_medical_proxy_route_comprehendmedical__operation__post
+      parameters:
+      - in: path
+        name: operation
+        required: true
+        schema:
+          title: Operation
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Comprehend Medical Proxy Route
+      tags:
+      - llm_passthrough
+  /cursor/{endpoint}:
+    delete:
+      description: 'Pass-through endpoint for the Cursor Cloud Agents API.
+
+
+        Supports all Cursor Cloud Agents endpoints:
+
+        - GET /v0/agents — List agents
+
+        - POST /v0/agents — Launch an agent
+
+        - GET /v0/agents/{id} — Agent status
+
+        - GET /v0/agents/{id}/conversation — Agent conversation
+
+        - POST /v0/agents/{id}/followup — Add follow-up
+
+        - POST /v0/agents/{id}/stop — Stop an agent
+
+        - DELETE /v0/agents/{id} — Delete an agent
+
+        - GET /v0/me — API key info
+
+        - GET /v0/models — List models
+
+        - GET /v0/repositories — List GitHub repositories
+
+
+        Uses Basic Authentication (base64-encoded `API_KEY:`).
+
+
+        Credential lookup order:
+
+        1. passthrough_endpoint_router (config.yaml deployments with use_in_pass_through)
+
+        2. litellm.credential_list (credentials added via UI)
+
+        3. CURSOR_API_KEY environment variable'
+      operationId: cursor_proxy_route_cursor__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Cursor Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: 'Pass-through endpoint for the Cursor Cloud Agents API.
+
+
+        Supports all Cursor Cloud Agents endpoints:
+
+        - GET /v0/agents — List agents
+
+        - POST /v0/agents — Launch an agent
+
+        - GET /v0/agents/{id} — Agent status
+
+        - GET /v0/agents/{id}/conversation — Agent conversation
+
+        - POST /v0/agents/{id}/followup — Add follow-up
+
+        - POST /v0/agents/{id}/stop — Stop an agent
+
+        - DELETE /v0/agents/{id} — Delete an agent
+
+        - GET /v0/me — API key info
+
+        - GET /v0/models — List models
+
+        - GET /v0/repositories — List GitHub repositories
+
+
+        Uses Basic Authentication (base64-encoded `API_KEY:`).
+
+
+        Credential lookup order:
+
+        1. passthrough_endpoint_router (config.yaml deployments with use_in_pass_through)
+
+        2. litellm.credential_list (credentials added via UI)
+
+        3. CURSOR_API_KEY environment variable'
+      operationId: cursor_proxy_route_cursor__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Cursor Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: 'Pass-through endpoint for the Cursor Cloud Agents API.
+
+
+        Supports all Cursor Cloud Agents endpoints:
+
+        - GET /v0/agents — List agents
+
+        - POST /v0/agents — Launch an agent
+
+        - GET /v0/agents/{id} — Agent status
+
+        - GET /v0/agents/{id}/conversation — Agent conversation
+
+        - POST /v0/agents/{id}/followup — Add follow-up
+
+        - POST /v0/agents/{id}/stop — Stop an agent
+
+        - DELETE /v0/agents/{id} — Delete an agent
+
+        - GET /v0/me — API key info
+
+        - GET /v0/models — List models
+
+        - GET /v0/repositories — List GitHub repositories
+
+
+        Uses Basic Authentication (base64-encoded `API_KEY:`).
+
+
+        Credential lookup order:
+
+        1. passthrough_endpoint_router (config.yaml deployments with use_in_pass_through)
+
+        2. litellm.credential_list (credentials added via UI)
+
+        3. CURSOR_API_KEY environment variable'
+      operationId: cursor_proxy_route_cursor__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Cursor Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: 'Pass-through endpoint for the Cursor Cloud Agents API.
+
+
+        Supports all Cursor Cloud Agents endpoints:
+
+        - GET /v0/agents — List agents
+
+        - POST /v0/agents — Launch an agent
+
+        - GET /v0/agents/{id} — Agent status
+
+        - GET /v0/agents/{id}/conversation — Agent conversation
+
+        - POST /v0/agents/{id}/followup — Add follow-up
+
+        - POST /v0/agents/{id}/stop — Stop an agent
+
+        - DELETE /v0/agents/{id} — Delete an agent
+
+        - GET /v0/me — API key info
+
+        - GET /v0/models — List models
+
+        - GET /v0/repositories — List GitHub repositories
+
+
+        Uses Basic Authentication (base64-encoded `API_KEY:`).
+
+
+        Credential lookup order:
+
+        1. passthrough_endpoint_router (config.yaml deployments with use_in_pass_through)
+
+        2. litellm.credential_list (credentials added via UI)
+
+        3. CURSOR_API_KEY environment variable'
+      operationId: cursor_proxy_route_cursor__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Cursor Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: 'Pass-through endpoint for the Cursor Cloud Agents API.
+
+
+        Supports all Cursor Cloud Agents endpoints:
+
+        - GET /v0/agents — List agents
+
+        - POST /v0/agents — Launch an agent
+
+        - GET /v0/agents/{id} — Agent status
+
+        - GET /v0/agents/{id}/conversation — Agent conversation
+
+        - POST /v0/agents/{id}/followup — Add follow-up
+
+        - POST /v0/agents/{id}/stop — Stop an agent
+
+        - DELETE /v0/agents/{id} — Delete an agent
+
+        - GET /v0/me — API key info
+
+        - GET /v0/models — List models
+
+        - GET /v0/repositories — List GitHub repositories
+
+
+        Uses Basic Authentication (base64-encoded `API_KEY:`).
+
+
+        Credential lookup order:
+
+        1. passthrough_endpoint_router (config.yaml deployments with use_in_pass_through)
+
+        2. litellm.credential_list (credentials added via UI)
+
+        3. CURSOR_API_KEY environment variable'
+      operationId: cursor_proxy_route_cursor__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Cursor Proxy Route
+      tags:
+      - llm_passthrough
+  /eu.assemblyai/{endpoint}:
+    delete:
+      operationId: assemblyai_proxy_route_eu_assemblyai__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Assemblyai Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      operationId: assemblyai_proxy_route_eu_assemblyai__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Assemblyai Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      operationId: assemblyai_proxy_route_eu_assemblyai__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Assemblyai Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      operationId: assemblyai_proxy_route_eu_assemblyai__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Assemblyai Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      operationId: assemblyai_proxy_route_eu_assemblyai__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Assemblyai Proxy Route
+      tags:
+      - llm_passthrough
+  /gemini/{endpoint}:
+    delete:
+      description: Docs
+      operationId: gemini_proxy_route_gemini__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Gemini Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: Docs
+      operationId: gemini_proxy_route_gemini__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Gemini Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: Docs
+      operationId: gemini_proxy_route_gemini__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Gemini Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: Docs
+      operationId: gemini_proxy_route_gemini__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Gemini Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: Docs
+      operationId: gemini_proxy_route_gemini__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Gemini Proxy Route
+      tags:
+      - llm_passthrough
+  /gigachat/{endpoint}:
+    delete:
+      description: Docs
+      operationId: gigachat_proxy_route_gigachat__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Gigachat Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: Docs
+      operationId: gigachat_proxy_route_gigachat__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Gigachat Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: Docs
+      operationId: gigachat_proxy_route_gigachat__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Gigachat Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: Docs
+      operationId: gigachat_proxy_route_gigachat__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Gigachat Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: Docs
+      operationId: gigachat_proxy_route_gigachat__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Gigachat Proxy Route
+      tags:
+      - llm_passthrough
+  /milvus/{endpoint}:
+    delete:
+      description: Enable using Milvus `/vectors` endpoint as a pass-through endpoint.
+      operationId: milvus_proxy_route_milvus__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Milvus Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: Enable using Milvus `/vectors` endpoint as a pass-through endpoint.
+      operationId: milvus_proxy_route_milvus__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Milvus Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: Enable using Milvus `/vectors` endpoint as a pass-through endpoint.
+      operationId: milvus_proxy_route_milvus__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Milvus Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: Enable using Milvus `/vectors` endpoint as a pass-through endpoint.
+      operationId: milvus_proxy_route_milvus__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Milvus Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: Enable using Milvus `/vectors` endpoint as a pass-through endpoint.
+      operationId: milvus_proxy_route_milvus__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Milvus Proxy Route
+      tags:
+      - llm_passthrough
+  /mistral/{endpoint}:
+    delete:
+      description: Docs
+      operationId: mistral_proxy_route_mistral__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Mistral Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: Docs
+      operationId: mistral_proxy_route_mistral__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Mistral Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: Docs
+      operationId: mistral_proxy_route_mistral__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Mistral Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: Docs
+      operationId: mistral_proxy_route_mistral__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Mistral Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: Docs
+      operationId: mistral_proxy_route_mistral__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Mistral Proxy Route
+      tags:
+      - llm_passthrough
+  /openai/v1/realtime/calls:
+    post:
+      operationId: proxy_realtime_calls_openai_v1_realtime_calls_post
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+      summary: Proxy Realtime Calls
+      tags:
+      - llm_passthrough
+  /openai/v1/realtime/client_secrets:
+    post:
+      operationId: create_realtime_client_secret_openai_v1_realtime_client_secrets_post
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RealtimeClientSecretResponse'
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: Create Realtime Client Secret
+      tags:
+      - llm_passthrough
+  /openai/v1/realtime/transcription_sessions:
+    post:
+      description: 'Create an ephemeral Realtime transcription session
+
+        (POST /v1/realtime/transcription_sessions) for the WebRTC/WebSocket flow.
+
+
+        Mirrors the client_secrets route but targets the transcription_sessions
+
+        endpoint and encrypts the ephemeral key returned under `client_secret.value`.'
+      operationId: create_realtime_transcription_session_openai_v1_realtime_transcription_sessions_post
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RealtimeTranscriptionSessionResponse'
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: Create Realtime Transcription Session
+      tags:
+      - llm_passthrough
+  /openai/{endpoint}:
+    delete:
+      description: 'Pass-through endpoint for OpenAI API calls.
+
+
+        Available on both routes:
+
+        - /openai/{endpoint:path} - Standard OpenAI passthrough route
+
+        - /openai_passthrough/{endpoint:path} - Dedicated passthrough route (recommended for Responses API)
+
+
+        Use /openai_passthrough/* when you need guaranteed passthrough to OpenAI without conflicts
+
+        with LiteLLM''s native implementations (e.g., for the Responses API at /v1/responses).
+
+
+        Examples:
+
+        Standard route:
+
+        - /openai/v1/chat/completions
+
+        - /openai/v1/assistants
+
+        - /openai/v1/threads
+
+
+        Dedicated passthrough (for Responses API):
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_proxy_route_openai__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Openai Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: 'Pass-through endpoint for OpenAI API calls.
+
+
+        Available on both routes:
+
+        - /openai/{endpoint:path} - Standard OpenAI passthrough route
+
+        - /openai_passthrough/{endpoint:path} - Dedicated passthrough route (recommended for Responses API)
+
+
+        Use /openai_passthrough/* when you need guaranteed passthrough to OpenAI without conflicts
+
+        with LiteLLM''s native implementations (e.g., for the Responses API at /v1/responses).
+
+
+        Examples:
+
+        Standard route:
+
+        - /openai/v1/chat/completions
+
+        - /openai/v1/assistants
+
+        - /openai/v1/threads
+
+
+        Dedicated passthrough (for Responses API):
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_proxy_route_openai__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Openai Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: 'Pass-through endpoint for OpenAI API calls.
+
+
+        Available on both routes:
+
+        - /openai/{endpoint:path} - Standard OpenAI passthrough route
+
+        - /openai_passthrough/{endpoint:path} - Dedicated passthrough route (recommended for Responses API)
+
+
+        Use /openai_passthrough/* when you need guaranteed passthrough to OpenAI without conflicts
+
+        with LiteLLM''s native implementations (e.g., for the Responses API at /v1/responses).
+
+
+        Examples:
+
+        Standard route:
+
+        - /openai/v1/chat/completions
+
+        - /openai/v1/assistants
+
+        - /openai/v1/threads
+
+
+        Dedicated passthrough (for Responses API):
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_proxy_route_openai__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Openai Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: 'Pass-through endpoint for OpenAI API calls.
+
+
+        Available on both routes:
+
+        - /openai/{endpoint:path} - Standard OpenAI passthrough route
+
+        - /openai_passthrough/{endpoint:path} - Dedicated passthrough route (recommended for Responses API)
+
+
+        Use /openai_passthrough/* when you need guaranteed passthrough to OpenAI without conflicts
+
+        with LiteLLM''s native implementations (e.g., for the Responses API at /v1/responses).
+
+
+        Examples:
+
+        Standard route:
+
+        - /openai/v1/chat/completions
+
+        - /openai/v1/assistants
+
+        - /openai/v1/threads
+
+
+        Dedicated passthrough (for Responses API):
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_proxy_route_openai__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Openai Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: 'Pass-through endpoint for OpenAI API calls.
+
+
+        Available on both routes:
+
+        - /openai/{endpoint:path} - Standard OpenAI passthrough route
+
+        - /openai_passthrough/{endpoint:path} - Dedicated passthrough route (recommended for Responses API)
+
+
+        Use /openai_passthrough/* when you need guaranteed passthrough to OpenAI without conflicts
+
+        with LiteLLM''s native implementations (e.g., for the Responses API at /v1/responses).
+
+
+        Examples:
+
+        Standard route:
+
+        - /openai/v1/chat/completions
+
+        - /openai/v1/assistants
+
+        - /openai/v1/threads
+
+
+        Dedicated passthrough (for Responses API):
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_proxy_route_openai__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Openai Proxy Route
+      tags:
+      - llm_passthrough
+  /openrouter/{endpoint}:
+    delete:
+      operationId: openrouter_proxy_route_openrouter__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Openrouter Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      operationId: openrouter_proxy_route_openrouter__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Openrouter Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      operationId: openrouter_proxy_route_openrouter__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Openrouter Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      operationId: openrouter_proxy_route_openrouter__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Openrouter Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      operationId: openrouter_proxy_route_openrouter__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Openrouter Proxy Route
+      tags:
+      - llm_passthrough
+  /typesafe/{endpoint}:
+    delete:
+      description: Docs
+      operationId: typesafe_proxy_route_typesafe__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Typesafe Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: Docs
+      operationId: typesafe_proxy_route_typesafe__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Typesafe Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: Docs
+      operationId: typesafe_proxy_route_typesafe__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Typesafe Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: Docs
+      operationId: typesafe_proxy_route_typesafe__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Typesafe Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: Docs
+      operationId: typesafe_proxy_route_typesafe__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Typesafe Proxy Route
+      tags:
+      - llm_passthrough
+  /vertex_ai/discovery/{endpoint}:
+    delete:
+      description: 'Call any vertex discovery endpoint using the proxy.
+
+
+        Just use `{PROXY_BASE_URL}/vertex_ai/discovery/{endpoint:path}`
+
+
+        Target url: `https://discoveryengine.googleapis.com`'
+      operationId: vertex_discovery_proxy_route_vertex_ai_discovery__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Vertex Discovery Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: 'Call any vertex discovery endpoint using the proxy.
+
+
+        Just use `{PROXY_BASE_URL}/vertex_ai/discovery/{endpoint:path}`
+
+
+        Target url: `https://discoveryengine.googleapis.com`'
+      operationId: vertex_discovery_proxy_route_vertex_ai_discovery__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Vertex Discovery Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: 'Call any vertex discovery endpoint using the proxy.
+
+
+        Just use `{PROXY_BASE_URL}/vertex_ai/discovery/{endpoint:path}`
+
+
+        Target url: `https://discoveryengine.googleapis.com`'
+      operationId: vertex_discovery_proxy_route_vertex_ai_discovery__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Vertex Discovery Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: 'Call any vertex discovery endpoint using the proxy.
+
+
+        Just use `{PROXY_BASE_URL}/vertex_ai/discovery/{endpoint:path}`
+
+
+        Target url: `https://discoveryengine.googleapis.com`'
+      operationId: vertex_discovery_proxy_route_vertex_ai_discovery__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Vertex Discovery Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: 'Call any vertex discovery endpoint using the proxy.
+
+
+        Just use `{PROXY_BASE_URL}/vertex_ai/discovery/{endpoint:path}`
+
+
+        Target url: `https://discoveryengine.googleapis.com`'
+      operationId: vertex_discovery_proxy_route_vertex_ai_discovery__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Vertex Discovery Proxy Route
+      tags:
+      - llm_passthrough
+  /vertex_ai/{endpoint}:
+    delete:
+      description: 'Call LiteLLM proxy via Vertex AI SDK.
+
+
+        Docs'
+      operationId: vertex_proxy_route_vertex_ai__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Vertex Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: 'Call LiteLLM proxy via Vertex AI SDK.
+
+
+        Docs'
+      operationId: vertex_proxy_route_vertex_ai__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Vertex Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: 'Call LiteLLM proxy via Vertex AI SDK.
+
+
+        Docs'
+      operationId: vertex_proxy_route_vertex_ai__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Vertex Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: 'Call LiteLLM proxy via Vertex AI SDK.
+
+
+        Docs'
+      operationId: vertex_proxy_route_vertex_ai__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Vertex Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: 'Call LiteLLM proxy via Vertex AI SDK.
+
+
+        Docs'
+      operationId: vertex_proxy_route_vertex_ai__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Vertex Proxy Route
+      tags:
+      - llm_passthrough
+  /vllm/{endpoint}:
+    delete:
+      description: Docs
+      operationId: vllm_proxy_route_vllm__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Vllm Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: Docs
+      operationId: vllm_proxy_route_vllm__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Vllm Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: Docs
+      operationId: vllm_proxy_route_vllm__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Vllm Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: Docs
+      operationId: vllm_proxy_route_vllm__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Vllm Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: Docs
+      operationId: vllm_proxy_route_vllm__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Vllm Proxy Route
+      tags:
+      - llm_passthrough
+  /watsonx/{endpoint}:
+    delete:
+      description: 'Watsonx pass-through endpoint.
+
+        Allows using Watsonx APIs with automatic IAM token management and version parameter injection.
+
+
+        Example:
+
+        POST /watsonx/ml/v1/text/tokenization
+
+        POST /watsonx/ml/v1/text/generation'
+      operationId: watsonx_proxy_route_watsonx__endpoint__delete
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Watsonx Proxy Route
+      tags:
+      - llm_passthrough
+    get:
+      description: 'Watsonx pass-through endpoint.
+
+        Allows using Watsonx APIs with automatic IAM token management and version parameter injection.
+
+
+        Example:
+
+        POST /watsonx/ml/v1/text/tokenization
+
+        POST /watsonx/ml/v1/text/generation'
+      operationId: watsonx_proxy_route_watsonx__endpoint__get
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Watsonx Proxy Route
+      tags:
+      - llm_passthrough
+    patch:
+      description: 'Watsonx pass-through endpoint.
+
+        Allows using Watsonx APIs with automatic IAM token management and version parameter injection.
+
+
+        Example:
+
+        POST /watsonx/ml/v1/text/tokenization
+
+        POST /watsonx/ml/v1/text/generation'
+      operationId: watsonx_proxy_route_watsonx__endpoint__patch
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Watsonx Proxy Route
+      tags:
+      - llm_passthrough
+    post:
+      description: 'Watsonx pass-through endpoint.
+
+        Allows using Watsonx APIs with automatic IAM token management and version parameter injection.
+
+
+        Example:
+
+        POST /watsonx/ml/v1/text/tokenization
+
+        POST /watsonx/ml/v1/text/generation'
+      operationId: watsonx_proxy_route_watsonx__endpoint__post
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Watsonx Proxy Route
+      tags:
+      - llm_passthrough
+    put:
+      description: 'Watsonx pass-through endpoint.
+
+        Allows using Watsonx APIs with automatic IAM token management and version parameter injection.
+
+
+        Example:
+
+        POST /watsonx/ml/v1/text/tokenization
+
+        POST /watsonx/ml/v1/text/generation'
+      operationId: watsonx_proxy_route_watsonx__endpoint__put
+      parameters:
+      - in: path
+        name: endpoint
+        required: true
+        schema:
+          title: Endpoint
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Watsonx Proxy Route
+      tags:
+      - llm_passthrough
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    RealtimeTranscriptionSessionResponse:
+      additionalProperties: true
+      description: 'Response from POST /v1/realtime/transcription_sessions.
+
+
+        `client_secret.value` contains the encrypted token instead of the raw
+
+        ephemeral key. Unknown fields pass through unchanged.'
+      properties:
+        client_secret:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Client Secret
+      title: RealtimeTranscriptionSessionResponse
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    RealtimeClientSecretResponse:
+      description: 'Response from POST /v1/realtime/client_secrets.
+
+
+        Both the top-level `value` and `session.client_secret.value`
+
+        will contain the encrypted token instead of the raw ephemeral key.
+
+        The `session` field is kept as a raw dict so unknown fields pass through.'
+      properties:
+        expires_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Expires At
+        session:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Session
+        value:
+          title: Value
+          type: string
+      required:
+      - value
+      title: RealtimeClientSecretResponse
+      type: object
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

@@ -1,0 +1,142 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Skills API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Skills
+paths:
+  /.well-known/agent-skills/index.json:
+    get:
+      tags:
+      - Skills
+      summary: Agent Skills Index
+      description: Agent Skills v0.2.0 discovery index over every skill stored on this proxy.
+      operationId: agent_skills_index__well_known_agent_skills_index_json_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentSkillsIndex'
+  /v1/skills/{skill_id}/archive:
+    get:
+      tags:
+      - Skills
+      summary: Agent Skills Archive
+      description: Stored skill upload, repacked so SKILL.md sits at the archive root.
+      operationId: agent_skills_archive_v1_skills__skill_id__archive_get
+      parameters:
+      - name: skill_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Skill Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/zip:
+              schema:
+                type: string
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    AgentSkillsIndexEntry:
+      properties:
+        name:
+          type: string
+          title: Name
+        type:
+          type: string
+          const: archive
+          title: Type
+        description:
+          type: string
+          title: Description
+        url:
+          type: string
+          title: Url
+        digest:
+          type: string
+          title: Digest
+      type: object
+      required:
+      - name
+      - type
+      - description
+      - url
+      - digest
+      title: AgentSkillsIndexEntry
+    AgentSkillsIndex:
+      properties:
+        $schema:
+          type: string
+          title: $Schema
+          default: https://schemas.agentskills.io/discovery/0.2.0/schema.json
+        skills:
+          items:
+            $ref: '#/components/schemas/AgentSkillsIndexEntry'
+          type: array
+          title: Skills
+      type: object
+      required:
+      - skills
+      title: AgentSkillsIndex
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

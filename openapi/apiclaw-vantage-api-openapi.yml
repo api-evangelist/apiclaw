@@ -1,0 +1,406 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Vantage API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: vantage
+paths:
+  /vantage/delete:
+    delete:
+      description: 'Delete Vantage settings from the database.
+
+
+        Only admin users can delete Vantage settings.'
+      operationId: delete_vantage_settings_vantage_delete_delete
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VantageInitResponse'
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: Delete Vantage Settings
+      tags:
+      - vantage
+  /vantage/dry-run:
+    post:
+      description: 'Perform a dry run export using the Vantage logger.
+
+
+        Returns the data that would be exported without actually sending it to Vantage.
+
+
+        Parameters:
+
+        - limit: Limit on number of records to preview (default: 500)
+
+
+        Only admin users can perform Vantage exports.'
+      operationId: vantage_dry_run_export_vantage_dry_run_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VantageDryRunRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VantageExportResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Vantage Dry Run Export
+      tags:
+      - vantage
+  /vantage/export:
+    post:
+      description: 'Perform an actual export using the Vantage logger.
+
+
+        Exports usage data in FOCUS CSV format to the Vantage API.
+
+
+        Parameters:
+
+        - limit: Optional limit on number of records to export
+
+        - start_time_utc: Optional start time for data export
+
+        - end_time_utc: Optional end time for data export
+
+
+        Only admin users can perform Vantage exports.'
+      operationId: vantage_export_vantage_export_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VantageExportRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VantageExportResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Vantage Export
+      tags:
+      - vantage
+  /vantage/init:
+    post:
+      description: 'Initialize Vantage settings and store in the database.
+
+
+        Parameters:
+
+        - api_key: Vantage API key for authentication
+
+        - integration_token: Vantage integration token for the cost-import endpoint
+
+        - base_url: Vantage API base URL (default: https://api.vantage.sh)
+
+
+        Only admin users can configure Vantage settings.'
+      operationId: init_vantage_settings_vantage_init_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VantageInitRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VantageInitResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Init Vantage Settings
+      tags:
+      - vantage
+  /vantage/settings:
+    get:
+      description: 'View current Vantage settings.
+
+
+        Returns the current Vantage configuration with the API key masked for security.
+
+        Only admin users (Proxy Admin or Admin Viewer) can view Vantage settings.'
+      operationId: get_vantage_settings_vantage_settings_get
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VantageSettingsView'
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: Get Vantage Settings
+      tags:
+      - vantage
+    put:
+      description: 'Update existing Vantage settings.
+
+
+        Allows updating individual Vantage configuration fields without requiring all fields.
+
+        Only admin users can update Vantage settings.'
+      operationId: update_vantage_settings_vantage_settings_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VantageSettingsUpdate'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VantageInitResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Update Vantage Settings
+      tags:
+      - vantage
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    VantageSettingsView:
+      description: Response model for viewing Vantage settings with masked API key
+      properties:
+        api_key_masked:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Masked API key showing only first 4 and last 4 characters
+          title: Api Key Masked
+        base_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Vantage API base URL
+          title: Base Url
+        integration_token_masked:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Masked integration token showing only first 4 and last 4 characters
+          title: Integration Token Masked
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Configuration status
+          title: Status
+      title: VantageSettingsView
+      type: object
+    VantageExportRequest:
+      description: Request model for Vantage export operations (actual export, no default limit)
+      properties:
+        end_time_utc:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: End time for data export in UTC
+          title: End Time Utc
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: 'Optional limit on number of records to export (default: no limit)'
+          title: Limit
+        start_time_utc:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: Start time for data export in UTC
+          title: Start Time Utc
+      title: VantageExportRequest
+      type: object
+    VantageInitResponse:
+      description: Response model for Vantage initialization
+      properties:
+        message:
+          title: Message
+          type: string
+        status:
+          title: Status
+          type: string
+      required:
+      - message
+      - status
+      title: VantageInitResponse
+      type: object
+    VantageInitRequest:
+      description: Request model for initializing Vantage settings
+      properties:
+        api_key:
+          description: Vantage API key for authentication
+          title: Api Key
+          type: string
+        base_url:
+          default: https://api.vantage.sh
+          description: 'Vantage API base URL (default: https://api.vantage.sh)'
+          title: Base Url
+          type: string
+        integration_token:
+          description: Vantage integration token for the cost-import endpoint
+          title: Integration Token
+          type: string
+      required:
+      - api_key
+      - integration_token
+      title: VantageInitRequest
+      type: object
+    VantageExportResponse:
+      description: Response model for Vantage export operations
+      properties:
+        dry_run_data:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          description: Dry run data including usage data and FOCUS transformed data
+          title: Dry Run Data
+        message:
+          title: Message
+          type: string
+        status:
+          title: Status
+          type: string
+        summary:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          description: Summary statistics for dry run
+          title: Summary
+      required:
+      - message
+      - status
+      title: VantageExportResponse
+      type: object
+    VantageDryRunRequest:
+      description: Request model for Vantage dry-run operations (capped for preview)
+      properties:
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: 500
+          description: 'Limit on number of records to preview (default: 500)'
+          title: Limit
+      title: VantageDryRunRequest
+      type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    VantageSettingsUpdate:
+      description: Request model for updating Vantage settings
+      properties:
+        api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New Vantage API key for authentication
+          title: Api Key
+        base_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New Vantage API base URL
+          title: Base Url
+        integration_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New Vantage integration token
+          title: Integration Token
+      title: VantageSettingsUpdate
+      type: object
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

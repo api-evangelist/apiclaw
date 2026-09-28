@@ -1,0 +1,27 @@
+generated: '2026-09-27'
+method: generated
+generator: extract-docs-artifacts.py skills (local)
+source: openapi/apiclaw.json
+skills:
+- file: skills/apiclaw-customer-management.md
+  name: apiclaw-customer-management
+  api: openapi/apiclaw.json
+  operations:
+  - new_end_user_customer_new_post
+  - end_user_info_customer_info_get
+  - update_end_user_customer_update_post
+  - block_user_customer_block_post
+  - unblock_user_customer_unblock_post
+  - delete_end_user_customer_delete_post
+- file: skills/apiclaw-billing-purchase-plan.md
+  name: apiclaw-billing-purchase-plan
+  api: openapi/apiclaw.json
+  operations:
+  - list_plans_billing_plans_get
+  - billing_checkout_billing_checkout_post
+- file: skills/apiclaw-create-and-retrieve-response.md
+  name: apiclaw-create-and-retrieve-response
+  api: openapi/apiclaw.json
+  operations:
+  - responses_api_responses_post
+  - get_response_responses__response_id__get

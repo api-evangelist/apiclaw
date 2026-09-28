@@ -1,0 +1,155 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM A2a Registration API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: a2a_registration
+paths:
+  /v1/a2a/discover:
+    post:
+      description: 'Fetch the upstream agent''s well-known card so the UI can show the admin
+
+        which skills/capabilities the agent exposes.
+
+
+        Only proxy admins can call this — the UI uses it during agent registration,
+
+        and we don''t want arbitrary keys probing internal URLs.
+
+
+        Example:
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1/a2a/discover" \
+
+        -H "Authorization: Bearer " \
+
+        -H "Content-Type: application/json" \
+
+        -d ''{"url": "https://upstream-agent.example.com"}''
+
+        ```'
+      operationId: discover_agent_card_v1_a2a_discover_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiscoverAgentRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscoverAgentResponse'
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Discover Agent Card
+      tags:
+      - a2a_registration
+components:
+  schemas:
+    DiscoverAgentResponse:
+      properties:
+        agent_card:
+          additionalProperties: true
+          title: Agent Card
+          type: object
+        url:
+          title: Url
+          type: string
+      required:
+      - url
+      - agent_card
+      title: DiscoverAgentResponse
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    DiscoveryMode:
+      description: 'How to locate the upstream agent card.
+
+
+        String-valued so it serializes cleanly over JSON / Pydantic.'
+      enum:
+      - well_known_fallback
+      - langgraph_platform
+      title: DiscoveryMode
+      type: string
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    DiscoverAgentRequest:
+      properties:
+        discovery_mode:
+          $ref: '#/components/schemas/DiscoveryMode'
+          default: well_known_fallback
+          description: How to locate the upstream card. ``well_known_fallback`` for pure A2A agents (try standard paths); ``langgraph_platform`` for LangGraph Platform deployments where the card is shared across assistants and disambiguated by a query parameter.
+        params:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          description: 'Mode-specific parameters. ``langgraph_platform`` requires ``{''assistant_id'': <id>}``. ``well_known_fallback`` ignores this.'
+          title: Params
+        url:
+          description: 'Base URL of the upstream agent. Behavior depends on ``discovery_mode``: ``well_known_fallback`` (default) tries /.well-known/agent-card.json, /.well-known/agent.json, /agent.json under this URL in order; ``langgraph_platform`` hits ``/.well-known/agent-card.json?assistant_id=<id>`` instead.'
+          title: Url
+          type: string
+      required:
+      - url
+      title: DiscoverAgentRequest
+      type: object
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

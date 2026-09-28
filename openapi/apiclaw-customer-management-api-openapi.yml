@@ -1,0 +1,1519 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Customer Management API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Customer Management
+paths:
+  /customer/block:
+    post:
+      tags:
+      - Customer Management
+      summary: Block User
+      description: '[BETA] Reject calls with this end-user id
+
+
+        Parameters:
+
+        - user_ids (List[str], required): The unique `user_id`s for the users to block
+
+
+        (any /chat/completion call with this user={end-user-id} param, will be rejected.)
+
+
+        ```
+
+        curl -X POST "http://0.0.0.0:8000/user/block"
+
+        -H "Authorization: Bearer sk-1234"
+
+        -d ''{
+
+        "user_ids": [, ...]
+
+        }''
+
+        ```'
+      operationId: block_user_customer_block_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockUsers'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockUsersResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /customer/unblock:
+    post:
+      tags:
+      - Customer Management
+      summary: Unblock User
+      description: '[BETA] Unblock calls with this user id
+
+
+        Example
+
+        ```
+
+        curl -X POST "http://0.0.0.0:8000/user/unblock"
+
+        -H "Authorization: Bearer sk-1234"
+
+        -d ''{
+
+        "user_ids": [, ...]
+
+        }''
+
+        ```'
+      operationId: unblock_user_customer_unblock_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockUsers'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnblockUsersResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /customer/new:
+    post:
+      tags:
+      - Customer Management
+      summary: New End User
+      description: 'Allow creating a new Customer
+
+
+        Parameters:
+
+        - user_id: str - The unique identifier for the user.
+
+        - alias: Optional[str] - A human-friendly alias for the user.
+
+        - blocked: bool - Flag to allow or disallow requests for this end-user. Default is False.
+
+        - max_budget: Optional[float] - The maximum budget allocated to the user. Either ''max_budget'' or ''budget_id'' should be provided, not both.
+
+        - budget_id: Optional[str] - The identifier for an existing budget allocated to the user. Either ''max_budget'' or ''budget_id'' should be provided, not both.
+
+        - allowed_model_region: Optional[Union[Literal["eu"], Literal["us"]]] - Require all user requests to use models in this specific region.
+
+        - default_model: Optional[str] - If no equivalent model in the allowed region, default all requests to this model.
+
+        - metadata: Optional[dict] = Metadata for customer, store information for customer. Example metadata = {"data_training_opt_out": True}
+
+        - budget_duration: Optional[str] - Budget is reset at the end of specified duration. If not set, budget is never reset. You can set duration as seconds ("30s"), minutes ("30m"), hours ("30h"), days ("30d").
+
+        - tpm_limit: Optional[int] - [Not Implemented Yet] Specify tpm limit for a given customer (Tokens per minute)
+
+        - rpm_limit: Optional[int] - [Not Implemented Yet] Specify rpm limit for a given customer (Requests per minute)
+
+        - model_max_budget: Optional[dict] - [Not Implemented Yet] Specify max budget for a given model. Example: {"openai/gpt-4o-mini": {"max_budget": 100.0, "budget_duration": "1d"}}
+
+        - max_parallel_requests: Optional[int] - [Not Implemented Yet] Specify max parallel requests for a given customer.
+
+        - soft_budget: Optional[float] - [Not Implemented Yet] Get alerts when customer crosses given budget, doesn''t block requests.
+
+        - spend: Optional[float] - Specify initial spend for a given customer.
+
+        - budget_reset_at: Optional[str] - Specify the date and time when the budget should be reset.
+
+        - object_permission: Optional[LiteLLM_ObjectPermissionBase] - Customer-specific object permissions to control access to resources.
+
+        Supported fields:
+
+        * mcp_servers: List[str] - List of allowed MCP server IDs
+
+        * mcp_access_groups: List[str] - List of MCP access group names
+
+        * mcp_tool_permissions: Dict[str, List[str]] - Map of server ID to allowed tool names (e.g., {"server_1": ["tool_a", "tool_b"]})
+
+        * vector_stores: List[str] - List of allowed vector store IDs
+
+        * agents: List[str] - List of allowed agent IDs
+
+        * agent_access_groups: List[str] - List of agent access group names
+
+        Example: {"mcp_servers": ["server_1", "server_2"], "vector_stores": ["vector_store_1"], "agents": ["agent_1"]}
+
+        IF null or {} then no object-level restrictions apply.
+
+
+        - Allow specifying allowed regions
+
+        - Allow specifying default model
+
+
+        Example curl:
+
+        ```
+
+        curl --location ''http://0.0.0.0:4000/customer/new'' --header ''Authorization: Bearer sk-1234'' --header ''Content-Type: application/json'' --data ''{
+
+        "user_id" : "ishaan-jaff-3",
+
+        "allowed_region": "eu",
+
+        "budget_id": "free_tier",
+
+        "default_model": "azure/gpt-3.5-turbo-eu"
+
+        }''
+
+
+        # With object permissions
+
+        curl -L -X POST ''http://localhost:4000/customer/new'' -H ''Authorization: Bearer sk-1234'' -H ''Content-Type: application/json'' -d ''{
+
+        "user_id": "user_1",
+
+        "object_permission": {
+
+        "mcp_servers": ["server_1"],
+
+        "mcp_access_groups": ["public_group"],
+
+        "vector_stores": ["vector_store_1"]
+
+        }
+
+        }''
+
+
+        # return end-user object
+
+        ```
+
+
+        NOTE: This used to be called `/end_user/new`, we will still be maintaining compatibility for /end_user/XXX for these endpoints'
+      operationId: new_end_user_customer_new_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewCustomerRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /customer/info:
+    get:
+      tags:
+      - Customer Management
+      summary: End User Info
+      description: 'Get information about an end-user. An `end_user` is a customer (external user) of the proxy.
+
+
+        Parameters:
+
+        - end_user_id (str, required): The unique identifier for the end-user
+
+
+        Example curl:
+
+        ```
+
+        curl -X GET ''http://localhost:4000/customer/info?end_user_id=test-litellm-user-4'' -H ''Authorization: Bearer sk-1234''
+
+        ```'
+      operationId: end_user_info_customer_info_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: end_user_id
+        in: query
+        required: true
+        schema:
+          type: string
+          description: End User ID in the request parameters
+          title: End User Id
+        description: End User ID in the request parameters
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /customer/update:
+    post:
+      tags:
+      - Customer Management
+      summary: Update End User
+      description: 'Example curl
+
+
+        Parameters:
+
+        - user_id: str
+
+        - alias: Optional[str] = None # human-friendly alias
+
+        - blocked: bool = False # allow/disallow requests for this end-user
+
+        - max_budget: Optional[float] = None
+
+        - budget_id: Optional[str] = None # give either a budget_id or max_budget
+
+        - allowed_model_region: Optional[AllowedModelRegion] = (
+
+        None # require all user requests to use models in this specific region
+
+        )
+
+        - default_model: Optional[str] = (
+
+        None # if no equivalent model in allowed region - default all requests to this model
+
+        )
+
+        - object_permission: Optional[LiteLLM_ObjectPermissionBase] - Customer-specific object permissions to control access to resources.
+
+        Supported fields:
+
+        * mcp_servers: List[str] - List of allowed MCP server IDs
+
+        * mcp_access_groups: List[str] - List of MCP access group names
+
+        * mcp_tool_permissions: Dict[str, List[str]] - Map of server ID to allowed tool names
+
+        * vector_stores: List[str] - List of allowed vector store IDs
+
+        * agents: List[str] - List of allowed agent IDs
+
+        * agent_access_groups: List[str] - List of agent access group names
+
+        Example: {"mcp_servers": ["server_1"], "vector_stores": ["vector_store_1"]}
+
+        IF null or {} then no object-level restrictions apply.
+
+
+        Example curl:
+
+        ```
+
+        curl --location ''http://0.0.0.0:4000/customer/update'' --header ''Authorization: Bearer sk-1234'' --header ''Content-Type: application/json'' --data ''{
+
+        "user_id": "test-litellm-user-4",
+
+        "budget_id": "paid_tier"
+
+        }''
+
+
+        # Updating object permissions
+
+        curl -L -X POST ''http://localhost:4000/customer/update'' --header ''Authorization: Bearer sk-1234'' --header ''Content-Type: application/json'' --data ''{
+
+        "user_id": "user_1",
+
+        "object_permission": {
+
+        "mcp_servers": ["server_3"],
+
+        "vector_stores": ["vector_store_2", "vector_store_3"]
+
+        }
+
+        }''
+
+
+        See below for all params
+
+        ```'
+      operationId: update_end_user_customer_update_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCustomerRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /customer/delete:
+    post:
+      tags:
+      - Customer Management
+      summary: Delete End User
+      description: 'Delete multiple end-users.
+
+
+        Parameters:
+
+        - user_ids (List[str], required): The unique `user_id`s for the users to delete
+
+
+        Example curl:
+
+        ```
+
+        curl --location ''http://0.0.0.0:4000/customer/delete'' --header ''Authorization: Bearer sk-1234'' --header ''Content-Type: application/json'' --data ''{
+
+        "user_ids" :["ishaan-jaff-5"]
+
+        }''
+
+
+        See below for all params
+
+        ```'
+      operationId: delete_end_user_customer_delete_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteCustomerRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteCustomersResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /customer/list:
+    get:
+      tags:
+      - Customer Management
+      summary: List End User
+      description: '[Admin-only] List all available customers
+
+
+        Example curl:
+
+        ```
+
+        curl --location --request GET ''http://0.0.0.0:4000/customer/list'' --header ''Authorization: Bearer sk-1234''
+
+        ```'
+      operationId: list_end_user_customer_list_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/CustomerResponse'
+                type: array
+                title: Response List End User Customer List Get
+      security:
+      - APIKeyHeader: []
+  /customer/daily/activity:
+    get:
+      tags:
+      - Customer Management
+      summary: Get Customer Daily Activity
+      description: Get daily activity for specific organizations or all accessible organizations.
+      operationId: get_customer_daily_activity_customer_daily_activity_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: end_user_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: End User Ids
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Start Date
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: End Date
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          title: Page Size
+      - name: exclude_end_user_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exclude End User Ids
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpendAnalyticsPaginatedResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    UpdateCustomerRequest:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Alias
+        blocked:
+          type: boolean
+          title: Blocked
+          default: false
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        budget_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Id
+        allowed_model_region:
+          anyOf:
+          - type: string
+            enum:
+            - eu
+            - us
+          - type: 'null'
+          title: Allowed Model Region
+        default_model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Default Model
+        object_permission:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionBase'
+          - type: 'null'
+      type: object
+      required:
+      - user_id
+      title: UpdateCustomerRequest
+      description: Update a Customer, use this to update customer budgets etc
+    LiteLLM_BudgetTable:
+      properties:
+        budget_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Id
+        soft_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Soft Budget
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        max_parallel_requests:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Parallel Requests
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
+        model_max_budget:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Max Budget
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        allowed_models:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allowed Models
+      type: object
+      title: LiteLLM_BudgetTable
+      description: 'Represents user-controllable params for a LiteLLM_BudgetTable record.
+
+
+        Budget-write paths use `model_fields.keys()` on this class as an allowlist
+
+        for user input. Keep server-managed fields (e.g. `budget_reset_at`) on
+
+        `LiteLLM_BudgetTableFull` so they aren''t user-settable.'
+    BreakdownMetrics:
+      properties:
+        mcp_servers:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Mcp Servers
+        models:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Models
+        model_groups:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Model Groups
+        providers:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Providers
+        endpoints:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Endpoints
+        api_keys:
+          additionalProperties:
+            $ref: '#/components/schemas/KeyMetricWithMetadata'
+          type: object
+          title: Api Keys
+        entities:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Entities
+      type: object
+      title: BreakdownMetrics
+      description: Breakdown of spend by different dimensions
+    DailySpendData:
+      properties:
+        date:
+          type: string
+          format: date
+          title: Date
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        breakdown:
+          $ref: '#/components/schemas/BreakdownMetrics'
+      type: object
+      required:
+      - date
+      - metrics
+      title: DailySpendData
+    BlockUsersResponse:
+      properties:
+        blocked_users:
+          items:
+            $ref: '#/components/schemas/LiteLLM_EndUserTable'
+          type: array
+          title: Blocked Users
+      type: object
+      required:
+      - blocked_users
+      title: BlockUsersResponse
+    UnblockUsersResponse:
+      properties:
+        blocked_users:
+          items:
+            type: string
+          type: array
+          title: Blocked Users
+          description: User IDs that remain blocked after this unblock call
+      type: object
+      required:
+      - blocked_users
+      title: UnblockUsersResponse
+    CustomerResponse:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        blocked:
+          type: boolean
+          title: Blocked
+        alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Alias
+        spend:
+          type: number
+          title: Spend
+          default: 0.0
+        allowed_model_region:
+          anyOf:
+          - type: string
+            enum:
+            - eu
+            - us
+          - type: 'null'
+          title: Allowed Model Region
+        default_model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Default Model
+        budget_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Id
+        litellm_budget_table:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_BudgetTableFull'
+          - type: 'null'
+        object_permission_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Object Permission Id
+        object_permission:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionTable'
+          - type: 'null'
+      type: object
+      required:
+      - user_id
+      - blocked
+      title: CustomerResponse
+      description: 'Customer object returned by the /customer read+write endpoints.
+
+
+        Nests the full budget response model so server-managed budget fields
+
+        (budget_reset_at, created_at) survive response_model filtering, rather than
+
+        the narrow write-allowlist shape LiteLLM_EndUserTable carries for internal use.'
+    KeyMetadata:
+      properties:
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+      type: object
+      title: KeyMetadata
+      description: Metadata for a key
+    DeleteCustomerRequest:
+      properties:
+        user_ids:
+          items:
+            type: string
+          type: array
+          title: User Ids
+      type: object
+      required:
+      - user_ids
+      title: DeleteCustomerRequest
+      description: Delete multiple Customers
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    KeyMetricWithMetadata:
+      properties:
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        metadata:
+          $ref: '#/components/schemas/KeyMetadata'
+      type: object
+      required:
+      - metrics
+      title: KeyMetricWithMetadata
+      description: Base class for metrics with additional metadata
+    SpendMetrics:
+      properties:
+        spend:
+          type: number
+          title: Spend
+          default: 0.0
+        flat_cost:
+          type: number
+          title: Flat Cost
+          default: 0.0
+        prompt_tokens:
+          type: integer
+          title: Prompt Tokens
+          default: 0
+        completion_tokens:
+          type: integer
+          title: Completion Tokens
+          default: 0
+        cache_read_input_tokens:
+          type: integer
+          title: Cache Read Input Tokens
+          default: 0
+        cache_creation_input_tokens:
+          type: integer
+          title: Cache Creation Input Tokens
+          default: 0
+        compression_saved_tokens:
+          type: integer
+          title: Compression Saved Tokens
+          default: 0
+        compression_savings_spend:
+          type: number
+          title: Compression Savings Spend
+          default: 0.0
+        prompt_caching_savings_spend:
+          type: number
+          title: Prompt Caching Savings Spend
+          default: 0.0
+        gateway_injected_caching_savings_spend:
+          type: number
+          title: Gateway Injected Caching Savings Spend
+          default: 0.0
+        autorouter_savings_spend:
+          type: number
+          title: Autorouter Savings Spend
+          default: 0.0
+        total_tokens:
+          type: integer
+          title: Total Tokens
+          default: 0
+        successful_requests:
+          type: integer
+          title: Successful Requests
+          default: 0
+        failed_requests:
+          type: integer
+          title: Failed Requests
+          default: 0
+        api_requests:
+          type: integer
+          title: Api Requests
+          default: 0
+      type: object
+      title: SpendMetrics
+    DeleteCustomersResponse:
+      properties:
+        deleted_customers:
+          type: integer
+          title: Deleted Customers
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - deleted_customers
+      - message
+      title: DeleteCustomersResponse
+    LiteLLM_EndUserTable:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        blocked:
+          type: boolean
+          title: Blocked
+        alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Alias
+        spend:
+          type: number
+          title: Spend
+          default: 0.0
+        allowed_model_region:
+          anyOf:
+          - type: string
+            enum:
+            - eu
+            - us
+          - type: 'null'
+          title: Allowed Model Region
+        default_model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Default Model
+        budget_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Id
+        litellm_budget_table:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_BudgetTable'
+          - type: 'null'
+        object_permission_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Object Permission Id
+        object_permission:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionTable'
+          - type: 'null'
+      type: object
+      required:
+      - user_id
+      - blocked
+      title: LiteLLM_EndUserTable
+    NewCustomerRequest:
+      properties:
+        budget_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Id
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+          description: Requests will fail if this budget (in USD) is exceeded.
+        soft_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Soft Budget
+          description: Requests will NOT fail if this is exceeded. Will fire alerting though.
+        max_parallel_requests:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Parallel Requests
+          description: Max concurrent requests allowed for this budget id.
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+          description: Max tokens per minute, allowed for this budget id.
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
+          description: Max requests per minute, allowed for this budget id.
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+          description: Max duration budget should be set for (e.g. '1hr', '1d', '28d')
+        model_max_budget:
+          anyOf:
+          - additionalProperties:
+              $ref: '#/components/schemas/BudgetConfig'
+            type: object
+          - type: 'null'
+          title: Model Max Budget
+          description: 'Max budget for each model (e.g. {''gpt-4o'': {''max_budget'': ''0.0000001'', ''budget_duration'': ''1d'', ''tpm_limit'': 1000, ''rpm_limit'': 1000}})'
+        budget_reset_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Budget Reset At
+          description: Datetime when the budget is reset
+        user_id:
+          type: string
+          title: User Id
+        alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Alias
+        blocked:
+          type: boolean
+          title: Blocked
+          default: false
+        spend:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Spend
+        allowed_model_region:
+          anyOf:
+          - type: string
+            enum:
+            - eu
+            - us
+          - type: 'null'
+          title: Allowed Model Region
+        default_model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Default Model
+        object_permission:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionBase'
+          - type: 'null'
+      type: object
+      required:
+      - user_id
+      title: NewCustomerRequest
+      description: Create a new customer, allocate a budget to them
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    MetricWithMetadata:
+      properties:
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+        api_key_breakdown:
+          additionalProperties:
+            $ref: '#/components/schemas/KeyMetricWithMetadata'
+          type: object
+          title: Api Key Breakdown
+      type: object
+      required:
+      - metrics
+      title: MetricWithMetadata
+    LiteLLM_ObjectPermissionTable:
+      properties:
+        object_permission_id:
+          type: string
+          title: Object Permission Id
+        mcp_servers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Servers
+          default: []
+        mcp_access_groups:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Access Groups
+          default: []
+        mcp_tool_permissions:
+          anyOf:
+          - additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+          - type: 'null'
+          title: Mcp Tool Permissions
+        vector_stores:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Vector Stores
+          default: []
+        agents:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Agents
+          default: []
+        agent_access_groups:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Agent Access Groups
+          default: []
+        models:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Models
+          default: []
+        mcp_toolsets:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Toolsets
+        blocked_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Blocked Tools
+          default: []
+        search_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Search Tools
+          default: []
+        mcp_tool_search_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Mcp Tool Search Enabled
+        skills:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Skills
+      type: object
+      required:
+      - object_permission_id
+      title: LiteLLM_ObjectPermissionTable
+      description: Represents a LiteLLM_ObjectPermissionTable record
+    SpendAnalyticsPaginatedResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/DailySpendData'
+          type: array
+          title: Results
+        metadata:
+          $ref: '#/components/schemas/DailySpendMetadata'
+      type: object
+      required:
+      - results
+      title: SpendAnalyticsPaginatedResponse
+    DailySpendMetadata:
+      properties:
+        total_spend:
+          type: number
+          title: Total Spend
+          default: 0.0
+        total_flat_cost:
+          type: number
+          title: Total Flat Cost
+          default: 0.0
+        total_prompt_tokens:
+          type: integer
+          title: Total Prompt Tokens
+          default: 0
+        total_completion_tokens:
+          type: integer
+          title: Total Completion Tokens
+          default: 0
+        total_tokens:
+          type: integer
+          title: Total Tokens
+          default: 0
+        total_api_requests:
+          type: integer
+          title: Total Api Requests
+          default: 0
+        total_successful_requests:
+          type: integer
+          title: Total Successful Requests
+          default: 0
+        total_failed_requests:
+          type: integer
+          title: Total Failed Requests
+          default: 0
+        total_cache_read_input_tokens:
+          type: integer
+          title: Total Cache Read Input Tokens
+          default: 0
+        total_cache_creation_input_tokens:
+          type: integer
+          title: Total Cache Creation Input Tokens
+          default: 0
+        total_compression_saved_tokens:
+          type: integer
+          title: Total Compression Saved Tokens
+          default: 0
+        total_compression_savings_spend:
+          type: number
+          title: Total Compression Savings Spend
+          default: 0.0
+        total_prompt_caching_savings_spend:
+          type: number
+          title: Total Prompt Caching Savings Spend
+          default: 0.0
+        total_gateway_injected_caching_savings_spend:
+          type: number
+          title: Total Gateway Injected Caching Savings Spend
+          default: 0.0
+        total_autorouter_savings_spend:
+          type: number
+          title: Total Autorouter Savings Spend
+          default: 0.0
+        page:
+          type: integer
+          title: Page
+          default: 1
+        total_pages:
+          type: integer
+          title: Total Pages
+          default: 1
+        has_more:
+          type: boolean
+          title: Has More
+          default: false
+      type: object
+      title: DailySpendMetadata
+    BlockUsers:
+      properties:
+        user_ids:
+          items:
+            type: string
+          type: array
+          title: User Ids
+      type: object
+      required:
+      - user_ids
+      title: BlockUsers
+    BudgetConfig:
+      properties:
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
+      type: object
+      title: BudgetConfig
+    LiteLLM_ObjectPermissionBase:
+      properties:
+        mcp_servers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Servers
+        mcp_access_groups:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Access Groups
+        mcp_tool_permissions:
+          anyOf:
+          - additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+          - type: 'null'
+          title: Mcp Tool Permissions
+        mcp_toolsets:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Toolsets
+        blocked_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Blocked Tools
+        vector_stores:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Vector Stores
+        agents:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Agents
+        agent_access_groups:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Agent Access Groups
+        models:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Models
+        search_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Search Tools
+        mcp_tool_search_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Mcp Tool Search Enabled
+        skills:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Skills
+      type: object
+      title: LiteLLM_ObjectPermissionBase
+    LiteLLM_BudgetTableFull:
+      properties:
+        budget_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Id
+        soft_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Soft Budget
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        max_parallel_requests:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Parallel Requests
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
+        model_max_budget:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Max Budget
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        allowed_models:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allowed Models
+        budget_reset_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Budget Reset At
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+      - created_at
+      title: LiteLLM_BudgetTableFull
+      description: LiteLLM_BudgetTable + server-managed fields returned on API responses.
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

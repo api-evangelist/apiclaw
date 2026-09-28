@@ -1,0 +1,59 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM APIClaw Playground API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: APIClaw Playground
+paths:
+  /apiclaw/playground/key:
+    get:
+      tags:
+      - APIClaw Playground
+      summary: Resolve Playground Key
+      operationId: resolve_playground_key_apiclaw_playground_key_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaygroundKeyOut'
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    PlaygroundKeyOut:
+      properties:
+        key:
+          type: string
+          title: Key
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+        created:
+          type: boolean
+          title: Created
+      type: object
+      required:
+      - key
+      - key_alias
+      - created
+      title: PlaygroundKeyOut
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

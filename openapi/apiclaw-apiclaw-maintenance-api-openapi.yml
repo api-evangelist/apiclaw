@@ -1,0 +1,133 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM APIClaw Maintenance API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: APIClaw Maintenance
+paths:
+  /apiclaw/maintenance:
+    get:
+      tags:
+      - APIClaw Maintenance
+      summary: Get Maintenance
+      operationId: get_maintenance_apiclaw_maintenance_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_MaintenanceOut'
+      security:
+      - APIKeyHeader: []
+    patch:
+      tags:
+      - APIClaw Maintenance
+      summary: Update Maintenance
+      operationId: update_maintenance_apiclaw_maintenance_patch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_UpdateMaintenanceRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_MaintenanceOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    _UpdateMaintenanceRequest:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+        message:
+          type: string
+          title: Message
+          default: ''
+      type: object
+      required:
+      - enabled
+      title: _UpdateMaintenanceRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    _MaintenanceOut:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+        message:
+          type: string
+          title: Message
+        updated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated At
+      type: object
+      required:
+      - enabled
+      - message
+      - updated_at
+      title: _MaintenanceOut
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

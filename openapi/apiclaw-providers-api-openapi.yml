@@ -1,0 +1,138 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Providers API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Providers
+paths:
+  /public/providers:
+    get:
+      tags:
+      - Providers
+      summary: Apiclaw Get Supported Providers
+      operationId: apiclaw_get_supported_providers_public_providers_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  type: string
+                type: array
+                title: Response Apiclaw Get Supported Providers Public Providers Get
+      security:
+      - APIKeyHeader: []
+  /public/providers/fields:
+    get:
+      tags:
+      - Providers
+      summary: Apiclaw Get Provider Fields
+      operationId: apiclaw_get_provider_fields_public_providers_fields_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ProviderCreateInfo'
+                type: array
+                title: Response Apiclaw Get Provider Fields Public Providers Fields Get
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    ProviderCredentialField:
+      properties:
+        key:
+          type: string
+          title: Key
+        label:
+          type: string
+          title: Label
+        placeholder:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Placeholder
+        tooltip:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tooltip
+        required:
+          type: boolean
+          title: Required
+          default: false
+        field_type:
+          type: string
+          enum:
+          - text
+          - password
+          - select
+          - upload
+          - textarea
+          title: Field Type
+          default: text
+        options:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Options
+        default_value:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Default Value
+      type: object
+      required:
+      - key
+      - label
+      title: ProviderCredentialField
+    ProviderCreateInfo:
+      properties:
+        provider:
+          type: string
+          title: Provider
+        provider_display_name:
+          type: string
+          title: Provider Display Name
+        litellm_provider:
+          type: string
+          title: Litellm Provider
+        credential_fields:
+          items:
+            $ref: '#/components/schemas/ProviderCredentialField'
+          type: array
+          title: Credential Fields
+        default_model_placeholder:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Default Model Placeholder
+      type: object
+      required:
+      - provider
+      - provider_display_name
+      - litellm_provider
+      - credential_fields
+      title: ProviderCreateInfo
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

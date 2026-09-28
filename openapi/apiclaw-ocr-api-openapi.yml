@@ -1,0 +1,138 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Ocr API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: OCR
+paths:
+  /ocr:
+    post:
+      tags:
+      - OCR
+      summary: Ocr
+      description: 'OCR endpoint for extracting text from documents and images.
+
+
+        Supports two input modes:
+
+
+        **1. JSON body** (Mistral OCR API compatible):
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1/ocr" -H "Authorization: Bearer sk-1234" -H "Content-Type: application/json" -d ''{
+
+        "model": "mistral-ocr",
+
+        "document": {
+
+        "type": "document_url",
+
+        "document_url": "https://arxiv.org/pdf/2201.04234"
+
+        }
+
+        }''
+
+        ```
+
+
+        **2. Multipart form file upload**:
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1/ocr" -H "Authorization: Bearer sk-1234" -F "model=mistral-ocr" -F "file=@document.pdf"
+
+        ```
+
+
+        Response format is normalized to the LiteLLM OCR schema by default. Providers
+
+        that support it (Azure Document Intelligence) can return their own payload
+
+        instead, with cost tracking unchanged, via `x-req-format: native` (or
+
+        `"req_format": "native"` in the body).'
+      operationId: ocr_ocr_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /v1/ocr:
+    post:
+      tags:
+      - OCR
+      summary: Ocr
+      description: 'OCR endpoint for extracting text from documents and images.
+
+
+        Supports two input modes:
+
+
+        **1. JSON body** (Mistral OCR API compatible):
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1/ocr" -H "Authorization: Bearer sk-1234" -H "Content-Type: application/json" -d ''{
+
+        "model": "mistral-ocr",
+
+        "document": {
+
+        "type": "document_url",
+
+        "document_url": "https://arxiv.org/pdf/2201.04234"
+
+        }
+
+        }''
+
+        ```
+
+
+        **2. Multipart form file upload**:
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1/ocr" -H "Authorization: Bearer sk-1234" -F "model=mistral-ocr" -F "file=@document.pdf"
+
+        ```
+
+
+        Response format is normalized to the LiteLLM OCR schema by default. Providers
+
+        that support it (Azure Document Intelligence) can return their own payload
+
+        instead, with cost tracking unchanged, via `x-req-format: native` (or
+
+        `"req_format": "native"` in the body).'
+      operationId: ocr_v1_ocr_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+components:
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

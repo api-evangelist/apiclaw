@@ -1,0 +1,84 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Logging Callbacks API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Logging Callbacks
+paths:
+  /callbacks/list:
+    get:
+      tags:
+      - Logging Callbacks
+      summary: List Callbacks
+      description: View List of Active Logging Callbacks
+      operationId: list_callbacks_callbacks_list_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallbacksByType'
+      security:
+      - APIKeyHeader: []
+  /callbacks/configs:
+    get:
+      tags:
+      - Logging Callbacks
+      summary: Get Callback Configs
+      description: 'Get Available Callback Configurations
+
+
+        Returns the configuration details for all available logging callbacks,
+
+        including supported parameters, field types, and descriptions.'
+      operationId: get_callback_configs_callbacks_configs_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    CallbacksByType:
+      properties:
+        success:
+          items:
+            type: string
+          type: array
+          title: Success
+        failure:
+          items:
+            type: string
+          type: array
+          title: Failure
+        success_and_failure:
+          items:
+            type: string
+          type: array
+          title: Success And Failure
+      type: object
+      required:
+      - success
+      - failure
+      - success_and_failure
+      title: CallbacksByType
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

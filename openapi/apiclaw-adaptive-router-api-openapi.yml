@@ -1,0 +1,49 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Adaptive Router API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: adaptive_router
+paths:
+  /adaptive_router/state:
+    get:
+      tags:
+      - adaptive_router
+      summary: Get Adaptive Router State
+      description: 'Return live bandit posteriors + queue depth for every configured adaptive router.
+
+
+        Admin-only. Returns 404 if no adaptive router is configured.
+
+
+        Response shape: `{"routers": [, ...]}` — one snapshot per
+
+        adaptive-router deployment. Each snapshot''s `router_name` field identifies
+
+        which deployment it came from.'
+      operationId: get_adaptive_router_state_adaptive_router_state_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+components:
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

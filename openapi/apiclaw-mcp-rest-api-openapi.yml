@@ -1,0 +1,657 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM MCP Rest API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: mcp_rest
+paths:
+  /mcp-rest/test/connection:
+    post:
+      description: Test if we can connect to the provided MCP server before adding it
+      operationId: test_connection_mcp_rest_test_connection_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMCPServerRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Test Connection
+      tags:
+      - mcp_rest
+  /mcp-rest/test/tools/list:
+    post:
+      description: Preview tools available from MCP server before adding it
+      operationId: test_tools_list_mcp_rest_test_tools_list_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMCPServerRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: Test Tools List
+      tags:
+      - mcp_rest
+  /mcp-rest/tools/call:
+    post:
+      description: REST API to call a specific MCP tool with the provided arguments
+      operationId: call_tool_rest_api_mcp_rest_tools_call_post
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+      security:
+      - APIKeyHeader: []
+      summary: Call Tool Rest Api
+      tags:
+      - mcp_rest
+  /mcp-rest/tools/list:
+    get:
+      description: 'List all available tools with information about the server they belong to.
+
+
+        Example response:
+
+        {
+
+        "tools": [
+
+        {
+
+        "name": "create_zap",
+
+        "description": "Create a new zap",
+
+        "inputSchema": "tool_input_schema",
+
+        "mcp_info": {
+
+        "server_name": "zapier",
+
+        "logo_url": "https://www.zapier.com/logo.png",
+
+        "server_id": "a1b2c3d4-...",
+
+        "alias": "zapier_prod",
+
+        }
+
+        }
+
+        ],
+
+        "error": null,
+
+        "message": "Successfully retrieved tools"
+
+        }'
+      operationId: list_tool_rest_api_mcp_rest_tools_list_get
+      parameters:
+      - description: The server id to list tools for
+        in: query
+        name: server_id
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The server id to list tools for
+          title: Server Id
+      - description: Filter tools to a single MCP server by name or alias
+        in: query
+        name: mcp_server_name
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter tools to a single MCP server by name or alias
+          title: Mcp Server Name
+      - description: Filter tools to a single toolset by name
+        in: query
+        name: toolset_name
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter tools to a single toolset by name
+          title: Toolset Name
+      - description: Admin only. Return the full server tool catalog without the allowed_tools filter or per-key tool permissions, so the MCP settings UI can configure the allowlist. Ignored for non-admins.
+        in: query
+        name: include_disabled_tools
+        required: false
+        schema:
+          default: false
+          description: Admin only. Return the full server tool catalog without the allowed_tools filter or per-key tool permissions, so the MCP settings UI can configure the allowlist. Ignored for non-admins.
+          title: Include Disabled Tools
+          type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                title: Response List Tool Rest Api Mcp Rest Tools List Get
+                type: object
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - APIKeyHeader: []
+      summary: List Tool Rest Api
+      tags:
+      - mcp_rest
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    MCPCredentials:
+      properties:
+        auth_value:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Auth Value
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Id
+        client_secret:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Secret
+        scopes:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Scopes
+        aws_access_key_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Aws Access Key Id
+        aws_secret_access_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Aws Secret Access Key
+        aws_session_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Aws Session Token
+        aws_region_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Aws Region Name
+        aws_service_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Aws Service Name
+        aws_role_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Aws Role Name
+        aws_session_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Aws Session Name
+        audience:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Audience
+        token_exchange_endpoint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Token Exchange Endpoint
+        subject_token_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject Token Type
+        id_jag_resource_token_endpoint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id Jag Resource Token Endpoint
+        id_jag_resource:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id Jag Resource
+        upstream_resource:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Upstream Resource
+        upstream_token_header:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Upstream Token Header
+        client_private_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Private Key
+        client_private_key_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Private Key Id
+        client_assertion_signing_alg:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Assertion Signing Alg
+        token_endpoint_auth_method:
+          anyOf:
+          - type: string
+            enum:
+            - client_secret_basic
+            - client_secret_post
+          - type: 'null'
+          title: Token Endpoint Auth Method
+        redirect_uris:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Redirect Uris
+        token_exchange_profile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Token Exchange Profile
+      type: object
+      title: MCPCredentials
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    NewMCPServerRequest:
+      properties:
+        server_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Server Id
+        server_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Server Name
+        alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Alias
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        transport:
+          type: string
+          enum:
+          - sse
+          - http
+          - stdio
+          title: Transport
+          default: sse
+        auth_type:
+          anyOf:
+          - type: string
+            enum:
+            - none
+            - api_key
+            - bearer_token
+            - basic
+            - authorization
+            - oauth2
+            - aws_sigv4
+            - token
+            - oauth2_token_exchange
+            - oauth2_id_jag
+            - true_passthrough
+            - oauth_delegate
+          - type: 'null'
+          title: Auth Type
+        credentials:
+          anyOf:
+          - $ref: '#/components/schemas/MCPCredentials'
+          - type: 'null'
+        url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Url
+        spec_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Spec Path
+        mcp_info:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Mcp Info
+        mcp_access_groups:
+          items:
+            type: string
+          type: array
+          title: Mcp Access Groups
+        allowed_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allowed Tools
+        tool_name_to_display_name:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Tool Name To Display Name
+        tool_name_to_description:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Tool Name To Description
+        extra_headers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Extra Headers
+        static_headers:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Static Headers
+        env_vars:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/MCPEnvVar'
+            type: array
+          - type: 'null'
+          title: Env Vars
+        instructions:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instructions
+        command:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Command
+        args:
+          items:
+            type: string
+          type: array
+          title: Args
+        env:
+          additionalProperties:
+            type: string
+          type: object
+          title: Env
+        issuer:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Issuer
+        authorization_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization Url
+        token_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Token Url
+        registration_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Registration Url
+        oauth2_flow:
+          anyOf:
+          - type: string
+            enum:
+            - client_credentials
+            - authorization_code
+          - type: 'null'
+          title: Oauth2 Flow
+        token_exchange_endpoint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Token Exchange Endpoint
+        audience:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Audience
+        subject_token_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject Token Type
+        token_exchange_profile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Token Exchange Profile
+        allow_all_keys:
+          type: boolean
+          title: Allow All Keys
+          default: false
+        available_on_public_internet:
+          type: boolean
+          title: Available On Public Internet
+          default: true
+        delegate_auth_to_upstream:
+          type: boolean
+          title: Delegate Auth To Upstream
+          default: false
+        oauth_passthrough:
+          type: boolean
+          title: Oauth Passthrough
+          default: false
+        dcr_bridge:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Dcr Bridge
+        per_server_oauth_discovery:
+          type: boolean
+          title: Per Server Oauth Discovery
+          default: false
+        is_byok:
+          type: boolean
+          title: Is Byok
+          default: false
+        byok_description:
+          items:
+            type: string
+          type: array
+          title: Byok Description
+        byok_api_key_help_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Byok Api Key Help Url
+        source_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source Url
+        timeout:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Timeout
+        max_concurrent_requests:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Concurrent Requests
+        approval_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Approval Status
+          description: 'Server-managed: set by the endpoint; caller values are overridden.'
+        submitted_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Submitted By
+          description: 'Server-managed: set by the endpoint; caller values are overridden.'
+        submitted_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Submitted At
+          description: 'Server-managed: set by the endpoint; caller values are overridden.'
+      type: object
+      title: NewMCPServerRequest
+    MCPEnvVar:
+      properties:
+        name:
+          type: string
+          title: Name
+        value:
+          type: string
+          title: Value
+          default: ''
+        scope:
+          $ref: '#/components/schemas/MCPEnvVarScope'
+          default: global
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+      type: object
+      required:
+      - name
+      title: MCPEnvVar
+      description: 'One environment variable for an MCP server.
+
+
+        Variables can be interpolated into ``static_headers`` using ``${NAME}``
+
+        syntax. ``scope=global`` values are stored on the server. ``scope=user``
+
+        values are stored per-user in ``LiteLLM_MCPUserEnvVars`` and supplied by
+
+        each user.'
+    MCPEnvVarScope:
+      type: string
+      enum:
+      - global
+      - user
+      title: MCPEnvVarScope
+      description: "Scope for an MCP server environment variable.\n\n- ``global``: value is provided by the admin and used for all users.\n- ``user``: each user must provide their own value via the per-user\n  env-var endpoint. The admin-supplied ``value`` is treated as a\n  placeholder/hint and is not used at request time."
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

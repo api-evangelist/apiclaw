@@ -1,0 +1,1304 @@
+{
+  "@context": {
+    "@vocab": "https://apiclaw.biz/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "apiclaw": "https://apiclaw.biz/schema#",
+    "APIKeySecurityScheme": "apiclaw:APIKeySecurityScheme",
+    "description": {
+      "@id": "apiclaw:description"
+    },
+    "type": {
+      "@id": "apiclaw:type",
+      "@type": "xsd:string"
+    },
+    "in_": {
+      "@id": "apiclaw:in_",
+      "@type": "xsd:string"
+    },
+    "name": {
+      "@id": "apiclaw:name",
+      "@type": "xsd:string"
+    },
+    "AccessControl_UI_AccessMode": "apiclaw:AccessControl_UI_AccessMode",
+    "restricted_sso_group": {
+      "@id": "apiclaw:restricted_sso_group",
+      "@type": "xsd:string"
+    },
+    "sso_group_jwt_field": {
+      "@id": "apiclaw:sso_group_jwt_field",
+      "@type": "xsd:string"
+    },
+    "AccessGroupBudget": "apiclaw:AccessGroupBudget",
+    "budget_id": {
+      "@id": "apiclaw:budget_id",
+      "@type": "xsd:string"
+    },
+    "max_budget": {
+      "@id": "apiclaw:max_budget"
+    },
+    "soft_budget": {
+      "@id": "apiclaw:soft_budget"
+    },
+    "budget_duration": {
+      "@id": "apiclaw:budget_duration"
+    },
+    "budget_reset_at": {
+      "@id": "apiclaw:budget_reset_at"
+    },
+    "AccessGroupBudgetRequest": "apiclaw:AccessGroupBudgetRequest",
+    "AccessGroupBudgetResponse": "apiclaw:AccessGroupBudgetResponse",
+    "access_group": {
+      "@id": "apiclaw:access_group",
+      "@type": "xsd:string"
+    },
+    "spend": {
+      "@id": "apiclaw:spend",
+      "@type": "xsd:decimal"
+    },
+    "budget": {
+      "@id": "apiclaw:budget"
+    },
+    "AccessGroupInfo": "apiclaw:AccessGroupInfo",
+    "model_names": {
+      "@id": "apiclaw:model_names",
+      "@container": "@list"
+    },
+    "deployment_count": {
+      "@id": "apiclaw:deployment_count",
+      "@type": "xsd:integer"
+    },
+    "ActiveUsersAnalyticsResponse": "apiclaw:ActiveUsersAnalyticsResponse",
+    "results": {
+      "@id": "apiclaw:results",
+      "@container": "@list"
+    },
+    "AdaptiveRouterWeights": "apiclaw:AdaptiveRouterWeights",
+    "quality": {
+      "@id": "apiclaw:quality",
+      "@type": "xsd:decimal"
+    },
+    "cost": {
+      "@id": "apiclaw:cost",
+      "@type": "xsd:decimal"
+    },
+    "AddTeamCallback": "apiclaw:AddTeamCallback",
+    "callback_name": {
+      "@id": "apiclaw:callback_name",
+      "@type": "xsd:string"
+    },
+    "callback_type": {
+      "@id": "apiclaw:callback_type"
+    },
+    "callback_vars": {
+      "@id": "apiclaw:callback_vars"
+    },
+    "AdminOverviewOut": "apiclaw:AdminOverviewOut",
+    "generated_at": {
+      "@id": "apiclaw:generated_at",
+      "@type": "xsd:string"
+    },
+    "cache_ttl_seconds": {
+      "@id": "apiclaw:cache_ttl_seconds",
+      "@type": "xsd:integer"
+    },
+    "users": {
+      "@id": "apiclaw:users",
+      "@type": "@id"
+    },
+    "capacity": {
+      "@id": "apiclaw:capacity",
+      "@type": "@id"
+    },
+    "plans": {
+      "@id": "apiclaw:plans",
+      "@container": "@list"
+    },
+    "revenue": {
+      "@id": "apiclaw:revenue",
+      "@type": "@id"
+    },
+    "daily": {
+      "@id": "apiclaw:daily",
+      "@container": "@list"
+    },
+    "platform": {
+      "@id": "apiclaw:platform",
+      "@type": "@id"
+    },
+    "AgentCapabilities": "apiclaw:AgentCapabilities",
+    "streaming": {
+      "@id": "apiclaw:streaming"
+    },
+    "pushNotifications": {
+      "@id": "apiclaw:pushNotifications"
+    },
+    "stateTransitionHistory": {
+      "@id": "apiclaw:stateTransitionHistory"
+    },
+    "extensions": {
+      "@id": "apiclaw:extensions"
+    },
+    "AgentCard": "apiclaw:AgentCard",
+    "protocolVersion": {
+      "@id": "apiclaw:protocolVersion",
+      "@type": "xsd:string"
+    },
+    "url": {
+      "@id": "apiclaw:url",
+      "@type": "xsd:string"
+    },
+    "version": {
+      "@id": "apiclaw:version",
+      "@type": "xsd:string"
+    },
+    "capabilities": {
+      "@id": "apiclaw:capabilities",
+      "@type": "@id"
+    },
+    "defaultInputModes": {
+      "@id": "apiclaw:defaultInputModes",
+      "@container": "@list"
+    },
+    "defaultOutputModes": {
+      "@id": "apiclaw:defaultOutputModes",
+      "@container": "@list"
+    },
+    "skills": {
+      "@id": "apiclaw:skills",
+      "@container": "@list"
+    },
+    "preferredTransport": {
+      "@id": "apiclaw:preferredTransport"
+    },
+    "additionalInterfaces": {
+      "@id": "apiclaw:additionalInterfaces"
+    },
+    "iconUrl": {
+      "@id": "apiclaw:iconUrl"
+    },
+    "provider": {
+      "@id": "apiclaw:provider"
+    },
+    "documentationUrl": {
+      "@id": "apiclaw:documentationUrl"
+    },
+    "securitySchemes": {
+      "@id": "apiclaw:securitySchemes"
+    },
+    "security": {
+      "@id": "apiclaw:security"
+    },
+    "supportsAuthenticatedExtendedCard": {
+      "@id": "apiclaw:supportsAuthenticatedExtendedCard"
+    },
+    "signatures": {
+      "@id": "apiclaw:signatures"
+    },
+    "AgentCardSignature": "apiclaw:AgentCardSignature",
+    "protected": {
+      "@id": "apiclaw:protected",
+      "@type": "xsd:string"
+    },
+    "signature": {
+      "@id": "apiclaw:signature",
+      "@type": "xsd:string"
+    },
+    "header": {
+      "@id": "apiclaw:header"
+    },
+    "AgentConfig": "apiclaw:AgentConfig",
+    "agent_name": {
+      "@id": "apiclaw:agent_name",
+      "@type": "xsd:string"
+    },
+    "agent_card_params": {
+      "@id": "apiclaw:agent_card_params",
+      "@type": "@id"
+    },
+    "litellm_params": {
+      "@id": "apiclaw:litellm_params"
+    },
+    "object_permission": {
+      "@id": "apiclaw:object_permission",
+      "@type": "@id"
+    },
+    "tpm_limit": {
+      "@id": "apiclaw:tpm_limit"
+    },
+    "rpm_limit": {
+      "@id": "apiclaw:rpm_limit"
+    },
+    "session_tpm_limit": {
+      "@id": "apiclaw:session_tpm_limit"
+    },
+    "session_rpm_limit": {
+      "@id": "apiclaw:session_rpm_limit"
+    },
+    "static_headers": {
+      "@id": "apiclaw:static_headers"
+    },
+    "extra_headers": {
+      "@id": "apiclaw:extra_headers"
+    },
+    "AgentCreateInfo": "apiclaw:AgentCreateInfo",
+    "agent_type": {
+      "@id": "apiclaw:agent_type",
+      "@type": "xsd:string"
+    },
+    "agent_type_display_name": {
+      "@id": "apiclaw:agent_type_display_name",
+      "@type": "xsd:string"
+    },
+    "logo_url": {
+      "@id": "apiclaw:logo_url"
+    },
+    "credential_fields": {
+      "@id": "apiclaw:credential_fields",
+      "@container": "@list"
+    },
+    "litellm_params_template": {
+      "@id": "apiclaw:litellm_params_template"
+    },
+    "model_template": {
+      "@id": "apiclaw:model_template"
+    },
+    "AgentCredentialField": "apiclaw:AgentCredentialField",
+    "key": {
+      "@id": "apiclaw:key",
+      "@type": "xsd:string"
+    },
+    "label": {
+      "@id": "apiclaw:label",
+      "@type": "xsd:string"
+    },
+    "placeholder": {
+      "@id": "apiclaw:placeholder"
+    },
+    "tooltip": {
+      "@id": "apiclaw:tooltip"
+    },
+    "required": {
+      "@id": "apiclaw:required",
+      "@type": "xsd:boolean"
+    },
+    "field_type": {
+      "@id": "apiclaw:field_type",
+      "@type": "xsd:string"
+    },
+    "options": {
+      "@id": "apiclaw:options"
+    },
+    "default_value": {
+      "@id": "apiclaw:default_value"
+    },
+    "include_in_litellm_params": {
+      "@id": "apiclaw:include_in_litellm_params"
+    },
+    "validation_pattern": {
+      "@id": "apiclaw:validation_pattern"
+    },
+    "validation_message": {
+      "@id": "apiclaw:validation_message"
+    },
+    "AgentExtension": "apiclaw:AgentExtension",
+    "uri": {
+      "@id": "apiclaw:uri",
+      "@type": "xsd:string"
+    },
+    "params": {
+      "@id": "apiclaw:params"
+    },
+    "AgentInterface": "apiclaw:AgentInterface",
+    "transport": {
+      "@id": "apiclaw:transport",
+      "@type": "xsd:string"
+    },
+    "AgentKeySummary": "apiclaw:AgentKeySummary",
+    "token": {
+      "@id": "apiclaw:token",
+      "@type": "xsd:string"
+    },
+    "key_alias": {
+      "@id": "apiclaw:key_alias"
+    },
+    "key_name": {
+      "@id": "apiclaw:key_name"
+    },
+    "AgentMakePublicResponse": "apiclaw:AgentMakePublicResponse",
+    "message": {
+      "@id": "apiclaw:message",
+      "@type": "xsd:string"
+    },
+    "public_agent_groups": {
+      "@id": "apiclaw:public_agent_groups",
+      "@container": "@list"
+    },
+    "updated_by": {
+      "@id": "apiclaw:updated_by",
+      "@type": "xsd:string"
+    },
+    "AgentObjectPermission": "apiclaw:AgentObjectPermission",
+    "mcp_servers": {
+      "@id": "apiclaw:mcp_servers"
+    },
+    "mcp_access_groups": {
+      "@id": "apiclaw:mcp_access_groups"
+    },
+    "mcp_toolsets": {
+      "@id": "apiclaw:mcp_toolsets"
+    },
+    "mcp_tool_permissions": {
+      "@id": "apiclaw:mcp_tool_permissions"
+    },
+    "models": {
+      "@id": "apiclaw:models"
+    },
+    "agents": {
+      "@id": "apiclaw:agents"
+    },
+    "AgentProvider": "apiclaw:AgentProvider",
+    "organization": {
+      "@id": "apiclaw:organization",
+      "@type": "xsd:string"
+    },
+    "AgentResponse": "apiclaw:AgentResponse",
+    "agent_id": {
+      "@id": "apiclaw:agent_id",
+      "@type": "xsd:string"
+    },
+    "keys": {
+      "@id": "apiclaw:keys"
+    },
+    "search_score": {
+      "@id": "apiclaw:search_score"
+    },
+    "created_at": {
+      "@id": "apiclaw:created_at"
+    },
+    "updated_at": {
+      "@id": "apiclaw:updated_at"
+    },
+    "created_by": {
+      "@id": "apiclaw:created_by"
+    },
+    "AgentSkill": "apiclaw:AgentSkill",
+    "id": {
+      "@id": "apiclaw:id",
+      "@type": "xsd:string"
+    },
+    "tags": {
+      "@id": "apiclaw:tags",
+      "@container": "@list"
+    },
+    "examples": {
+      "@id": "apiclaw:examples"
+    },
+    "inputModes": {
+      "@id": "apiclaw:inputModes"
+    },
+    "outputModes": {
+      "@id": "apiclaw:outputModes"
+    },
+    "AgentSkillsIndex": "apiclaw:AgentSkillsIndex",
+    "AgentSkillsIndexEntry": "apiclaw:AgentSkillsIndexEntry",
+    "digest": {
+      "@id": "apiclaw:digest",
+      "@type": "xsd:string"
+    },
+    "AllowedVectorStoreIndexItem": "apiclaw:AllowedVectorStoreIndexItem",
+    "index_name": {
+      "@id": "apiclaw:index_name",
+      "@type": "xsd:string"
+    },
+    "index_permissions": {
+      "@id": "apiclaw:index_permissions",
+      "@container": "@list"
+    },
+    "ApplyGuardrailRequest": "apiclaw:ApplyGuardrailRequest",
+    "guardrail_name": {
+      "@id": "apiclaw:guardrail_name",
+      "@type": "xsd:string"
+    },
+    "text": {
+      "@id": "apiclaw:text",
+      "@type": "xsd:string"
+    },
+    "language": {
+      "@id": "apiclaw:language"
+    },
+    "entities": {
+      "@id": "apiclaw:entities"
+    },
+    "input_type": {
+      "@id": "apiclaw:input_type",
+      "@type": "xsd:string"
+    },
+    "messages": {
+      "@id": "apiclaw:messages"
+    },
+    "metadata": {
+      "@id": "apiclaw:metadata"
+    },
+    "ApplyGuardrailResponse": "apiclaw:ApplyGuardrailResponse",
+    "response_text": {
+      "@id": "apiclaw:response_text",
+      "@type": "xsd:string"
+    },
+    "AuditLogResponse": "apiclaw:AuditLogResponse",
+    "changed_by": {
+      "@id": "apiclaw:changed_by",
+      "@type": "xsd:string"
+    },
+    "changed_by_api_key": {
+      "@id": "apiclaw:changed_by_api_key",
+      "@type": "xsd:string"
+    },
+    "action": {
+      "@id": "apiclaw:action",
+      "@type": "xsd:string"
+    },
+    "table_name": {
+      "@id": "apiclaw:table_name",
+      "@type": "xsd:string"
+    },
+    "object_id": {
+      "@id": "apiclaw:object_id",
+      "@type": "xsd:string"
+    },
+    "before_value": {
+      "@id": "apiclaw:before_value"
+    },
+    "updated_values": {
+      "@id": "apiclaw:updated_values"
+    },
+    "AutoRouterBenchmarkGroup": "apiclaw:AutoRouterBenchmarkGroup",
+    "sessions": {
+      "@id": "apiclaw:sessions",
+      "@type": "xsd:integer"
+    },
+    "turns": {
+      "@id": "apiclaw:turns",
+      "@type": "xsd:integer"
+    },
+    "avg_turns_per_session": {
+      "@id": "apiclaw:avg_turns_per_session",
+      "@type": "xsd:decimal"
+    },
+    "avg_session_seconds": {
+      "@id": "apiclaw:avg_session_seconds",
+      "@type": "xsd:decimal"
+    },
+    "avg_tokens_per_session": {
+      "@id": "apiclaw:avg_tokens_per_session",
+      "@type": "xsd:decimal"
+    },
+    "classifier_cost": {
+      "@id": "apiclaw:classifier_cost"
+    },
+    "saved_spend": {
+      "@id": "apiclaw:saved_spend",
+      "@type": "xsd:decimal"
+    },
+    "baseline_spend": {
+      "@id": "apiclaw:baseline_spend",
+      "@type": "xsd:decimal"
+    },
+    "saved_pct": {
+      "@id": "apiclaw:saved_pct",
+      "@type": "xsd:decimal"
+    },
+    "saved_per_session": {
+      "@id": "apiclaw:saved_per_session",
+      "@type": "xsd:decimal"
+    },
+    "cache": {
+      "@id": "apiclaw:cache",
+      "@type": "@id"
+    },
+    "router_name": {
+      "@id": "apiclaw:router_name",
+      "@type": "xsd:string"
+    },
+    "router_type": {
+      "@id": "apiclaw:router_type",
+      "@type": "xsd:string"
+    },
+    "tier_turns": {
+      "@id": "apiclaw:tier_turns"
+    },
+    "AutoRouterBenchmarkTotals": "apiclaw:AutoRouterBenchmarkTotals",
+    "AutoRouterBenchmarksResponse": "apiclaw:AutoRouterBenchmarksResponse",
+    "start_date": {
+      "@id": "apiclaw:start_date",
+      "@type": "xsd:string"
+    },
+    "end_date": {
+      "@id": "apiclaw:end_date",
+      "@type": "xsd:string"
+    },
+    "routers_in_scope": {
+      "@id": "apiclaw:routers_in_scope",
+      "@type": "xsd:integer"
+    },
+    "totals": {
+      "@id": "apiclaw:totals",
+      "@type": "@id"
+    },
+    "groups": {
+      "@id": "apiclaw:groups",
+      "@container": "@list"
+    },
+    "AutoRouterCacheBucket": "apiclaw:AutoRouterCacheBucket",
+    "hits": {
+      "@id": "apiclaw:hits",
+      "@type": "xsd:integer"
+    },
+    "hit_rate_pct": {
+      "@id": "apiclaw:hit_rate_pct",
+      "@type": "xsd:decimal"
+    },
+    "AutoRouterCacheStats": "apiclaw:AutoRouterCacheStats",
+    "coverage_pct": {
+      "@id": "apiclaw:coverage_pct",
+      "@type": "xsd:decimal"
+    },
+    "same_model": {
+      "@id": "apiclaw:same_model",
+      "@type": "@id"
+    },
+    "first_visit": {
+      "@id": "apiclaw:first_visit",
+      "@type": "@id"
+    },
+    "return_to_tier": {
+      "@id": "apiclaw:return_to_tier",
+      "@type": "@id"
+    },
+    "unordered_turns": {
+      "@id": "apiclaw:unordered_turns",
+      "@type": "xsd:integer"
+    },
+    "return_misses_expired": {
+      "@id": "apiclaw:return_misses_expired",
+      "@type": "xsd:integer"
+    },
+    "return_misses_within_ttl": {
+      "@id": "apiclaw:return_misses_within_ttl",
+      "@type": "xsd:integer"
+    },
+    "return_misses_unknown": {
+      "@id": "apiclaw:return_misses_unknown",
+      "@type": "xsd:integer"
+    },
+    "ttl_5m_turns": {
+      "@id": "apiclaw:ttl_5m_turns",
+      "@type": "xsd:integer"
+    },
+    "ttl_1h_turns": {
+      "@id": "apiclaw:ttl_1h_turns",
+      "@type": "xsd:integer"
+    },
+    "AutoRouterClassifierDefaultPromptResponse": "apiclaw:AutoRouterClassifierDefaultPromptResponse",
+    "system_prompt": {
+      "@id": "apiclaw:system_prompt",
+      "@type": "xsd:string"
+    },
+    "AutoRouterClassifierPromptPreviewRequest": "apiclaw:AutoRouterClassifierPromptPreviewRequest",
+    "tier_definitions": {
+      "@id": "apiclaw:tier_definitions"
+    },
+    "tier_labels": {
+      "@id": "apiclaw:tier_labels"
+    },
+    "classification_rubric": {
+      "@id": "apiclaw:classification_rubric"
+    },
+    "context_window_size": {
+      "@id": "apiclaw:context_window_size",
+      "@type": "xsd:integer"
+    },
+    "classification_prompt": {
+      "@id": "apiclaw:classification_prompt"
+    },
+    "classification_examples": {
+      "@id": "apiclaw:classification_examples"
+    },
+    "AutoRouterPresetConfig": "apiclaw:AutoRouterPresetConfig",
+    "tiers": {
+      "@id": "apiclaw:tiers",
+      "@type": "@id"
+    },
+    "AutoRouterPresetRecord": "apiclaw:AutoRouterPresetRecord",
+    "complexity_router_config": {
+      "@id": "apiclaw:complexity_router_config",
+      "@type": "@id"
+    },
+    "AutoRouterPresetTiers": "apiclaw:AutoRouterPresetTiers",
+    "SIMPLE": {
+      "@id": "apiclaw:SIMPLE",
+      "@container": "@list"
+    },
+    "MEDIUM": {
+      "@id": "apiclaw:MEDIUM",
+      "@container": "@list"
+    },
+    "COMPLEX": {
+      "@id": "apiclaw:COMPLEX",
+      "@container": "@list"
+    },
+    "REASONING": {
+      "@id": "apiclaw:REASONING",
+      "@container": "@list"
+    },
+    "AutoRouterRoutingTestRequest": "apiclaw:AutoRouterRoutingTestRequest",
+    "prompt": {
+      "@id": "apiclaw:prompt"
+    },
+    "system": {
+      "@id": "apiclaw:system"
+    },
+    "tools": {
+      "@id": "apiclaw:tools"
+    },
+    "saved_model_id": {
+      "@id": "apiclaw:saved_model_id"
+    },
+    "default_model": {
+      "@id": "apiclaw:default_model"
+    },
+    "team_id": {
+      "@id": "apiclaw:team_id"
+    },
+    "AutoRouterRoutingTestResponse": "apiclaw:AutoRouterRoutingTestResponse",
+    "routed_model": {
+      "@id": "apiclaw:routed_model",
+      "@type": "xsd:string"
+    },
+    "routed_model_configured": {
+      "@id": "apiclaw:routed_model_configured",
+      "@type": "xsd:boolean"
+    },
+    "routing_decision": {
+      "@id": "apiclaw:routing_decision",
+      "@type": "@id"
+    },
+    "AutoRouterSessionResponse": "apiclaw:AutoRouterSessionResponse",
+    "session_id": {
+      "@id": "apiclaw:session_id",
+      "@type": "xsd:string"
+    },
+    "last_model": {
+      "@id": "apiclaw:last_model",
+      "@type": "xsd:string"
+    },
+    "baseline_model": {
+      "@id": "apiclaw:baseline_model"
+    },
+    "baseline_models": {
+      "@id": "apiclaw:baseline_models"
+    },
+    "AwsSessionTag": "apiclaw:AwsSessionTag",
+    "Key": {
+      "@id": "apiclaw:Key",
+      "@type": "xsd:string"
+    },
+    "Value": {
+      "@id": "apiclaw:Value",
+      "@type": "xsd:string"
+    },
+    "BaseLitellmParams": "apiclaw:BaseLitellmParams",
+    "patterns": {
+      "@id": "apiclaw:patterns"
+    },
+    "blocked_words": {
+      "@id": "apiclaw:blocked_words"
+    },
+    "blocked_words_file": {
+      "@id": "apiclaw:blocked_words_file"
+    },
+    "categories": {
+      "@id": "apiclaw:categories"
+    },
+    "severity_threshold": {
+      "@id": "apiclaw:severity_threshold"
+    },
+    "pattern_redaction_format": {
+      "@id": "apiclaw:pattern_redaction_format"
+    },
+    "keyword_redaction_tag": {
+      "@id": "apiclaw:keyword_redaction_tag"
+    },
+    "api_key": {
+      "@id": "apiclaw:api_key"
+    },
+    "api_base": {
+      "@id": "apiclaw:api_base"
+    },
+    "experimental_use_latest_role_message_only": {
+      "@id": "apiclaw:experimental_use_latest_role_message_only"
+    },
+    "only_scan_new_messages": {
+      "@id": "apiclaw:only_scan_new_messages"
+    },
+    "skip_system_message_in_guardrail": {
+      "@id": "apiclaw:skip_system_message_in_guardrail"
+    },
+    "skip_tool_message_in_guardrail": {
+      "@id": "apiclaw:skip_tool_message_in_guardrail"
+    },
+    "scan_only_tool_results": {
+      "@id": "apiclaw:scan_only_tool_results"
+    },
+    "inspect_embeddings": {
+      "@id": "apiclaw:inspect_embeddings"
+    },
+    "category_thresholds": {
+      "@id": "apiclaw:category_thresholds"
+    },
+    "detect_secrets_config": {
+      "@id": "apiclaw:detect_secrets_config"
+    },
+    "guard_name": {
+      "@id": "apiclaw:guard_name"
+    },
+    "default_on": {
+      "@id": "apiclaw:default_on"
+    },
+    "mask_request_content": {
+      "@id": "apiclaw:mask_request_content"
+    },
+    "mask_response_content": {
+      "@id": "apiclaw:mask_response_content"
+    },
+    "pangea_input_recipe": {
+      "@id": "apiclaw:pangea_input_recipe"
+    },
+    "pangea_output_recipe": {
+      "@id": "apiclaw:pangea_output_recipe"
+    },
+    "model": {
+      "@id": "apiclaw:model"
+    },
+    "violation_message_template": {
+      "@id": "apiclaw:violation_message_template"
+    },
+    "end_session_after_n_fails": {
+      "@id": "apiclaw:end_session_after_n_fails"
+    },
+    "on_violation": {
+      "@id": "apiclaw:on_violation"
+    },
+    "realtime_violation_message": {
+      "@id": "apiclaw:realtime_violation_message"
+    },
+    "template_id": {
+      "@id": "apiclaw:template_id"
+    },
+    "location": {
+      "@id": "apiclaw:location"
+    },
+    "credentials": {
+      "@id": "apiclaw:credentials"
+    },
+    "api_endpoint": {
+      "@id": "apiclaw:api_endpoint"
+    },
+    "fail_on_error": {
+      "@id": "apiclaw:fail_on_error"
+    },
+    "skip_unscannable_attachments": {
+      "@id": "apiclaw:skip_unscannable_attachments"
+    },
+    "sanitize_error_detail": {
+      "@id": "apiclaw:sanitize_error_detail"
+    },
+    "additional_provider_specific_params": {
+      "@id": "apiclaw:additional_provider_specific_params"
+    },
+    "unreachable_fallback": {
+      "@id": "apiclaw:unreachable_fallback",
+      "@type": "xsd:string"
+    },
+    "custom_code": {
+      "@id": "apiclaw:custom_code"
+    },
+    "timeout": {
+      "@id": "apiclaw:timeout"
+    },
+    "on_sensitive_data": {
+      "@id": "apiclaw:on_sensitive_data"
+    },
+    "sensitive_data_route_to_model": {
+      "@id": "apiclaw:sensitive_data_route_to_model"
+    },
+    "sticky_session_routing": {
+      "@id": "apiclaw:sticky_session_routing"
+    },
+    "run_in_parallel": {
+      "@id": "apiclaw:run_in_parallel"
+    },
+    "scan_raw_request": {
+      "@id": "apiclaw:scan_raw_request"
+    },
+    "BedrockChecksConfigModel": "apiclaw:BedrockChecksConfigModel",
+    "contentFilter": {
+      "@id": "apiclaw:contentFilter"
+    },
+    "promptAttack": {
+      "@id": "apiclaw:promptAttack"
+    },
+    "sensitiveInformation": {
+      "@id": "apiclaw:sensitiveInformation"
+    },
+    "BedrockChecksContentFilterCategoryItem": "apiclaw:BedrockChecksContentFilterCategoryItem",
+    "category": {
+      "@id": "apiclaw:category",
+      "@type": "xsd:string"
+    },
+    "BedrockChecksContentFilterModel": "apiclaw:BedrockChecksContentFilterModel",
+    "BedrockChecksPromptAttackCategoryItem": "apiclaw:BedrockChecksPromptAttackCategoryItem",
+    "BedrockChecksPromptAttackModel": "apiclaw:BedrockChecksPromptAttackModel",
+    "BedrockChecksSensitiveInformationEntityItem": "apiclaw:BedrockChecksSensitiveInformationEntityItem",
+    "BedrockChecksSensitiveInformationModel": "apiclaw:BedrockChecksSensitiveInformationModel",
+    "BlockKeyRequest": "apiclaw:BlockKeyRequest",
+    "BlockModelRequest": "apiclaw:BlockModelRequest",
+    "model_id": {
+      "@id": "apiclaw:model_id",
+      "@type": "xsd:string"
+    },
+    "BlockTeamRequest": "apiclaw:BlockTeamRequest",
+    "BlockUnpricedModelsRequest": "apiclaw:BlockUnpricedModelsRequest",
+    "enabled": {
+      "@id": "apiclaw:enabled",
+      "@type": "xsd:boolean"
+    },
+    "BlockUnpricedModelsResponse": "apiclaw:BlockUnpricedModelsResponse",
+    "BlockUsers": "apiclaw:BlockUsers",
+    "user_ids": {
+      "@id": "apiclaw:user_ids",
+      "@container": "@list"
+    },
+    "BlockUsersResponse": "apiclaw:BlockUsersResponse",
+    "blocked_users": {
+      "@id": "apiclaw:blocked_users",
+      "@container": "@list"
+    },
+    "BlockedWord": "apiclaw:BlockedWord",
+    "keyword": {
+      "@id": "apiclaw:keyword",
+      "@type": "xsd:string"
+    },
+    "BlogPost": "apiclaw:BlogPost",
+    "title": {
+      "@id": "apiclaw:title",
+      "@type": "xsd:string"
+    },
+    "date": {
+      "@id": "apiclaw:date",
+      "@type": "xsd:string"
+    },
+    "BlogPostsResponse": "apiclaw:BlogPostsResponse",
+    "posts": {
+      "@id": "apiclaw:posts",
+      "@container": "@list"
+    },
+    "Body_apiclaw_test_model_connection_health_test_connection_post": "apiclaw:Body_apiclaw_test_model_connection_health_test_connection_post",
+    "mode": {
+      "@id": "apiclaw:mode"
+    },
+    "model_info": {
+      "@id": "apiclaw:model_info"
+    },
+    "Body_audio_transcriptions_audio_transcriptions_post": "apiclaw:Body_audio_transcriptions_audio_transcriptions_post",
+    "file": {
+      "@id": "apiclaw:file",
+      "@type": "xsd:string"
+    },
+    "Body_audio_transcriptions_v1_audio_transcriptions_post": "apiclaw:Body_audio_transcriptions_v1_audio_transcriptions_post",
+    "Body_authorize_complete_authorize_complete_post": "apiclaw:Body_authorize_complete_authorize_complete_post",
+    "flow": {
+      "@id": "apiclaw:flow",
+      "@type": "xsd:string"
+    },
+    "delivery": {
+      "@id": "apiclaw:delivery"
+    },
+    "decision": {
+      "@id": "apiclaw:decision"
+    },
+    "Body_convert_prompt_file_to_json_utils_dotprompt_json_converter_post": "apiclaw:Body_convert_prompt_file_to_json_utils_dotprompt_json_converter_post",
+    "Body_create_file__provider__v1_files_post": "apiclaw:Body_create_file__provider__v1_files_post",
+    "purpose": {
+      "@id": "apiclaw:purpose",
+      "@type": "xsd:string"
+    },
+    "target_model_names": {
+      "@id": "apiclaw:target_model_names",
+      "@type": "xsd:string"
+    },
+    "target_storage": {
+      "@id": "apiclaw:target_storage",
+      "@type": "xsd:string"
+    },
+    "custom_llm_provider": {
+      "@id": "apiclaw:custom_llm_provider",
+      "@type": "xsd:string"
+    },
+    "litellm_metadata": {
+      "@id": "apiclaw:litellm_metadata"
+    },
+    "Body_create_file_files_post": "apiclaw:Body_create_file_files_post",
+    "Body_create_file_v1_files_post": "apiclaw:Body_create_file_v1_files_post",
+    "Body_image_edit_api_images_edits_post": "apiclaw:Body_image_edit_api_images_edits_post",
+    "image": {
+      "@id": "apiclaw:image"
+    },
+    "mask": {
+      "@id": "apiclaw:mask"
+    },
+    "Body_image_edit_api_openai_deployments__model__images_edits_post": "apiclaw:Body_image_edit_api_openai_deployments__model__images_edits_post",
+    "Body_image_edit_api_v1_images_edits_post": "apiclaw:Body_image_edit_api_v1_images_edits_post",
+    "Body_introspect_endpoint_introspect_post": "apiclaw:Body_introspect_endpoint_introspect_post",
+    "Body_revoke_endpoint_revoke_post": "apiclaw:Body_revoke_endpoint_revoke_post",
+    "client_id": {
+      "@id": "apiclaw:client_id",
+      "@type": "xsd:string"
+    },
+    "Body_token_endpoint__mcp_server_name__token_post": "apiclaw:Body_token_endpoint__mcp_server_name__token_post",
+    "grant_type": {
+      "@id": "apiclaw:grant_type",
+      "@type": "xsd:string"
+    },
+    "code": {
+      "@id": "apiclaw:code",
+      "@type": "xsd:string"
+    },
+    "redirect_uri": {
+      "@id": "apiclaw:redirect_uri",
+      "@type": "xsd:string"
+    },
+    "client_secret": {
+      "@id": "apiclaw:client_secret"
+    },
+    "code_verifier": {
+      "@id": "apiclaw:code_verifier",
+      "@type": "xsd:string"
+    },
+    "refresh_token": {
+      "@id": "apiclaw:refresh_token"
+    },
+    "scope": {
+      "@id": "apiclaw:scope"
+    },
+    "resource": {
+      "@id": "apiclaw:resource"
+    },
+    "Body_token_endpoint_token_post": "apiclaw:Body_token_endpoint_token_post",
+    "Body_upload_logo_upload_logo_post": "apiclaw:Body_upload_logo_upload_logo_post",
+    "Body_video_create_character_v1_videos_characters_post": "apiclaw:Body_video_create_character_v1_videos_characters_post",
+    "video": {
+      "@id": "apiclaw:video",
+      "@type": "xsd:string"
+    },
+    "Body_video_create_character_videos_characters_post": "apiclaw:Body_video_create_character_videos_characters_post",
+    "Body_video_generation_v1_videos_post": "apiclaw:Body_video_generation_v1_videos_post",
+    "input_reference": {
+      "@id": "apiclaw:input_reference"
+    },
+    "Body_video_generation_videos_post": "apiclaw:Body_video_generation_videos_post",
+    "BreakdownMetrics": "apiclaw:BreakdownMetrics",
+    "model_groups": {
+      "@id": "apiclaw:model_groups"
+    },
+    "providers": {
+      "@id": "apiclaw:providers"
+    },
+    "endpoints": {
+      "@id": "apiclaw:endpoints"
+    },
+    "api_keys": {
+      "@id": "apiclaw:api_keys"
+    },
+    "BudgetConfig": "apiclaw:BudgetConfig",
+    "BudgetDeleteRequest": "apiclaw:BudgetDeleteRequest",
+    "BudgetLimitEntry": "apiclaw:BudgetLimitEntry",
+    "reset_at": {
+      "@id": "apiclaw:reset_at"
+    },
+    "BudgetListItem": "apiclaw:BudgetListItem",
+    "BudgetNewRequest": "apiclaw:BudgetNewRequest",
+    "max_parallel_requests": {
+      "@id": "apiclaw:max_parallel_requests"
+    },
+    "model_max_budget": {
+      "@id": "apiclaw:model_max_budget"
+    },
+    "BudgetRequest": "apiclaw:BudgetRequest",
+    "budgets": {
+      "@id": "apiclaw:budgets",
+      "@container": "@list"
+    },
+    "BulkTeamMemberAddRequest": "apiclaw:BulkTeamMemberAddRequest",
+    "members": {
+      "@id": "apiclaw:members"
+    },
+    "all_users": {
+      "@id": "apiclaw:all_users"
+    },
+    "max_budget_in_team": {
+      "@id": "apiclaw:max_budget_in_team"
+    },
+    "BulkTeamMemberAddResponse": "apiclaw:BulkTeamMemberAddResponse",
+    "total_requested": {
+      "@id": "apiclaw:total_requested",
+      "@type": "xsd:integer"
+    },
+    "successful_additions": {
+      "@id": "apiclaw:successful_additions",
+      "@type": "xsd:integer"
+    },
+    "failed_additions": {
+      "@id": "apiclaw:failed_additions",
+      "@type": "xsd:integer"
+    },
+    "updated_team": {
+      "@id": "apiclaw:updated_team"
+    },
+    "BulkUpdateKeyRequest": "apiclaw:BulkUpdateKeyRequest",
+    "BulkUpdateKeyRequestItem": "apiclaw:BulkUpdateKeyRequestItem",
+    "BulkUpdateKeyResponse": "apiclaw:BulkUpdateKeyResponse",
+    "successful_updates": {
+      "@id": "apiclaw:successful_updates",
+      "@container": "@list"
+    },
+    "failed_updates": {
+      "@id": "apiclaw:failed_updates",
+      "@container": "@list"
+    },
+    "BulkUpdateTeamKeysRequest": "apiclaw:BulkUpdateTeamKeysRequest",
+    "key_ids": {
+      "@id": "apiclaw:key_ids"
+    },
+    "all_keys_in_team": {
+      "@id": "apiclaw:all_keys_in_team",
+      "@type": "xsd:boolean"
+    },
+    "update_fields": {
+      "@id": "apiclaw:update_fields",
+      "@type": "@id"
+    },
+    "BulkUpdateTeamMemberPermissionsRequest": "apiclaw:BulkUpdateTeamMemberPermissionsRequest",
+    "permissions": {
+      "@id": "apiclaw:permissions",
+      "@container": "@list"
+    },
+    "team_ids": {
+      "@id": "apiclaw:team_ids"
+    },
+    "apply_to_all_teams": {
+      "@id": "apiclaw:apply_to_all_teams",
+      "@type": "xsd:boolean"
+    },
+    "BulkUpdateTeamMemberPermissionsResponse": "apiclaw:BulkUpdateTeamMemberPermissionsResponse",
+    "teams_updated": {
+      "@id": "apiclaw:teams_updated",
+      "@type": "xsd:integer"
+    },
+    "permissions_appended": {
+      "@id": "apiclaw:permissions_appended"
+    },
+    "BulkUpdateUserRequest": "apiclaw:BulkUpdateUserRequest",
+    "user_updates": {
+      "@id": "apiclaw:user_updates"
+    },
+    "BulkUpdateUserResponse": "apiclaw:BulkUpdateUserResponse",
+    "CachePingResponse": "apiclaw:CachePingResponse",
+    "status": {
+      "@id": "apiclaw:status",
+      "@type": "xsd:string"
+    },
+    "cache_type": {
+      "@id": "apiclaw:cache_type",
+      "@type": "xsd:string"
+    },
+    "ping_response": {
+      "@id": "apiclaw:ping_response"
+    },
+    "set_cache_response": {
+      "@id": "apiclaw:set_cache_response"
+    },
+    "litellm_cache_params": {
+      "@id": "apiclaw:litellm_cache_params"
+    },
+    "health_check_cache_params": {
+      "@id": "apiclaw:health_check_cache_params"
+    },
+    "CacheSettingsField": "apiclaw:CacheSettingsField",
+    "field_name": {
+      "@id": "apiclaw:field_name",
+      "@type": "xsd:string"
+    },
+    "field_value": {
+      "@id": "apiclaw:field_value"
+    },
+    "field_description": {
+      "@id": "apiclaw:field_description",
+      "@type": "xsd:string"
+    },
+    "field_default": {
+      "@id": "apiclaw:field_default"
+    },
+    "ui_field_name": {
+      "@id": "apiclaw:ui_field_name",
+      "@type": "xsd:string"
+    },
+    "link": {
+      "@id": "apiclaw:link"
+    },
+    "redis_type": {
+      "@id": "apiclaw:redis_type"
+    },
+    "CacheSettingsResponse": "apiclaw:CacheSettingsResponse",
+    "fields": {
+      "@id": "apiclaw:fields",
+      "@container": "@list"
+    },
+    "current_values": {
+      "@id": "apiclaw:current_values"
+    },
+    "redis_type_descriptions": {
+      "@id": "apiclaw:redis_type_descriptions"
+    },
+    "CacheSettingsUpdateRequest": "apiclaw:CacheSettingsUpdateRequest",
+    "cache_settings": {
+      "@id": "apiclaw:cache_settings"
+    },
+    "CacheTestRequest": "apiclaw:CacheTestRequest",
+    "CacheTestResponse": "apiclaw:CacheTestResponse",
+    "error": {
+      "@id": "apiclaw:error"
+    },
+    "CallTypes": "apiclaw:CallTypes",
+    "CallbackLogFailure": "apiclaw:CallbackLogFailure",
+    "index": {
+      "@id": "apiclaw:index",
+      "@type": "xsd:integer"
+    },
+    "CallbackLogRecord": "apiclaw:CallbackLogRecord",
+    "standard_logging_payload": {
+      "@id": "apiclaw:standard_logging_payload"
+    },
+    "CallbackLogsRequest": "apiclaw:CallbackLogsRequest",
+    "records": {
+      "@id": "apiclaw:records",
+      "@container": "@list"
+    },
+    "CallbackLogsResponse": "apiclaw:CallbackLogsResponse",
+    "processed": {
+      "@id": "apiclaw:processed",
+      "@type": "xsd:integer"
+    },
+    "failed": {
+      "@id": "apiclaw:failed",
+      "@type": "xsd:integer"
+    },
+    "failures": {
+      "@id": "apiclaw:failures",
+      "@container": "@list"
+    },
+    "CallbacksByType": "apiclaw:CallbacksByType",
+    "success": {
+      "@id": "apiclaw:success",
+      "@container": "@list"
+    },
+    "failure": {
+      "@id": "apiclaw:failure",
+      "@container": "@list"
+    },
+    "success_and_failure": {
+      "@id": "apiclaw:success_and_failure",
+      "@container": "@list"
+    },
+    "CapacityOut": "apiclaw:CapacityOut",
+    "sanctioned_daily_requests": {
+      "@id": "apiclaw:sanctioned_daily_requests",
+      "@type": "xsd:integer"
+    },
+    "sanctioned_monthly_requests": {
+      "@id": "apiclaw:sanctioned_monthly_requests",
+      "@type": "xsd:integer"
+    },
+    "active_subscriptions": {
+      "@id": "apiclaw:active_subscriptions",
+      "@type": "xsd:integer"
+    },
+    "expired_subscriptions": {
+      "@id": "apiclaw:expired_subscriptions",
+      "@type": "xsd:integer"
+    },
+    "expiring_within_7d": {
+      "@id": "apiclaw:expiring_within_7d",
+      "@type": "xsd:integer"
+    },
+    "ChatCompletionAnnotation": "apiclaw:ChatCompletionAnnotation",
+    "url_citation": {
+      "@id": "apiclaw:url_citation",
+      "@type": "@id"
+    },
+    "ChatCompletionAnnotationURLCitation": "apiclaw:ChatCompletionAnnotationURLCitation",
+    "end_index": {
+      "@id": "apiclaw:end_index",
+      "@type": "xsd:integer"
+    },
+    "start_index": {
+      "@id": "apiclaw:start_index",
+      "@type": "xsd:integer"
+    },
+    "ChatCompletionAudioResponse": "apiclaw:ChatCompletionAudioResponse",
+    "data": {
+      "@id": "apiclaw:data",
+      "@type": "xsd:string"
+    },
+    "expires_at": {
+      "@id": "apiclaw:expires_at",
+      "@type": "xsd:integer"
+    },
+    "transcript": {
+      "@id": "apiclaw:transcript",
+      "@type": "xsd:string"
+    },
+    "ChatCompletionCachedContent": "apiclaw:ChatCompletionCachedContent",
+    "ttl": {
+      "@id": "apiclaw:ttl",
+      "@type": "xsd:string"
+    },
+    "ChatCompletionCustomToolCallPayload": "apiclaw:ChatCompletionCustomToolCallPayload",
+    "input": {
+      "@id": "apiclaw:input",
+      "@type": "xsd:string"
+    },
+    "ChatCompletionMessageCustomToolCall": "apiclaw:ChatCompletionMessageCustomToolCall",
+    "custom": {
+      "@id": "apiclaw:custom",
+      "@type": "@id"
+    },
+    "ChatCompletionReasoningItem": "apiclaw:ChatCompletionReasoningItem",
+    "encrypted_content": {
+      "@id": "apiclaw:encrypted_content"
+    },
+    "summary": {
+      "@id": "apiclaw:summary",
+      "@container": "@list"
+    },
+    "ChatCompletionReasoningSummaryTextBlock": "apiclaw:ChatCompletionReasoningSummaryTextBlock"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "APIClaw API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects APIClaw's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-09-28) from openapi/apiclaw.json.",
+  "dcterms:created": "2026-09-28",
+  "dcterms:source": [
+    "openapi/apiclaw.json"
+  ]
+}

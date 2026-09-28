@@ -1,0 +1,19 @@
+generated: '2026-09-27'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://apiclaw.biz/claude-code-api-setup/
+sources:
+- https://apiclaw.biz/claude-code-api-setup/
+- https://apiclaw.biz/kilo-code-api-setup/
+- https://apiclaw.biz/blog/cheapest-claude-api/
+description: APIClaw authenticates requests using an API key passed as a Bearer token in the Authorization header.
+schemes:
+- type: http-bearer
+  name: API Key
+  evidence: 'curl https://apiclaw.biz/v1/chat/completions \ -H "Authorization: Bearer sk-your-apiclaw-key" \ -H "Content-Type: application/json"
+    \ ...'
+  location: header
+  header: Authorization
+  how_to_obtain: Copy your API key from the APIClaw dashboard.
+note: No OAuth2, apiKey, or other authentication schemes are documented on the provided pages.
+docs: https://apiclaw.biz/claude-code-api-setup/

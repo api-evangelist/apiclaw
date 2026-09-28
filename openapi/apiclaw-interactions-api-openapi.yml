@@ -1,0 +1,324 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Interactions API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Interactions
+paths:
+  /interactions:
+    post:
+      tags:
+      - Interactions
+      summary: Create Interaction
+      description: 'Create a new interaction using Google''s Interactions API.
+
+
+        Per OpenAPI spec: POST /{api_version}/interactions
+
+
+        Supports both model interactions and agent interactions:
+
+        - Model: Provide `model` parameter (e.g., "gemini-2.5-flash")
+
+        - Agent: Provide `agent` parameter (e.g., "deep-research-pro-preview-12-2025")
+
+
+        Example:
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1beta/interactions" -H "Authorization: Bearer sk-1234" -H "Content-Type: application/json" -d ''{
+
+        "model": "gemini/gemini-2.5-flash",
+
+        "input": "Hello, how are you?"
+
+        }''
+
+        ```'
+      operationId: create_interaction_interactions_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /v1beta/interactions:
+    post:
+      tags:
+      - Interactions
+      summary: Create Interaction
+      description: 'Create a new interaction using Google''s Interactions API.
+
+
+        Per OpenAPI spec: POST /{api_version}/interactions
+
+
+        Supports both model interactions and agent interactions:
+
+        - Model: Provide `model` parameter (e.g., "gemini-2.5-flash")
+
+        - Agent: Provide `agent` parameter (e.g., "deep-research-pro-preview-12-2025")
+
+
+        Example:
+
+        ```bash
+
+        curl -X POST "http://localhost:4000/v1beta/interactions" -H "Authorization: Bearer sk-1234" -H "Content-Type: application/json" -d ''{
+
+        "model": "gemini/gemini-2.5-flash",
+
+        "input": "Hello, how are you?"
+
+        }''
+
+        ```'
+      operationId: create_interaction_v1beta_interactions_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /interactions/{interaction_id}:
+    get:
+      tags:
+      - Interactions
+      summary: Get Interaction
+      description: 'Get an interaction by ID.
+
+
+        Per OpenAPI spec: GET /{api_version}/interactions/{interaction_id}'
+      operationId: get_interaction_interactions__interaction_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: interaction_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Interaction Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Interactions
+      summary: Delete Interaction
+      description: 'Delete an interaction by ID.
+
+
+        Per OpenAPI spec: DELETE /{api_version}/interactions/{interaction_id}'
+      operationId: delete_interaction_interactions__interaction_id__delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: interaction_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Interaction Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1beta/interactions/{interaction_id}:
+    get:
+      tags:
+      - Interactions
+      summary: Get Interaction
+      description: 'Get an interaction by ID.
+
+
+        Per OpenAPI spec: GET /{api_version}/interactions/{interaction_id}'
+      operationId: get_interaction_v1beta_interactions__interaction_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: interaction_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Interaction Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Interactions
+      summary: Delete Interaction
+      description: 'Delete an interaction by ID.
+
+
+        Per OpenAPI spec: DELETE /{api_version}/interactions/{interaction_id}'
+      operationId: delete_interaction_v1beta_interactions__interaction_id__delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: interaction_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Interaction Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /interactions/{interaction_id}/cancel:
+    post:
+      tags:
+      - Interactions
+      summary: Cancel Interaction
+      description: 'Cancel an interaction by ID.
+
+
+        Per OpenAPI spec: POST /{api_version}/interactions/{interaction_id}:cancel'
+      operationId: cancel_interaction_interactions__interaction_id__cancel_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: interaction_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Interaction Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1beta/interactions/{interaction_id}/cancel:
+    post:
+      tags:
+      - Interactions
+      summary: Cancel Interaction
+      description: 'Cancel an interaction by ID.
+
+
+        Per OpenAPI spec: POST /{api_version}/interactions/{interaction_id}:cancel'
+      operationId: cancel_interaction_v1beta_interactions__interaction_id__cancel_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: interaction_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Interaction Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

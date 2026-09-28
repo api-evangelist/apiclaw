@@ -1,0 +1,717 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Health API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Health
+paths:
+  /health/liveness:
+    get:
+      tags:
+      - Health
+      summary: Health Liveliness
+      description: 'Unprotected endpoint for checking if worker is alive.
+
+
+        Returns 503 once graceful shutdown has begun so Kubernetes stops counting
+
+        the draining pod as live and terminates it on schedule.'
+      operationId: health_liveliness_health_liveness_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+    options:
+      tags:
+      - Health
+      summary: Health Liveliness Options
+      description: Options endpoint for health/liveliness check.
+      operationId: health_liveliness_options_health_liveness_options
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /health/liveliness:
+    get:
+      tags:
+      - Health
+      summary: Health Liveliness
+      description: 'Unprotected endpoint for checking if worker is alive.
+
+
+        Returns 503 once graceful shutdown has begun so Kubernetes stops counting
+
+        the draining pod as live and terminates it on schedule.'
+      operationId: health_liveliness_health_liveliness_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+    options:
+      tags:
+      - Health
+      summary: Health Liveliness Options
+      description: Options endpoint for health/liveliness check.
+      operationId: health_liveliness_options_health_liveliness_options
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /health/test_connection:
+    post:
+      tags:
+      - Health
+      summary: Apiclaw Test Model Connection
+      operationId: apiclaw_test_model_connection_health_test_connection_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Body_apiclaw_test_model_connection_health_test_connection_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Apiclaw Test Model Connection Health Test Connection Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /test:
+    get:
+      tags:
+      - Health
+      summary: Test Endpoint
+      description: '[DEPRECATED] use `/health/liveliness` instead.
+
+
+        A test endpoint that pings the proxy server to check if it''s healthy.
+
+
+        Parameters:
+
+        request (Request): The incoming request.
+
+
+        Returns:
+
+        dict: A dictionary containing the route of the request URL.'
+      operationId: test_endpoint_test_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /health/services:
+    get:
+      tags:
+      - Health
+      summary: Health Services Endpoint
+      description: 'Use this admin-only endpoint to check if the service is healthy.
+
+
+        Example:
+
+        ```
+
+        curl -L -X GET ''http://0.0.0.0:4000/health/services?service=datadog'' -H ''Authorization: Bearer sk-1234''
+
+        ```'
+      operationId: health_services_endpoint_health_services_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: service
+        in: query
+        required: true
+        schema:
+          anyOf:
+          - enum:
+            - slack_budget_alerts
+            - langfuse
+            - langfuse_otel
+            - slack
+            - ms_teams
+            - openmeter
+            - webhook
+            - email
+            - braintrust
+            - datadog
+            - datadog_llm_observability
+            - generic_api
+            - arize
+            - galileo
+            - newrelic
+            - pointfive
+            - sqs
+            type: string
+          - type: string
+          description: Specify the service being hit.
+          title: Service
+        description: Specify the service being hit.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /health:
+    get:
+      tags:
+      - Health
+      summary: Health Endpoint
+      description: '🚨 USE `/health/liveliness` to health check the proxy 🚨
+
+
+        See more 👉 https://docs.litellm.ai/docs/proxy/health
+
+
+        Check the health of all the endpoints in config.yaml
+
+
+        To run health checks in the background, add this to config.yaml:
+
+        ```
+
+        general_settings:
+
+        # ... other settings
+
+        background_health_checks: True
+
+        ```
+
+        else, the health checks will be run on models when /health is called.
+
+
+        To skip deployments that set ``model_info.disable_background_health_check: true``
+
+        on ``GET /health`` as well as in the background loop, set
+
+        ``general_settings.health_check_skip_disabled_background_models: true``.'
+      operationId: health_endpoint_health_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Specify the model name (optional)
+          title: Model
+        description: Specify the model name (optional)
+      - name: model_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Specify the model ID (optional)
+          title: Model Id
+        description: Specify the model ID (optional)
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /health/history:
+    get:
+      tags:
+      - Health
+      summary: Health Check History Endpoint
+      description: 'Get health check history for models
+
+
+        Returns historical health check data with optional filtering.'
+      operationId: health_check_history_endpoint_health_history_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific model name
+          title: Model
+        description: Filter by specific model name
+      - name: status_filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by status (healthy/unhealthy)
+          title: Status Filter
+        description: Filter by status (healthy/unhealthy)
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          description: Number of records to return
+          default: 100
+          title: Limit
+        description: Number of records to return
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Number of records to skip
+          default: 0
+          title: Offset
+        description: Number of records to skip
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /health/latest:
+    get:
+      tags:
+      - Health
+      summary: Latest Health Checks Endpoint
+      description: 'Get the latest health check status for all models
+
+
+        Returns the most recent health check result for each model.'
+      operationId: latest_health_checks_endpoint_health_latest_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /health/shared-status:
+    get:
+      tags:
+      - Health
+      summary: Shared Health Check Status Endpoint
+      description: 'Get the status of shared health check coordination across pods.
+
+
+        Returns information about Redis connectivity, lock status, and cache status.'
+      operationId: shared_health_check_status_endpoint_health_shared_status_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /health/license:
+    get:
+      tags:
+      - Health
+      summary: Health License Endpoint
+      description: Return metadata about the configured LiteLLM license without exposing the key.
+      operationId: health_license_endpoint_health_license_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /active/callbacks:
+    get:
+      tags:
+      - Health
+      summary: Active Callbacks
+      description: 'Returns a list of litellm level settings
+
+
+        This is useful for debugging and ensuring the proxy server is configured correctly.
+
+
+        Response schema:
+
+        ```
+
+        {
+
+        "alerting": _alerting,
+
+        "litellm.callbacks": litellm_callbacks,
+
+        "litellm.input_callback": litellm_input_callbacks,
+
+        "litellm.failure_callback": litellm_failure_callbacks,
+
+        "litellm.success_callback": litellm_success_callbacks,
+
+        "litellm._async_success_callback": litellm_async_success_callbacks,
+
+        "litellm._async_failure_callback": litellm_async_failure_callbacks,
+
+        "litellm._async_input_callback": litellm_async_input_callbacks,
+
+        "all_litellm_callbacks": all_litellm_callbacks,
+
+        "num_callbacks": len(all_litellm_callbacks),
+
+        "num_alerting": _num_alerting,
+
+        "litellm.request_timeout": litellm.request_timeout,
+
+        }
+
+        ```'
+      operationId: active_callbacks_active_callbacks_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /settings:
+    get:
+      tags:
+      - Health
+      summary: Active Callbacks
+      description: 'Returns a list of litellm level settings
+
+
+        This is useful for debugging and ensuring the proxy server is configured correctly.
+
+
+        Response schema:
+
+        ```
+
+        {
+
+        "alerting": _alerting,
+
+        "litellm.callbacks": litellm_callbacks,
+
+        "litellm.input_callback": litellm_input_callbacks,
+
+        "litellm.failure_callback": litellm_failure_callbacks,
+
+        "litellm.success_callback": litellm_success_callbacks,
+
+        "litellm._async_success_callback": litellm_async_success_callbacks,
+
+        "litellm._async_failure_callback": litellm_async_failure_callbacks,
+
+        "litellm._async_input_callback": litellm_async_input_callbacks,
+
+        "all_litellm_callbacks": all_litellm_callbacks,
+
+        "num_callbacks": len(all_litellm_callbacks),
+
+        "num_alerting": _num_alerting,
+
+        "litellm.request_timeout": litellm.request_timeout,
+
+        }
+
+        ```'
+      operationId: active_callbacks_settings_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /health/readiness:
+    get:
+      tags:
+      - Health
+      summary: Health Readiness
+      description: 'Public readiness probe. Returns a low-detail payload safe to expose to
+
+        unauthenticated load balancers — `status` plus `db` so orchestrators and
+
+        external probes can distinguish "healthy" from "DB unreachable" without a
+
+        credential. Admins can opt into the legacy detailed payload with
+
+        general_settings.allow_public_health_readiness_details.'
+      operationId: health_readiness_health_readiness_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+    options:
+      tags:
+      - Health
+      summary: Health Readiness Options
+      description: Options endpoint for health/readiness check.
+      operationId: health_readiness_options_health_readiness_options
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /health/readiness/details:
+    get:
+      tags:
+      - Health
+      summary: Health Readiness Details
+      description: Authenticated readiness diagnostics with DB/cache/callback metadata.
+      operationId: health_readiness_details_health_readiness_details_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /health/backlog:
+    get:
+      tags:
+      - Health
+      summary: Health Backlog
+      description: 'Returns the number of HTTP requests currently in-flight on this uvicorn worker.
+
+
+        Use this to measure per-pod queue depth. A high value means the worker is
+
+        processing many concurrent requests — requests arriving now will have to wait
+
+        for the event loop to get to them, adding latency before LiteLLM even starts
+
+        its own timer.'
+      operationId: health_backlog_health_backlog_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /health/drain:
+    get:
+      tags:
+      - Health
+      summary: Health Drain
+      description: 'Graceful-drain probe for Kubernetes ``preStop`` hooks.
+
+
+        Disabled by default and returns 404 unless ``general_settings`` sets
+
+        ``enable_drain_endpoint: true``. Calling it flips a process-wide
+
+        shutting-down flag, so a successful call permanently takes the worker out
+
+        of rotation until the pod restarts.
+
+
+        Because the kubelet calls preStop hooks without proxy credentials, the
+
+        endpoint does not require ``user_api_key_auth``. To prevent any
+
+        pod-reachable caller from triggering shutdown, set
+
+        ``general_settings.drain_endpoint_token`` (or the ``DRAIN_ENDPOINT_TOKEN``
+
+        env var) and supply the same value on the ``X-Drain-Token`` header from
+
+        the preStop hook. Calls without the header (or with a wrong value) get a
+
+        401 and have no side effect.
+
+
+        When enabled, it marks the worker as shutting down (so /health/readiness
+
+        and /health/liveliness immediately start returning 503, removing the pod
+
+        from service) and blocks until the in-flight request counter drains to
+
+        zero or ``GRACEFUL_SHUTDOWN_TIMEOUT`` elapses. Unlike a fixed ``sleep``,
+
+        this returns as soon as real in-flight work is done.
+
+
+        Wire it up as:
+
+
+        ```yaml
+
+        lifecycle:
+
+        preStop:
+
+        httpGet:
+
+        path: /health/drain
+
+        port: 4000
+
+        httpHeaders:
+
+        - name: X-Drain-Token
+
+        value:
+
+        ```'
+      operationId: health_drain_health_drain_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /health/live:
+    get:
+      tags:
+      - Health
+      summary: Loop Liveness Route
+      operationId: _loop_liveness_route_health_live_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    Body_apiclaw_test_model_connection_health_test_connection_post:
+      properties:
+        mode:
+          anyOf:
+          - type: string
+            enum:
+            - chat
+            - completion
+            - embedding
+            - audio_speech
+            - audio_transcription
+            - image_generation
+            - video_generation
+            - batch
+            - rerank
+            - realtime
+            - responses
+            - ocr
+          - type: 'null'
+          title: Mode
+          description: The mode to test the model with
+        litellm_params:
+          additionalProperties: true
+          type: object
+          title: Litellm Params
+          description: Parameters for litellm.completion, litellm.embedding for the health check
+        model_info:
+          additionalProperties: true
+          type: object
+          title: Model Info
+          description: Model info for the health check
+      type: object
+      title: Body_apiclaw_test_model_connection_health_test_connection_post
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

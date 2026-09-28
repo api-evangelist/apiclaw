@@ -1,0 +1,496 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM APIClaw Blogs API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: APIClaw Blogs
+paths:
+  /apiclaw/admin/blogs:
+    get:
+      tags:
+      - APIClaw Blogs
+      summary: List Admin Blog Posts
+      operationId: list_admin_blog_posts_apiclaw_admin_blogs_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 20
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BlogPostListOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - APIClaw Blogs
+      summary: Create Blog Post
+      operationId: create_blog_post_apiclaw_admin_blogs_post
+      security:
+      - APIKeyHeader: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_CreateBlogPostRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BlogPostOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /apiclaw/admin/blogs/{post_id}:
+    get:
+      tags:
+      - APIClaw Blogs
+      summary: Get Admin Blog Post
+      operationId: get_admin_blog_post_apiclaw_admin_blogs__post_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: post_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Post Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BlogPostOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - APIClaw Blogs
+      summary: Update Blog Post
+      operationId: update_blog_post_apiclaw_admin_blogs__post_id__put
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: post_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Post Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_UpdateBlogPostRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_BlogPostOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - APIClaw Blogs
+      summary: Delete Blog Post
+      operationId: delete_blog_post_apiclaw_admin_blogs__post_id__delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: post_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Post Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_OkOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /public/blogs:
+    get:
+      tags:
+      - APIClaw Blogs
+      summary: List Public Blog Posts
+      operationId: list_public_blog_posts_public_blogs_get
+      parameters:
+      - name: slug
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Slug
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 20
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_PublicBlogPostListOut'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PaginatedResult:
+      properties:
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+      type: object
+      required:
+      - total
+      - page
+      - page_size
+      - total_pages
+      title: PaginatedResult
+    _OkOut:
+      properties:
+        ok:
+          type: boolean
+          title: Ok
+      type: object
+      required:
+      - ok
+      title: _OkOut
+    _BlogPostListOut:
+      properties:
+        posts:
+          items:
+            $ref: '#/components/schemas/_BlogPostOut'
+          type: array
+          title: Posts
+        pagination:
+          $ref: '#/components/schemas/PaginatedResult'
+      type: object
+      required:
+      - posts
+      - pagination
+      title: _BlogPostListOut
+    _PublicBlogPostListOut:
+      properties:
+        posts:
+          items:
+            $ref: '#/components/schemas/_PublicBlogPostOut'
+          type: array
+          title: Posts
+        pagination:
+          $ref: '#/components/schemas/PaginatedResult'
+      type: object
+      required:
+      - posts
+      - pagination
+      title: _PublicBlogPostListOut
+    _BlogPostOut:
+      properties:
+        id:
+          type: string
+          title: Id
+        slug:
+          type: string
+          title: Slug
+        title:
+          type: string
+          title: Title
+        description:
+          type: string
+          title: Description
+        body:
+          type: string
+          title: Body
+        cover_image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cover Image Url
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+        status:
+          type: string
+          enum:
+          - draft
+          - published
+          title: Status
+        created_by:
+          type: string
+          title: Created By
+        created_at:
+          type: string
+          title: Created At
+        updated_at:
+          type: string
+          title: Updated At
+        published_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Published At
+      type: object
+      required:
+      - id
+      - slug
+      - title
+      - description
+      - body
+      - cover_image_url
+      - tags
+      - status
+      - created_by
+      - created_at
+      - updated_at
+      - published_at
+      title: _BlogPostOut
+    _PublicBlogPostOut:
+      properties:
+        slug:
+          type: string
+          title: Slug
+        title:
+          type: string
+          title: Title
+        description:
+          type: string
+          title: Description
+        body:
+          type: string
+          title: Body
+        cover_image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cover Image Url
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+        published_at:
+          type: string
+          title: Published At
+      type: object
+      required:
+      - slug
+      - title
+      - description
+      - body
+      - cover_image_url
+      - tags
+      - published_at
+      title: _PublicBlogPostOut
+    _UpdateBlogPostRequest:
+      properties:
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        slug:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Slug
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        body:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Body
+        cover_image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cover Image Url
+        cover_image_url_set:
+          type: boolean
+          title: Cover Image Url Set
+          default: false
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        status:
+          anyOf:
+          - type: string
+            enum:
+            - draft
+            - published
+          - type: 'null'
+          title: Status
+      type: object
+      title: _UpdateBlogPostRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    _CreateBlogPostRequest:
+      properties:
+        title:
+          type: string
+          title: Title
+        slug:
+          type: string
+          title: Slug
+        description:
+          type: string
+          title: Description
+        body:
+          type: string
+          title: Body
+        cover_image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cover Image Url
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+          default: []
+        status:
+          type: string
+          enum:
+          - draft
+          - published
+          title: Status
+          default: draft
+      type: object
+      required:
+      - title
+      - slug
+      - description
+      - body
+      title: _CreateBlogPostRequest
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key
