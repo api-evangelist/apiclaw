@@ -232,6 +232,38 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    PaginatedAuditLogResponse:
+      properties:
+        audit_logs:
+          items:
+            $ref: '#/components/schemas/AuditLogResponse'
+          type: array
+          title: Audit Logs
+        total:
+          type: integer
+          title: Total
+          description: Total number of audit logs matching the filters
+        page:
+          type: integer
+          title: Page
+          description: Current page number
+        page_size:
+          type: integer
+          title: Page Size
+          description: Number of items per page
+        total_pages:
+          type: integer
+          title: Total Pages
+          description: Total number of pages
+      type: object
+      required:
+      - audit_logs
+      - total
+      - page
+      - page_size
+      - total_pages
+      title: PaginatedAuditLogResponse
+      description: Response model for paginated audit logs
     HTTPValidationError:
       properties:
         detail:
@@ -267,38 +299,6 @@ components:
       - msg
       - type
       title: ValidationError
-    PaginatedAuditLogResponse:
-      properties:
-        audit_logs:
-          items:
-            $ref: '#/components/schemas/AuditLogResponse'
-          type: array
-          title: Audit Logs
-        total:
-          type: integer
-          title: Total
-          description: Total number of audit logs matching the filters
-        page:
-          type: integer
-          title: Page
-          description: Current page number
-        page_size:
-          type: integer
-          title: Page Size
-          description: Number of items per page
-        total_pages:
-          type: integer
-          title: Total Pages
-          description: Total number of pages
-      type: object
-      required:
-      - audit_logs
-      - total
-      - page
-      - page_size
-      - total_pages
-      title: PaginatedAuditLogResponse
-      description: Response model for paginated audit logs
     AuditLogResponse:
       properties:
         id:

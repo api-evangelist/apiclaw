@@ -96,6 +96,15 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     UIThemeConfig:
       properties:
         logo_url:
@@ -119,6 +128,16 @@ components:
       type: object
       title: UIThemeConfig
       description: Configuration for UI theme customization
+    Body_upload_logo_upload_logo_post:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+      type: object
+      required:
+      - file
+      title: Body_upload_logo_upload_logo_post
     ValidationError:
       properties:
         loc:
@@ -145,16 +164,6 @@ components:
       - msg
       - type
       title: ValidationError
-    Body_upload_logo_upload_logo_post:
-      properties:
-        file:
-          type: string
-          contentMediaType: application/octet-stream
-          title: File
-      type: object
-      required:
-      - file
-      title: Body_upload_logo_upload_logo_post
     UIThemeSettingsResponse:
       properties:
         values:
@@ -171,15 +180,6 @@ components:
       - field_schema
       title: UIThemeSettingsResponse
       description: Response model for UI theme settings
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

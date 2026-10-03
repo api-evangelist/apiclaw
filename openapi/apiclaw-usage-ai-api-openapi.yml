@@ -73,22 +73,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    ChatMessage:
-      properties:
-        content:
-          title: Content
-          type: string
-        role:
-          enum:
-          - user
-          - assistant
-          title: Role
-          type: string
-      required:
-      - role
-      - content
-      title: ChatMessage
-      type: object
     ValidationError:
       properties:
         loc:
@@ -115,6 +99,22 @@ components:
       - msg
       - type
       title: ValidationError
+    ChatMessage:
+      properties:
+        content:
+          title: Content
+          type: string
+        role:
+          enum:
+          - user
+          - assistant
+          title: Role
+          type: string
+      required:
+      - role
+      - content
+      title: ChatMessage
+      type: object
   securitySchemes:
     APIKeyHeader:
       type: apiKey

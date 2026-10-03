@@ -187,163 +187,13 @@ paths:
       - mcp_rest
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    MCPCredentials:
-      properties:
-        auth_value:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Auth Value
-        client_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Client Id
-        client_secret:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Client Secret
-        scopes:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Scopes
-        aws_access_key_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Aws Access Key Id
-        aws_secret_access_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Aws Secret Access Key
-        aws_session_token:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Aws Session Token
-        aws_region_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Aws Region Name
-        aws_service_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Aws Service Name
-        aws_role_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Aws Role Name
-        aws_session_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Aws Session Name
-        audience:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Audience
-        token_exchange_endpoint:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Token Exchange Endpoint
-        subject_token_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Subject Token Type
-        id_jag_resource_token_endpoint:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Id Jag Resource Token Endpoint
-        id_jag_resource:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Id Jag Resource
-        upstream_resource:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Upstream Resource
-        upstream_token_header:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Upstream Token Header
-        client_private_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Client Private Key
-        client_private_key_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Client Private Key Id
-        client_assertion_signing_alg:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Client Assertion Signing Alg
-        token_endpoint_auth_method:
-          anyOf:
-          - type: string
-            enum:
-            - client_secret_basic
-            - client_secret_post
-          - type: 'null'
-          title: Token Endpoint Auth Method
-        redirect_uris:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Redirect Uris
-        token_exchange_profile:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Token Exchange Profile
-      type: object
-      title: MCPCredentials
+    MCPEnvVarScope:
+      type: string
+      enum:
+      - global
+      - user
+      title: MCPEnvVarScope
+      description: "Scope for an MCP server environment variable.\n\n- ``global``: value is provided by the admin and used for all users.\n- ``user``: each user must provide their own value via the per-user\n  env-var endpoint. The admin-supplied ``value`` is treated as a\n  placeholder/hint and is not used at request time."
     HTTPValidationError:
       properties:
         detail:
@@ -642,13 +492,163 @@ components:
         values are stored per-user in ``LiteLLM_MCPUserEnvVars`` and supplied by
 
         each user.'
-    MCPEnvVarScope:
-      type: string
-      enum:
-      - global
-      - user
-      title: MCPEnvVarScope
-      description: "Scope for an MCP server environment variable.\n\n- ``global``: value is provided by the admin and used for all users.\n- ``user``: each user must provide their own value via the per-user\n  env-var endpoint. The admin-supplied ``value`` is treated as a\n  placeholder/hint and is not used at request time."
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    MCPCredentials:
+      properties:
+        auth_value:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Auth Value
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Id
+        client_secret:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Secret
+        scopes:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Scopes
+        aws_access_key_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Aws Access Key Id
+        aws_secret_access_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Aws Secret Access Key
+        aws_session_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Aws Session Token
+        aws_region_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Aws Region Name
+        aws_service_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Aws Service Name
+        aws_role_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Aws Role Name
+        aws_session_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Aws Session Name
+        audience:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Audience
+        token_exchange_endpoint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Token Exchange Endpoint
+        subject_token_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject Token Type
+        id_jag_resource_token_endpoint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id Jag Resource Token Endpoint
+        id_jag_resource:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id Jag Resource
+        upstream_resource:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Upstream Resource
+        upstream_token_header:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Upstream Token Header
+        client_private_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Private Key
+        client_private_key_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Private Key Id
+        client_assertion_signing_alg:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Assertion Signing Alg
+        token_endpoint_auth_method:
+          anyOf:
+          - type: string
+            enum:
+            - client_secret_basic
+            - client_secret_post
+          - type: 'null'
+          title: Token Endpoint Auth Method
+        redirect_uris:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Redirect Uris
+        token_exchange_profile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Token Exchange Profile
+      type: object
+      title: MCPCredentials
   securitySchemes:
     APIKeyHeader:
       type: apiKey

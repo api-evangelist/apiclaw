@@ -748,169 +748,32 @@ paths:
       - Evals
 components:
   schemas:
-    DeleteEvalResponse:
-      description: Response from deleting an evaluation
+    HTTPValidationError:
       properties:
-        deleted:
-          title: Deleted
-          type: boolean
-        eval_id:
-          title: Eval Id
-          type: string
-        object:
-          default: eval.deleted
-          title: Object
-          type: string
-      required:
-      - eval_id
-      - deleted
-      title: DeleteEvalResponse
-      type: object
-    ValidationError:
-      properties:
-        loc:
+        detail:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Detail
       type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    CancelRunResponse:
-      description: Response from cancelling a run
+      title: HTTPValidationError
+    PerTestingCriteriaResult:
+      description: Results for a specific testing criteria
       properties:
-        id:
-          title: Id
-          type: string
-        object:
-          default: eval.run
-          title: Object
-          type: string
-        status:
-          const: cancelled
-          title: Status
-          type: string
-      required:
-      - id
-      - status
-      title: CancelRunResponse
-      type: object
-    ResultCounts:
-      description: Result counts for a run
-      properties:
-        error:
-          default: 0
-          title: Error
-          type: integer
-        failed:
-          default: 0
-          title: Failed
-          type: integer
-        passed:
-          default: 0
-          title: Passed
-          type: integer
-        total:
-          title: Total
+        average_score:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Average Score
+        result_counts:
+          $ref: '#/components/schemas/ResultCounts'
+        testing_criteria_index:
+          title: Testing Criteria Index
           type: integer
       required:
-      - total
-      title: ResultCounts
-      type: object
-    ListRunsResponse:
-      description: Response from listing runs
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/Run'
-          title: Data
-          type: array
-        first_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Id
-        has_more:
-          default: false
-          title: Has More
-          type: boolean
-        last_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Id
-        object:
-          default: list
-          title: Object
-          type: string
-      required:
-      - data
-      title: ListRunsResponse
-      type: object
-    CancelEvalResponse:
-      description: Response from cancelling an evaluation
-      properties:
-        id:
-          title: Id
-          type: string
-        object:
-          default: eval
-          title: Object
-          type: string
-        status:
-          const: cancelled
-          title: Status
-          type: string
-      required:
-      - id
-      - status
-      title: CancelEvalResponse
-      type: object
-    ListEvalsResponse:
-      description: Response from listing evaluations
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/Eval'
-          title: Data
-          type: array
-        first_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Id
-        has_more:
-          default: false
-          title: Has More
-          type: boolean
-        last_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Id
-        object:
-          default: list
-          title: Object
-          type: string
-      required:
-      - data
-      title: ListEvalsResponse
+      - testing_criteria_index
+      - result_counts
+      title: PerTestingCriteriaResult
       type: object
     Eval:
       description: Represents an evaluation from the OpenAI Evals API
@@ -958,32 +821,98 @@ components:
       - testing_criteria
       title: Eval
       type: object
-    HTTPValidationError:
+    ResultCounts:
+      description: Result counts for a run
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    PerTestingCriteriaResult:
-      description: Results for a specific testing criteria
-      properties:
-        average_score:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Average Score
-        result_counts:
-          $ref: '#/components/schemas/ResultCounts'
-        testing_criteria_index:
-          title: Testing Criteria Index
+        error:
+          default: 0
+          title: Error
+          type: integer
+        failed:
+          default: 0
+          title: Failed
+          type: integer
+        passed:
+          default: 0
+          title: Passed
+          type: integer
+        total:
+          title: Total
           type: integer
       required:
-      - testing_criteria_index
-      - result_counts
-      title: PerTestingCriteriaResult
+      - total
+      title: ResultCounts
+      type: object
+    CancelRunResponse:
+      description: Response from cancelling a run
+      properties:
+        id:
+          title: Id
+          type: string
+        object:
+          default: eval.run
+          title: Object
+          type: string
+        status:
+          const: cancelled
+          title: Status
+          type: string
+      required:
+      - id
+      - status
+      title: CancelRunResponse
+      type: object
+    RunDeleteResponse:
+      description: Response from deleting a run
+      properties:
+        deleted:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: true
+          title: Deleted
+        object:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: eval.run.deleted
+          title: Object
+        run_id:
+          title: Run Id
+          type: string
+      required:
+      - run_id
+      title: RunDeleteResponse
+      type: object
+    ListEvalsResponse:
+      description: Response from listing evaluations
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/Eval'
+          title: Data
+          type: array
+        first_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Id
+        has_more:
+          default: false
+          title: Has More
+          type: boolean
+        last_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Id
+        object:
+          default: list
+          title: Object
+          type: string
+      required:
+      - data
+      title: ListEvalsResponse
       type: object
     Run:
       description: Represents a run from the OpenAI Evals API
@@ -1083,27 +1012,98 @@ components:
       - eval_id
       title: Run
       type: object
-    RunDeleteResponse:
-      description: Response from deleting a run
+    ListRunsResponse:
+      description: Response from listing runs
       properties:
-        deleted:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          default: true
-          title: Deleted
-        object:
+        data:
+          items:
+            $ref: '#/components/schemas/Run'
+          title: Data
+          type: array
+        first_id:
           anyOf:
           - type: string
           - type: 'null'
-          default: eval.run.deleted
+          title: First Id
+        has_more:
+          default: false
+          title: Has More
+          type: boolean
+        last_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Id
+        object:
+          default: list
           title: Object
-        run_id:
-          title: Run Id
           type: string
       required:
-      - run_id
-      title: RunDeleteResponse
+      - data
+      title: ListRunsResponse
+      type: object
+    DeleteEvalResponse:
+      description: Response from deleting an evaluation
+      properties:
+        deleted:
+          title: Deleted
+          type: boolean
+        eval_id:
+          title: Eval Id
+          type: string
+        object:
+          default: eval.deleted
+          title: Object
+          type: string
+      required:
+      - eval_id
+      - deleted
+      title: DeleteEvalResponse
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CancelEvalResponse:
+      description: Response from cancelling an evaluation
+      properties:
+        id:
+          title: Id
+          type: string
+        object:
+          default: eval
+          title: Object
+          type: string
+        status:
+          const: cancelled
+          title: Status
+          type: string
+      required:
+      - id
+      - status
+      title: CancelEvalResponse
       type: object
   securitySchemes:
     APIKeyHeader:

@@ -468,6 +468,46 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    PluginResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Plugin unique ID
+        name:
+          type: string
+          title: Name
+          description: Plugin name
+        version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+          description: Plugin version
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Plugin description
+        source:
+          additionalProperties:
+            type: string
+          type: object
+          title: Source
+          description: Plugin source reference
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Whether plugin is enabled
+      type: object
+      required:
+      - id
+      - name
+      - source
+      - enabled
+      title: PluginResponse
+      description: Plugin information in API responses.
     UpdatePluginRequest:
       properties:
         source:
@@ -547,6 +587,110 @@ components:
         fields reset to their defaults, so version is cleared rather than
 
         defaulting to the create-time "1.0.0".'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ListPluginsResponse:
+      properties:
+        plugins:
+          items:
+            $ref: '#/components/schemas/PluginListItem'
+          type: array
+          title: Plugins
+        count:
+          type: integer
+          title: Count
+      type: object
+      required:
+      - plugins
+      - count
+      title: ListPluginsResponse
+      description: Response from listing plugins.
+    PluginListItem:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Version
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        source:
+          additionalProperties:
+            type: string
+          type: object
+          title: Source
+        author:
+          anyOf:
+          - $ref: '#/components/schemas/PluginAuthor'
+          - type: 'null'
+        homepage:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Homepage
+        keywords:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Keywords
+        category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Category
+        domain:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Domain
+        namespace:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Namespace
+        enabled:
+          type: boolean
+          title: Enabled
+        created_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created At
+        updated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated At
+      type: object
+      required:
+      - id
+      - name
+      - version
+      - description
+      - source
+      - enabled
+      - created_at
+      - updated_at
+      title: PluginListItem
+      description: Plugin item in list responses.
     RegisterPluginRequest:
       properties:
         source:
@@ -672,85 +816,6 @@ components:
       - msg
       - type
       title: ValidationError
-    PluginListItem:
-      properties:
-        id:
-          type: string
-          title: Id
-        name:
-          type: string
-          title: Name
-        version:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Version
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        source:
-          additionalProperties:
-            type: string
-          type: object
-          title: Source
-        author:
-          anyOf:
-          - $ref: '#/components/schemas/PluginAuthor'
-          - type: 'null'
-        homepage:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Homepage
-        keywords:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Keywords
-        category:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Category
-        domain:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-        namespace:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Namespace
-        enabled:
-          type: boolean
-          title: Enabled
-        created_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created At
-        updated_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Updated At
-      type: object
-      required:
-      - id
-      - name
-      - version
-      - description
-      - source
-      - enabled
-      - created_at
-      - updated_at
-      title: PluginListItem
-      description: Plugin item in list responses.
     RegisterPluginResponse:
       properties:
         status:
@@ -771,71 +836,6 @@ components:
       - plugin
       title: RegisterPluginResponse
       description: Response from plugin registration.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ListPluginsResponse:
-      properties:
-        plugins:
-          items:
-            $ref: '#/components/schemas/PluginListItem'
-          type: array
-          title: Plugins
-        count:
-          type: integer
-          title: Count
-      type: object
-      required:
-      - plugins
-      - count
-      title: ListPluginsResponse
-      description: Response from listing plugins.
-    PluginResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Plugin unique ID
-        name:
-          type: string
-          title: Name
-          description: Plugin name
-        version:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Version
-          description: Plugin version
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Plugin description
-        source:
-          additionalProperties:
-            type: string
-          type: object
-          title: Source
-          description: Plugin source reference
-        enabled:
-          type: boolean
-          title: Enabled
-          description: Whether plugin is enabled
-      type: object
-      required:
-      - id
-      - name
-      - source
-      - enabled
-      title: PluginResponse
-      description: Plugin information in API responses.
   securitySchemes:
     APIKeyHeader:
       type: apiKey

@@ -1670,6 +1670,15 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     GatewayRequestActivityResponse:
       properties:
         total_successful_requests:
@@ -1695,99 +1704,90 @@ components:
       type: object
       title: GatewayRequestActivityResponse
       description: Response for GET /gateway/daily/activity.
-    GatewayRequestBreakdownEntry:
+    PageMeta:
       properties:
-        category:
-          type: string
-          title: Category
-        route:
-          type: string
-          title: Route
-        successful_requests:
+        page:
           type: integer
-          title: Successful Requests
-          default: 0
-        failed_requests:
+          title: Page
+        page_size:
           type: integer
-          title: Failed Requests
-          default: 0
+          title: Page Size
+        has_more:
+          type: boolean
+          title: Has More
       type: object
       required:
-      - category
-      - route
-      title: GatewayRequestBreakdownEntry
-    GatewayRequestDailyEntry:
+      - page
+      - page_size
+      - has_more
+      title: PageMeta
+      description: '`has_more` rather than `total_count`, which would need a COUNT(*) over the whole match set per keystroke.'
+    SpendAnalyticsPaginatedResponse:
       properties:
-        date:
-          type: string
-          title: Date
-        successful_requests:
-          type: integer
-          title: Successful Requests
-          default: 0
-        failed_requests:
-          type: integer
-          title: Failed Requests
-          default: 0
+        results:
+          items:
+            $ref: '#/components/schemas/DailySpendData'
+          type: array
+          title: Results
+        metadata:
+          $ref: '#/components/schemas/DailySpendMetadata'
       type: object
       required:
-      - date
-      title: GatewayRequestDailyEntry
-    BreakdownMetrics:
+      - results
+      title: SpendAnalyticsPaginatedResponse
+    MetricWithMetadata:
       properties:
-        mcp_servers:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        metadata:
+          additionalProperties: true
           type: object
-          title: Mcp Servers
-        models:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Models
-        model_groups:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Model Groups
-        providers:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Providers
-        endpoints:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Endpoints
-        api_keys:
+          title: Metadata
+        api_key_breakdown:
           additionalProperties:
             $ref: '#/components/schemas/KeyMetricWithMetadata'
           type: object
-          title: Api Keys
-        entities:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Entities
-      type: object
-      title: BreakdownMetrics
-      description: Breakdown of spend by different dimensions
-    DailySpendData:
-      properties:
-        date:
-          type: string
-          format: date
-          title: Date
-        metrics:
-          $ref: '#/components/schemas/SpendMetrics'
-        breakdown:
-          $ref: '#/components/schemas/BreakdownMetrics'
+          title: Api Key Breakdown
       type: object
       required:
-      - date
       - metrics
-      title: DailySpendData
+      title: MetricWithMetadata
+    KeyMetricWithMetadata:
+      properties:
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        metadata:
+          $ref: '#/components/schemas/KeyMetadata'
+      type: object
+      required:
+      - metrics
+      title: KeyMetricWithMetadata
+      description: Base class for metrics with additional metadata
+    KeyMetadata:
+      properties:
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+      type: object
+      title: KeyMetadata
+      description: Metadata for a key
     LiteLLM_SpendLogs:
       properties:
         request_id:
@@ -1922,144 +1922,6 @@ components:
       - messages
       - response
       title: LiteLLM_SpendLogs
-    PageLinks:
-      properties:
-        self:
-          type: string
-          title: Self
-        prev:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Prev
-        next:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next
-      type: object
-      required:
-      - self
-      title: PageLinks
-      description: 'Hypermedia for a paginated list. No `first`/`last`: without a total count the last page is unknown.'
-    KeyMetadata:
-      properties:
-        key_alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Key Alias
-        team_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Team Id
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-        user_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Email
-      type: object
-      title: KeyMetadata
-      description: Metadata for a key
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    KeyMetricWithMetadata:
-      properties:
-        metrics:
-          $ref: '#/components/schemas/SpendMetrics'
-        metadata:
-          $ref: '#/components/schemas/KeyMetadata'
-      type: object
-      required:
-      - metrics
-      title: KeyMetricWithMetadata
-      description: Base class for metrics with additional metadata
-    SpendMetrics:
-      properties:
-        spend:
-          type: number
-          title: Spend
-          default: 0.0
-        flat_cost:
-          type: number
-          title: Flat Cost
-          default: 0.0
-        prompt_tokens:
-          type: integer
-          title: Prompt Tokens
-          default: 0
-        completion_tokens:
-          type: integer
-          title: Completion Tokens
-          default: 0
-        cache_read_input_tokens:
-          type: integer
-          title: Cache Read Input Tokens
-          default: 0
-        cache_creation_input_tokens:
-          type: integer
-          title: Cache Creation Input Tokens
-          default: 0
-        compression_saved_tokens:
-          type: integer
-          title: Compression Saved Tokens
-          default: 0
-        compression_savings_spend:
-          type: number
-          title: Compression Savings Spend
-          default: 0.0
-        prompt_caching_savings_spend:
-          type: number
-          title: Prompt Caching Savings Spend
-          default: 0.0
-        gateway_injected_caching_savings_spend:
-          type: number
-          title: Gateway Injected Caching Savings Spend
-          default: 0.0
-        autorouter_savings_spend:
-          type: number
-          title: Autorouter Savings Spend
-          default: 0.0
-        total_tokens:
-          type: integer
-          title: Total Tokens
-          default: 0
-        successful_requests:
-          type: integer
-          title: Successful Requests
-          default: 0
-        failed_requests:
-          type: integer
-          title: Failed Requests
-          default: 0
-        api_requests:
-          type: integer
-          title: Api Requests
-          default: 0
-      type: object
-      title: SpendMetrics
-    IPAddress:
-      properties:
-        ip:
-          type: string
-          title: Ip
-      type: object
-      required:
-      - ip
-      title: IPAddress
     ValidationError:
       properties:
         loc:
@@ -2086,36 +1948,109 @@ components:
       - msg
       - type
       title: ValidationError
-    MetricWithMetadata:
+    IPAddress:
       properties:
-        metrics:
-          $ref: '#/components/schemas/SpendMetrics'
-        metadata:
-          additionalProperties: true
+        ip:
+          type: string
+          title: Ip
+      type: object
+      required:
+      - ip
+      title: IPAddress
+    SpendCalculateRequest:
+      properties:
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+        messages:
+          anyOf:
+          - items: {}
+            type: array
+          - type: 'null'
+          title: Messages
+        completion_response:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Completion Response
+      type: object
+      title: SpendCalculateRequest
+    BreakdownMetrics:
+      properties:
+        mcp_servers:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
           type: object
-          title: Metadata
-        api_key_breakdown:
+          title: Mcp Servers
+        models:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Models
+        model_groups:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Model Groups
+        providers:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Providers
+        endpoints:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Endpoints
+        api_keys:
           additionalProperties:
             $ref: '#/components/schemas/KeyMetricWithMetadata'
           type: object
-          title: Api Key Breakdown
+          title: Api Keys
+        entities:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Entities
       type: object
-      required:
-      - metrics
-      title: MetricWithMetadata
-    SpendAnalyticsPaginatedResponse:
+      title: BreakdownMetrics
+      description: Breakdown of spend by different dimensions
+    FacetListResponse:
       properties:
-        results:
+        data:
           items:
-            $ref: '#/components/schemas/DailySpendData'
+            type: string
           type: array
-          title: Results
-        metadata:
-          $ref: '#/components/schemas/DailySpendMetadata'
+          title: Data
+        meta:
+          $ref: '#/components/schemas/PageMeta'
+        links:
+          $ref: '#/components/schemas/PageLinks'
       type: object
       required:
-      - results
-      title: SpendAnalyticsPaginatedResponse
+      - data
+      - meta
+      - links
+      title: FacetListResponse
+      description: The distinct values one column takes over a filtered query. `data` holds bare values, not entity rows.
+    DailySpendData:
+      properties:
+        date:
+          type: string
+          format: date
+          title: Date
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        breakdown:
+          $ref: '#/components/schemas/BreakdownMetrics'
+      type: object
+      required:
+      - date
+      - metrics
+      title: DailySpendData
     DailySpendMetadata:
       properties:
         total_spend:
@@ -2192,63 +2127,128 @@ components:
           default: false
       type: object
       title: DailySpendMetadata
-    SpendCalculateRequest:
+    PageLinks:
       properties:
-        model:
+        self:
+          type: string
+          title: Self
+        prev:
           anyOf:
           - type: string
           - type: 'null'
-          title: Model
-        messages:
+          title: Prev
+        next:
           anyOf:
-          - items: {}
-            type: array
+          - type: string
           - type: 'null'
-          title: Messages
-        completion_response:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Completion Response
-      type: object
-      title: SpendCalculateRequest
-    PageMeta:
-      properties:
-        page:
-          type: integer
-          title: Page
-        page_size:
-          type: integer
-          title: Page Size
-        has_more:
-          type: boolean
-          title: Has More
+          title: Next
       type: object
       required:
-      - page
-      - page_size
-      - has_more
-      title: PageMeta
-      description: '`has_more` rather than `total_count`, which would need a COUNT(*) over the whole match set per keystroke.'
-    FacetListResponse:
+      - self
+      title: PageLinks
+      description: 'Hypermedia for a paginated list. No `first`/`last`: without a total count the last page is unknown.'
+    SpendMetrics:
       properties:
-        data:
-          items:
-            type: string
-          type: array
-          title: Data
-        meta:
-          $ref: '#/components/schemas/PageMeta'
-        links:
-          $ref: '#/components/schemas/PageLinks'
+        spend:
+          type: number
+          title: Spend
+          default: 0.0
+        flat_cost:
+          type: number
+          title: Flat Cost
+          default: 0.0
+        prompt_tokens:
+          type: integer
+          title: Prompt Tokens
+          default: 0
+        completion_tokens:
+          type: integer
+          title: Completion Tokens
+          default: 0
+        cache_read_input_tokens:
+          type: integer
+          title: Cache Read Input Tokens
+          default: 0
+        cache_creation_input_tokens:
+          type: integer
+          title: Cache Creation Input Tokens
+          default: 0
+        compression_saved_tokens:
+          type: integer
+          title: Compression Saved Tokens
+          default: 0
+        compression_savings_spend:
+          type: number
+          title: Compression Savings Spend
+          default: 0.0
+        prompt_caching_savings_spend:
+          type: number
+          title: Prompt Caching Savings Spend
+          default: 0.0
+        gateway_injected_caching_savings_spend:
+          type: number
+          title: Gateway Injected Caching Savings Spend
+          default: 0.0
+        autorouter_savings_spend:
+          type: number
+          title: Autorouter Savings Spend
+          default: 0.0
+        total_tokens:
+          type: integer
+          title: Total Tokens
+          default: 0
+        successful_requests:
+          type: integer
+          title: Successful Requests
+          default: 0
+        failed_requests:
+          type: integer
+          title: Failed Requests
+          default: 0
+        api_requests:
+          type: integer
+          title: Api Requests
+          default: 0
+      type: object
+      title: SpendMetrics
+    GatewayRequestDailyEntry:
+      properties:
+        date:
+          type: string
+          title: Date
+        successful_requests:
+          type: integer
+          title: Successful Requests
+          default: 0
+        failed_requests:
+          type: integer
+          title: Failed Requests
+          default: 0
       type: object
       required:
-      - data
-      - meta
-      - links
-      title: FacetListResponse
-      description: The distinct values one column takes over a filtered query. `data` holds bare values, not entity rows.
+      - date
+      title: GatewayRequestDailyEntry
+    GatewayRequestBreakdownEntry:
+      properties:
+        category:
+          type: string
+          title: Category
+        route:
+          type: string
+          title: Route
+        successful_requests:
+          type: integer
+          title: Successful Requests
+          default: 0
+        failed_requests:
+          type: integer
+          title: Failed Requests
+          default: 0
+      type: object
+      required:
+      - category
+      - route
+      title: GatewayRequestBreakdownEntry
   securitySchemes:
     APIKeyHeader:
       type: apiKey

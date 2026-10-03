@@ -209,53 +209,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    PaginatedResult:
-      properties:
-        total:
-          type: integer
-          title: Total
-        page:
-          type: integer
-          title: Page
-        page_size:
-          type: integer
-          title: Page Size
-        total_pages:
-          type: integer
-          title: Total Pages
-      type: object
-      required:
-      - total
-      - page
-      - page_size
-      - total_pages
-      title: PaginatedResult
     _OkOut:
       properties:
         ok:
@@ -265,34 +218,15 @@ components:
       required:
       - ok
       title: _OkOut
-    _BlogPostListOut:
+    HTTPValidationError:
       properties:
-        posts:
+        detail:
           items:
-            $ref: '#/components/schemas/_BlogPostOut'
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Posts
-        pagination:
-          $ref: '#/components/schemas/PaginatedResult'
+          title: Detail
       type: object
-      required:
-      - posts
-      - pagination
-      title: _BlogPostListOut
-    _PublicBlogPostListOut:
-      properties:
-        posts:
-          items:
-            $ref: '#/components/schemas/_PublicBlogPostOut'
-          type: array
-          title: Posts
-        pagination:
-          $ref: '#/components/schemas/PaginatedResult'
-      type: object
-      required:
-      - posts
-      - pagination
-      title: _PublicBlogPostListOut
+      title: HTTPValidationError
     _BlogPostOut:
       properties:
         id:
@@ -355,43 +289,6 @@ components:
       - updated_at
       - published_at
       title: _BlogPostOut
-    _PublicBlogPostOut:
-      properties:
-        slug:
-          type: string
-          title: Slug
-        title:
-          type: string
-          title: Title
-        description:
-          type: string
-          title: Description
-        body:
-          type: string
-          title: Body
-        cover_image_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Cover Image Url
-        tags:
-          items:
-            type: string
-          type: array
-          title: Tags
-        published_at:
-          type: string
-          title: Published At
-      type: object
-      required:
-      - slug
-      - title
-      - description
-      - body
-      - cover_image_url
-      - tags
-      - published_at
-      title: _PublicBlogPostOut
     _UpdateBlogPostRequest:
       properties:
         title:
@@ -440,15 +337,6 @@ components:
           title: Status
       type: object
       title: _UpdateBlogPostRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     _CreateBlogPostRequest:
       properties:
         title:
@@ -488,6 +376,118 @@ components:
       - description
       - body
       title: _CreateBlogPostRequest
+    _BlogPostListOut:
+      properties:
+        posts:
+          items:
+            $ref: '#/components/schemas/_BlogPostOut'
+          type: array
+          title: Posts
+        pagination:
+          $ref: '#/components/schemas/PaginatedResult'
+      type: object
+      required:
+      - posts
+      - pagination
+      title: _BlogPostListOut
+    _PublicBlogPostOut:
+      properties:
+        slug:
+          type: string
+          title: Slug
+        title:
+          type: string
+          title: Title
+        description:
+          type: string
+          title: Description
+        body:
+          type: string
+          title: Body
+        cover_image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cover Image Url
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+        published_at:
+          type: string
+          title: Published At
+      type: object
+      required:
+      - slug
+      - title
+      - description
+      - body
+      - cover_image_url
+      - tags
+      - published_at
+      title: _PublicBlogPostOut
+    PaginatedResult:
+      properties:
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+      type: object
+      required:
+      - total
+      - page
+      - page_size
+      - total_pages
+      title: PaginatedResult
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    _PublicBlogPostListOut:
+      properties:
+        posts:
+          items:
+            $ref: '#/components/schemas/_PublicBlogPostOut'
+          type: array
+          title: Posts
+        pagination:
+          $ref: '#/components/schemas/PaginatedResult'
+      type: object
+      required:
+      - posts
+      - pagination
+      title: _PublicBlogPostListOut
   securitySchemes:
     APIKeyHeader:
       type: apiKey

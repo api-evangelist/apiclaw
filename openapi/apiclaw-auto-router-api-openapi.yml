@@ -379,286 +379,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    AutoRouterPresetConfig:
-      properties:
-        tiers:
-          $ref: '#/components/schemas/AutoRouterPresetTiers'
-      additionalProperties: true
-      type: object
-      required:
-      - tiers
-      title: AutoRouterPresetConfig
-      description: 'The complexity_router_config a preset prefills.
-
-
-        Only tiers is validated, because every dashboard consumer dereferences it; everything else
-
-        passes through verbatim with unknown fields kept (extra="allow"), so a catalog published after
-
-        this proxy shipped still serves its new fields intact.'
-    ShadowEvalJobTargetResponse:
-      properties:
-        target_type:
-          type: string
-          enum:
-          - key
-          - team
-          - user
-          title: Target Type
-          description: What kind of entity this entry scopes
-        target_id:
-          type: string
-          title: Target Id
-          description: The hashed virtual key, team id, or user id whose traffic this entry scopes
-        max_turns:
-          type: integer
-          title: Max Turns
-          description: 'This target''s sample-count ceiling: the whole budget for jobs created before max_budget existed, and the error-loop safety valve otherwise'
-        max_budget:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Max Budget
-          description: This target's own USD budget for the eval's shadow and judge spend, independent of its siblings'; None on jobs created before spend budgets existed, which max_turns alone bounds
-        stopped_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Stopped At
-          description: When this target's slot was stamped free, whether its own budget ran out, the window closed, or an operator stopped the job; status is derived, so a spent budget reads completed even while this is still unset
-        attempt_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Attempt Count
-          description: This target's sampled attempts so far, judged and errored alike, the same count the sampler budgets against max_turns; populated on list and detail responses. Frozen at stopped_at once the target is stamped, so in-flight attempts landing after a stop never reclassify it
-        spend:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Spend
-          description: This target's recorded shadow plus judge spend in USD, the same figure the sampler budgets against max_budget; populated on list and detail responses and frozen at stopped_at exactly like attempt_count
-        verdicts:
-          anyOf:
-          - $ref: '#/components/schemas/ShadowEvalSlice'
-          - type: 'null'
-          description: This target's own judged-verdict slice; detail endpoint only, None until a turn is judged
-        target_alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Target Alias
-          description: 'Display label resolved from the target''s own row at read time: the key''s alias, the team''s alias, or the user''s email; None when unset or deleted'
-        key_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Key Name
-          description: Masked display name (sk-...) for key targets, resolved at read time; None for teams and users
-      type: object
-      required:
-      - target_type
-      - target_id
-      - max_turns
-      title: ShadowEvalJobTargetResponse
-      description: One target a job shadows (a key, team, or user), with its own budget and stop state.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    AutoRouterPresetRecord:
-      properties:
-        label:
-          type: string
-          title: Label
-        description:
-          type: string
-          title: Description
-        complexity_router_config:
-          $ref: '#/components/schemas/AutoRouterPresetConfig'
-      additionalProperties: true
-      type: object
-      required:
-      - label
-      - description
-      - complexity_router_config
-      title: AutoRouterPresetRecord
-      description: One auto-router preset as served to the dashboard's template picker.
-    AutoRouterBenchmarksResponse:
-      properties:
-        start_date:
-          type: string
-          title: Start Date
-          description: Window start day, YYYY-MM-DD UTC, inclusive
-        end_date:
-          type: string
-          title: End Date
-          description: Window end day, YYYY-MM-DD UTC, inclusive
-        routers_in_scope:
-          type: integer
-          title: Routers In Scope
-          description: How many groups this response carries. Every auto-router configured on the proxy counts, whether or not it served anything in the window. To count only the routers that did serve traffic, filter `groups` to the entries whose `sessions` is above zero
-        totals:
-          $ref: '#/components/schemas/AutoRouterBenchmarkTotals'
-        groups:
-          items:
-            $ref: '#/components/schemas/AutoRouterBenchmarkGroup'
-          type: array
-          title: Groups
-          description: 'One entry per auto-router, listed from the model registry rather than from the rollup, so a router appears as soon as it is configured and reads zero until it serves traffic. Semantic auto-routers are absent: they record no routing decision, so no session can ever be attributed to them'
-      type: object
-      required:
-      - start_date
-      - end_date
-      - routers_in_scope
-      - totals
-      - groups
-      title: AutoRouterBenchmarksResponse
-      description: Benchmarks for the auto-router dashboard, aggregated from the per-session rollup.
-    AutoRouterSessionResponse:
-      properties:
-        session_id:
-          type: string
-          title: Session Id
-        router_name:
-          type: string
-          title: Router Name
-          description: The auto-router alias the session's requests were sent to
-        router_type:
-          type: string
-          title: Router Type
-          description: complexity, adaptive or quality
-        turns:
-          type: integer
-          title: Turns
-          description: Auto-routed turns the rollup has recorded for this session so far
-        last_model:
-          type: string
-          title: Last Model
-          description: The deployment model the most recent turn was routed to
-        spend:
-          type: number
-          title: Spend
-          description: What the session's routed traffic actually cost, classifier calls included
-        saved_spend:
-          type: number
-          title: Saved Spend
-          description: Estimated savings against the baseline, net of classifier cost
-        baseline_spend:
-          type: number
-          title: Baseline Spend
-          description: 'spend plus saved_spend: the estimated single-model cost'
-        baseline_model:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Baseline Model
-          description: 'The savings baseline most of this session''s turns were priced against, recorded turn by turn, so it still names the counterfactual after the router is reconfigured or removed. None when no turn recorded one: rows from before the baseline was recorded, and adaptive and quality routers, which derive no baseline and so report no savings'
-        baseline_models:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Baseline Models
-          description: Turns priced against each baseline model; more than one entry means the router's baseline changed mid-session and baseline_spend mixes both
-      type: object
-      required:
-      - session_id
-      - router_name
-      - router_type
-      - turns
-      - last_model
-      - spend
-      - saved_spend
-      - baseline_spend
-      - baseline_model
-      - baseline_models
-      title: AutoRouterSessionResponse
-      description: 'One auto-routed session as its own key sees it: what the last turn ran on, and what the session cost
-
-        against the router''s savings baseline (the priciest model in its hardest tier).'
-    AutoRouterBenchmarkTotals:
-      properties:
-        sessions:
-          type: integer
-          title: Sessions
-        turns:
-          type: integer
-          title: Turns
-        avg_turns_per_session:
-          type: number
-          title: Avg Turns Per Session
-        avg_session_seconds:
-          type: number
-          title: Avg Session Seconds
-        avg_tokens_per_session:
-          type: number
-          title: Avg Tokens Per Session
-        spend:
-          type: number
-          title: Spend
-          description: What the routed traffic actually cost
-        classifier_cost:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Classifier Cost
-          description: Recorded LLM classifier cost already included in spend; null when any session turns predate subtotal recording, and zero for an empty window
-        saved_spend:
-          type: number
-          title: Saved Spend
-          description: Signed dollars saved versus each router's savings baseline (derived from its hardest tier, or the configured override), from the same per-request savings record the usage tab reads
-        baseline_spend:
-          type: number
-          title: Baseline Spend
-          description: 'spend plus saved_spend: the estimated single-model cost'
-        saved_pct:
-          type: number
-          title: Saved Pct
-          description: saved_spend over baseline_spend, as a percentage
-        saved_per_session:
-          type: number
-          title: Saved Per Session
-        cache:
-          $ref: '#/components/schemas/AutoRouterCacheStats'
-      type: object
-      required:
-      - sessions
-      - turns
-      - avg_turns_per_session
-      - avg_session_seconds
-      - avg_tokens_per_session
-      - spend
-      - classifier_cost
-      - saved_spend
-      - baseline_spend
-      - saved_pct
-      - saved_per_session
-      - cache
-      title: AutoRouterBenchmarkTotals
-      description: Session-shape and savings aggregates over auto-routed traffic in the window.
     ShadowEvalJobResponse:
       properties:
         job_id:
@@ -789,124 +509,63 @@ components:
         never stored, so no writer anywhere can produce an inconsistent one. Aggregate
 
         fields are populated by the detail endpoint only and stay None on list responses.'
-    ComplexityScorerDefaults:
+    HTTPValidationError:
       properties:
-        tier_boundaries:
-          additionalProperties:
-            type: number
-          type: object
-          title: Tier Boundaries
-        token_thresholds:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Token Thresholds
-        dimension_weights:
-          additionalProperties:
-            type: number
-          type: object
-          title: Dimension Weights
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - tier_boundaries
-      - token_thresholds
-      - dimension_weights
-      title: ComplexityScorerDefaults
-      description: 'The complexity router''s shipped heuristic scorer defaults.
-
-
-        The dashboard prefills its Advanced scoring controls from these rather than keeping its own copy, so
-
-        a recalibration of the defaults cannot leave the form reporting numbers the router no longer uses.'
-    ShadowEvalResult:
+      title: HTTPValidationError
+    AutoRouterBenchmarksResponse:
       properties:
-        by_tier:
-          items:
-            $ref: '#/components/schemas/ShadowEvalSlice'
-          type: array
-          title: By Tier
-        by_current_model:
-          items:
-            $ref: '#/components/schemas/ShadowEvalSlice'
-          type: array
-          title: By Current Model
-          description: 'Sliced by the model that served the real arm: the keys'' incumbent models in forward mode, and in reverse the models the router itself picked'
-        by_router:
-          items:
-            $ref: '#/components/schemas/ShadowEvalSlice'
-          type: array
-          title: By Router
-          description: 'One slice per router arm, grouped on the router name. Every arm of a multi-router job is judged against the same real responses over the same sampled requests, so these slices compare routers head-to-head: like-for-like win rates and spends on identical traffic. Verdicts from before arm stamping existed count toward the job''s own router'
-          default: []
-        overall_shadow_win_rate_pct:
-          type: number
-          title: Overall Shadow Win Rate Pct
-        overall_tie_rate_pct:
-          type: number
-          title: Overall Tie Rate Pct
-        sampled_real_spend:
-          type: number
-          title: Sampled Real Spend
-          description: USD the real arm billed across all judged turns, cache-served turns excluded. A judged turn is one (request, router arm) verdict, so a multi-router job counts the real response once per arm it was judged against; per-router comparisons read by_router
-          default: 0.0
-        sampled_shadow_spend:
-          type: number
-          title: Sampled Shadow Spend
-          description: USD the shadow arms billed across the same turns, judge excluded, like for like
-          default: 0.0
-        not_sampled_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Not Sampled Count
-          description: 'Eligible requests the sampling dice skipped, summed over legs: the judged rows stand for judged + this many requests. None for jobs from before the funnel existed'
-        unjudgeable_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Unjudgeable Count
-          description: Sampled requests whose shape could not be judged (tool-final turn, empty text)
-        shed_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Shed Count
-          description: Sampled requests dropped by the per-pod concurrency cap, so quiet periods are overweighted
-        withheld_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Withheld Count
-          description: 'Sampled requests the pipeline declined to spend on: no database to record into, an over-budget key or team, or the eval budget unverifiable or already reached (the in-flight burst as a job crosses max_budget lands here rather than vanishing from coverage)'
-      type: object
-      required:
-      - by_tier
-      - by_current_model
-      - overall_shadow_win_rate_pct
-      - overall_tie_rate_pct
-      title: ShadowEvalResult
-      description: Stratified results of a shadow-eval job's verdicts so far.
-    AutoRouterCacheBucket:
-      properties:
-        turns:
+        start_date:
+          type: string
+          title: Start Date
+          description: Window start day, YYYY-MM-DD UTC, inclusive
+        end_date:
+          type: string
+          title: End Date
+          description: Window end day, YYYY-MM-DD UTC, inclusive
+        routers_in_scope:
           type: integer
-          title: Turns
-          description: Turns classified into this bucket
-        hits:
-          type: integer
-          title: Hits
-          description: Turns in this bucket whose response reported cache-read tokens
-        hit_rate_pct:
-          type: number
-          title: Hit Rate Pct
-          description: hits over this bucket's turns, as a percentage
+          title: Routers In Scope
+          description: How many groups this response carries. Every auto-router configured on the proxy counts, whether or not it served anything in the window. To count only the routers that did serve traffic, filter `groups` to the entries whose `sessions` is above zero
+        totals:
+          $ref: '#/components/schemas/AutoRouterBenchmarkTotals'
+        groups:
+          items:
+            $ref: '#/components/schemas/AutoRouterBenchmarkGroup'
+          type: array
+          title: Groups
+          description: 'One entry per auto-router, listed from the model registry rather than from the rollup, so a router appears as soon as it is configured and reads zero until it serves traffic. Semantic auto-routers are absent: they record no routing decision, so no session can ever be attributed to them'
       type: object
       required:
-      - turns
-      - hits
-      - hit_rate_pct
-      title: AutoRouterCacheBucket
-      description: One prompt-caching bucket of turns, with how often those turns hit the cache.
+      - start_date
+      - end_date
+      - routers_in_scope
+      - totals
+      - groups
+      title: AutoRouterBenchmarksResponse
+      description: Benchmarks for the auto-router dashboard, aggregated from the per-session rollup.
+    AutoRouterPresetConfig:
+      properties:
+        tiers:
+          $ref: '#/components/schemas/AutoRouterPresetTiers'
+      additionalProperties: true
+      type: object
+      required:
+      - tiers
+      title: AutoRouterPresetConfig
+      description: 'The complexity_router_config a preset prefills.
+
+
+        Only tiers is validated, because every dashboard consumer dereferences it; everything else
+
+        passes through verbatim with unknown fields kept (extra="allow"), so a catalog published after
+
+        this proxy shipped still serves its new fields intact.'
     ShadowEvalSlice:
       properties:
         group:
@@ -958,51 +617,6 @@ components:
         models that served the real arm, or one scoped target (embedded on that target''s
 
         own entry, so slices never need re-joining to a target by id).'
-    AutoRouterPresetTiers:
-      properties:
-        SIMPLE:
-          items:
-            type: string
-          type: array
-          title: Simple
-        MEDIUM:
-          items:
-            type: string
-          type: array
-          title: Medium
-        COMPLEX:
-          items:
-            type: string
-          type: array
-          title: Complex
-        REASONING:
-          items:
-            type: string
-          type: array
-          title: Reasoning
-      additionalProperties: false
-      type: object
-      required:
-      - SIMPLE
-      - MEDIUM
-      - COMPLEX
-      - REASONING
-      title: AutoRouterPresetTiers
-      description: 'Exactly the four built-in tiers the dashboard''s preset prefill can apply.
-
-
-        extra="forbid" on purpose: a tier name this dashboard cannot apply would grey out or crash the
-
-        picker, so such a catalog is rejected wholesale and the bundled one serves instead.'
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     AutoRouterCacheStats:
       properties:
         coverage_pct:
@@ -1065,7 +679,7 @@ components:
         visited a model for the first time (cold by design), or returned to a model it had
 
         already used. Out-of-order turns (cross-pod flush races) are counted but not bucketed.'
-    AutoRouterBenchmarkGroup:
+    AutoRouterBenchmarkTotals:
       properties:
         sessions:
           type: integer
@@ -1109,20 +723,6 @@ components:
           title: Saved Per Session
         cache:
           $ref: '#/components/schemas/AutoRouterCacheStats'
-        router_name:
-          type: string
-          title: Router Name
-          description: The auto-router alias requests were sent to
-        router_type:
-          type: string
-          title: Router Type
-          description: complexity, adaptive or quality
-        tier_turns:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Tier Turns
-          description: 'Turns per tier, keyed by the tier name the routing decision recorded at request time (never re-derived at read time, since the tier-to-model mapping is mutable config). Tier names are scoped to this group''s router_type and are not comparable across types: a complexity router reports ''SIMPLE''/''MEDIUM''/''COMPLEX''/''REASONING'', a quality router reports its numeric quality tier, and an adaptive router records no tier at all. Turns no tier served (the classifier fell back to default_model) are absent rather than pooled under a sentinel key, so the values may sum to less than turns'
       type: object
       required:
       - sessions
@@ -1137,10 +737,8 @@ components:
       - saved_pct
       - saved_per_session
       - cache
-      - router_name
-      - router_type
-      title: AutoRouterBenchmarkGroup
-      description: One auto-router's slice of the benchmarks.
+      title: AutoRouterBenchmarkTotals
+      description: Session-shape and savings aggregates over auto-routed traffic in the window.
     StartShadowEvalRequest:
       properties:
         api_key_ids:
@@ -1242,6 +840,408 @@ components:
         carries after auth (user_api_key_team_id / user_api_key_user_id), so they cover
 
         JWT-authenticated traffic, which presents no virtual key at all.'
+    AutoRouterPresetTiers:
+      properties:
+        SIMPLE:
+          items:
+            type: string
+          type: array
+          title: Simple
+        MEDIUM:
+          items:
+            type: string
+          type: array
+          title: Medium
+        COMPLEX:
+          items:
+            type: string
+          type: array
+          title: Complex
+        REASONING:
+          items:
+            type: string
+          type: array
+          title: Reasoning
+      additionalProperties: false
+      type: object
+      required:
+      - SIMPLE
+      - MEDIUM
+      - COMPLEX
+      - REASONING
+      title: AutoRouterPresetTiers
+      description: 'Exactly the four built-in tiers the dashboard''s preset prefill can apply.
+
+
+        extra="forbid" on purpose: a tier name this dashboard cannot apply would grey out or crash the
+
+        picker, so such a catalog is rejected wholesale and the bundled one serves instead.'
+    AutoRouterBenchmarkGroup:
+      properties:
+        sessions:
+          type: integer
+          title: Sessions
+        turns:
+          type: integer
+          title: Turns
+        avg_turns_per_session:
+          type: number
+          title: Avg Turns Per Session
+        avg_session_seconds:
+          type: number
+          title: Avg Session Seconds
+        avg_tokens_per_session:
+          type: number
+          title: Avg Tokens Per Session
+        spend:
+          type: number
+          title: Spend
+          description: What the routed traffic actually cost
+        classifier_cost:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Classifier Cost
+          description: Recorded LLM classifier cost already included in spend; null when any session turns predate subtotal recording, and zero for an empty window
+        saved_spend:
+          type: number
+          title: Saved Spend
+          description: Signed dollars saved versus each router's savings baseline (derived from its hardest tier, or the configured override), from the same per-request savings record the usage tab reads
+        baseline_spend:
+          type: number
+          title: Baseline Spend
+          description: 'spend plus saved_spend: the estimated single-model cost'
+        saved_pct:
+          type: number
+          title: Saved Pct
+          description: saved_spend over baseline_spend, as a percentage
+        saved_per_session:
+          type: number
+          title: Saved Per Session
+        cache:
+          $ref: '#/components/schemas/AutoRouterCacheStats'
+        router_name:
+          type: string
+          title: Router Name
+          description: The auto-router alias requests were sent to
+        router_type:
+          type: string
+          title: Router Type
+          description: complexity, adaptive or quality
+        tier_turns:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Tier Turns
+          description: 'Turns per tier, keyed by the tier name the routing decision recorded at request time (never re-derived at read time, since the tier-to-model mapping is mutable config). Tier names are scoped to this group''s router_type and are not comparable across types: a complexity router reports ''SIMPLE''/''MEDIUM''/''COMPLEX''/''REASONING'', a quality router reports its numeric quality tier, and an adaptive router records no tier at all. Turns no tier served (the classifier fell back to default_model) are absent rather than pooled under a sentinel key, so the values may sum to less than turns'
+      type: object
+      required:
+      - sessions
+      - turns
+      - avg_turns_per_session
+      - avg_session_seconds
+      - avg_tokens_per_session
+      - spend
+      - classifier_cost
+      - saved_spend
+      - baseline_spend
+      - saved_pct
+      - saved_per_session
+      - cache
+      - router_name
+      - router_type
+      title: AutoRouterBenchmarkGroup
+      description: One auto-router's slice of the benchmarks.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AutoRouterCacheBucket:
+      properties:
+        turns:
+          type: integer
+          title: Turns
+          description: Turns classified into this bucket
+        hits:
+          type: integer
+          title: Hits
+          description: Turns in this bucket whose response reported cache-read tokens
+        hit_rate_pct:
+          type: number
+          title: Hit Rate Pct
+          description: hits over this bucket's turns, as a percentage
+      type: object
+      required:
+      - turns
+      - hits
+      - hit_rate_pct
+      title: AutoRouterCacheBucket
+      description: One prompt-caching bucket of turns, with how often those turns hit the cache.
+    ShadowEvalResult:
+      properties:
+        by_tier:
+          items:
+            $ref: '#/components/schemas/ShadowEvalSlice'
+          type: array
+          title: By Tier
+        by_current_model:
+          items:
+            $ref: '#/components/schemas/ShadowEvalSlice'
+          type: array
+          title: By Current Model
+          description: 'Sliced by the model that served the real arm: the keys'' incumbent models in forward mode, and in reverse the models the router itself picked'
+        by_router:
+          items:
+            $ref: '#/components/schemas/ShadowEvalSlice'
+          type: array
+          title: By Router
+          description: 'One slice per router arm, grouped on the router name. Every arm of a multi-router job is judged against the same real responses over the same sampled requests, so these slices compare routers head-to-head: like-for-like win rates and spends on identical traffic. Verdicts from before arm stamping existed count toward the job''s own router'
+          default: []
+        overall_shadow_win_rate_pct:
+          type: number
+          title: Overall Shadow Win Rate Pct
+        overall_tie_rate_pct:
+          type: number
+          title: Overall Tie Rate Pct
+        sampled_real_spend:
+          type: number
+          title: Sampled Real Spend
+          description: USD the real arm billed across all judged turns, cache-served turns excluded. A judged turn is one (request, router arm) verdict, so a multi-router job counts the real response once per arm it was judged against; per-router comparisons read by_router
+          default: 0.0
+        sampled_shadow_spend:
+          type: number
+          title: Sampled Shadow Spend
+          description: USD the shadow arms billed across the same turns, judge excluded, like for like
+          default: 0.0
+        not_sampled_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Not Sampled Count
+          description: 'Eligible requests the sampling dice skipped, summed over legs: the judged rows stand for judged + this many requests. None for jobs from before the funnel existed'
+        unjudgeable_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Unjudgeable Count
+          description: Sampled requests whose shape could not be judged (tool-final turn, empty text)
+        shed_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Shed Count
+          description: Sampled requests dropped by the per-pod concurrency cap, so quiet periods are overweighted
+        withheld_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Withheld Count
+          description: 'Sampled requests the pipeline declined to spend on: no database to record into, an over-budget key or team, or the eval budget unverifiable or already reached (the in-flight burst as a job crosses max_budget lands here rather than vanishing from coverage)'
+      type: object
+      required:
+      - by_tier
+      - by_current_model
+      - overall_shadow_win_rate_pct
+      - overall_tie_rate_pct
+      title: ShadowEvalResult
+      description: Stratified results of a shadow-eval job's verdicts so far.
+    ShadowEvalJobTargetResponse:
+      properties:
+        target_type:
+          type: string
+          enum:
+          - key
+          - team
+          - user
+          title: Target Type
+          description: What kind of entity this entry scopes
+        target_id:
+          type: string
+          title: Target Id
+          description: The hashed virtual key, team id, or user id whose traffic this entry scopes
+        max_turns:
+          type: integer
+          title: Max Turns
+          description: 'This target''s sample-count ceiling: the whole budget for jobs created before max_budget existed, and the error-loop safety valve otherwise'
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+          description: This target's own USD budget for the eval's shadow and judge spend, independent of its siblings'; None on jobs created before spend budgets existed, which max_turns alone bounds
+        stopped_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Stopped At
+          description: When this target's slot was stamped free, whether its own budget ran out, the window closed, or an operator stopped the job; status is derived, so a spent budget reads completed even while this is still unset
+        attempt_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Attempt Count
+          description: This target's sampled attempts so far, judged and errored alike, the same count the sampler budgets against max_turns; populated on list and detail responses. Frozen at stopped_at once the target is stamped, so in-flight attempts landing after a stop never reclassify it
+        spend:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Spend
+          description: This target's recorded shadow plus judge spend in USD, the same figure the sampler budgets against max_budget; populated on list and detail responses and frozen at stopped_at exactly like attempt_count
+        verdicts:
+          anyOf:
+          - $ref: '#/components/schemas/ShadowEvalSlice'
+          - type: 'null'
+          description: This target's own judged-verdict slice; detail endpoint only, None until a turn is judged
+        target_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Target Alias
+          description: 'Display label resolved from the target''s own row at read time: the key''s alias, the team''s alias, or the user''s email; None when unset or deleted'
+        key_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Name
+          description: Masked display name (sk-...) for key targets, resolved at read time; None for teams and users
+      type: object
+      required:
+      - target_type
+      - target_id
+      - max_turns
+      title: ShadowEvalJobTargetResponse
+      description: One target a job shadows (a key, team, or user), with its own budget and stop state.
+    AutoRouterPresetRecord:
+      properties:
+        label:
+          type: string
+          title: Label
+        description:
+          type: string
+          title: Description
+        complexity_router_config:
+          $ref: '#/components/schemas/AutoRouterPresetConfig'
+      additionalProperties: true
+      type: object
+      required:
+      - label
+      - description
+      - complexity_router_config
+      title: AutoRouterPresetRecord
+      description: One auto-router preset as served to the dashboard's template picker.
+    AutoRouterSessionResponse:
+      properties:
+        session_id:
+          type: string
+          title: Session Id
+        router_name:
+          type: string
+          title: Router Name
+          description: The auto-router alias the session's requests were sent to
+        router_type:
+          type: string
+          title: Router Type
+          description: complexity, adaptive or quality
+        turns:
+          type: integer
+          title: Turns
+          description: Auto-routed turns the rollup has recorded for this session so far
+        last_model:
+          type: string
+          title: Last Model
+          description: The deployment model the most recent turn was routed to
+        spend:
+          type: number
+          title: Spend
+          description: What the session's routed traffic actually cost, classifier calls included
+        saved_spend:
+          type: number
+          title: Saved Spend
+          description: Estimated savings against the baseline, net of classifier cost
+        baseline_spend:
+          type: number
+          title: Baseline Spend
+          description: 'spend plus saved_spend: the estimated single-model cost'
+        baseline_model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Baseline Model
+          description: 'The savings baseline most of this session''s turns were priced against, recorded turn by turn, so it still names the counterfactual after the router is reconfigured or removed. None when no turn recorded one: rows from before the baseline was recorded, and adaptive and quality routers, which derive no baseline and so report no savings'
+        baseline_models:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Baseline Models
+          description: Turns priced against each baseline model; more than one entry means the router's baseline changed mid-session and baseline_spend mixes both
+      type: object
+      required:
+      - session_id
+      - router_name
+      - router_type
+      - turns
+      - last_model
+      - spend
+      - saved_spend
+      - baseline_spend
+      - baseline_model
+      - baseline_models
+      title: AutoRouterSessionResponse
+      description: 'One auto-routed session as its own key sees it: what the last turn ran on, and what the session cost
+
+        against the router''s savings baseline (the priciest model in its hardest tier).'
+    ComplexityScorerDefaults:
+      properties:
+        tier_boundaries:
+          additionalProperties:
+            type: number
+          type: object
+          title: Tier Boundaries
+        token_thresholds:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Token Thresholds
+        dimension_weights:
+          additionalProperties:
+            type: number
+          type: object
+          title: Dimension Weights
+      type: object
+      required:
+      - tier_boundaries
+      - token_thresholds
+      - dimension_weights
+      title: ComplexityScorerDefaults
+      description: 'The complexity router''s shipped heuristic scorer defaults.
+
+
+        The dashboard prefills its Advanced scoring controls from these rather than keeping its own copy, so
+
+        a recalibration of the defaults cannot leave the form reporting numbers the router no longer uses.'
   securitySchemes:
     APIKeyHeader:
       type: apiKey

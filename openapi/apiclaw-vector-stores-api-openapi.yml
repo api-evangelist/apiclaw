@@ -901,6 +901,15 @@ paths:
       - Vector Stores
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     IndexCreateRequest:
       properties:
         index_info:
@@ -1003,15 +1012,6 @@ components:
       - vector_store_name
       title: IndexCreateLiteLLMParams
       type: object
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     IndexListResponse:
       properties:
         data:

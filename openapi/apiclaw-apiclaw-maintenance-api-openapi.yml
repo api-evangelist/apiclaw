@@ -58,6 +58,15 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     _UpdateMaintenanceRequest:
       properties:
         enabled:
@@ -71,15 +80,6 @@ components:
       required:
       - enabled
       title: _UpdateMaintenanceRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     _MaintenanceOut:
       properties:
         enabled:

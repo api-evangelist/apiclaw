@@ -277,23 +277,15 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    ListResponse_BudgetListItem_:
+    HTTPValidationError:
       properties:
-        data:
+        detail:
           items:
-            $ref: '#/components/schemas/BudgetListItem'
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Data
-        meta:
-          $ref: '#/components/schemas/ListMeta'
-        links:
-          $ref: '#/components/schemas/ListLinks'
+          title: Detail
       type: object
-      required:
-      - data
-      - meta
-      - links
-      title: ListResponse[BudgetListItem]
+      title: HTTPValidationError
     ListMeta:
       properties:
         total_count:
@@ -316,52 +308,105 @@ components:
       - total_pages
       title: ListMeta
       description: 'Page-mode counterpart to `PageMeta`: an entity list pays for the COUNT(*) so the table can show a page count.'
-    ValidationError:
+    BudgetConfig:
       properties:
-        loc:
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
+      type: object
+      title: BudgetConfig
+    ListResponse_BudgetListItem_:
+      properties:
+        data:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/BudgetListItem'
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Data
+        meta:
+          $ref: '#/components/schemas/ListMeta'
+        links:
+          $ref: '#/components/schemas/ListLinks'
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    BudgetRequest:
+      - data
+      - meta
+      - links
+      title: ListResponse[BudgetListItem]
+    BudgetListItem:
       properties:
-        budgets:
-          items:
-            type: string
-          type: array
-          title: Budgets
-      type: object
-      required:
-      - budgets
-      title: BudgetRequest
-    BudgetDeleteRequest:
-      properties:
-        id:
+        budget_id:
           type: string
-          title: Id
+          title: Budget Id
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        soft_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Soft Budget
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        budget_reset_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Budget Reset At
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
       type: object
       required:
-      - id
-      title: BudgetDeleteRequest
+      - budget_id
+      - created_at
+      - updated_at
+      title: BudgetListItem
+      description: 'One budget as the Budgets page reads it, and as it comes back off the table.
+
+
+        Validating the raw row through here is what makes `tpm_limit` / `rpm_limit`
+
+        numbers: they are `BigInt?` in the schema, which the query engine hands back as
+
+        decimal strings, and a quoted "60000" breaks arithmetic in the dashboard.'
     BudgetNewRequest:
       properties:
         budget_id:
@@ -423,30 +468,52 @@ components:
           description: Datetime when the budget is reset
       type: object
       title: BudgetNewRequest
-    BudgetConfig:
+    ValidationError:
       properties:
-        max_budget:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Max Budget
-        budget_duration:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Budget Duration
-        tpm_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Tpm Limit
-        rpm_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Rpm Limit
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
-      title: BudgetConfig
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    BudgetDeleteRequest:
+      properties:
+        id:
+          type: string
+          title: Id
+      type: object
+      required:
+      - id
+      title: BudgetDeleteRequest
+    BudgetRequest:
+      properties:
+        budgets:
+          items:
+            type: string
+          type: array
+          title: Budgets
+      type: object
+      required:
+      - budgets
+      title: BudgetRequest
     ListLinks:
       properties:
         self:
@@ -475,73 +542,6 @@ components:
       - last
       title: ListLinks
       description: Page-mode counterpart to `PageLinks`. `first`/`last` are knowable here because the total count is.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    BudgetListItem:
-      properties:
-        budget_id:
-          type: string
-          title: Budget Id
-        max_budget:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Max Budget
-        soft_budget:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Soft Budget
-        tpm_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Tpm Limit
-        rpm_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Rpm Limit
-        budget_duration:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Budget Duration
-        budget_reset_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Budget Reset At
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-      type: object
-      required:
-      - budget_id
-      - created_at
-      - updated_at
-      title: BudgetListItem
-      description: 'One budget as the Budgets page reads it, and as it comes back off the table.
-
-
-        Validating the raw row through here is what makes `tpm_limit` / `rpm_limit`
-
-        numbers: they are `BigInt?` in the schema, which the query engine hands back as
-
-        decimal strings, and a quoted "60000" breaks arithmetic in the dashboard.'
   securitySchemes:
     APIKeyHeader:
       type: apiKey

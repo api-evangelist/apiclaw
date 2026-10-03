@@ -355,195 +355,6 @@ paths:
       - Tools
 components:
   schemas:
-    ToolPolicyOverrideRow:
-      properties:
-        created_at:
-          anyOf:
-          - format: date-time
-            type: string
-          - type: 'null'
-          title: Created At
-        input_policy:
-          default: blocked
-          enum:
-          - trusted
-          - untrusted
-          - blocked
-          title: Input Policy
-          type: string
-        key_alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Key Alias
-        key_hash:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Key Hash
-        override_id:
-          title: Override Id
-          type: string
-        team_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Team Id
-        tool_name:
-          title: Tool Name
-          type: string
-        updated_at:
-          anyOf:
-          - format: date-time
-            type: string
-          - type: 'null'
-          title: Updated At
-      required:
-      - override_id
-      - tool_name
-      title: ToolPolicyOverrideRow
-      type: object
-    ToolPolicyUpdateRequest:
-      properties:
-        input_policy:
-          anyOf:
-          - enum:
-            - trusted
-            - untrusted
-            - blocked
-            type: string
-          - type: 'null'
-          title: Input Policy
-        key_alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Key Alias
-        key_hash:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Key Hash
-        output_policy:
-          anyOf:
-          - enum:
-            - trusted
-            - untrusted
-            type: string
-          - type: 'null'
-          title: Output Policy
-        team_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Team Id
-        tool_name:
-          title: Tool Name
-          type: string
-      required:
-      - tool_name
-      title: ToolPolicyUpdateRequest
-      type: object
-    ToolUsageLogEntry:
-      description: One spend log row for a tool call (for UI "recent logs" table).
-      properties:
-        id:
-          title: Id
-          type: string
-        input_snippet:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Input Snippet
-        model:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Model
-        spend:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Spend
-        timestamp:
-          title: Timestamp
-          type: string
-        total_tokens:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Total Tokens
-      required:
-      - id
-      - timestamp
-      title: ToolUsageLogEntry
-      type: object
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    ToolPolicyUpdateResponse:
-      properties:
-        input_policy:
-          anyOf:
-          - enum:
-            - trusted
-            - untrusted
-            - blocked
-            type: string
-          - type: 'null'
-          title: Input Policy
-        key_hash:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Key Hash
-        output_policy:
-          anyOf:
-          - enum:
-            - trusted
-            - untrusted
-            type: string
-          - type: 'null'
-          title: Output Policy
-        team_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Team Id
-        tool_name:
-          title: Tool Name
-          type: string
-        updated:
-          title: Updated
-          type: boolean
-      required:
-      - tool_name
-      - updated
-      title: ToolPolicyUpdateResponse
-      type: object
     ToolPolicyOption:
       properties:
         description:
@@ -560,6 +371,19 @@ components:
       - label
       - description
       title: ToolPolicyOption
+      type: object
+    ToolDetailResponse:
+      properties:
+        overrides:
+          items:
+            $ref: '#/components/schemas/ToolPolicyOverrideRow'
+          title: Overrides
+          type: array
+        tool:
+          $ref: '#/components/schemas/LiteLLM_ToolTableRow'
+      required:
+      - tool
+      title: ToolDetailResponse
       type: object
     ToolSpendEntry:
       description: Total spend attributed to one tool over the requested window.
@@ -584,96 +408,37 @@ components:
       - tool_name
       title: ToolSpendEntry
       type: object
-    ToolSpendResponse:
+    HTTPValidationError:
       properties:
-        by_tool:
+        detail:
           items:
-            $ref: '#/components/schemas/ToolSpendEntry'
-          title: By Tool
+            $ref: '#/components/schemas/ValidationError'
           type: array
-        daily:
-          items:
-            $ref: '#/components/schemas/ToolSpendDailyEntry'
-          title: Daily
-          type: array
-        end_date:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: End Date
-        start_date:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Start Date
-      title: ToolSpendResponse
+          title: Detail
       type: object
-    ToolSpendDailyEntry:
-      description: Spend attributed to one tool on one UTC day.
+      title: HTTPValidationError
+    ToolUsageLogsResponse:
       properties:
-        call_count:
-          default: 0
-          title: Call Count
+        logs:
+          items:
+            $ref: '#/components/schemas/ToolUsageLogEntry'
+          title: Logs
+          type: array
+        page:
+          title: Page
           type: integer
-        date:
-          title: Date
-          type: string
-        spend:
-          default: 0.0
-          title: Spend
-          type: number
-        tool_name:
-          title: Tool Name
-          type: string
-      required:
-      - date
-      - tool_name
-      title: ToolSpendDailyEntry
-      type: object
-    ToolDetailResponse:
-      properties:
-        overrides:
-          items:
-            $ref: '#/components/schemas/ToolPolicyOverrideRow'
-          title: Overrides
-          type: array
-        tool:
-          $ref: '#/components/schemas/LiteLLM_ToolTableRow'
-      required:
-      - tool
-      title: ToolDetailResponse
-      type: object
-    ToolPolicyOptionsResponse:
-      properties:
-        input_policies:
-          items:
-            $ref: '#/components/schemas/ToolPolicyOption'
-          title: Input Policies
-          type: array
-        output_policies:
-          items:
-            $ref: '#/components/schemas/ToolPolicyOption'
-          title: Output Policies
-          type: array
-      required:
-      - input_policies
-      - output_policies
-      title: ToolPolicyOptionsResponse
-      type: object
-    ToolListResponse:
-      properties:
-        tools:
-          items:
-            $ref: '#/components/schemas/LiteLLM_ToolTableRow'
-          title: Tools
-          type: array
+        page_size:
+          title: Page Size
+          type: integer
         total:
           title: Total
           type: integer
       required:
-      - tools
+      - logs
       - total
-      title: ToolListResponse
+      - page
+      - page_size
+      title: ToolUsageLogsResponse
       type: object
     LiteLLM_ToolTableRow:
       properties:
@@ -766,38 +531,273 @@ components:
       - tool_name
       title: LiteLLM_ToolTableRow
       type: object
-    ToolUsageLogsResponse:
+    ToolSpendResponse:
       properties:
-        logs:
+        by_tool:
           items:
-            $ref: '#/components/schemas/ToolUsageLogEntry'
-          title: Logs
+            $ref: '#/components/schemas/ToolSpendEntry'
+          title: By Tool
           type: array
-        page:
-          title: Page
-          type: integer
-        page_size:
-          title: Page Size
-          type: integer
+        daily:
+          items:
+            $ref: '#/components/schemas/ToolSpendDailyEntry'
+          title: Daily
+          type: array
+        end_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: End Date
+        start_date:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Start Date
+      title: ToolSpendResponse
+      type: object
+    ToolListResponse:
+      properties:
+        tools:
+          items:
+            $ref: '#/components/schemas/LiteLLM_ToolTableRow'
+          title: Tools
+          type: array
         total:
           title: Total
           type: integer
       required:
-      - logs
+      - tools
       - total
-      - page
-      - page_size
-      title: ToolUsageLogsResponse
+      title: ToolListResponse
       type: object
-    HTTPValidationError:
+    ToolPolicyOverrideRow:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        created_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Created At
+        input_policy:
+          default: blocked
+          enum:
+          - trusted
+          - untrusted
+          - blocked
+          title: Input Policy
+          type: string
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+        key_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Hash
+        override_id:
+          title: Override Id
+          type: string
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        tool_name:
+          title: Tool Name
+          type: string
+        updated_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Updated At
+      required:
+      - override_id
+      - tool_name
+      title: ToolPolicyOverrideRow
       type: object
-      title: HTTPValidationError
+    ToolSpendDailyEntry:
+      description: Spend attributed to one tool on one UTC day.
+      properties:
+        call_count:
+          default: 0
+          title: Call Count
+          type: integer
+        date:
+          title: Date
+          type: string
+        spend:
+          default: 0.0
+          title: Spend
+          type: number
+        tool_name:
+          title: Tool Name
+          type: string
+      required:
+      - date
+      - tool_name
+      title: ToolSpendDailyEntry
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ToolPolicyUpdateResponse:
+      properties:
+        input_policy:
+          anyOf:
+          - enum:
+            - trusted
+            - untrusted
+            - blocked
+            type: string
+          - type: 'null'
+          title: Input Policy
+        key_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Hash
+        output_policy:
+          anyOf:
+          - enum:
+            - trusted
+            - untrusted
+            type: string
+          - type: 'null'
+          title: Output Policy
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        tool_name:
+          title: Tool Name
+          type: string
+        updated:
+          title: Updated
+          type: boolean
+      required:
+      - tool_name
+      - updated
+      title: ToolPolicyUpdateResponse
+      type: object
+    ToolPolicyOptionsResponse:
+      properties:
+        input_policies:
+          items:
+            $ref: '#/components/schemas/ToolPolicyOption'
+          title: Input Policies
+          type: array
+        output_policies:
+          items:
+            $ref: '#/components/schemas/ToolPolicyOption'
+          title: Output Policies
+          type: array
+      required:
+      - input_policies
+      - output_policies
+      title: ToolPolicyOptionsResponse
+      type: object
+    ToolUsageLogEntry:
+      description: One spend log row for a tool call (for UI "recent logs" table).
+      properties:
+        id:
+          title: Id
+          type: string
+        input_snippet:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Input Snippet
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+        spend:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Spend
+        timestamp:
+          title: Timestamp
+          type: string
+        total_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Tokens
+      required:
+      - id
+      - timestamp
+      title: ToolUsageLogEntry
+      type: object
+    ToolPolicyUpdateRequest:
+      properties:
+        input_policy:
+          anyOf:
+          - enum:
+            - trusted
+            - untrusted
+            - blocked
+            type: string
+          - type: 'null'
+          title: Input Policy
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+        key_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Hash
+        output_policy:
+          anyOf:
+          - enum:
+            - trusted
+            - untrusted
+            type: string
+          - type: 'null'
+          title: Output Policy
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        tool_name:
+          title: Tool Name
+          type: string
+      required:
+      - tool_name
+      title: ToolPolicyUpdateRequest
+      type: object
   securitySchemes:
     APIKeyHeader:
       type: apiKey

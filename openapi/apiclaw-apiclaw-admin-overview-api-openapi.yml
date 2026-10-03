@@ -32,56 +32,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    PlatformOut:
-      properties:
-        maintenance_enabled:
-          type: boolean
-          title: Maintenance Enabled
-        paused_deployments:
-          type: integer
-          title: Paused Deployments
-        cooling_api_keys:
-          type: integer
-          title: Cooling Api Keys
-        referrers:
-          type: integer
-          title: Referrers
-        referrals:
-          type: integer
-          title: Referrals
-        pending_commissions:
-          type: integer
-          title: Pending Commissions
-        commissions_paid_usd:
-          type: number
-          title: Commissions Paid Usd
-      type: object
-      required:
-      - maintenance_enabled
-      - paused_deployments
-      - cooling_api_keys
-      - referrers
-      - referrals
-      - pending_commissions
-      - commissions_paid_usd
-      title: PlatformOut
-    DailyOut:
-      properties:
-        day:
-          type: string
-          title: Day
-        signups:
-          type: integer
-          title: Signups
-        purchases:
-          type: integer
-          title: Purchases
-      type: object
-      required:
-      - day
-      - signups
-      - purchases
-      title: DailyOut
     RevenueOut:
       properties:
         total_usd:
@@ -137,31 +87,76 @@ components:
       - checkout_conversion_percent
       - estimated_mrr_usd
       title: RevenueOut
-    CapacityOut:
+    AdminOverviewOut:
       properties:
-        sanctioned_daily_requests:
+        generated_at:
+          type: string
+          title: Generated At
+        cache_ttl_seconds:
           type: integer
-          title: Sanctioned Daily Requests
-        sanctioned_monthly_requests:
-          type: integer
-          title: Sanctioned Monthly Requests
-        active_subscriptions:
-          type: integer
-          title: Active Subscriptions
-        expired_subscriptions:
-          type: integer
-          title: Expired Subscriptions
-        expiring_within_7d:
-          type: integer
-          title: Expiring Within 7D
+          title: Cache Ttl Seconds
+        users:
+          $ref: '#/components/schemas/UsersOut'
+        capacity:
+          $ref: '#/components/schemas/CapacityOut'
+        plans:
+          items:
+            $ref: '#/components/schemas/PlanRowOut'
+          type: array
+          title: Plans
+        revenue:
+          $ref: '#/components/schemas/RevenueOut'
+        daily:
+          items:
+            $ref: '#/components/schemas/DailyOut'
+          type: array
+          title: Daily
+        platform:
+          $ref: '#/components/schemas/PlatformOut'
       type: object
       required:
-      - sanctioned_daily_requests
-      - sanctioned_monthly_requests
-      - active_subscriptions
-      - expired_subscriptions
-      - expiring_within_7d
-      title: CapacityOut
+      - generated_at
+      - cache_ttl_seconds
+      - users
+      - capacity
+      - plans
+      - revenue
+      - daily
+      - platform
+      title: AdminOverviewOut
+    PlatformOut:
+      properties:
+        maintenance_enabled:
+          type: boolean
+          title: Maintenance Enabled
+        paused_deployments:
+          type: integer
+          title: Paused Deployments
+        cooling_api_keys:
+          type: integer
+          title: Cooling Api Keys
+        referrers:
+          type: integer
+          title: Referrers
+        referrals:
+          type: integer
+          title: Referrals
+        pending_commissions:
+          type: integer
+          title: Pending Commissions
+        commissions_paid_usd:
+          type: number
+          title: Commissions Paid Usd
+      type: object
+      required:
+      - maintenance_enabled
+      - paused_deployments
+      - cooling_api_keys
+      - referrers
+      - referrals
+      - pending_commissions
+      - commissions_paid_usd
+      title: PlatformOut
     PlanRowOut:
       properties:
         id:
@@ -201,6 +196,23 @@ components:
       - sanctioned_daily_requests
       - monthly_value_usd
       title: PlanRowOut
+    DailyOut:
+      properties:
+        day:
+          type: string
+          title: Day
+        signups:
+          type: integer
+          title: Signups
+        purchases:
+          type: integer
+          title: Purchases
+      type: object
+      required:
+      - day
+      - signups
+      - purchases
+      title: DailyOut
     UsersOut:
       properties:
         total:
@@ -238,43 +250,31 @@ components:
       - blocked
       - virtual_keys
       title: UsersOut
-    AdminOverviewOut:
+    CapacityOut:
       properties:
-        generated_at:
-          type: string
-          title: Generated At
-        cache_ttl_seconds:
+        sanctioned_daily_requests:
           type: integer
-          title: Cache Ttl Seconds
-        users:
-          $ref: '#/components/schemas/UsersOut'
-        capacity:
-          $ref: '#/components/schemas/CapacityOut'
-        plans:
-          items:
-            $ref: '#/components/schemas/PlanRowOut'
-          type: array
-          title: Plans
-        revenue:
-          $ref: '#/components/schemas/RevenueOut'
-        daily:
-          items:
-            $ref: '#/components/schemas/DailyOut'
-          type: array
-          title: Daily
-        platform:
-          $ref: '#/components/schemas/PlatformOut'
+          title: Sanctioned Daily Requests
+        sanctioned_monthly_requests:
+          type: integer
+          title: Sanctioned Monthly Requests
+        active_subscriptions:
+          type: integer
+          title: Active Subscriptions
+        expired_subscriptions:
+          type: integer
+          title: Expired Subscriptions
+        expiring_within_7d:
+          type: integer
+          title: Expiring Within 7D
       type: object
       required:
-      - generated_at
-      - cache_ttl_seconds
-      - users
-      - capacity
-      - plans
-      - revenue
-      - daily
-      - platform
-      title: AdminOverviewOut
+      - sanctioned_daily_requests
+      - sanctioned_monthly_requests
+      - active_subscriptions
+      - expired_subscriptions
+      - expiring_within_7d
+      title: CapacityOut
   securitySchemes:
     APIKeyHeader:
       type: apiKey

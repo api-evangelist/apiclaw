@@ -58,15 +58,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     AgentSkillsIndexEntry:
       properties:
         name:
@@ -93,6 +84,15 @@ components:
       - url
       - digest
       title: AgentSkillsIndexEntry
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     AgentSkillsIndex:
       properties:
         $schema:

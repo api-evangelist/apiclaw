@@ -67,6 +67,25 @@ paths:
       - a2a_registration
 components:
   schemas:
+    DiscoveryMode:
+      description: 'How to locate the upstream agent card.
+
+
+        String-valued so it serializes cleanly over JSON / Pydantic.'
+      enum:
+      - well_known_fallback
+      - langgraph_platform
+      title: DiscoveryMode
+      type: string
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     DiscoverAgentResponse:
       properties:
         agent_card:
@@ -107,25 +126,6 @@ components:
       - msg
       - type
       title: ValidationError
-    DiscoveryMode:
-      description: 'How to locate the upstream agent card.
-
-
-        String-valued so it serializes cleanly over JSON / Pydantic.'
-      enum:
-      - well_known_fallback
-      - langgraph_platform
-      title: DiscoveryMode
-      type: string
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     DiscoverAgentRequest:
       properties:
         discovery_mode:

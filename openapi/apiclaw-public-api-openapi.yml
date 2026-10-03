@@ -332,304 +332,67 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    AgentInterface:
+    MCPPublicServer:
       properties:
-        url:
+        server_id:
           type: string
-          title: Url
-        transport:
-          type: string
-          title: Transport
-      type: object
-      title: AgentInterface
-      description: Declares a combination of a target URL and a transport protocol.
-    AutoRouterPresetConfig:
-      properties:
-        tiers:
-          $ref: '#/components/schemas/AutoRouterPresetTiers'
-      additionalProperties: true
-      type: object
-      required:
-      - tiers
-      title: AutoRouterPresetConfig
-      description: 'The complexity_router_config a preset prefills.
-
-
-        Only tiers is validated, because every dashboard consumer dereferences it; everything else
-
-        passes through verbatim with unknown fields kept (extra="allow"), so a catalog published after
-
-        this proxy shipped still serves its new fields intact.'
-    SupportedEndpoint:
-      properties:
-        key:
-          type: string
-          title: Key
-        label:
-          type: string
-          title: Label
-        endpoint:
-          type: string
-          title: Endpoint
-        providers:
-          items:
-            $ref: '#/components/schemas/EndpointProvider'
-          type: array
-          title: Providers
-      type: object
-      required:
-      - key
-      - label
-      - endpoint
-      - providers
-      title: SupportedEndpoint
-    OAuth2SecurityScheme:
-      properties:
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        type:
-          type: string
-          const: oauth2
-          title: Type
-        flows:
-          $ref: '#/components/schemas/OAuthFlows'
-        oauth2MetadataUrl:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Oauth2Metadataurl
-      type: object
-      required:
-      - type
-      - flows
-      title: OAuth2SecurityScheme
-      description: Defines a security scheme using OAuth 2.0.
-    AgentSkillsIndex:
-      properties:
-        $schema:
-          type: string
-          title: $Schema
-          default: https://schemas.agentskills.io/discovery/0.2.0/schema.json
-        skills:
-          items:
-            $ref: '#/components/schemas/AgentSkillsIndexEntry'
-          type: array
-          title: Skills
-      type: object
-      required:
-      - skills
-      title: AgentSkillsIndex
-    ConfigurableClientsideParamsCustomAuth-Output:
-      properties:
-        api_base:
-          type: string
-          title: Api Base
-      type: object
-      required:
-      - api_base
-      title: ConfigurableClientsideParamsCustomAuth
-    AgentCardSignature:
-      properties:
-        protected:
-          type: string
-          title: Protected
-        signature:
-          type: string
-          title: Signature
-        header:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Header
-      type: object
-      title: AgentCardSignature
-      description: Represents a JWS signature of an AgentCard.
-    ListLinks:
-      properties:
-        self:
-          type: string
-          title: Self
-        first:
-          type: string
-          title: First
-        prev:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Prev
-        next:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next
-        last:
-          type: string
-          title: Last
-      type: object
-      required:
-      - self
-      - first
-      - last
-      title: ListLinks
-      description: Page-mode counterpart to `PageLinks`. `first`/`last` are knowable here because the total count is.
-    APIKeySecurityScheme:
-      properties:
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        type:
-          type: string
-          const: apiKey
-          title: Type
-        in_:
-          type: string
-          enum:
-          - query
-          - header
-          - cookie
-          title: In
+          title: Server Id
         name:
           type: string
           title: Name
-      type: object
-      required:
-      - type
-      - in_
-      - name
-      title: APIKeySecurityScheme
-      description: Defines a security scheme using an API key.
-    AgentCredentialField:
-      properties:
-        key:
-          type: string
-          title: Key
-        label:
-          type: string
-          title: Label
-        placeholder:
+        alias:
           anyOf:
           - type: string
           - type: 'null'
-          title: Placeholder
-        tooltip:
+          title: Alias
+        server_name:
           anyOf:
           - type: string
           - type: 'null'
-          title: Tooltip
-        required:
-          type: boolean
-          title: Required
-          default: false
-        field_type:
+          title: Server Name
+        transport:
           type: string
           enum:
-          - text
-          - password
-          - select
-          - upload
-          - textarea
-          title: Field Type
-          default: text
-        options:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Options
-        default_value:
+          - sse
+          - http
+          - stdio
+          title: Transport
+        spec_path:
           anyOf:
           - type: string
           - type: 'null'
-          title: Default Value
-        include_in_litellm_params:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Include In Litellm Params
-        validation_pattern:
+          title: Spec Path
+        auth_type:
           anyOf:
           - type: string
+            enum:
+            - none
+            - api_key
+            - bearer_token
+            - basic
+            - authorization
+            - oauth2
+            - aws_sigv4
+            - token
+            - oauth2_token_exchange
+            - oauth2_id_jag
+            - true_passthrough
+            - oauth_delegate
           - type: 'null'
-          title: Validation Pattern
-        validation_message:
+          title: Auth Type
+        mcp_info:
           anyOf:
-          - type: string
+          - additionalProperties: true
+            type: object
           - type: 'null'
-          title: Validation Message
+          title: Mcp Info
       type: object
       required:
-      - key
-      - label
-      title: AgentCredentialField
-    PageLinks:
-      properties:
-        self:
-          type: string
-          title: Self
-        prev:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Prev
-        next:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next
-      type: object
-      required:
-      - self
-      title: PageLinks
-      description: 'Hypermedia for a paginated list. No `first`/`last`: without a total count the last page is unknown.'
-    OAuthFlows:
-      properties:
-        authorizationCode:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Authorizationcode
-        clientCredentials:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Clientcredentials
-        implicit:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Implicit
-        password:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Password
-      type: object
-      title: OAuthFlows
-      description: Defines the configuration for the supported OAuth 2.0 flows.
-    EndpointProvider:
-      properties:
-        slug:
-          type: string
-          title: Slug
-        display_name:
-          type: string
-          title: Display Name
-      type: object
-      required:
-      - slug
-      - display_name
-      title: EndpointProvider
+      - server_id
+      - name
+      - transport
+      title: MCPPublicServer
+      description: Safe params for public MCP servers
     AgentProvider:
       properties:
         organization:
@@ -641,37 +404,6 @@ components:
       type: object
       title: AgentProvider
       description: Represents the service provider of an agent.
-    BlogPostsResponse:
-      properties:
-        posts:
-          items:
-            $ref: '#/components/schemas/BlogPost'
-          type: array
-          title: Posts
-      type: object
-      required:
-      - posts
-      title: BlogPostsResponse
-    OpenIdConnectSecurityScheme:
-      properties:
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        type:
-          type: string
-          const: openIdConnect
-          title: Type
-        openIdConnectUrl:
-          type: string
-          title: Openidconnecturl
-      type: object
-      required:
-      - type
-      - openIdConnectUrl
-      title: OpenIdConnectSecurityScheme
-      description: Defines a security scheme using OpenID Connect.
     HTTPValidationError:
       properties:
         detail:
@@ -711,6 +443,41 @@ components:
       - litellm_version
       - useful_links
       title: PublicModelHubInfo
+    PageMeta:
+      properties:
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        has_more:
+          type: boolean
+          title: Has More
+      type: object
+      required:
+      - page
+      - page_size
+      - has_more
+      title: PageMeta
+      description: '`has_more` rather than `total_count`, which would need a COUNT(*) over the whole match set per keystroke.'
+    AutoRouterPresetConfig:
+      properties:
+        tiers:
+          $ref: '#/components/schemas/AutoRouterPresetTiers'
+      additionalProperties: true
+      type: object
+      required:
+      - tiers
+      title: AutoRouterPresetConfig
+      description: 'The complexity_router_config a preset prefills.
+
+
+        Only tiers is validated, because every dashboard consumer dereferences it; everything else
+
+        passes through verbatim with unknown fields kept (extra="allow"), so a catalog published after
+
+        this proxy shipped still serves its new fields intact.'
     SupportedEndpointsResponse:
       properties:
         endpoints:
@@ -722,80 +489,135 @@ components:
       required:
       - endpoints
       title: SupportedEndpointsResponse
-    AgentSkillsIndexEntry:
+    HTTPAuthSecurityScheme:
       properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        type:
+          type: string
+          const: http
+          title: Type
+        scheme:
+          type: string
+          title: Scheme
+        bearerFormat:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bearerformat
+      type: object
+      required:
+      - type
+      - scheme
+      title: HTTPAuthSecurityScheme
+      description: Defines a security scheme using HTTP authentication.
+    AgentSkill:
+      properties:
+        id:
+          type: string
+          title: Id
         name:
           type: string
           title: Name
-        type:
-          type: string
-          const: archive
-          title: Type
         description:
           type: string
           title: Description
-        url:
-          type: string
-          title: Url
-        digest:
-          type: string
-          title: Digest
-      type: object
-      required:
-      - name
-      - type
-      - description
-      - url
-      - digest
-      title: AgentSkillsIndexEntry
-    ListMeta:
-      properties:
-        total_count:
-          type: integer
-          title: Total Count
-        page:
-          type: integer
-          title: Page
-        page_size:
-          type: integer
-          title: Page Size
-        total_pages:
-          type: integer
-          title: Total Pages
-      type: object
-      required:
-      - total_count
-      - page
-      - page_size
-      - total_pages
-      title: ListMeta
-      description: 'Page-mode counterpart to `PageMeta`: an entity list pays for the COUNT(*) so the table can show a page count.'
-    ValidationError:
-      properties:
-        loc:
+        tags:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            type: string
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
+          title: Tags
+        examples:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Examples
+        inputModes:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Inputmodes
+        outputModes:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Outputmodes
+        security:
+          anyOf:
+          - items:
+              additionalProperties:
+                items:
+                  type: string
+                type: array
+              type: object
+            type: array
+          - type: 'null'
+          title: Security
+      type: object
+      title: AgentSkill
+      description: Represents a distinct capability or function that an agent can perform.
+    OAuthFlows:
+      properties:
+        authorizationCode:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Authorizationcode
+        clientCredentials:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Clientcredentials
+        implicit:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Implicit
+        password:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Password
+      type: object
+      title: OAuthFlows
+      description: Defines the configuration for the supported OAuth 2.0 flows.
+    OAuth2SecurityScheme:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
         type:
           type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          const: oauth2
+          title: Type
+        flows:
+          $ref: '#/components/schemas/OAuthFlows'
+        oauth2MetadataUrl:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Oauth2Metadataurl
       type: object
       required:
-      - loc
-      - msg
       - type
-      title: ValidationError
+      - flows
+      title: OAuth2SecurityScheme
+      description: Defines a security scheme using OAuth 2.0.
     AutoRouterPresetRecord:
       properties:
         label:
@@ -814,149 +636,59 @@ components:
       - complexity_router_config
       title: AutoRouterPresetRecord
       description: One auto-router preset as served to the dashboard's template picker.
-    AgentCard:
+    AgentExtension:
       properties:
-        protocolVersion:
+        uri:
           type: string
-          title: Protocolversion
-        name:
-          type: string
-          title: Name
+          title: Uri
         description:
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
           title: Description
-        url:
-          type: string
-          title: Url
-        version:
-          type: string
-          title: Version
-        capabilities:
-          $ref: '#/components/schemas/AgentCapabilities'
-        defaultInputModes:
-          items:
-            type: string
-          type: array
-          title: Defaultinputmodes
-        defaultOutputModes:
-          items:
-            type: string
-          type: array
-          title: Defaultoutputmodes
-        skills:
-          items:
-            $ref: '#/components/schemas/AgentSkill'
-          type: array
-          title: Skills
-        preferredTransport:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Preferredtransport
-        additionalInterfaces:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/AgentInterface'
-            type: array
-          - type: 'null'
-          title: Additionalinterfaces
-        iconUrl:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Iconurl
-        provider:
-          anyOf:
-          - $ref: '#/components/schemas/AgentProvider'
-          - type: 'null'
-        documentationUrl:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Documentationurl
-        securitySchemes:
-          anyOf:
-          - additionalProperties:
-              anyOf:
-              - $ref: '#/components/schemas/APIKeySecurityScheme'
-              - $ref: '#/components/schemas/HTTPAuthSecurityScheme'
-              - $ref: '#/components/schemas/OAuth2SecurityScheme'
-              - $ref: '#/components/schemas/OpenIdConnectSecurityScheme'
-              - $ref: '#/components/schemas/MutualTLSSecurityScheme'
-            type: object
-          - type: 'null'
-          title: Securityschemes
-        security:
-          anyOf:
-          - items:
-              additionalProperties:
-                items:
-                  type: string
-                type: array
-              type: object
-            type: array
-          - type: 'null'
-          title: Security
-        supportsAuthenticatedExtendedCard:
+        required:
           anyOf:
           - type: boolean
           - type: 'null'
-          title: Supportsauthenticatedextendedcard
-        signatures:
+          title: Required
+        params:
           anyOf:
-          - items:
-              $ref: '#/components/schemas/AgentCardSignature'
-            type: array
-          - type: 'null'
-          title: Signatures
-      type: object
-      title: AgentCard
-      description: 'The AgentCard is a self-describing manifest for an agent.
-
-        It provides essential metadata including the agent''s identity, capabilities,
-
-        skills, supported communication methods, and security requirements.'
-    AgentCreateInfo:
-      properties:
-        agent_type:
-          type: string
-          title: Agent Type
-        agent_type_display_name:
-          type: string
-          title: Agent Type Display Name
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        logo_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Logo Url
-        credential_fields:
-          items:
-            $ref: '#/components/schemas/AgentCredentialField'
-          type: array
-          title: Credential Fields
-        litellm_params_template:
-          anyOf:
-          - additionalProperties:
-              type: string
+          - additionalProperties: true
             type: object
           - type: 'null'
-          title: Litellm Params Template
-        model_template:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Model Template
+          title: Params
+      type: object
+      title: AgentExtension
+      description: A declaration of a protocol extension supported by an Agent.
+    ComplexityScorerDefaults:
+      properties:
+        tier_boundaries:
+          additionalProperties:
+            type: number
+          type: object
+          title: Tier Boundaries
+        token_thresholds:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Token Thresholds
+        dimension_weights:
+          additionalProperties:
+            type: number
+          type: object
+          title: Dimension Weights
       type: object
       required:
-      - agent_type
-      - agent_type_display_name
-      - credential_fields
-      title: AgentCreateInfo
+      - tier_boundaries
+      - token_thresholds
+      - dimension_weights
+      title: ComplexityScorerDefaults
+      description: 'The complexity router''s shipped heuristic scorer defaults.
+
+
+        The dashboard prefills its Advanced scoring controls from these rather than keeping its own copy, so
+
+        a recalibration of the defaults cannot leave the form reporting numbers the router no longer uses.'
     ModelGroupInfoProxy:
       properties:
         model_group:
@@ -1099,30 +831,534 @@ components:
       - model_group
       - providers
       title: ModelGroupInfoProxy
-    AgentExtension:
+    AgentSkillsIndex:
       properties:
-        uri:
+        $schema:
           type: string
-          title: Uri
+          title: $Schema
+          default: https://schemas.agentskills.io/discovery/0.2.0/schema.json
+        skills:
+          items:
+            $ref: '#/components/schemas/AgentSkillsIndexEntry'
+          type: array
+          title: Skills
+      type: object
+      required:
+      - skills
+      title: AgentSkillsIndex
+    AgentCapabilities:
+      properties:
+        streaming:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Streaming
+        pushNotifications:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Pushnotifications
+        stateTransitionHistory:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Statetransitionhistory
+        extensions:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/AgentExtension'
+            type: array
+          - type: 'null'
+          title: Extensions
+      type: object
+      title: AgentCapabilities
+      description: Defines optional capabilities supported by an agent.
+    APIKeySecurityScheme:
+      properties:
         description:
           anyOf:
           - type: string
           - type: 'null'
           title: Description
+        type:
+          type: string
+          const: apiKey
+          title: Type
+        in_:
+          type: string
+          enum:
+          - query
+          - header
+          - cookie
+          title: In
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - type
+      - in_
+      - name
+      title: APIKeySecurityScheme
+      description: Defines a security scheme using an API key.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AgentCredentialField:
+      properties:
+        key:
+          type: string
+          title: Key
+        label:
+          type: string
+          title: Label
+        placeholder:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Placeholder
+        tooltip:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tooltip
         required:
+          type: boolean
+          title: Required
+          default: false
+        field_type:
+          type: string
+          enum:
+          - text
+          - password
+          - select
+          - upload
+          - textarea
+          title: Field Type
+          default: text
+        options:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Options
+        default_value:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Default Value
+        include_in_litellm_params:
           anyOf:
           - type: boolean
           - type: 'null'
-          title: Required
-        params:
+          title: Include In Litellm Params
+        validation_pattern:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Validation Pattern
+        validation_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Validation Message
+      type: object
+      required:
+      - key
+      - label
+      title: AgentCredentialField
+    ListLinks:
+      properties:
+        self:
+          type: string
+          title: Self
+        first:
+          type: string
+          title: First
+        prev:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev
+        next:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next
+        last:
+          type: string
+          title: Last
+      type: object
+      required:
+      - self
+      - first
+      - last
+      title: ListLinks
+      description: Page-mode counterpart to `PageLinks`. `first`/`last` are knowable here because the total count is.
+    ListResponse_ModelGroupInfoProxy_:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ModelGroupInfoProxy'
+          type: array
+          title: Data
+        meta:
+          $ref: '#/components/schemas/ListMeta'
+        links:
+          $ref: '#/components/schemas/ListLinks'
+      type: object
+      required:
+      - data
+      - meta
+      - links
+      title: ListResponse[ModelGroupInfoProxy]
+    AgentInterface:
+      properties:
+        url:
+          type: string
+          title: Url
+        transport:
+          type: string
+          title: Transport
+      type: object
+      title: AgentInterface
+      description: Declares a combination of a target URL and a transport protocol.
+    BlogPostsResponse:
+      properties:
+        posts:
+          items:
+            $ref: '#/components/schemas/BlogPost'
+          type: array
+          title: Posts
+      type: object
+      required:
+      - posts
+      title: BlogPostsResponse
+    ListMeta:
+      properties:
+        total_count:
+          type: integer
+          title: Total Count
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+      type: object
+      required:
+      - total_count
+      - page
+      - page_size
+      - total_pages
+      title: ListMeta
+      description: 'Page-mode counterpart to `PageMeta`: an entity list pays for the COUNT(*) so the table can show a page count.'
+    OpenIdConnectSecurityScheme:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        type:
+          type: string
+          const: openIdConnect
+          title: Type
+        openIdConnectUrl:
+          type: string
+          title: Openidconnecturl
+      type: object
+      required:
+      - type
+      - openIdConnectUrl
+      title: OpenIdConnectSecurityScheme
+      description: Defines a security scheme using OpenID Connect.
+    EndpointProvider:
+      properties:
+        slug:
+          type: string
+          title: Slug
+        display_name:
+          type: string
+          title: Display Name
+      type: object
+      required:
+      - slug
+      - display_name
+      title: EndpointProvider
+    AgentCard:
+      properties:
+        protocolVersion:
+          type: string
+          title: Protocolversion
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        url:
+          type: string
+          title: Url
+        version:
+          type: string
+          title: Version
+        capabilities:
+          $ref: '#/components/schemas/AgentCapabilities'
+        defaultInputModes:
+          items:
+            type: string
+          type: array
+          title: Defaultinputmodes
+        defaultOutputModes:
+          items:
+            type: string
+          type: array
+          title: Defaultoutputmodes
+        skills:
+          items:
+            $ref: '#/components/schemas/AgentSkill'
+          type: array
+          title: Skills
+        preferredTransport:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Preferredtransport
+        additionalInterfaces:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/AgentInterface'
+            type: array
+          - type: 'null'
+          title: Additionalinterfaces
+        iconUrl:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Iconurl
+        provider:
+          anyOf:
+          - $ref: '#/components/schemas/AgentProvider'
+          - type: 'null'
+        documentationUrl:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Documentationurl
+        securitySchemes:
+          anyOf:
+          - additionalProperties:
+              anyOf:
+              - $ref: '#/components/schemas/APIKeySecurityScheme'
+              - $ref: '#/components/schemas/HTTPAuthSecurityScheme'
+              - $ref: '#/components/schemas/OAuth2SecurityScheme'
+              - $ref: '#/components/schemas/OpenIdConnectSecurityScheme'
+              - $ref: '#/components/schemas/MutualTLSSecurityScheme'
+            type: object
+          - type: 'null'
+          title: Securityschemes
+        security:
+          anyOf:
+          - items:
+              additionalProperties:
+                items:
+                  type: string
+                type: array
+              type: object
+            type: array
+          - type: 'null'
+          title: Security
+        supportsAuthenticatedExtendedCard:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Supportsauthenticatedextendedcard
+        signatures:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/AgentCardSignature'
+            type: array
+          - type: 'null'
+          title: Signatures
+      type: object
+      title: AgentCard
+      description: 'The AgentCard is a self-describing manifest for an agent.
+
+        It provides essential metadata including the agent''s identity, capabilities,
+
+        skills, supported communication methods, and security requirements.'
+    AgentCardSignature:
+      properties:
+        protected:
+          type: string
+          title: Protected
+        signature:
+          type: string
+          title: Signature
+        header:
           anyOf:
           - additionalProperties: true
             type: object
           - type: 'null'
-          title: Params
+          title: Header
       type: object
-      title: AgentExtension
-      description: A declaration of a protocol extension supported by an Agent.
+      title: AgentCardSignature
+      description: Represents a JWS signature of an AgentCard.
+    FacetListResponse:
+      properties:
+        data:
+          items:
+            type: string
+          type: array
+          title: Data
+        meta:
+          $ref: '#/components/schemas/PageMeta'
+        links:
+          $ref: '#/components/schemas/PageLinks'
+      type: object
+      required:
+      - data
+      - meta
+      - links
+      title: FacetListResponse
+      description: The distinct values one column takes over a filtered query. `data` holds bare values, not entity rows.
+    MutualTLSSecurityScheme:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        type:
+          type: string
+          const: mutualTLS
+          title: Type
+      type: object
+      required:
+      - type
+      title: MutualTLSSecurityScheme
+      description: Defines a security scheme using mTLS authentication.
+    AgentCreateInfo:
+      properties:
+        agent_type:
+          type: string
+          title: Agent Type
+        agent_type_display_name:
+          type: string
+          title: Agent Type Display Name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        logo_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Logo Url
+        credential_fields:
+          items:
+            $ref: '#/components/schemas/AgentCredentialField'
+          type: array
+          title: Credential Fields
+        litellm_params_template:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Litellm Params Template
+        model_template:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model Template
+      type: object
+      required:
+      - agent_type
+      - agent_type_display_name
+      - credential_fields
+      title: AgentCreateInfo
+    PageLinks:
+      properties:
+        self:
+          type: string
+          title: Self
+        prev:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev
+        next:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next
+      type: object
+      required:
+      - self
+      title: PageLinks
+      description: 'Hypermedia for a paginated list. No `first`/`last`: without a total count the last page is unknown.'
+    SupportedEndpoint:
+      properties:
+        key:
+          type: string
+          title: Key
+        label:
+          type: string
+          title: Label
+        endpoint:
+          type: string
+          title: Endpoint
+        providers:
+          items:
+            $ref: '#/components/schemas/EndpointProvider'
+          type: array
+          title: Providers
+      type: object
+      required:
+      - key
+      - label
+      - endpoint
+      - providers
+      title: SupportedEndpoint
+    ConfigurableClientsideParamsCustomAuth-Output:
+      properties:
+        api_base:
+          type: string
+          title: Api Base
+      type: object
+      required:
+      - api_base
+      title: ConfigurableClientsideParamsCustomAuth
     AutoRouterPresetTiers:
       properties:
         SIMPLE:
@@ -1159,170 +1395,6 @@ components:
         extra="forbid" on purpose: a tier name this dashboard cannot apply would grey out or crash the
 
         picker, so such a catalog is rejected wholesale and the bundled one serves instead.'
-    AgentCapabilities:
-      properties:
-        streaming:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Streaming
-        pushNotifications:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Pushnotifications
-        stateTransitionHistory:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Statetransitionhistory
-        extensions:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/AgentExtension'
-            type: array
-          - type: 'null'
-          title: Extensions
-      type: object
-      title: AgentCapabilities
-      description: Defines optional capabilities supported by an agent.
-    MutualTLSSecurityScheme:
-      properties:
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        type:
-          type: string
-          const: mutualTLS
-          title: Type
-      type: object
-      required:
-      - type
-      title: MutualTLSSecurityScheme
-      description: Defines a security scheme using mTLS authentication.
-    MCPPublicServer:
-      properties:
-        server_id:
-          type: string
-          title: Server Id
-        name:
-          type: string
-          title: Name
-        alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Alias
-        server_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Server Name
-        transport:
-          type: string
-          enum:
-          - sse
-          - http
-          - stdio
-          title: Transport
-        spec_path:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Spec Path
-        auth_type:
-          anyOf:
-          - type: string
-            enum:
-            - none
-            - api_key
-            - bearer_token
-            - basic
-            - authorization
-            - oauth2
-            - aws_sigv4
-            - token
-            - oauth2_token_exchange
-            - oauth2_id_jag
-            - true_passthrough
-            - oauth_delegate
-          - type: 'null'
-          title: Auth Type
-        mcp_info:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Mcp Info
-      type: object
-      required:
-      - server_id
-      - name
-      - transport
-      title: MCPPublicServer
-      description: Safe params for public MCP servers
-    HTTPAuthSecurityScheme:
-      properties:
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        type:
-          type: string
-          const: http
-          title: Type
-        scheme:
-          type: string
-          title: Scheme
-        bearerFormat:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Bearerformat
-      type: object
-      required:
-      - type
-      - scheme
-      title: HTTPAuthSecurityScheme
-      description: Defines a security scheme using HTTP authentication.
-    PageMeta:
-      properties:
-        page:
-          type: integer
-          title: Page
-        page_size:
-          type: integer
-          title: Page Size
-        has_more:
-          type: boolean
-          title: Has More
-      type: object
-      required:
-      - page
-      - page_size
-      - has_more
-      title: PageMeta
-      description: '`has_more` rather than `total_count`, which would need a COUNT(*) over the whole match set per keystroke.'
-    ListResponse_ModelGroupInfoProxy_:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/ModelGroupInfoProxy'
-          type: array
-          title: Data
-        meta:
-          $ref: '#/components/schemas/ListMeta'
-        links:
-          $ref: '#/components/schemas/ListLinks'
-      type: object
-      required:
-      - data
-      - meta
-      - links
-      title: ListResponse[ModelGroupInfoProxy]
     BlogPost:
       properties:
         title:
@@ -1344,104 +1416,32 @@ components:
       - date
       - url
       title: BlogPost
-    AgentSkill:
+    AgentSkillsIndexEntry:
       properties:
-        id:
-          type: string
-          title: Id
         name:
           type: string
           title: Name
+        type:
+          type: string
+          const: archive
+          title: Type
         description:
           type: string
           title: Description
-        tags:
-          items:
-            type: string
-          type: array
-          title: Tags
-        examples:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Examples
-        inputModes:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Inputmodes
-        outputModes:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Outputmodes
-        security:
-          anyOf:
-          - items:
-              additionalProperties:
-                items:
-                  type: string
-                type: array
-              type: object
-            type: array
-          - type: 'null'
-          title: Security
-      type: object
-      title: AgentSkill
-      description: Represents a distinct capability or function that an agent can perform.
-    ComplexityScorerDefaults:
-      properties:
-        tier_boundaries:
-          additionalProperties:
-            type: number
-          type: object
-          title: Tier Boundaries
-        token_thresholds:
-          additionalProperties:
-            type: integer
-          type: object
-          title: Token Thresholds
-        dimension_weights:
-          additionalProperties:
-            type: number
-          type: object
-          title: Dimension Weights
+        url:
+          type: string
+          title: Url
+        digest:
+          type: string
+          title: Digest
       type: object
       required:
-      - tier_boundaries
-      - token_thresholds
-      - dimension_weights
-      title: ComplexityScorerDefaults
-      description: 'The complexity router''s shipped heuristic scorer defaults.
-
-
-        The dashboard prefills its Advanced scoring controls from these rather than keeping its own copy, so
-
-        a recalibration of the defaults cannot leave the form reporting numbers the router no longer uses.'
-    FacetListResponse:
-      properties:
-        data:
-          items:
-            type: string
-          type: array
-          title: Data
-        meta:
-          $ref: '#/components/schemas/PageMeta'
-        links:
-          $ref: '#/components/schemas/PageLinks'
-      type: object
-      required:
-      - data
-      - meta
-      - links
-      title: FacetListResponse
-      description: The distinct values one column takes over a filtered query. `data` holds bare values, not entity rows.
+      - name
+      - type
+      - description
+      - url
+      - digest
+      title: AgentSkillsIndexEntry
   securitySchemes:
     APIKeyHeader:
       type: apiKey

@@ -74,6 +74,15 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     EmailEventSettingsUpdateRequest:
       properties:
         settings:
@@ -85,6 +94,18 @@ components:
       required:
       - settings
       title: EmailEventSettingsUpdateRequest
+    EmailEventSettings:
+      properties:
+        event:
+          $ref: '#/components/schemas/EmailEvent'
+        enabled:
+          type: boolean
+          title: Enabled
+      type: object
+      required:
+      - event
+      - enabled
+      title: EmailEventSettings
     EmailEventSettingsResponse:
       properties:
         settings:
@@ -131,27 +152,6 @@ components:
       - Soft Budget Crossed
       - Max Budget Alert
       title: EmailEvent
-    EmailEventSettings:
-      properties:
-        event:
-          $ref: '#/components/schemas/EmailEvent'
-        enabled:
-          type: boolean
-          title: Enabled
-      type: object
-      required:
-      - event
-      - enabled
-      title: EmailEventSettings
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

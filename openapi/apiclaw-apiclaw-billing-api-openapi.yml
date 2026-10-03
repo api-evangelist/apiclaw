@@ -404,6 +404,24 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    _OkOut:
+      properties:
+        ok:
+          type: boolean
+          title: Ok
+      type: object
+      required:
+      - ok
+      title: _OkOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     _AdminAssignPlanRequest:
       properties:
         plan:
@@ -428,68 +446,17 @@ components:
       required:
       - plan
       title: _AdminAssignPlanRequest
-    ValidationError:
+    _AdminUsersByPlanOut:
       properties:
-        loc:
+        user_ids:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            type: string
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: User Ids
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    _PlanOut:
-      properties:
-        id:
-          type: string
-          title: Id
-        name:
-          type: string
-          title: Name
-        daily_request_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Daily Request Limit
-        price_usd:
-          type: integer
-          title: Price Usd
-        kind:
-          type: string
-          title: Kind
-      type: object
-      required:
-      - id
-      - name
-      - daily_request_limit
-      - price_usd
-      - kind
-      title: _PlanOut
-    _OkOut:
-      properties:
-        ok:
-          type: boolean
-          title: Ok
-      type: object
-      required:
-      - ok
-      title: _OkOut
+      - user_ids
+      title: _AdminUsersByPlanOut
     _BillingMeOut:
       properties:
         user_id:
@@ -567,44 +534,6 @@ components:
       - quota_remaining
       - quota_percent
       title: _BillingMeOut
-    _AdminActivatePaymentRequest:
-      properties:
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-      type: object
-      title: _AdminActivatePaymentRequest
-    _AdminUsersByPlanOut:
-      properties:
-        user_ids:
-          items:
-            type: string
-          type: array
-          title: User Ids
-      type: object
-      required:
-      - user_ids
-      title: _AdminUsersByPlanOut
-    _CheckoutRequest:
-      properties:
-        plan:
-          type: string
-          title: Plan
-      type: object
-      required:
-      - plan
-      title: _CheckoutRequest
-    _AdminBlockRequest:
-      properties:
-        blocked:
-          type: boolean
-          title: Blocked
-      type: object
-      required:
-      - blocked
-      title: _AdminBlockRequest
     _AdminUserSummaryOut:
       properties:
         user_id:
@@ -658,15 +587,96 @@ components:
       - quota_used
       - quota_limit
       title: _AdminUserSummaryOut
-    _CheckoutOut:
+    PaymentRecord:
       properties:
-        invoice_url:
+        payment_id:
           type: string
-          title: Invoice Url
+          title: Payment Id
+        invoice_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Invoice Id
+        order_id:
+          type: string
+          title: Order Id
+        user_id:
+          type: string
+          title: User Id
+        plan:
+          type: string
+          title: Plan
+        price_amount:
+          type: number
+          title: Price Amount
+        price_currency:
+          type: string
+          title: Price Currency
+        pay_currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pay Currency
+        status:
+          type: string
+          title: Status
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
       type: object
       required:
-      - invoice_url
-      title: _CheckoutOut
+      - payment_id
+      - invoice_id
+      - order_id
+      - user_id
+      - plan
+      - price_amount
+      - price_currency
+      - pay_currency
+      - status
+      - created_at
+      - updated_at
+      title: PaymentRecord
+    _AdminBlockRequest:
+      properties:
+        blocked:
+          type: boolean
+          title: Blocked
+      type: object
+      required:
+      - blocked
+      title: _AdminBlockRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     _AdminUserOut:
       properties:
         user_id:
@@ -754,70 +764,60 @@ components:
       - expires_at
       - blocked
       title: _AdminUserOut
-    HTTPValidationError:
+    _PlanOut:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    PaymentRecord:
-      properties:
-        payment_id:
+        id:
           type: string
-          title: Payment Id
-        invoice_id:
+          title: Id
+        name:
+          type: string
+          title: Name
+        daily_request_limit:
           anyOf:
-          - type: string
+          - type: integer
           - type: 'null'
-          title: Invoice Id
-        order_id:
+          title: Daily Request Limit
+        price_usd:
+          type: integer
+          title: Price Usd
+        kind:
           type: string
-          title: Order Id
-        user_id:
-          type: string
-          title: User Id
+          title: Kind
+      type: object
+      required:
+      - id
+      - name
+      - daily_request_limit
+      - price_usd
+      - kind
+      title: _PlanOut
+    _CheckoutRequest:
+      properties:
         plan:
           type: string
           title: Plan
-        price_amount:
-          type: number
-          title: Price Amount
-        price_currency:
-          type: string
-          title: Price Currency
-        pay_currency:
+      type: object
+      required:
+      - plan
+      title: _CheckoutRequest
+    _AdminActivatePaymentRequest:
+      properties:
+        user_id:
           anyOf:
           - type: string
           - type: 'null'
-          title: Pay Currency
-        status:
+          title: User Id
+      type: object
+      title: _AdminActivatePaymentRequest
+    _CheckoutOut:
+      properties:
+        invoice_url:
           type: string
-          title: Status
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
+          title: Invoice Url
       type: object
       required:
-      - payment_id
-      - invoice_id
-      - order_id
-      - user_id
-      - plan
-      - price_amount
-      - price_currency
-      - pay_currency
-      - status
-      - created_at
-      - updated_at
-      title: PaymentRecord
+      - invoice_url
+      title: _CheckoutOut
     _AdminSetLimitRequest:
       properties:
         daily_request_limit:

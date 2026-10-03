@@ -192,56 +192,15 @@ paths:
       - Config
 components:
   schemas:
-    ValidationError:
+    HTTPValidationError:
       properties:
-        loc:
+        detail:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Detail
       type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    PassThroughGuardrailSettings:
-      properties:
-        request_fields:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Request Fields
-          description: 'JSONPath expressions for input field targeting (pre_call). Examples: ''query'', ''documents[*].text'', ''messages[*].content''. If not specified, guardrail runs on entire request payload.'
-        response_fields:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Response Fields
-          description: 'JSONPath expressions for output field targeting (post_call). Examples: ''results[*].text'', ''output''. If not specified, guardrail runs on entire response payload.'
-      type: object
-      title: PassThroughGuardrailSettings
-      description: 'Settings for a specific guardrail on a passthrough endpoint.
-
-
-        Allows field-level targeting for guardrail execution.'
+      title: HTTPValidationError
     PassThroughEndpointResponse:
       properties:
         endpoints:
@@ -253,15 +212,6 @@ components:
       required:
       - endpoints
       title: PassThroughEndpointResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     PassThroughGenericEndpoint:
       properties:
         id:
@@ -339,6 +289,56 @@ components:
       - path
       - target
       title: PassThroughGenericEndpoint
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PassThroughGuardrailSettings:
+      properties:
+        request_fields:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Request Fields
+          description: 'JSONPath expressions for input field targeting (pre_call). Examples: ''query'', ''documents[*].text'', ''messages[*].content''. If not specified, guardrail runs on entire request payload.'
+        response_fields:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Response Fields
+          description: 'JSONPath expressions for output field targeting (post_call). Examples: ''results[*].text'', ''output''. If not specified, guardrail runs on entire response payload.'
+      type: object
+      title: PassThroughGuardrailSettings
+      description: 'Settings for a specific guardrail on a passthrough endpoint.
+
+
+        Allows field-level targeting for guardrail execution.'
   securitySchemes:
     APIKeyHeader:
       type: apiKey

@@ -304,6 +304,15 @@ components:
       - custom_llm_provider
       title: LiteLLM_ManagedVectorStoresTable
       type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     VectorStoreDeleteRequest:
       properties:
         vector_store_id:
@@ -312,6 +321,45 @@ components:
       required:
       - vector_store_id
       title: VectorStoreDeleteRequest
+      type: object
+    VectorStoreUpdateRequest:
+      properties:
+        custom_llm_provider:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Custom Llm Provider
+        vector_store_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Vector Store Description
+        vector_store_id:
+          title: Vector Store Id
+          type: string
+        vector_store_metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Vector Store Metadata
+        vector_store_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Vector Store Name
+      required:
+      - vector_store_id
+      title: VectorStoreUpdateRequest
+      type: object
+    VectorStoreInfoRequest:
+      properties:
+        vector_store_id:
+          title: Vector Store Id
+          type: string
+      required:
+      - vector_store_id
+      title: VectorStoreInfoRequest
       type: object
     LiteLLM_ManagedVectorStoreListResponse:
       description: Response format for listing vector stores
@@ -341,41 +389,6 @@ components:
           - type: 'null'
           title: Total Pages
       title: LiteLLM_ManagedVectorStoreListResponse
-      type: object
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    VectorStoreInfoRequest:
-      properties:
-        vector_store_id:
-          title: Vector Store Id
-          type: string
-      required:
-      - vector_store_id
-      title: VectorStoreInfoRequest
       type: object
     ResponseLiteLLM_ManagedVectorStore:
       properties:
@@ -444,45 +457,32 @@ components:
           title: Vector Store Name
       title: LiteLLM_ManagedVectorStore
       type: object
-    HTTPValidationError:
+    ValidationError:
       properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    VectorStoreUpdateRequest:
-      properties:
-        custom_llm_provider:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Custom Llm Provider
-        vector_store_description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Vector Store Description
-        vector_store_id:
-          title: Vector Store Id
+          title: Location
+        msg:
           type: string
-        vector_store_metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Vector Store Metadata
-        vector_store_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Vector Store Name
-      required:
-      - vector_store_id
-      title: VectorStoreUpdateRequest
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

@@ -245,55 +245,6 @@ paths:
       - config_overrides
 components:
   schemas:
-    ConfigOverrideSettingsResponse:
-      description: Response model for config override settings GET endpoints.
-      properties:
-        config_type:
-          description: The type of config override
-          title: Config Type
-          type: string
-        field_schema:
-          additionalProperties: true
-          description: Schema information for UI rendering
-          title: Field Schema
-          type: object
-        values:
-          additionalProperties: true
-          description: Current configuration values (sensitive fields decrypted)
-          title: Values
-          type: object
-      required:
-      - config_type
-      - values
-      - field_schema
-      title: ConfigOverrideSettingsResponse
-      type: object
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     HTTPValidationError:
       properties:
         detail:
@@ -303,59 +254,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    CyberArkConfig:
-      description: Configuration for CyberArk Conjur secret manager integration.
-      properties:
-        client_cert:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Path to the client TLS certificate for certificate-based authentication
-          title: Client Cert
-        client_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Path to the client TLS private key for certificate-based authentication
-          title: Client Key
-        cyberark_account:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: The Conjur organization account name
-          title: Cyberark Account
-        cyberark_api_base:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: The address of the CyberArk Conjur server (e.g., https://conjur.example.com)
-          title: Cyberark Api Base
-        cyberark_api_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: API key for Conjur API-key authentication
-          title: Cyberark Api Key
-        cyberark_username:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: The Conjur username (login) to authenticate as
-          title: Cyberark Username
-        refresh_interval:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: 'Auth token cache TTL in seconds (default: 300)'
-          title: Refresh Interval
-        ssl_verify:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Set to false to disable SSL verification (e.g., for self-signed certificates)
-          title: Ssl Verify
-      title: CyberArkConfig
-      type: object
     HashicorpVaultConfig:
       description: Configuration for Hashicorp Vault secret manager integration.
       properties:
@@ -426,6 +324,108 @@ components:
           description: Token for Vault token-based authentication
           title: Vault Token
       title: HashicorpVaultConfig
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ConfigOverrideSettingsResponse:
+      description: Response model for config override settings GET endpoints.
+      properties:
+        config_type:
+          description: The type of config override
+          title: Config Type
+          type: string
+        field_schema:
+          additionalProperties: true
+          description: Schema information for UI rendering
+          title: Field Schema
+          type: object
+        values:
+          additionalProperties: true
+          description: Current configuration values (sensitive fields decrypted)
+          title: Values
+          type: object
+      required:
+      - config_type
+      - values
+      - field_schema
+      title: ConfigOverrideSettingsResponse
+      type: object
+    CyberArkConfig:
+      description: Configuration for CyberArk Conjur secret manager integration.
+      properties:
+        client_cert:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Path to the client TLS certificate for certificate-based authentication
+          title: Client Cert
+        client_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Path to the client TLS private key for certificate-based authentication
+          title: Client Key
+        cyberark_account:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The Conjur organization account name
+          title: Cyberark Account
+        cyberark_api_base:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The address of the CyberArk Conjur server (e.g., https://conjur.example.com)
+          title: Cyberark Api Base
+        cyberark_api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key for Conjur API-key authentication
+          title: Cyberark Api Key
+        cyberark_username:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The Conjur username (login) to authenticate as
+          title: Cyberark Username
+        refresh_interval:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Auth token cache TTL in seconds (default: 300)'
+          title: Refresh Interval
+        ssl_verify:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Set to false to disable SSL verification (e.g., for self-signed certificates)
+          title: Ssl Verify
+      title: CyberArkConfig
       type: object
   securitySchemes:
     APIKeyHeader:

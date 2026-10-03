@@ -102,43 +102,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    KeyMetricWithMetadata:
-      properties:
-        metrics:
-          $ref: '#/components/schemas/SpendMetrics'
-        metadata:
-          $ref: '#/components/schemas/KeyMetadata'
-      type: object
-      required:
-      - metrics
-      title: KeyMetricWithMetadata
-      description: Base class for metrics with additional metadata
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     MetricWithMetadata:
       properties:
         metrics:
@@ -156,120 +119,6 @@ components:
       required:
       - metrics
       title: MetricWithMetadata
-    SpendAnalyticsPaginatedResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/DailySpendData'
-          type: array
-          title: Results
-        metadata:
-          $ref: '#/components/schemas/DailySpendMetadata'
-      type: object
-      required:
-      - results
-      title: SpendAnalyticsPaginatedResponse
-    KeyMetadata:
-      properties:
-        key_alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Key Alias
-        team_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Team Id
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-        user_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Email
-      type: object
-      title: KeyMetadata
-      description: Metadata for a key
-    DailySpendMetadata:
-      properties:
-        total_spend:
-          type: number
-          title: Total Spend
-          default: 0.0
-        total_flat_cost:
-          type: number
-          title: Total Flat Cost
-          default: 0.0
-        total_prompt_tokens:
-          type: integer
-          title: Total Prompt Tokens
-          default: 0
-        total_completion_tokens:
-          type: integer
-          title: Total Completion Tokens
-          default: 0
-        total_tokens:
-          type: integer
-          title: Total Tokens
-          default: 0
-        total_api_requests:
-          type: integer
-          title: Total Api Requests
-          default: 0
-        total_successful_requests:
-          type: integer
-          title: Total Successful Requests
-          default: 0
-        total_failed_requests:
-          type: integer
-          title: Total Failed Requests
-          default: 0
-        total_cache_read_input_tokens:
-          type: integer
-          title: Total Cache Read Input Tokens
-          default: 0
-        total_cache_creation_input_tokens:
-          type: integer
-          title: Total Cache Creation Input Tokens
-          default: 0
-        total_compression_saved_tokens:
-          type: integer
-          title: Total Compression Saved Tokens
-          default: 0
-        total_compression_savings_spend:
-          type: number
-          title: Total Compression Savings Spend
-          default: 0.0
-        total_prompt_caching_savings_spend:
-          type: number
-          title: Total Prompt Caching Savings Spend
-          default: 0.0
-        total_gateway_injected_caching_savings_spend:
-          type: number
-          title: Total Gateway Injected Caching Savings Spend
-          default: 0.0
-        total_autorouter_savings_spend:
-          type: number
-          title: Total Autorouter Savings Spend
-          default: 0.0
-        page:
-          type: integer
-          title: Page
-          default: 1
-        total_pages:
-          type: integer
-          title: Total Pages
-          default: 1
-        has_more:
-          type: boolean
-          title: Has More
-          default: false
-      type: object
-      title: DailySpendMetadata
     HTTPValidationError:
       properties:
         detail:
@@ -383,6 +232,81 @@ components:
           default: 0
       type: object
       title: SpendMetrics
+    KeyMetricWithMetadata:
+      properties:
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        metadata:
+          $ref: '#/components/schemas/KeyMetadata'
+      type: object
+      required:
+      - metrics
+      title: KeyMetricWithMetadata
+      description: Base class for metrics with additional metadata
+    KeyMetadata:
+      properties:
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+      type: object
+      title: KeyMetadata
+      description: Metadata for a key
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    SpendAnalyticsPaginatedResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/DailySpendData'
+          type: array
+          title: Results
+        metadata:
+          $ref: '#/components/schemas/DailySpendMetadata'
+      type: object
+      required:
+      - results
+      title: SpendAnalyticsPaginatedResponse
     DailySpendData:
       properties:
         date:
@@ -398,6 +322,82 @@ components:
       - date
       - metrics
       title: DailySpendData
+    DailySpendMetadata:
+      properties:
+        total_spend:
+          type: number
+          title: Total Spend
+          default: 0.0
+        total_flat_cost:
+          type: number
+          title: Total Flat Cost
+          default: 0.0
+        total_prompt_tokens:
+          type: integer
+          title: Total Prompt Tokens
+          default: 0
+        total_completion_tokens:
+          type: integer
+          title: Total Completion Tokens
+          default: 0
+        total_tokens:
+          type: integer
+          title: Total Tokens
+          default: 0
+        total_api_requests:
+          type: integer
+          title: Total Api Requests
+          default: 0
+        total_successful_requests:
+          type: integer
+          title: Total Successful Requests
+          default: 0
+        total_failed_requests:
+          type: integer
+          title: Total Failed Requests
+          default: 0
+        total_cache_read_input_tokens:
+          type: integer
+          title: Total Cache Read Input Tokens
+          default: 0
+        total_cache_creation_input_tokens:
+          type: integer
+          title: Total Cache Creation Input Tokens
+          default: 0
+        total_compression_saved_tokens:
+          type: integer
+          title: Total Compression Saved Tokens
+          default: 0
+        total_compression_savings_spend:
+          type: number
+          title: Total Compression Savings Spend
+          default: 0.0
+        total_prompt_caching_savings_spend:
+          type: number
+          title: Total Prompt Caching Savings Spend
+          default: 0.0
+        total_gateway_injected_caching_savings_spend:
+          type: number
+          title: Total Gateway Injected Caching Savings Spend
+          default: 0.0
+        total_autorouter_savings_spend:
+          type: number
+          title: Total Autorouter Savings Spend
+          default: 0.0
+        page:
+          type: integer
+          title: Page
+          default: 1
+        total_pages:
+          type: integer
+          title: Total Pages
+          default: 1
+        has_more:
+          type: boolean
+          title: Has More
+          default: false
+      type: object
+      title: DailySpendMetadata
   securitySchemes:
     APIKeyHeader:
       type: apiKey

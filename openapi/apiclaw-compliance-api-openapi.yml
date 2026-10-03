@@ -91,54 +91,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    ComplianceCheckResult:
-      properties:
-        check_name:
-          type: string
-          title: Check Name
-        article:
-          type: string
-          title: Article
-        passed:
-          type: boolean
-          title: Passed
-        detail:
-          type: string
-          title: Detail
-      type: object
-      required:
-      - check_name
-      - article
-      - passed
-      - detail
-      title: ComplianceCheckResult
-      description: Result of a single compliance check.
     ComplianceCheckRequest:
       properties:
         request_id:
@@ -175,6 +127,15 @@ components:
 
 
         Mirrors the spend log fields needed for compliance evaluation.'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ComplianceResponse:
       properties:
         compliant:
@@ -195,15 +156,54 @@ components:
       - checks
       title: ComplianceResponse
       description: Response from a compliance check endpoint.
-    HTTPValidationError:
+    ComplianceCheckResult:
       properties:
+        check_name:
+          type: string
+          title: Check Name
+        article:
+          type: string
+          title: Article
+        passed:
+          type: boolean
+          title: Passed
         detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
+          type: string
           title: Detail
       type: object
-      title: HTTPValidationError
+      required:
+      - check_name
+      - article
+      - passed
+      - detail
+      title: ComplianceCheckResult
+      description: Result of a single compliance check.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

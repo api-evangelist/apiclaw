@@ -163,29 +163,24 @@ components:
       - created_at
       - expires_at
       title: _AnnouncementOut
-    _CreateAnnouncementRequest:
+    _OkOut:
       properties:
-        title:
-          type: string
-          title: Title
-        body:
-          type: string
-          title: Body
-        link_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Link Url
-        link_label:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Link Label
+        ok:
+          type: boolean
+          title: Ok
       type: object
       required:
-      - title
-      - body
-      title: _CreateAnnouncementRequest
+      - ok
+      title: _OkOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -212,24 +207,29 @@ components:
       - msg
       - type
       title: ValidationError
-    _OkOut:
+    _CreateAnnouncementRequest:
       properties:
-        ok:
-          type: boolean
-          title: Ok
+        title:
+          type: string
+          title: Title
+        body:
+          type: string
+          title: Body
+        link_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Link Url
+        link_label:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Link Label
       type: object
       required:
-      - ok
-      title: _OkOut
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+      - title
+      - body
+      title: _CreateAnnouncementRequest
   securitySchemes:
     APIKeyHeader:
       type: apiKey
