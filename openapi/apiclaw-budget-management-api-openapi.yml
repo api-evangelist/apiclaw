@@ -277,37 +277,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ListMeta:
-      properties:
-        total_count:
-          type: integer
-          title: Total Count
-        page:
-          type: integer
-          title: Page
-        page_size:
-          type: integer
-          title: Page Size
-        total_pages:
-          type: integer
-          title: Total Pages
-      type: object
-      required:
-      - total_count
-      - page
-      - page_size
-      - total_pages
-      title: ListMeta
-      description: 'Page-mode counterpart to `PageMeta`: an entity list pays for the COUNT(*) so the table can show a page count.'
     BudgetConfig:
       properties:
         max_budget:
@@ -332,23 +301,6 @@ components:
           title: Rpm Limit
       type: object
       title: BudgetConfig
-    ListResponse_BudgetListItem_:
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/BudgetListItem'
-          type: array
-          title: Data
-        meta:
-          $ref: '#/components/schemas/ListMeta'
-        links:
-          $ref: '#/components/schemas/ListLinks'
-      type: object
-      required:
-      - data
-      - meta
-      - links
-      title: ListResponse[BudgetListItem]
     BudgetListItem:
       properties:
         budget_id:
@@ -407,6 +359,91 @@ components:
         numbers: they are `BigInt?` in the schema, which the query engine hands back as
 
         decimal strings, and a quoted "60000" breaks arithmetic in the dashboard.'
+    BudgetDeleteRequest:
+      properties:
+        id:
+          type: string
+          title: Id
+      type: object
+      required:
+      - id
+      title: BudgetDeleteRequest
+    ListLinks:
+      properties:
+        self:
+          type: string
+          title: Self
+        first:
+          type: string
+          title: First
+        prev:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev
+        next:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next
+        last:
+          type: string
+          title: Last
+      type: object
+      required:
+      - self
+      - first
+      - last
+      title: ListLinks
+      description: Page-mode counterpart to `PageLinks`. `first`/`last` are knowable here because the total count is.
+    ListMeta:
+      properties:
+        total_count:
+          type: integer
+          title: Total Count
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+      type: object
+      required:
+      - total_count
+      - page
+      - page_size
+      - total_pages
+      title: ListMeta
+      description: 'Page-mode counterpart to `PageMeta`: an entity list pays for the COUNT(*) so the table can show a page count.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     BudgetNewRequest:
       properties:
         budget_id:
@@ -468,41 +505,23 @@ components:
           description: Datetime when the budget is reset
       type: object
       title: BudgetNewRequest
-    ValidationError:
+    ListResponse_BudgetListItem_:
       properties:
-        loc:
+        data:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/BudgetListItem'
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Data
+        meta:
+          $ref: '#/components/schemas/ListMeta'
+        links:
+          $ref: '#/components/schemas/ListLinks'
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    BudgetDeleteRequest:
-      properties:
-        id:
-          type: string
-          title: Id
-      type: object
-      required:
-      - id
-      title: BudgetDeleteRequest
+      - data
+      - meta
+      - links
+      title: ListResponse[BudgetListItem]
     BudgetRequest:
       properties:
         budgets:
@@ -514,34 +533,15 @@ components:
       required:
       - budgets
       title: BudgetRequest
-    ListLinks:
+    HTTPValidationError:
       properties:
-        self:
-          type: string
-          title: Self
-        first:
-          type: string
-          title: First
-        prev:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Prev
-        next:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next
-        last:
-          type: string
-          title: Last
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - self
-      - first
-      - last
-      title: ListLinks
-      description: Page-mode counterpart to `PageLinks`. `first`/`last` are knowable here because the total count is.
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

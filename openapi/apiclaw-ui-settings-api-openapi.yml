@@ -112,15 +112,35 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    HTTPValidationError:
+    UserBanner:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        enabled:
+          type: boolean
+          title: Enabled
+          description: If true, the banner is shown to all authenticated dashboard users.
+          default: false
+        message:
+          type: string
+          maxLength: 4000
+          title: Message
+          description: Banner text shown to dashboard users. Markdown is supported.
+          default: ''
+        severity:
+          type: string
+          enum:
+          - info
+          - warning
+          - error
+          title: Severity
+          description: Visual style of the banner.
+          default: info
+        revision:
+          type: string
+          title: Revision
+          description: Server-stamped opaque publish identity; a fresh value is generated on every update so clients re-surface dismissed banners on republish.
+          default: ''
       type: object
-      title: HTTPValidationError
+      title: UserBanner
     UserBannerUpdate:
       properties:
         enabled:
@@ -161,47 +181,6 @@ components:
       - field_schema
       title: UISettingsResponse
       description: Response model for UI settings
-    UserBanner:
-      properties:
-        enabled:
-          type: boolean
-          title: Enabled
-          description: If true, the banner is shown to all authenticated dashboard users.
-          default: false
-        message:
-          type: string
-          maxLength: 4000
-          title: Message
-          description: Banner text shown to dashboard users. Markdown is supported.
-          default: ''
-        severity:
-          type: string
-          enum:
-          - info
-          - warning
-          - error
-          title: Severity
-          description: Visual style of the banner.
-          default: info
-        revision:
-          type: string
-          title: Revision
-          description: Server-stamped opaque publish identity; a fresh value is generated on every update so clients re-surface dismissed banners on republish.
-          default: ''
-      type: object
-      title: UserBanner
-    UpdateUserBannerResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-        banner:
-          $ref: '#/components/schemas/UserBanner'
-      type: object
-      required:
-      - message
-      - banner
-      title: UpdateUserBannerResponse
     ValidationError:
       properties:
         loc:
@@ -228,6 +207,27 @@ components:
       - msg
       - type
       title: ValidationError
+    UpdateUserBannerResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+        banner:
+          $ref: '#/components/schemas/UserBanner'
+      type: object
+      required:
+      - message
+      - banner
+      title: UpdateUserBannerResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

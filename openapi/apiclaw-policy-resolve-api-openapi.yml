@@ -133,46 +133,6 @@ paths:
       - policy_resolve
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    PolicyResolveRequest:
-      description: Request body for resolving effective policies/guardrails for a context.
-      properties:
-        key_alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Key alias to resolve for.
-          title: Key Alias
-        model:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Model name to resolve for.
-          title: Model
-        tags:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          description: Tags to resolve for.
-          title: Tags
-        team_alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Team alias to resolve for.
-          title: Team Alias
-      title: PolicyResolveRequest
-      type: object
     PolicyMatchDetail:
       description: Details about why a specific policy matched.
       properties:
@@ -195,32 +155,6 @@ components:
       - matched_via
       title: PolicyMatchDetail
       type: object
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     PolicyResolveResponse:
       description: Response for resolving effective policies/guardrails for a context.
       properties:
@@ -237,6 +171,43 @@ components:
           title: Matched Policies
           type: array
       title: PolicyResolveResponse
+      type: object
+    AttachmentImpactResponse:
+      description: Response for estimating the impact of a policy attachment.
+      properties:
+        affected_keys_count:
+          default: 0
+          description: Number of keys that would be affected (named + unnamed).
+          title: Affected Keys Count
+          type: integer
+        affected_teams_count:
+          default: 0
+          description: Number of teams that would be affected (named + unnamed).
+          title: Affected Teams Count
+          type: integer
+        sample_keys:
+          description: Sample of affected key aliases (up to 10).
+          items:
+            type: string
+          title: Sample Keys
+          type: array
+        sample_teams:
+          description: Sample of affected team aliases (up to 10).
+          items:
+            type: string
+          title: Sample Teams
+          type: array
+        unnamed_keys_count:
+          default: 0
+          description: Number of affected keys without an alias.
+          title: Unnamed Keys Count
+          type: integer
+        unnamed_teams_count:
+          default: 0
+          description: Number of affected teams without an alias.
+          title: Unnamed Teams Count
+          type: integer
+      title: AttachmentImpactResponse
       type: object
     PolicyAttachmentCreateRequest:
       properties:
@@ -287,43 +258,72 @@ components:
       - policy_name
       title: PolicyAttachmentCreateRequest
       description: Request body for creating a policy attachment.
-    AttachmentImpactResponse:
-      description: Response for estimating the impact of a policy attachment.
+    ValidationError:
       properties:
-        affected_keys_count:
-          default: 0
-          description: Number of keys that would be affected (named + unnamed).
-          title: Affected Keys Count
-          type: integer
-        affected_teams_count:
-          default: 0
-          description: Number of teams that would be affected (named + unnamed).
-          title: Affected Teams Count
-          type: integer
-        sample_keys:
-          description: Sample of affected key aliases (up to 10).
+        loc:
           items:
-            type: string
-          title: Sample Keys
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-        sample_teams:
-          description: Sample of affected team aliases (up to 10).
-          items:
-            type: string
-          title: Sample Teams
-          type: array
-        unnamed_keys_count:
-          default: 0
-          description: Number of affected keys without an alias.
-          title: Unnamed Keys Count
-          type: integer
-        unnamed_teams_count:
-          default: 0
-          description: Number of affected teams without an alias.
-          title: Unnamed Teams Count
-          type: integer
-      title: AttachmentImpactResponse
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PolicyResolveRequest:
+      description: Request body for resolving effective policies/guardrails for a context.
+      properties:
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Key alias to resolve for.
+          title: Key Alias
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Model name to resolve for.
+          title: Model
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          description: Tags to resolve for.
+          title: Tags
+        team_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Team alias to resolve for.
+          title: Team Alias
+      title: PolicyResolveRequest
+      type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

@@ -404,279 +404,26 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    _OkOut:
-      properties:
-        ok:
-          type: boolean
-          title: Ok
-      type: object
-      required:
-      - ok
-      title: _OkOut
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    _AdminAssignPlanRequest:
-      properties:
-        plan:
-          type: string
-          title: Plan
-        daily_request_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Daily Request Limit
-        started_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Started At
-        expires_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Expires At
-      type: object
-      required:
-      - plan
-      title: _AdminAssignPlanRequest
-    _AdminUsersByPlanOut:
-      properties:
-        user_ids:
-          items:
-            type: string
-          type: array
-          title: User Ids
-      type: object
-      required:
-      - user_ids
-      title: _AdminUsersByPlanOut
-    _BillingMeOut:
+    _AdminActivatePaymentRequest:
       properties:
         user_id:
-          type: string
+          anyOf:
+          - type: string
+          - type: 'null'
           title: User Id
-        is_trial:
-          type: boolean
-          title: Is Trial
-        plan:
-          type: string
-          title: Plan
-        plan_name:
-          type: string
-          title: Plan Name
-        status:
-          type: string
-          title: Status
+      type: object
+      title: _AdminActivatePaymentRequest
+    _AdminSetLimitRequest:
+      properties:
         daily_request_limit:
           anyOf:
           - type: integer
           - type: 'null'
           title: Daily Request Limit
-        usage_today:
-          type: integer
-          title: Usage Today
-        started_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Started At
-        expires_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Expires At
-        trial_used:
-          type: integer
-          title: Trial Used
-        trial_limit:
-          type: integer
-          title: Trial Limit
-        quota_used:
-          type: integer
-          title: Quota Used
-        quota_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Quota Limit
-        quota_remaining:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Quota Remaining
-        quota_percent:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Quota Percent
       type: object
       required:
-      - user_id
-      - is_trial
-      - plan
-      - plan_name
-      - status
       - daily_request_limit
-      - usage_today
-      - started_at
-      - expires_at
-      - trial_used
-      - trial_limit
-      - quota_used
-      - quota_limit
-      - quota_remaining
-      - quota_percent
-      title: _BillingMeOut
-    _AdminUserSummaryOut:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-        plan:
-          type: string
-          title: Plan
-        plan_name:
-          type: string
-          title: Plan Name
-        status:
-          type: string
-          title: Status
-        effective_daily_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Effective Daily Limit
-        is_trial:
-          type: boolean
-          title: Is Trial
-        usage_today:
-          type: integer
-          title: Usage Today
-        trial_used:
-          type: integer
-          title: Trial Used
-        trial_limit:
-          type: integer
-          title: Trial Limit
-        quota_used:
-          type: integer
-          title: Quota Used
-        quota_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Quota Limit
-      type: object
-      required:
-      - user_id
-      - plan
-      - plan_name
-      - status
-      - effective_daily_limit
-      - is_trial
-      - usage_today
-      - trial_used
-      - trial_limit
-      - quota_used
-      - quota_limit
-      title: _AdminUserSummaryOut
-    PaymentRecord:
-      properties:
-        payment_id:
-          type: string
-          title: Payment Id
-        invoice_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Invoice Id
-        order_id:
-          type: string
-          title: Order Id
-        user_id:
-          type: string
-          title: User Id
-        plan:
-          type: string
-          title: Plan
-        price_amount:
-          type: number
-          title: Price Amount
-        price_currency:
-          type: string
-          title: Price Currency
-        pay_currency:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Pay Currency
-        status:
-          type: string
-          title: Status
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-      type: object
-      required:
-      - payment_id
-      - invoice_id
-      - order_id
-      - user_id
-      - plan
-      - price_amount
-      - price_currency
-      - pay_currency
-      - status
-      - created_at
-      - updated_at
-      title: PaymentRecord
-    _AdminBlockRequest:
-      properties:
-        blocked:
-          type: boolean
-          title: Blocked
-      type: object
-      required:
-      - blocked
-      title: _AdminBlockRequest
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      title: _AdminSetLimitRequest
     _AdminUserOut:
       properties:
         user_id:
@@ -791,24 +538,184 @@ components:
       - price_usd
       - kind
       title: _PlanOut
-    _CheckoutRequest:
+    PaymentRecord:
+      properties:
+        payment_id:
+          type: string
+          title: Payment Id
+        invoice_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Invoice Id
+        order_id:
+          type: string
+          title: Order Id
+        user_id:
+          type: string
+          title: User Id
+        plan:
+          type: string
+          title: Plan
+        price_amount:
+          type: number
+          title: Price Amount
+        price_currency:
+          type: string
+          title: Price Currency
+        pay_currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pay Currency
+        status:
+          type: string
+          title: Status
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+      type: object
+      required:
+      - payment_id
+      - invoice_id
+      - order_id
+      - user_id
+      - plan
+      - price_amount
+      - price_currency
+      - pay_currency
+      - status
+      - created_at
+      - updated_at
+      title: PaymentRecord
+    _OkOut:
+      properties:
+        ok:
+          type: boolean
+          title: Ok
+      type: object
+      required:
+      - ok
+      title: _OkOut
+    _AdminAssignPlanRequest:
       properties:
         plan:
           type: string
           title: Plan
-      type: object
-      required:
-      - plan
-      title: _CheckoutRequest
-    _AdminActivatePaymentRequest:
-      properties:
-        user_id:
+        daily_request_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Daily Request Limit
+        started_at:
           anyOf:
           - type: string
           - type: 'null'
-          title: User Id
+          title: Started At
+        expires_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Expires At
       type: object
-      title: _AdminActivatePaymentRequest
+      required:
+      - plan
+      title: _AdminAssignPlanRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    _AdminUsersByPlanOut:
+      properties:
+        user_ids:
+          items:
+            type: string
+          type: array
+          title: User Ids
+      type: object
+      required:
+      - user_ids
+      title: _AdminUsersByPlanOut
+    _AdminUserSummaryOut:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        plan:
+          type: string
+          title: Plan
+        plan_name:
+          type: string
+          title: Plan Name
+        status:
+          type: string
+          title: Status
+        effective_daily_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Effective Daily Limit
+        is_trial:
+          type: boolean
+          title: Is Trial
+        usage_today:
+          type: integer
+          title: Usage Today
+        trial_used:
+          type: integer
+          title: Trial Used
+        trial_limit:
+          type: integer
+          title: Trial Limit
+        quota_used:
+          type: integer
+          title: Quota Used
+        quota_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Quota Limit
+      type: object
+      required:
+      - user_id
+      - plan
+      - plan_name
+      - status
+      - effective_daily_limit
+      - is_trial
+      - usage_today
+      - trial_used
+      - trial_limit
+      - quota_used
+      - quota_limit
+      title: _AdminUserSummaryOut
     _CheckoutOut:
       properties:
         invoice_url:
@@ -818,17 +725,110 @@ components:
       required:
       - invoice_url
       title: _CheckoutOut
-    _AdminSetLimitRequest:
+    _BillingMeOut:
       properties:
+        user_id:
+          type: string
+          title: User Id
+        is_trial:
+          type: boolean
+          title: Is Trial
+        plan:
+          type: string
+          title: Plan
+        plan_name:
+          type: string
+          title: Plan Name
+        status:
+          type: string
+          title: Status
         daily_request_limit:
           anyOf:
           - type: integer
           - type: 'null'
           title: Daily Request Limit
+        usage_today:
+          type: integer
+          title: Usage Today
+        started_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Started At
+        expires_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Expires At
+        trial_used:
+          type: integer
+          title: Trial Used
+        trial_limit:
+          type: integer
+          title: Trial Limit
+        quota_used:
+          type: integer
+          title: Quota Used
+        quota_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Quota Limit
+        quota_remaining:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Quota Remaining
+        quota_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Quota Percent
       type: object
       required:
+      - user_id
+      - is_trial
+      - plan
+      - plan_name
+      - status
       - daily_request_limit
-      title: _AdminSetLimitRequest
+      - usage_today
+      - started_at
+      - expires_at
+      - trial_used
+      - trial_limit
+      - quota_used
+      - quota_limit
+      - quota_remaining
+      - quota_percent
+      title: _BillingMeOut
+    _CheckoutRequest:
+      properties:
+        plan:
+          type: string
+          title: Plan
+      type: object
+      required:
+      - plan
+      title: _CheckoutRequest
+    _AdminBlockRequest:
+      properties:
+        blocked:
+          type: boolean
+          title: Blocked
+      type: object
+      required:
+      - blocked
+      title: _AdminBlockRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

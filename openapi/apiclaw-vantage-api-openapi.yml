@@ -211,35 +211,28 @@ paths:
       - vantage
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    VantageInitRequest:
-      description: Request model for initializing Vantage settings
+    VantageSettingsUpdate:
+      description: Request model for updating Vantage settings
       properties:
         api_key:
-          description: Vantage API key for authentication
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New Vantage API key for authentication
           title: Api Key
-          type: string
         base_url:
-          default: https://api.vantage.sh
-          description: 'Vantage API base URL (default: https://api.vantage.sh)'
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New Vantage API base URL
           title: Base Url
-          type: string
         integration_token:
-          description: Vantage integration token for the cost-import endpoint
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New Vantage integration token
           title: Integration Token
-          type: string
-      required:
-      - api_key
-      - integration_token
-      title: VantageInitRequest
+      title: VantageSettingsUpdate
       type: object
     VantageSettingsView:
       description: Response model for viewing Vantage settings with masked API key
@@ -270,6 +263,18 @@ components:
           title: Status
       title: VantageSettingsView
       type: object
+    VantageDryRunRequest:
+      description: Request model for Vantage dry-run operations (capped for preview)
+      properties:
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: 500
+          description: 'Limit on number of records to preview (default: 500)'
+          title: Limit
+      title: VantageDryRunRequest
+      type: object
     VantageExportRequest:
       description: Request model for Vantage export operations (actual export, no default limit)
       properties:
@@ -295,6 +300,67 @@ components:
           title: Start Time Utc
       title: VantageExportRequest
       type: object
+    VantageInitResponse:
+      description: Response model for Vantage initialization
+      properties:
+        message:
+          title: Message
+          type: string
+        status:
+          title: Status
+          type: string
+      required:
+      - message
+      - status
+      title: VantageInitResponse
+      type: object
+    VantageInitRequest:
+      description: Request model for initializing Vantage settings
+      properties:
+        api_key:
+          description: Vantage API key for authentication
+          title: Api Key
+          type: string
+        base_url:
+          default: https://api.vantage.sh
+          description: 'Vantage API base URL (default: https://api.vantage.sh)'
+          title: Base Url
+          type: string
+        integration_token:
+          description: Vantage integration token for the cost-import endpoint
+          title: Integration Token
+          type: string
+      required:
+      - api_key
+      - integration_token
+      title: VantageInitRequest
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     VantageExportResponse:
       description: Response model for Vantage export operations
       properties:
@@ -323,81 +389,15 @@ components:
       - status
       title: VantageExportResponse
       type: object
-    VantageSettingsUpdate:
-      description: Request model for updating Vantage settings
+    HTTPValidationError:
       properties:
-        api_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: New Vantage API key for authentication
-          title: Api Key
-        base_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: New Vantage API base URL
-          title: Base Url
-        integration_token:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: New Vantage integration token
-          title: Integration Token
-      title: VantageSettingsUpdate
-      type: object
-    ValidationError:
-      properties:
-        loc:
+        detail:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Detail
       type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    VantageDryRunRequest:
-      description: Request model for Vantage dry-run operations (capped for preview)
-      properties:
-        limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          default: 500
-          description: 'Limit on number of records to preview (default: 500)'
-          title: Limit
-      title: VantageDryRunRequest
-      type: object
-    VantageInitResponse:
-      description: Response model for Vantage initialization
-      properties:
-        message:
-          title: Message
-          type: string
-        status:
-          title: Status
-          type: string
-      required:
-      - message
-      - status
-      title: VantageInitResponse
-      type: object
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

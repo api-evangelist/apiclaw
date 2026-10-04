@@ -76,50 +76,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    RouterSettingsResponse:
-      properties:
-        fields:
-          items:
-            $ref: '#/components/schemas/RouterSettingsField'
-          type: array
-          title: Fields
-          description: List of all configurable router settings with metadata
-        current_values:
-          additionalProperties: true
-          type: object
-          title: Current Values
-          description: Current values of router settings
-        routing_strategy_descriptions:
-          additionalProperties:
-            type: string
-          type: object
-          title: Routing Strategy Descriptions
-          description: Descriptions for each routing strategy option
-      type: object
-      required:
-      - fields
-      - current_values
-      - routing_strategy_descriptions
-      title: RouterSettingsResponse
-    RouterFieldsResponse:
-      properties:
-        fields:
-          items:
-            $ref: '#/components/schemas/RouterSettingsField'
-          type: array
-          title: Fields
-          description: List of all configurable router settings with metadata (without field values)
-        routing_strategy_descriptions:
-          additionalProperties:
-            type: string
-          type: object
-          title: Routing Strategy Descriptions
-          description: Descriptions for each routing strategy option
-      type: object
-      required:
-      - fields
-      - routing_strategy_descriptions
-      title: RouterFieldsResponse
     RouterSettingsField:
       properties:
         field_name:
@@ -158,6 +114,50 @@ components:
       - field_description
       - ui_field_name
       title: RouterSettingsField
+    RouterFieldsResponse:
+      properties:
+        fields:
+          items:
+            $ref: '#/components/schemas/RouterSettingsField'
+          type: array
+          title: Fields
+          description: List of all configurable router settings with metadata (without field values)
+        routing_strategy_descriptions:
+          additionalProperties:
+            type: string
+          type: object
+          title: Routing Strategy Descriptions
+          description: Descriptions for each routing strategy option
+      type: object
+      required:
+      - fields
+      - routing_strategy_descriptions
+      title: RouterFieldsResponse
+    RouterSettingsResponse:
+      properties:
+        fields:
+          items:
+            $ref: '#/components/schemas/RouterSettingsField'
+          type: array
+          title: Fields
+          description: List of all configurable router settings with metadata
+        current_values:
+          additionalProperties: true
+          type: object
+          title: Current Values
+          description: Current values of router settings
+        routing_strategy_descriptions:
+          additionalProperties:
+            type: string
+          type: object
+          title: Routing Strategy Descriptions
+          description: Descriptions for each routing strategy option
+      type: object
+      required:
+      - fields
+      - current_values
+      - routing_strategy_descriptions
+      title: RouterSettingsResponse
   securitySchemes:
     APIKeyHeader:
       type: apiKey

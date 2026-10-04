@@ -340,15 +340,27 @@ paths:
       - anthropic_skills
 components:
   schemas:
-    HTTPValidationError:
+    ListSkillsResponse:
+      description: Response from listing skills
       properties:
-        detail:
+        data:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/Skill'
+          title: Data
           type: array
-          title: Detail
+        has_more:
+          default: false
+          title: Has More
+          type: boolean
+        next_page:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Page
+      required:
+      - data
+      title: ListSkillsResponse
       type: object
-      title: HTTPValidationError
     Skill:
       description: Represents a skill from the Anthropic Skills API
       properties:
@@ -435,27 +447,15 @@ components:
       - id
       title: DeleteSkillResponse
       type: object
-    ListSkillsResponse:
-      description: Response from listing skills
+    HTTPValidationError:
       properties:
-        data:
+        detail:
           items:
-            $ref: '#/components/schemas/Skill'
-          title: Data
+            $ref: '#/components/schemas/ValidationError'
           type: array
-        has_more:
-          default: false
-          title: Has More
-          type: boolean
-        next_page:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next Page
-      required:
-      - data
-      title: ListSkillsResponse
+          title: Detail
       type: object
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

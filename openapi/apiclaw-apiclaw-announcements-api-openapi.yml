@@ -172,15 +172,29 @@ components:
       required:
       - ok
       title: _OkOut
-    HTTPValidationError:
+    _CreateAnnouncementRequest:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        title:
+          type: string
+          title: Title
+        body:
+          type: string
+          title: Body
+        link_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Link Url
+        link_label:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Link Label
       type: object
-      title: HTTPValidationError
+      required:
+      - title
+      - body
+      title: _CreateAnnouncementRequest
     ValidationError:
       properties:
         loc:
@@ -207,29 +221,15 @@ components:
       - msg
       - type
       title: ValidationError
-    _CreateAnnouncementRequest:
+    HTTPValidationError:
       properties:
-        title:
-          type: string
-          title: Title
-        body:
-          type: string
-          title: Body
-        link_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Link Url
-        link_label:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Link Label
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - title
-      - body
-      title: _CreateAnnouncementRequest
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

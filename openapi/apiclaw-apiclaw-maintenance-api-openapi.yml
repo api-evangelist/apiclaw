@@ -58,28 +58,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    _UpdateMaintenanceRequest:
-      properties:
-        enabled:
-          type: boolean
-          title: Enabled
-        message:
-          type: string
-          title: Message
-          default: ''
-      type: object
-      required:
-      - enabled
-      title: _UpdateMaintenanceRequest
     _MaintenanceOut:
       properties:
         enabled:
@@ -125,6 +103,28 @@ components:
       - msg
       - type
       title: ValidationError
+    _UpdateMaintenanceRequest:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+        message:
+          type: string
+          title: Message
+          default: ''
+      type: object
+      required:
+      - enabled
+      title: _UpdateMaintenanceRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

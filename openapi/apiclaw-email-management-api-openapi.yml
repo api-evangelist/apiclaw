@@ -74,26 +74,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    EmailEventSettingsUpdateRequest:
-      properties:
-        settings:
-          items:
-            $ref: '#/components/schemas/EmailEventSettings'
-          type: array
-          title: Settings
-      type: object
-      required:
-      - settings
-      title: EmailEventSettingsUpdateRequest
     EmailEventSettings:
       properties:
         event:
@@ -106,6 +86,26 @@ components:
       - event
       - enabled
       title: EmailEventSettings
+    EmailEvent:
+      type: string
+      enum:
+      - Virtual Key Created
+      - New User Invitation
+      - Virtual Key Rotated
+      - Soft Budget Crossed
+      - Max Budget Alert
+      title: EmailEvent
+    EmailEventSettingsUpdateRequest:
+      properties:
+        settings:
+          items:
+            $ref: '#/components/schemas/EmailEventSettings'
+          type: array
+          title: Settings
+      type: object
+      required:
+      - settings
+      title: EmailEventSettingsUpdateRequest
     EmailEventSettingsResponse:
       properties:
         settings:
@@ -143,15 +143,15 @@ components:
       - msg
       - type
       title: ValidationError
-    EmailEvent:
-      type: string
-      enum:
-      - Virtual Key Created
-      - New User Invitation
-      - Virtual Key Rotated
-      - Soft Budget Crossed
-      - Max Budget Alert
-      title: EmailEvent
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

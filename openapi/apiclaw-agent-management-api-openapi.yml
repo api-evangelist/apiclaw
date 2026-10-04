@@ -102,32 +102,30 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    MetricWithMetadata:
+    KeyMetricWithMetadata:
       properties:
         metrics:
           $ref: '#/components/schemas/SpendMetrics'
         metadata:
-          additionalProperties: true
-          type: object
-          title: Metadata
-        api_key_breakdown:
-          additionalProperties:
-            $ref: '#/components/schemas/KeyMetricWithMetadata'
-          type: object
-          title: Api Key Breakdown
+          $ref: '#/components/schemas/KeyMetadata'
       type: object
       required:
       - metrics
-      title: MetricWithMetadata
-    HTTPValidationError:
+      title: KeyMetricWithMetadata
+      description: Base class for metrics with additional metadata
+    SpendAnalyticsPaginatedResponse:
       properties:
-        detail:
+        results:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/DailySpendData'
           type: array
-          title: Detail
+          title: Results
+        metadata:
+          $ref: '#/components/schemas/DailySpendMetadata'
       type: object
-      title: HTTPValidationError
+      required:
+      - results
+      title: SpendAnalyticsPaginatedResponse
     BreakdownMetrics:
       properties:
         mcp_servers:
@@ -232,17 +230,6 @@ components:
           default: 0
       type: object
       title: SpendMetrics
-    KeyMetricWithMetadata:
-      properties:
-        metrics:
-          $ref: '#/components/schemas/SpendMetrics'
-        metadata:
-          $ref: '#/components/schemas/KeyMetadata'
-      type: object
-      required:
-      - metrics
-      title: KeyMetricWithMetadata
-      description: Base class for metrics with additional metadata
     KeyMetadata:
       properties:
         key_alias:
@@ -294,34 +281,23 @@ components:
       - msg
       - type
       title: ValidationError
-    SpendAnalyticsPaginatedResponse:
+    MetricWithMetadata:
       properties:
-        results:
-          items:
-            $ref: '#/components/schemas/DailySpendData'
-          type: array
-          title: Results
-        metadata:
-          $ref: '#/components/schemas/DailySpendMetadata'
-      type: object
-      required:
-      - results
-      title: SpendAnalyticsPaginatedResponse
-    DailySpendData:
-      properties:
-        date:
-          type: string
-          format: date
-          title: Date
         metrics:
           $ref: '#/components/schemas/SpendMetrics'
-        breakdown:
-          $ref: '#/components/schemas/BreakdownMetrics'
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+        api_key_breakdown:
+          additionalProperties:
+            $ref: '#/components/schemas/KeyMetricWithMetadata'
+          type: object
+          title: Api Key Breakdown
       type: object
       required:
-      - date
       - metrics
-      title: DailySpendData
+      title: MetricWithMetadata
     DailySpendMetadata:
       properties:
         total_spend:
@@ -398,6 +374,30 @@ components:
           default: false
       type: object
       title: DailySpendMetadata
+    DailySpendData:
+      properties:
+        date:
+          type: string
+          format: date
+          title: Date
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        breakdown:
+          $ref: '#/components/schemas/BreakdownMetrics'
+      type: object
+      required:
+      - date
+      - metrics
+      title: DailySpendData
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

@@ -129,56 +129,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    TokenCountResponse:
-      properties:
-        total_tokens:
-          type: integer
-          title: Total Tokens
-        request_model:
-          type: string
-          title: Request Model
-        model_used:
-          type: string
-          title: Model Used
-        tokenizer_type:
-          type: string
-          title: Tokenizer Type
-        original_response:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Original Response
-        error:
-          type: boolean
-          title: Error
-          default: false
-        error_message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error Message
-        status_code:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Status Code
-      type: object
-      required:
-      - total_tokens
-      - request_model
-      - model_used
-      - tokenizer_type
-      title: TokenCountResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     CallTypes:
       type: string
       enum:
@@ -330,45 +280,6 @@ components:
       - send_message
       - acreate_skill
       title: CallTypes
-    TransformRequestBody:
-      properties:
-        call_type:
-          $ref: '#/components/schemas/CallTypes'
-        request_body:
-          additionalProperties: true
-          type: object
-          title: Request Body
-      type: object
-      required:
-      - call_type
-      - request_body
-      title: TransformRequestBody
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     RawRequestTypedDict:
       properties:
         raw_request_api_base:
@@ -438,6 +349,95 @@ components:
       required:
       - model
       title: TokenCountRequest
+    TokenCountResponse:
+      properties:
+        total_tokens:
+          type: integer
+          title: Total Tokens
+        request_model:
+          type: string
+          title: Request Model
+        model_used:
+          type: string
+          title: Model Used
+        tokenizer_type:
+          type: string
+          title: Tokenizer Type
+        original_response:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Original Response
+        error:
+          type: boolean
+          title: Error
+          default: false
+        error_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Message
+        status_code:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Status Code
+      type: object
+      required:
+      - total_tokens
+      - request_model
+      - model_used
+      - tokenizer_type
+      title: TokenCountResponse
+    TransformRequestBody:
+      properties:
+        call_type:
+          $ref: '#/components/schemas/CallTypes'
+        request_body:
+          additionalProperties: true
+          type: object
+          title: Request Body
+      type: object
+      required:
+      - call_type
+      - request_body
+      title: TransformRequestBody
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

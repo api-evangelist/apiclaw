@@ -242,6 +242,176 @@ paths:
       - vector_store_management
 components:
   schemas:
+    LiteLLM_ManagedVectorStore:
+      description: LiteLLM managed vector store object - this is is the object stored in the database
+      properties:
+        created_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Created At
+        custom_llm_provider:
+          title: Custom Llm Provider
+          type: string
+        litellm_credential_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Litellm Credential Name
+        litellm_params:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Litellm Params
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        updated_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          title: Updated At
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        vector_store_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Vector Store Description
+        vector_store_id:
+          title: Vector Store Id
+          type: string
+        vector_store_metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: string
+          - type: 'null'
+          title: Vector Store Metadata
+        vector_store_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Vector Store Name
+      title: LiteLLM_ManagedVectorStore
+      type: object
+    ResponseLiteLLM_ManagedVectorStore:
+      properties:
+        vector_store:
+          $ref: '#/components/schemas/LiteLLM_ManagedVectorStoresTable'
+      title: ResponseLiteLLM_ManagedVectorStore
+      type: object
+    VectorStoreUpdateRequest:
+      properties:
+        custom_llm_provider:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Custom Llm Provider
+        vector_store_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Vector Store Description
+        vector_store_id:
+          title: Vector Store Id
+          type: string
+        vector_store_metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Vector Store Metadata
+        vector_store_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Vector Store Name
+      required:
+      - vector_store_id
+      title: VectorStoreUpdateRequest
+      type: object
+    LiteLLM_ManagedVectorStoreListResponse:
+      description: Response format for listing vector stores
+      properties:
+        current_page:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Current Page
+        data:
+          items:
+            $ref: '#/components/schemas/LiteLLM_ManagedVectorStore'
+          title: Data
+          type: array
+        object:
+          const: list
+          title: Object
+          type: string
+        total_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Count
+        total_pages:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Pages
+      title: LiteLLM_ManagedVectorStoreListResponse
+      type: object
+    VectorStoreInfoRequest:
+      properties:
+        vector_store_id:
+          title: Vector Store Id
+          type: string
+      required:
+      - vector_store_id
+      title: VectorStoreInfoRequest
+      type: object
+    VectorStoreDeleteRequest:
+      properties:
+        vector_store_id:
+          title: Vector Store Id
+          type: string
+      required:
+      - vector_store_id
+      title: VectorStoreDeleteRequest
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     LiteLLM_ManagedVectorStoresTable:
       properties:
         created_at:
@@ -313,176 +483,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    VectorStoreDeleteRequest:
-      properties:
-        vector_store_id:
-          title: Vector Store Id
-          type: string
-      required:
-      - vector_store_id
-      title: VectorStoreDeleteRequest
-      type: object
-    VectorStoreUpdateRequest:
-      properties:
-        custom_llm_provider:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Custom Llm Provider
-        vector_store_description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Vector Store Description
-        vector_store_id:
-          title: Vector Store Id
-          type: string
-        vector_store_metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Vector Store Metadata
-        vector_store_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Vector Store Name
-      required:
-      - vector_store_id
-      title: VectorStoreUpdateRequest
-      type: object
-    VectorStoreInfoRequest:
-      properties:
-        vector_store_id:
-          title: Vector Store Id
-          type: string
-      required:
-      - vector_store_id
-      title: VectorStoreInfoRequest
-      type: object
-    LiteLLM_ManagedVectorStoreListResponse:
-      description: Response format for listing vector stores
-      properties:
-        current_page:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Current Page
-        data:
-          items:
-            $ref: '#/components/schemas/LiteLLM_ManagedVectorStore'
-          title: Data
-          type: array
-        object:
-          const: list
-          title: Object
-          type: string
-        total_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Total Count
-        total_pages:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Total Pages
-      title: LiteLLM_ManagedVectorStoreListResponse
-      type: object
-    ResponseLiteLLM_ManagedVectorStore:
-      properties:
-        vector_store:
-          $ref: '#/components/schemas/LiteLLM_ManagedVectorStoresTable'
-      title: ResponseLiteLLM_ManagedVectorStore
-      type: object
-    LiteLLM_ManagedVectorStore:
-      description: LiteLLM managed vector store object - this is is the object stored in the database
-      properties:
-        created_at:
-          anyOf:
-          - format: date-time
-            type: string
-          - type: 'null'
-          title: Created At
-        custom_llm_provider:
-          title: Custom Llm Provider
-          type: string
-        litellm_credential_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Litellm Credential Name
-        litellm_params:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Litellm Params
-        team_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Team Id
-        updated_at:
-          anyOf:
-          - format: date-time
-            type: string
-          - type: 'null'
-          title: Updated At
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-        vector_store_description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Vector Store Description
-        vector_store_id:
-          title: Vector Store Id
-          type: string
-        vector_store_metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: string
-          - type: 'null'
-          title: Vector Store Metadata
-        vector_store_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Vector Store Name
-      title: LiteLLM_ManagedVectorStore
-      type: object
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

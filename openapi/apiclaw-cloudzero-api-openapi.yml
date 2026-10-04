@@ -249,67 +249,27 @@ paths:
       - cloudzero
 components:
   schemas:
-    CloudZeroSettingsView:
-      description: Response model for viewing CloudZero settings with masked API key
-      properties:
-        api_key_masked:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Masked API key showing only first 4 and last 4 characters
-          title: Api Key Masked
-        connection_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: CloudZero connection ID for data submission
-          title: Connection Id
-        status:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Configuration status
-          title: Status
-        timezone:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Timezone for date handling
-          title: Timezone
-      title: CloudZeroSettingsView
-      type: object
-    CloudZeroSettingsUpdate:
-      description: Request model for updating CloudZero settings
+    CloudZeroInitRequest:
+      description: Request model for initializing CloudZero settings
       properties:
         api_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: New CloudZero API key for authentication
+          description: CloudZero API key for authentication
           title: Api Key
+          type: string
         connection_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: New CloudZero connection ID for data submission
+          description: CloudZero connection ID for data submission
           title: Connection Id
+          type: string
         timezone:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: New timezone for date handling
+          default: UTC
+          description: 'Timezone for date handling (default: UTC)'
           title: Timezone
-      title: CloudZeroSettingsUpdate
+          type: string
+      required:
+      - api_key
+      - connection_id
+      title: CloudZeroInitRequest
       type: object
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     CloudZeroExportRequest:
       description: Request model for CloudZero export operations
       properties:
@@ -340,6 +300,29 @@ components:
           title: Start Time Utc
       title: CloudZeroExportRequest
       type: object
+    CloudZeroSettingsUpdate:
+      description: Request model for updating CloudZero settings
+      properties:
+        api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New CloudZero API key for authentication
+          title: Api Key
+        connection_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New CloudZero connection ID for data submission
+          title: Connection Id
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New timezone for date handling
+          title: Timezone
+      title: CloudZeroSettingsUpdate
+      type: object
     CloudZeroInitResponse:
       description: Response model for CloudZero initialization
       properties:
@@ -354,32 +337,6 @@ components:
       - status
       title: CloudZeroInitResponse
       type: object
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     CloudZeroExportResponse:
       description: Response model for CloudZero export operations
       properties:
@@ -413,27 +370,70 @@ components:
       - status
       title: CloudZeroExportResponse
       type: object
-    CloudZeroInitRequest:
-      description: Request model for initializing CloudZero settings
+    ValidationError:
       properties:
-        api_key:
-          description: CloudZero API key for authentication
-          title: Api Key
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CloudZeroSettingsView:
+      description: Response model for viewing CloudZero settings with masked API key
+      properties:
+        api_key_masked:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Masked API key showing only first 4 and last 4 characters
+          title: Api Key Masked
         connection_id:
+          anyOf:
+          - type: string
+          - type: 'null'
           description: CloudZero connection ID for data submission
           title: Connection Id
-          type: string
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Configuration status
+          title: Status
         timezone:
-          default: UTC
-          description: 'Timezone for date handling (default: UTC)'
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Timezone for date handling
           title: Timezone
-          type: string
-      required:
-      - api_key
-      - connection_id
-      title: CloudZeroInitRequest
+      title: CloudZeroSettingsView
       type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

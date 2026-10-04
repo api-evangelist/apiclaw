@@ -491,15 +491,24 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
+    PromptTokensDetails:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        modality:
+          type: string
+          enum:
+          - TEXT
+          - AUDIO
+          - IMAGE
+          - VIDEO
+          title: Modality
+        tokenCount:
+          type: integer
+          title: Tokencount
       type: object
-      title: HTTPValidationError
+      required:
+      - modality
+      - tokenCount
+      title: PromptTokensDetails
     TokenCountDetailsResponse:
       properties:
         totalTokens:
@@ -542,24 +551,15 @@ components:
       - msg
       - type
       title: ValidationError
-    PromptTokensDetails:
+    HTTPValidationError:
       properties:
-        modality:
-          type: string
-          enum:
-          - TEXT
-          - AUDIO
-          - IMAGE
-          - VIDEO
-          title: Modality
-        tokenCount:
-          type: integer
-          title: Tokencount
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - modality
-      - tokenCount
-      title: PromptTokensDetails
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

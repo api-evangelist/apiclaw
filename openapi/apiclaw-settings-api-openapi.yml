@@ -112,60 +112,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    MCPSemanticFilterSettings:
-      properties:
-        enabled:
-          type: boolean
-          title: Enabled
-          description: Enable semantic filtering of MCP tools based on query relevance
-          default: false
-        embedding_model:
-          type: string
-          title: Embedding Model
-          description: Embedding model to use for semantic similarity (e.g., 'text-embedding-3-small', 'text-embedding-ada-002')
-          default: text-embedding-3-small
-        top_k:
-          type: integer
-          maximum: 100.0
-          minimum: 1.0
-          title: Top K
-          description: Number of most relevant tools to return
-          default: 10
-        similarity_threshold:
-          type: number
-          maximum: 1.0
-          minimum: 0.0
-          title: Similarity Threshold
-          description: Minimum similarity score for tool inclusion (0.0 to 1.0, where 1.0 = exact match)
-          default: 0.3
-      type: object
-      title: MCPSemanticFilterSettings
-      description: Configuration for MCP Semantic Tool Filter
-    MCPToolSearchSettingsResponse:
-      properties:
-        values:
-          additionalProperties: true
-          type: object
-          title: Values
-        field_schema:
-          additionalProperties: true
-          type: object
-          title: Field Schema
-      type: object
-      required:
-      - values
-      - field_schema
-      title: MCPToolSearchSettingsResponse
-      description: Response model for native MCP tool search settings
     MCPToolSearchSettings:
       properties:
         embedding_model:
@@ -198,6 +144,67 @@ components:
       type: object
       title: MCPToolSearchSettings
       description: '`litellm_settings.mcp_tool_search`: how the native `mcp_tool_search` virtual tool ranks the caller''s tools.'
+    MCPToolSearchSettingsResponse:
+      properties:
+        values:
+          additionalProperties: true
+          type: object
+          title: Values
+        field_schema:
+          additionalProperties: true
+          type: object
+          title: Field Schema
+      type: object
+      required:
+      - values
+      - field_schema
+      title: MCPToolSearchSettingsResponse
+      description: Response model for native MCP tool search settings
+    MCPSemanticFilterSettingsResponse:
+      properties:
+        values:
+          additionalProperties: true
+          type: object
+          title: Values
+        field_schema:
+          additionalProperties: true
+          type: object
+          title: Field Schema
+      type: object
+      required:
+      - values
+      - field_schema
+      title: MCPSemanticFilterSettingsResponse
+      description: Response model for MCP semantic filter settings
+    MCPSemanticFilterSettings:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Enable semantic filtering of MCP tools based on query relevance
+          default: false
+        embedding_model:
+          type: string
+          title: Embedding Model
+          description: Embedding model to use for semantic similarity (e.g., 'text-embedding-3-small', 'text-embedding-ada-002')
+          default: text-embedding-3-small
+        top_k:
+          type: integer
+          maximum: 100.0
+          minimum: 1.0
+          title: Top K
+          description: Number of most relevant tools to return
+          default: 10
+        similarity_threshold:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Similarity Threshold
+          description: Minimum similarity score for tool inclusion (0.0 to 1.0, where 1.0 = exact match)
+          default: 0.3
+      type: object
+      title: MCPSemanticFilterSettings
+      description: Configuration for MCP Semantic Tool Filter
     ValidationError:
       properties:
         loc:
@@ -224,22 +231,15 @@ components:
       - msg
       - type
       title: ValidationError
-    MCPSemanticFilterSettingsResponse:
+    HTTPValidationError:
       properties:
-        values:
-          additionalProperties: true
-          type: object
-          title: Values
-        field_schema:
-          additionalProperties: true
-          type: object
-          title: Field Schema
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - values
-      - field_schema
-      title: MCPSemanticFilterSettingsResponse
-      description: Response model for MCP semantic filter settings
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

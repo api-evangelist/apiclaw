@@ -130,15 +130,35 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    HTTPValidationError:
+    CoordinationRedisSettingsResponse:
       properties:
-        detail:
+        values:
+          additionalProperties: true
+          type: object
+          title: Values
+          description: Current coordination Redis settings, with credentials redacted
+        fields:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/CoordinationRedisSettingsField'
           type: array
-          title: Detail
+          title: Fields
+          description: List of all configurable coordination Redis settings with metadata
+        source:
+          anyOf:
+          - type: string
+            enum:
+            - coordination_redis
+            - cache_backend
+            - environment
+          - type: 'null'
+          title: Source
+          description: Where the proxy's coordination Redis comes from; null when it has none
       type: object
-      title: HTTPValidationError
+      required:
+      - values
+      - fields
+      - source
+      title: CoordinationRedisSettingsResponse
     CoordinationRedisSettingsField:
       properties:
         field_name:
@@ -189,6 +209,22 @@ components:
       required:
       - settings
       title: CoordinationRedisSettingsRequest
+    CoordinationRedisTestResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: 'Connection status: ''healthy'' or ''unhealthy'''
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+          description: Error message if the connection failed
+      type: object
+      required:
+      - status
+      title: CoordinationRedisTestResponse
     ValidationError:
       properties:
         loc:
@@ -215,51 +251,15 @@ components:
       - msg
       - type
       title: ValidationError
-    CoordinationRedisTestResponse:
+    HTTPValidationError:
       properties:
-        status:
-          type: string
-          title: Status
-          description: 'Connection status: ''healthy'' or ''unhealthy'''
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
-          description: Error message if the connection failed
-      type: object
-      required:
-      - status
-      title: CoordinationRedisTestResponse
-    CoordinationRedisSettingsResponse:
-      properties:
-        values:
-          additionalProperties: true
-          type: object
-          title: Values
-          description: Current coordination Redis settings, with credentials redacted
-        fields:
+        detail:
           items:
-            $ref: '#/components/schemas/CoordinationRedisSettingsField'
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Fields
-          description: List of all configurable coordination Redis settings with metadata
-        source:
-          anyOf:
-          - type: string
-            enum:
-            - coordination_redis
-            - cache_backend
-            - environment
-          - type: 'null'
-          title: Source
-          description: Where the proxy's coordination Redis comes from; null when it has none
+          title: Detail
       type: object
-      required:
-      - values
-      - fields
-      - source
-      title: CoordinationRedisSettingsResponse
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

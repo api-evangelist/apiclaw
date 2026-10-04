@@ -87,76 +87,43 @@ components:
       - checkout_conversion_percent
       - estimated_mrr_usd
       title: RevenueOut
-    AdminOverviewOut:
+    UsersOut:
       properties:
-        generated_at:
-          type: string
-          title: Generated At
-        cache_ttl_seconds:
+        total:
           type: integer
-          title: Cache Ttl Seconds
-        users:
-          $ref: '#/components/schemas/UsersOut'
-        capacity:
-          $ref: '#/components/schemas/CapacityOut'
-        plans:
-          items:
-            $ref: '#/components/schemas/PlanRowOut'
-          type: array
-          title: Plans
-        revenue:
-          $ref: '#/components/schemas/RevenueOut'
-        daily:
-          items:
-            $ref: '#/components/schemas/DailyOut'
-          type: array
-          title: Daily
-        platform:
-          $ref: '#/components/schemas/PlatformOut'
+          title: Total
+        paying:
+          type: integer
+          title: Paying
+        trial:
+          type: integer
+          title: Trial
+        signups_today:
+          type: integer
+          title: Signups Today
+        signups_7d:
+          type: integer
+          title: Signups 7D
+        signups_30d:
+          type: integer
+          title: Signups 30D
+        blocked:
+          type: integer
+          title: Blocked
+        virtual_keys:
+          type: integer
+          title: Virtual Keys
       type: object
       required:
-      - generated_at
-      - cache_ttl_seconds
-      - users
-      - capacity
-      - plans
-      - revenue
-      - daily
-      - platform
-      title: AdminOverviewOut
-    PlatformOut:
-      properties:
-        maintenance_enabled:
-          type: boolean
-          title: Maintenance Enabled
-        paused_deployments:
-          type: integer
-          title: Paused Deployments
-        cooling_api_keys:
-          type: integer
-          title: Cooling Api Keys
-        referrers:
-          type: integer
-          title: Referrers
-        referrals:
-          type: integer
-          title: Referrals
-        pending_commissions:
-          type: integer
-          title: Pending Commissions
-        commissions_paid_usd:
-          type: number
-          title: Commissions Paid Usd
-      type: object
-      required:
-      - maintenance_enabled
-      - paused_deployments
-      - cooling_api_keys
-      - referrers
-      - referrals
-      - pending_commissions
-      - commissions_paid_usd
-      title: PlatformOut
+      - total
+      - paying
+      - trial
+      - signups_today
+      - signups_7d
+      - signups_30d
+      - blocked
+      - virtual_keys
+      title: UsersOut
     PlanRowOut:
       properties:
         id:
@@ -213,43 +180,76 @@ components:
       - signups
       - purchases
       title: DailyOut
-    UsersOut:
+    PlatformOut:
       properties:
-        total:
+        maintenance_enabled:
+          type: boolean
+          title: Maintenance Enabled
+        paused_deployments:
           type: integer
-          title: Total
-        paying:
+          title: Paused Deployments
+        cooling_api_keys:
           type: integer
-          title: Paying
-        trial:
+          title: Cooling Api Keys
+        referrers:
           type: integer
-          title: Trial
-        signups_today:
+          title: Referrers
+        referrals:
           type: integer
-          title: Signups Today
-        signups_7d:
+          title: Referrals
+        pending_commissions:
           type: integer
-          title: Signups 7D
-        signups_30d:
-          type: integer
-          title: Signups 30D
-        blocked:
-          type: integer
-          title: Blocked
-        virtual_keys:
-          type: integer
-          title: Virtual Keys
+          title: Pending Commissions
+        commissions_paid_usd:
+          type: number
+          title: Commissions Paid Usd
       type: object
       required:
-      - total
-      - paying
-      - trial
-      - signups_today
-      - signups_7d
-      - signups_30d
-      - blocked
-      - virtual_keys
-      title: UsersOut
+      - maintenance_enabled
+      - paused_deployments
+      - cooling_api_keys
+      - referrers
+      - referrals
+      - pending_commissions
+      - commissions_paid_usd
+      title: PlatformOut
+    AdminOverviewOut:
+      properties:
+        generated_at:
+          type: string
+          title: Generated At
+        cache_ttl_seconds:
+          type: integer
+          title: Cache Ttl Seconds
+        users:
+          $ref: '#/components/schemas/UsersOut'
+        capacity:
+          $ref: '#/components/schemas/CapacityOut'
+        plans:
+          items:
+            $ref: '#/components/schemas/PlanRowOut'
+          type: array
+          title: Plans
+        revenue:
+          $ref: '#/components/schemas/RevenueOut'
+        daily:
+          items:
+            $ref: '#/components/schemas/DailyOut'
+          type: array
+          title: Daily
+        platform:
+          $ref: '#/components/schemas/PlatformOut'
+      type: object
+      required:
+      - generated_at
+      - cache_ttl_seconds
+      - users
+      - capacity
+      - plans
+      - revenue
+      - daily
+      - platform
+      title: AdminOverviewOut
     CapacityOut:
       properties:
         sanctioned_daily_requests:

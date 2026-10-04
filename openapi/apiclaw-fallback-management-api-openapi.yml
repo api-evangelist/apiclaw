@@ -208,15 +208,29 @@ components:
       - message
       title: FallbackDeleteResponse
       description: Response model for deleting fallbacks
-    HTTPValidationError:
+    FallbackGetResponse:
       properties:
-        detail:
+        model:
+          type: string
+          title: Model
+          description: The model name
+        fallback_models:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            type: string
           type: array
-          title: Detail
+          title: Fallback Models
+          description: List of fallback model names
+        fallback_type:
+          type: string
+          title: Fallback Type
+          description: Type of fallback
       type: object
-      title: HTTPValidationError
+      required:
+      - model
+      - fallback_models
+      - fallback_type
+      title: FallbackGetResponse
+      description: Response model for getting fallbacks
     FallbackResponse:
       properties:
         model:
@@ -245,6 +259,32 @@ components:
       - message
       title: FallbackResponse
       description: Response model for fallback operations
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     FallbackCreateRequest:
       properties:
         model:
@@ -273,55 +313,15 @@ components:
       - fallback_models
       title: FallbackCreateRequest
       description: Request model for creating/updating fallbacks
-    FallbackGetResponse:
+    HTTPValidationError:
       properties:
-        model:
-          type: string
-          title: Model
-          description: The model name
-        fallback_models:
+        detail:
           items:
-            type: string
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Fallback Models
-          description: List of fallback model names
-        fallback_type:
-          type: string
-          title: Fallback Type
-          description: Type of fallback
+          title: Detail
       type: object
-      required:
-      - model
-      - fallback_models
-      - fallback_type
-      title: FallbackGetResponse
-      description: Response model for getting fallbacks
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

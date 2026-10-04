@@ -167,15 +167,15 @@ paths:
       - jwt_mappings
 components:
   schemas:
-    HTTPValidationError:
+    DeleteJWTKeyMappingRequest:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        id:
+          title: Id
+          type: string
+      required:
+      - id
+      title: DeleteJWTKeyMappingRequest
       type: object
-      title: HTTPValidationError
     JWTKeyMappingResponse:
       properties:
         created_at:
@@ -222,39 +222,6 @@ components:
       - updated_at
       title: JWTKeyMappingResponse
       type: object
-    DeleteJWTKeyMappingRequest:
-      properties:
-        id:
-          title: Id
-          type: string
-      required:
-      - id
-      title: DeleteJWTKeyMappingRequest
-      type: object
-    UpdateJWTKeyMappingRequest:
-      properties:
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        id:
-          title: Id
-          type: string
-        is_active:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is Active
-        key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Key
-      required:
-      - id
-      title: UpdateJWTKeyMappingRequest
-      type: object
     ValidationError:
       properties:
         loc:
@@ -281,6 +248,30 @@ components:
       - msg
       - type
       title: ValidationError
+    UpdateJWTKeyMappingRequest:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        id:
+          title: Id
+          type: string
+        is_active:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Active
+        key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key
+      required:
+      - id
+      title: UpdateJWTKeyMappingRequest
+      type: object
     CreateJWTKeyMappingRequest:
       properties:
         description:
@@ -303,6 +294,15 @@ components:
       - key
       title: CreateJWTKeyMappingRequest
       type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

@@ -508,110 +508,6 @@ components:
       - enabled
       title: PluginResponse
       description: Plugin information in API responses.
-    UpdatePluginRequest:
-      properties:
-        source:
-          additionalProperties:
-            type: string
-          type: object
-          title: Source
-          description: 'Plugin source reference. Supported formats:
-
-            - GitHub: {''source'': ''github'', ''repo'': ''org/repo''}
-
-            - Git URL: {''source'': ''url'', ''url'': ''https://github.com/org/repo.git''}
-
-            - Git Subdir: {''source'': ''git-subdir'', ''url'': ''https://github.com/org/repo.git'', ''path'': ''plugins/plugin-name''}
-
-            - Zip archive on any https host (e.g. S3): {''source'': ''archive'', ''url'': ''https://bucket.s3.amazonaws.com/plugin.zip'', ''sha256'': ''<optional hex digest>''}'
-        version:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Version
-          description: Semantic version; cleared if omitted
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-          description: Plugin description
-        author:
-          anyOf:
-          - $ref: '#/components/schemas/PluginAuthor'
-          - type: 'null'
-          description: Plugin author
-        homepage:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Homepage
-          description: Plugin homepage URL
-        keywords:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Keywords
-          description: Search keywords
-        category:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Category
-          description: Plugin category
-        domain:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-          description: Skill domain (e.g., 'Productivity')
-        namespace:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Namespace
-          description: Skill namespace within domain (e.g., 'workflows')
-      type: object
-      required:
-      - source
-      title: UpdatePluginRequest
-      description: 'Request body for replacing an existing plugin.
-
-
-        The plugin name is the resource identity and is supplied as the path
-
-        parameter, so it cannot be changed here. This is a full replace: omitted
-
-        fields reset to their defaults, so version is cleared rather than
-
-        defaulting to the create-time "1.0.0".'
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ListPluginsResponse:
-      properties:
-        plugins:
-          items:
-            $ref: '#/components/schemas/PluginListItem'
-          type: array
-          title: Plugins
-        count:
-          type: integer
-          title: Count
-      type: object
-      required:
-      - plugins
-      - count
-      title: ListPluginsResponse
-      description: Response from listing plugins.
     PluginListItem:
       properties:
         id:
@@ -773,23 +669,105 @@ components:
         LiteLLM acts as a registry/discovery layer. Plugins are hosted on
 
         GitHub/GitLab/Bitbucket or as a zip archive on any https host and referenced by their source.'
-    PluginAuthor:
+    UpdatePluginRequest:
       properties:
-        name:
-          type: string
-          title: Name
-          description: Author name
-        email:
+        source:
+          additionalProperties:
+            type: string
+          type: object
+          title: Source
+          description: 'Plugin source reference. Supported formats:
+
+            - GitHub: {''source'': ''github'', ''repo'': ''org/repo''}
+
+            - Git URL: {''source'': ''url'', ''url'': ''https://github.com/org/repo.git''}
+
+            - Git Subdir: {''source'': ''git-subdir'', ''url'': ''https://github.com/org/repo.git'', ''path'': ''plugins/plugin-name''}
+
+            - Zip archive on any https host (e.g. S3): {''source'': ''archive'', ''url'': ''https://bucket.s3.amazonaws.com/plugin.zip'', ''sha256'': ''<optional hex digest>''}'
+        version:
           anyOf:
           - type: string
           - type: 'null'
-          title: Email
-          description: Author email
+          title: Version
+          description: Semantic version; cleared if omitted
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+          description: Plugin description
+        author:
+          anyOf:
+          - $ref: '#/components/schemas/PluginAuthor'
+          - type: 'null'
+          description: Plugin author
+        homepage:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Homepage
+          description: Plugin homepage URL
+        keywords:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Keywords
+          description: Search keywords
+        category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Category
+          description: Plugin category
+        domain:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Domain
+          description: Skill domain (e.g., 'Productivity')
+        namespace:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Namespace
+          description: Skill namespace within domain (e.g., 'workflows')
       type: object
       required:
-      - name
-      title: PluginAuthor
-      description: Plugin author information.
+      - source
+      title: UpdatePluginRequest
+      description: 'Request body for replacing an existing plugin.
+
+
+        The plugin name is the resource identity and is supplied as the path
+
+        parameter, so it cannot be changed here. This is a full replace: omitted
+
+        fields reset to their defaults, so version is cleared rather than
+
+        defaulting to the create-time "1.0.0".'
+    RegisterPluginResponse:
+      properties:
+        status:
+          type: string
+          title: Status
+          description: Operation status
+        action:
+          type: string
+          title: Action
+          description: Action taken (created/updated)
+        plugin:
+          $ref: '#/components/schemas/PluginResponse'
+          description: Plugin information
+      type: object
+      required:
+      - status
+      - action
+      - plugin
+      title: RegisterPluginResponse
+      description: Response from plugin registration.
     ValidationError:
       properties:
         loc:
@@ -816,26 +794,48 @@ components:
       - msg
       - type
       title: ValidationError
-    RegisterPluginResponse:
+    ListPluginsResponse:
       properties:
-        status:
-          type: string
-          title: Status
-          description: Operation status
-        action:
-          type: string
-          title: Action
-          description: Action taken (created/updated)
-        plugin:
-          $ref: '#/components/schemas/PluginResponse'
-          description: Plugin information
+        plugins:
+          items:
+            $ref: '#/components/schemas/PluginListItem'
+          type: array
+          title: Plugins
+        count:
+          type: integer
+          title: Count
       type: object
       required:
-      - status
-      - action
-      - plugin
-      title: RegisterPluginResponse
-      description: Response from plugin registration.
+      - plugins
+      - count
+      title: ListPluginsResponse
+      description: Response from listing plugins.
+    PluginAuthor:
+      properties:
+        name:
+          type: string
+          title: Name
+          description: Author name
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+          description: Author email
+      type: object
+      required:
+      - name
+      title: PluginAuthor
+      description: Plugin author information.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

@@ -91,6 +91,48 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
+    ComplianceCheckResult:
+      properties:
+        check_name:
+          type: string
+          title: Check Name
+        article:
+          type: string
+          title: Article
+        passed:
+          type: boolean
+          title: Passed
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - check_name
+      - article
+      - passed
+      - detail
+      title: ComplianceCheckResult
+      description: Result of a single compliance check.
+    ComplianceResponse:
+      properties:
+        compliant:
+          type: boolean
+          title: Compliant
+        regulation:
+          type: string
+          title: Regulation
+        checks:
+          items:
+            $ref: '#/components/schemas/ComplianceCheckResult'
+          type: array
+          title: Checks
+      type: object
+      required:
+      - compliant
+      - regulation
+      - checks
+      title: ComplianceResponse
+      description: Response from a compliance check endpoint.
     ComplianceCheckRequest:
       properties:
         request_id:
@@ -127,57 +169,6 @@ components:
 
 
         Mirrors the spend log fields needed for compliance evaluation.'
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ComplianceResponse:
-      properties:
-        compliant:
-          type: boolean
-          title: Compliant
-        regulation:
-          type: string
-          title: Regulation
-        checks:
-          items:
-            $ref: '#/components/schemas/ComplianceCheckResult'
-          type: array
-          title: Checks
-      type: object
-      required:
-      - compliant
-      - regulation
-      - checks
-      title: ComplianceResponse
-      description: Response from a compliance check endpoint.
-    ComplianceCheckResult:
-      properties:
-        check_name:
-          type: string
-          title: Check Name
-        article:
-          type: string
-          title: Article
-        passed:
-          type: boolean
-          title: Passed
-        detail:
-          type: string
-          title: Detail
-      type: object
-      required:
-      - check_name
-      - article
-      - passed
-      - detail
-      title: ComplianceCheckResult
-      description: Result of a single compliance check.
     ValidationError:
       properties:
         loc:
@@ -204,6 +195,15 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

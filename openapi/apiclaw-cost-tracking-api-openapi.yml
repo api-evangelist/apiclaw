@@ -296,79 +296,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    CostEstimateRequest:
-      properties:
-        model:
-          type: string
-          title: Model
-          description: Model name (from /model_group/info)
-        input_tokens:
-          type: integer
-          minimum: 0.0
-          title: Input Tokens
-          description: Expected input tokens per request
-        output_tokens:
-          type: integer
-          minimum: 0.0
-          title: Output Tokens
-          description: Expected output tokens per request
-        cache_read_input_tokens:
-          type: integer
-          minimum: 0.0
-          title: Cache Read Input Tokens
-          description: Input tokens read from the prompt cache; counted within input_tokens
-          default: 0
-        cache_creation_input_tokens:
-          type: integer
-          minimum: 0.0
-          title: Cache Creation Input Tokens
-          description: Input tokens written to the prompt cache; counted within input_tokens
-          default: 0
-        reasoning_tokens:
-          type: integer
-          minimum: 0.0
-          title: Reasoning Tokens
-          description: Reasoning tokens the model emits; counted within output_tokens
-          default: 0
-        num_requests_per_day:
-          anyOf:
-          - type: integer
-            minimum: 0.0
-          - type: 'null'
-          title: Num Requests Per Day
-          description: Number of requests per day
-        num_requests_per_month:
-          anyOf:
-          - type: integer
-            minimum: 0.0
-          - type: 'null'
-          title: Num Requests Per Month
-          description: Number of requests per month
-      type: object
-      required:
-      - model
-      - input_tokens
-      - output_tokens
-      title: CostEstimateRequest
-      description: Request body for /cost/estimate endpoint.
-    BlockUnpricedModelsResponse:
-      properties:
-        enabled:
-          type: boolean
-          title: Enabled
-      type: object
-      required:
-      - enabled
-      title: BlockUnpricedModelsResponse
     CostEstimateResponse:
       properties:
         model:
@@ -563,6 +490,79 @@ components:
       - output_cost_per_request
       title: CostEstimateResponse
       description: Response body for /cost/estimate endpoint.
+    BlockUnpricedModelsResponse:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+      type: object
+      required:
+      - enabled
+      title: BlockUnpricedModelsResponse
+    CostEstimateRequest:
+      properties:
+        model:
+          type: string
+          title: Model
+          description: Model name (from /model_group/info)
+        input_tokens:
+          type: integer
+          minimum: 0.0
+          title: Input Tokens
+          description: Expected input tokens per request
+        output_tokens:
+          type: integer
+          minimum: 0.0
+          title: Output Tokens
+          description: Expected output tokens per request
+        cache_read_input_tokens:
+          type: integer
+          minimum: 0.0
+          title: Cache Read Input Tokens
+          description: Input tokens read from the prompt cache; counted within input_tokens
+          default: 0
+        cache_creation_input_tokens:
+          type: integer
+          minimum: 0.0
+          title: Cache Creation Input Tokens
+          description: Input tokens written to the prompt cache; counted within input_tokens
+          default: 0
+        reasoning_tokens:
+          type: integer
+          minimum: 0.0
+          title: Reasoning Tokens
+          description: Reasoning tokens the model emits; counted within output_tokens
+          default: 0
+        num_requests_per_day:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Num Requests Per Day
+          description: Number of requests per day
+        num_requests_per_month:
+          anyOf:
+          - type: integer
+            minimum: 0.0
+          - type: 'null'
+          title: Num Requests Per Month
+          description: Number of requests per month
+      type: object
+      required:
+      - model
+      - input_tokens
+      - output_tokens
+      title: CostEstimateRequest
+      description: Request body for /cost/estimate endpoint.
+    BlockUnpricedModelsRequest:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+      type: object
+      required:
+      - enabled
+      title: BlockUnpricedModelsRequest
     ValidationError:
       properties:
         loc:
@@ -589,15 +589,15 @@ components:
       - msg
       - type
       title: ValidationError
-    BlockUnpricedModelsRequest:
+    HTTPValidationError:
       properties:
-        enabled:
-          type: boolean
-          title: Enabled
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - enabled
-      title: BlockUnpricedModelsRequest
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

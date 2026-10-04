@@ -579,6 +579,88 @@ paths:
       - search_tools
 components:
   schemas:
+    TestSearchToolConnectionRequest:
+      properties:
+        litellm_params:
+          additionalProperties: true
+          title: Litellm Params
+          type: object
+      required:
+      - litellm_params
+      title: TestSearchToolConnectionRequest
+      type: object
+    UpdateSearchToolRequest:
+      properties:
+        search_tool:
+          $ref: '#/components/schemas/SearchTool'
+      required:
+      - search_tool
+      title: UpdateSearchToolRequest
+      type: object
+    SearchToolLiteLLMParams:
+      description: LiteLLM params for search tools configuration.
+      properties:
+        api_base:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Base
+        api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key
+        max_retries:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Retries
+        search_provider:
+          title: Search Provider
+          type: string
+        timeout:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Timeout
+      required:
+      - search_provider
+      title: SearchToolLiteLLMParams
+      type: object
+    SearchTool:
+      description: "Search tool configuration.\n\nExample:\n    {\n        \"search_tool_id\": \"123e4567-e89b-12d3-a456-426614174000\",\n        \"search_tool_name\": \"litellm-search\",\n        \"litellm_params\": {\n            \"search_provider\": \"perplexity\",\n            \"api_key\": \"sk-...\"\n        },\n        \"search_tool_info\": {\n            \"description\": \"Perplexity search tool\"\n        }\n    }"
+      properties:
+        created_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created At
+        litellm_params:
+          $ref: '#/components/schemas/SearchToolLiteLLMParams'
+        search_tool_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Search Tool Id
+        search_tool_info:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Search Tool Info
+        search_tool_name:
+          title: Search Tool Name
+          type: string
+        updated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated At
+      required:
+      - search_tool_name
+      - litellm_params
+      title: SearchTool
+      type: object
     ListSearchToolsResponse:
       description: Response model for listing search tools.
       properties:
@@ -629,67 +711,6 @@ components:
           title: Updated At
       title: SearchToolInfoResponse
       type: object
-    TestSearchToolConnectionRequest:
-      properties:
-        litellm_params:
-          additionalProperties: true
-          title: Litellm Params
-          type: object
-      required:
-      - litellm_params
-      title: TestSearchToolConnectionRequest
-      type: object
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    SearchTool:
-      description: "Search tool configuration.\n\nExample:\n    {\n        \"search_tool_id\": \"123e4567-e89b-12d3-a456-426614174000\",\n        \"search_tool_name\": \"litellm-search\",\n        \"litellm_params\": {\n            \"search_provider\": \"perplexity\",\n            \"api_key\": \"sk-...\"\n        },\n        \"search_tool_info\": {\n            \"description\": \"Perplexity search tool\"\n        }\n    }"
-      properties:
-        created_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created At
-        litellm_params:
-          $ref: '#/components/schemas/SearchToolLiteLLMParams'
-        search_tool_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Search Tool Id
-        search_tool_info:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Search Tool Info
-        search_tool_name:
-          title: Search Tool Name
-          type: string
-        updated_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Updated At
-      required:
-      - search_tool_name
-      - litellm_params
-      title: SearchTool
-      type: object
-    UpdateSearchToolRequest:
-      properties:
-        search_tool:
-          $ref: '#/components/schemas/SearchTool'
-      required:
-      - search_tool
-      title: UpdateSearchToolRequest
-      type: object
     CreateSearchToolRequest:
       properties:
         search_tool:
@@ -697,36 +718,6 @@ components:
       required:
       - search_tool
       title: CreateSearchToolRequest
-      type: object
-    SearchToolLiteLLMParams:
-      description: LiteLLM params for search tools configuration.
-      properties:
-        api_base:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Api Base
-        api_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Api Key
-        max_retries:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Max Retries
-        search_provider:
-          title: Search Provider
-          type: string
-        timeout:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Timeout
-      required:
-      - search_provider
-      title: SearchToolLiteLLMParams
       type: object
     ValidationError:
       properties:
@@ -754,6 +745,15 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

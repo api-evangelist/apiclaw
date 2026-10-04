@@ -245,15 +245,59 @@ paths:
       - config_overrides
 components:
   schemas:
-    HTTPValidationError:
+    CyberArkConfig:
+      description: Configuration for CyberArk Conjur secret manager integration.
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        client_cert:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Path to the client TLS certificate for certificate-based authentication
+          title: Client Cert
+        client_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Path to the client TLS private key for certificate-based authentication
+          title: Client Key
+        cyberark_account:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The Conjur organization account name
+          title: Cyberark Account
+        cyberark_api_base:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The address of the CyberArk Conjur server (e.g., https://conjur.example.com)
+          title: Cyberark Api Base
+        cyberark_api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: API key for Conjur API-key authentication
+          title: Cyberark Api Key
+        cyberark_username:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The Conjur username (login) to authenticate as
+          title: Cyberark Username
+        refresh_interval:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Auth token cache TTL in seconds (default: 300)'
+          title: Refresh Interval
+        ssl_verify:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Set to false to disable SSL verification (e.g., for self-signed certificates)
+          title: Ssl Verify
+      title: CyberArkConfig
       type: object
-      title: HTTPValidationError
     HashicorpVaultConfig:
       description: Configuration for Hashicorp Vault secret manager integration.
       properties:
@@ -374,59 +418,15 @@ components:
       - field_schema
       title: ConfigOverrideSettingsResponse
       type: object
-    CyberArkConfig:
-      description: Configuration for CyberArk Conjur secret manager integration.
+    HTTPValidationError:
       properties:
-        client_cert:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Path to the client TLS certificate for certificate-based authentication
-          title: Client Cert
-        client_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Path to the client TLS private key for certificate-based authentication
-          title: Client Key
-        cyberark_account:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: The Conjur organization account name
-          title: Cyberark Account
-        cyberark_api_base:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: The address of the CyberArk Conjur server (e.g., https://conjur.example.com)
-          title: Cyberark Api Base
-        cyberark_api_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: API key for Conjur API-key authentication
-          title: Cyberark Api Key
-        cyberark_username:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: The Conjur username (login) to authenticate as
-          title: Cyberark Username
-        refresh_interval:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: 'Auth token cache TTL in seconds (default: 300)'
-          title: Refresh Interval
-        ssl_verify:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Set to false to disable SSL verification (e.g., for self-signed certificates)
-          title: Ssl Verify
-      title: CyberArkConfig
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

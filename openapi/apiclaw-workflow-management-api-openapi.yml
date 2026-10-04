@@ -309,34 +309,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    WorkflowEventCreateRequest:
-      properties:
-        event_type:
-          type: string
-          title: Event Type
-        step_name:
-          type: string
-          title: Step Name
-        data:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Data
-      type: object
-      required:
-      - event_type
-      - step_name
-      title: WorkflowEventCreateRequest
     ValidationError:
       properties:
         loc:
@@ -381,6 +353,46 @@ components:
       - role
       - content
       title: WorkflowMessageCreateRequest
+    WorkflowRunCreateRequest:
+      properties:
+        workflow_type:
+          type: string
+          title: Workflow Type
+        input:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Input
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+      type: object
+      required:
+      - workflow_type
+      title: WorkflowRunCreateRequest
+    WorkflowEventCreateRequest:
+      properties:
+        event_type:
+          type: string
+          title: Event Type
+        step_name:
+          type: string
+          title: Step Name
+        data:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Data
+      type: object
+      required:
+      - event_type
+      - step_name
+      title: WorkflowEventCreateRequest
     WorkflowRunUpdateRequest:
       properties:
         status:
@@ -408,27 +420,15 @@ components:
           title: Metadata
       type: object
       title: WorkflowRunUpdateRequest
-    WorkflowRunCreateRequest:
+    HTTPValidationError:
       properties:
-        workflow_type:
-          type: string
-          title: Workflow Type
-        input:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Input
-        metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Metadata
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - workflow_type
-      title: WorkflowRunCreateRequest
+      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey
