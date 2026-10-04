@@ -24,6 +24,12 @@ modified: '2026-09-27'
 
 tags:
 - Company
+- Artificial Intelligence
+- LLM
+- Software-as-a-Service
+- Platform
+tags_raw:
+- Company
 - AI
 - LLM
 - SaaS
@@ -39,6 +45,9 @@ maintainers:
   email: info@apis.io
 
 common:
+- type: CapabilityMap
+  url: capabilities/apiclaw-capability-edges.yml
+  name: APIClaw Business Capability Map
 - type: GettingStarted
   url: https://apiclaw.biz/claude-code-api-setup/
 - type: AgenticAccess
@@ -102,6 +111,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - A2A
+  tags_raw:
   - a2a
   properties:
   - type: OpenAPI
@@ -111,7 +122,8 @@ apis:
   description: The a2a_registration API from APIClaw — 1 operation(s) for a2a_registration.
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
-  tags:
+  tags: []
+  tags_raw:
   - a2a_registration
   properties:
   - type: OpenAPI
@@ -122,6 +134,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Access Groups
+  tags_raw:
   - access_groups
   properties:
   - type: OpenAPI
@@ -131,7 +145,8 @@ apis:
   description: The adaptive_router API from APIClaw — 1 operation(s) for adaptive_router.
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
-  tags:
+  tags: []
+  tags_raw:
   - adaptive_router
   properties:
   - type: OpenAPI
@@ -162,6 +177,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Anthropic Pass-through
+  tags_raw:
   - anthropic_passthrough
   properties:
   - type: OpenAPI
@@ -171,7 +188,8 @@ apis:
   description: The anthropic_skills API from APIClaw — 2 operation(s) for anthropic_skills.
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
-  tags:
+  tags: []
+  tags_raw:
   - anthropic_skills
   properties:
   - type: OpenAPI
@@ -262,6 +280,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Assistant
+  tags_raw:
   - assistants
   properties:
   - type: OpenAPI
@@ -272,6 +292,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Audio
+  tags_raw:
   - audio
   properties:
   - type: OpenAPI
@@ -302,6 +324,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Batch
+  tags_raw:
   - batch
   properties:
   - type: OpenAPI
@@ -373,6 +397,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Caching
+  tags_raw:
   - caching
   properties:
   - type: OpenAPI
@@ -383,6 +409,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Chat Completions
+  tags_raw:
   - chat/completions
   properties:
   - type: OpenAPI
@@ -414,6 +442,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Completions
+  tags_raw:
   - completions
   properties:
   - type: OpenAPI
@@ -424,6 +454,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Compliance
+  tags_raw:
   - compliance
   properties:
   - type: OpenAPI
@@ -443,7 +475,8 @@ apis:
   description: The config_overrides API from APIClaw — 4 operation(s) for config_overrides.
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
-  tags:
+  tags: []
+  tags_raw:
   - config_overrides
   properties:
   - type: OpenAPI
@@ -454,6 +487,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Containers
+  tags_raw:
   - containers
   properties:
   - type: OpenAPI
@@ -485,6 +520,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Credential Management
+  tags_raw:
   - credential management
   properties:
   - type: OpenAPI
@@ -515,6 +552,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Email Management
+  tags_raw:
   - email management
   properties:
   - type: OpenAPI
@@ -525,6 +564,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Embeddings
+  tags_raw:
   - embeddings
   properties:
   - type: OpenAPI
@@ -535,6 +576,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Evals
+  tags_raw:
   - evals
   properties:
   - type: OpenAPI
@@ -545,6 +588,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Experimental
+  tags_raw:
   - experimental
   properties:
   - type: OpenAPI
@@ -565,6 +610,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - File
+  tags_raw:
   - files
   properties:
   - type: OpenAPI
@@ -575,6 +622,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Fine-Tuning
+  tags_raw:
   - fine-tuning
   properties:
   - type: OpenAPI
@@ -584,7 +633,8 @@ apis:
   description: The gemini_agents API from APIClaw — 3 operation(s) for gemini_agents.
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
-  tags:
+  tags: []
+  tags_raw:
   - gemini_agents
   properties:
   - type: OpenAPI
@@ -616,6 +666,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Health
+  tags_raw:
   - health
   properties:
   - type: OpenAPI
@@ -626,6 +678,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Image
+  tags_raw:
   - images
   properties:
   - type: OpenAPI
@@ -636,6 +690,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Interactions
+  tags_raw:
   - interactions
   properties:
   - type: OpenAPI
@@ -656,7 +712,8 @@ apis:
   description: The jwt_mappings API from APIClaw — 5 operation(s) for jwt_mappings.
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
-  tags:
+  tags: []
+  tags_raw:
   - jwt_mappings
   properties:
   - type: OpenAPI
@@ -667,6 +724,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Key Management
+  tags_raw:
   - key management
   properties:
   - type: OpenAPI
@@ -676,7 +735,8 @@ apis:
   description: The langfuse_passthrough API from APIClaw — 1 operation(s) for langfuse_passthrough.
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
-  tags:
+  tags: []
+  tags_raw:
   - langfuse_passthrough
   properties:
   - type: OpenAPI
@@ -706,7 +766,8 @@ apis:
   description: The llm_passthrough API from APIClaw — 24 operation(s) for llm_passthrough.
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
-  tags:
+  tags: []
+  tags_raw:
   - llm_passthrough
   properties:
   - type: OpenAPI
@@ -737,6 +798,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - MCP
+  tags_raw:
   - Mcp
   properties:
   - type: OpenAPI
@@ -746,7 +809,8 @@ apis:
   description: The mcp_rest API from APIClaw — 4 operation(s) for mcp_rest.
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
-  tags:
+  tags: []
+  tags_raw:
   - mcp_rest
   properties:
   - type: OpenAPI
@@ -767,6 +831,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Model Management
+  tags_raw:
   - model management
   properties:
   - type: OpenAPI
@@ -777,6 +843,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Moderations
+  tags_raw:
   - moderations
   properties:
   - type: OpenAPI
@@ -787,6 +855,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - OCR
+  tags_raw:
   - ocr
   properties:
   - type: OpenAPI
@@ -808,6 +878,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Organization Management
+  tags_raw:
   - organization management
   properties:
   - type: OpenAPI
@@ -818,6 +890,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Plugins
+  tags_raw:
   - plugins
   properties:
   - type: OpenAPI
@@ -837,7 +911,8 @@ apis:
   description: The policy_resolve API from APIClaw — 2 operation(s) for policy_resolve.
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
-  tags:
+  tags: []
+  tags_raw:
   - policy_resolve
   properties:
   - type: OpenAPI
@@ -848,6 +923,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Project Management
+  tags_raw:
   - project management
   properties:
   - type: OpenAPI
@@ -868,6 +945,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Prompts
+  tags_raw:
   - prompts
   properties:
   - type: OpenAPI
@@ -878,6 +957,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Providers
+  tags_raw:
   - Provider
   properties:
   - type: OpenAPI
@@ -888,6 +969,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Providers
+  tags_raw:
   - providers
   properties:
   - type: OpenAPI
@@ -898,6 +981,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Public
+  tags_raw:
   - public
   properties:
   - type: OpenAPI
@@ -908,6 +993,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - RAG
+  tags_raw:
   - rag
   properties:
   - type: OpenAPI
@@ -918,6 +1005,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Real-Time
+  tags_raw:
   - realtime
   properties:
   - type: OpenAPI
@@ -928,6 +1017,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Rerank
+  tags_raw:
   - rerank
   properties:
   - type: OpenAPI
@@ -938,6 +1029,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Responses
+  tags_raw:
   - responses
   properties:
   - type: OpenAPI
@@ -988,6 +1081,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - SCIM
+  tags_raw:
   - scim
   properties:
   - type: OpenAPI
@@ -998,6 +1093,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Search
+  tags_raw:
   - search
   properties:
   - type: OpenAPI
@@ -1007,7 +1104,8 @@ apis:
   description: The search_tools API from APIClaw — 5 operation(s) for search_tools.
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
-  tags:
+  tags: []
+  tags_raw:
   - search_tools
   properties:
   - type: OpenAPI
@@ -1028,6 +1126,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Skills
+  tags_raw:
   - skills
   properties:
   - type: OpenAPI
@@ -1048,6 +1148,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Tag Management
+  tags_raw:
   - tag management
   properties:
   - type: OpenAPI
@@ -1068,6 +1170,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Team Management
+  tags_raw:
   - team management
   properties:
   - type: OpenAPI
@@ -1078,6 +1182,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Tools
+  tags_raw:
   - tools
   properties:
   - type: OpenAPI
@@ -1117,7 +1223,8 @@ apis:
   description: The usage_ai API from APIClaw — 1 operation(s) for usage_ai.
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
-  tags:
+  tags: []
+  tags_raw:
   - usage_ai
   properties:
   - type: OpenAPI
@@ -1138,6 +1245,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Utils
+  tags_raw:
   - utils
   properties:
   - type: OpenAPI
@@ -1159,6 +1268,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - vector store management
+  tags_raw:
   - vector_store_management
   properties:
   - type: OpenAPI
@@ -1169,6 +1280,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Vector Stores
+  tags_raw:
   - vector_stores
   properties:
   - type: OpenAPI
@@ -1179,6 +1292,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Video
+  tags_raw:
   - videos
   properties:
   - type: OpenAPI
@@ -1209,6 +1324,8 @@ apis:
   humanURL: https://apiclaw.biz/docs/
   baseURL: https://apiclaw.biz/v1/
   tags:
+  - Workflow Management
+  tags_raw:
   - workflow management
   properties:
   - type: OpenAPI
