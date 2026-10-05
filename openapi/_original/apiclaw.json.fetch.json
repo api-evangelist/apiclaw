@@ -1,0 +1,12 @@
+{
+ "url": "https://apiclaw.biz/openapi.json",
+ "requested_url": "https://apiclaw.biz/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 1657702,
+ "sha256": "453eec92e6bf3a76ef642b84bc885b7097c3a1fc0dfdd8cde7aaf158ad775abb",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "equivalent",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the provider's current document describes the same operations (Jaccard 0.965), but the bytes differ, so the archive is an earlier or reformatted copy."
+}
