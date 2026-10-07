@@ -45,6 +45,8 @@ maintainers:
   email: info@apis.io
 
 common:
+- type: Pricing
+  url: https://apiclaw.biz/#pricing
 - type: CapabilityMap
   url: capabilities/apiclaw-capability-edges.yml
   name: APIClaw Business Capability Map
