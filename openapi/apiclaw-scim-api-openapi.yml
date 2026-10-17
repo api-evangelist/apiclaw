@@ -804,264 +804,6 @@ paths:
       - SCIM
 components:
   schemas:
-    SCIMMultiValuedAttribute:
-      properties:
-        display:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Display
-        primary:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Primary
-        type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Type
-        value:
-          title: Value
-          type: string
-      required:
-      - value
-      title: SCIMMultiValuedAttribute
-      type: object
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    SCIMServiceProviderConfig:
-      properties:
-        authenticationSchemes:
-          anyOf:
-          - items:
-              additionalProperties: true
-              type: object
-            type: array
-          - type: 'null'
-          title: Authenticationschemes
-        bulk:
-          $ref: '#/components/schemas/SCIMFeature'
-          default:
-            supported: false
-        changePassword:
-          $ref: '#/components/schemas/SCIMFeature'
-          default:
-            supported: false
-        etag:
-          $ref: '#/components/schemas/SCIMFeature'
-          default:
-            supported: false
-        filter:
-          $ref: '#/components/schemas/SCIMFeature'
-          default:
-            supported: false
-        meta:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Meta
-        patch:
-          $ref: '#/components/schemas/SCIMFeature'
-          default:
-            supported: true
-        schemas:
-          default:
-          - urn:ietf:params:scim:schemas:core:2.0:ServiceProviderConfig
-          items:
-            type: string
-          title: Schemas
-          type: array
-        sort:
-          $ref: '#/components/schemas/SCIMFeature'
-          default:
-            supported: false
-      title: SCIMServiceProviderConfig
-      type: object
-    SCIMPlaceholderMergeResult:
-      properties:
-        merged_into_user_id:
-          title: Merged Into User Id
-          type: string
-        placeholder_user_id:
-          title: Placeholder User Id
-          type: string
-        team_ids:
-          items:
-            type: string
-          title: Team Ids
-          type: array
-      required:
-      - placeholder_user_id
-      - merged_into_user_id
-      - team_ids
-      title: SCIMPlaceholderMergeResult
-      type: object
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    SCIMPatchOp:
-      properties:
-        Operations:
-          items:
-            $ref: '#/components/schemas/SCIMPatchOperation'
-          title: Operations
-          type: array
-        schemas:
-          default:
-          - urn:ietf:params:scim:api:messages:2.0:PatchOp
-          items:
-            type: string
-          title: Schemas
-          type: array
-      required:
-      - Operations
-      title: SCIMPatchOp
-      type: object
-    SCIMListResponse:
-      properties:
-        Resources:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/SCIMUser-Output'
-            type: array
-          - items:
-              $ref: '#/components/schemas/SCIMGroup'
-            type: array
-          title: Resources
-        itemsPerPage:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          default: 10
-          title: Itemsperpage
-        schemas:
-          default:
-          - urn:ietf:params:scim:api:messages:2.0:ListResponse
-          items:
-            type: string
-          title: Schemas
-          type: array
-        startIndex:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          default: 1
-          title: Startindex
-        totalResults:
-          title: Totalresults
-          type: integer
-      required:
-      - totalResults
-      - Resources
-      title: SCIMListResponse
-      type: object
-    SCIMUserGroup:
-      properties:
-        display:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Display
-        type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: direct
-          title: Type
-        value:
-          title: Value
-          type: string
-      required:
-      - value
-      title: SCIMUserGroup
-      type: object
-    SCIMEnterpriseUser:
-      properties:
-        costCenter:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Costcenter
-        department:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Department
-        division:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Division
-        employeeNumber:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Employeenumber
-        manager:
-          anyOf:
-          - $ref: '#/components/schemas/SCIMUserManager'
-          - type: 'null'
-        organization:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Organization
-      title: SCIMEnterpriseUser
-      type: object
-    SCIMPlaceholder:
-      description: A user row keyed by a value that names another account by SSO identity or email.
-      properties:
-        placeholder_user_id:
-          title: Placeholder User Id
-          type: string
-        resolved_user_ids:
-          items:
-            type: string
-          title: Resolved User Ids
-          type: array
-        team_ids:
-          items:
-            type: string
-          title: Team Ids
-          type: array
-      required:
-      - placeholder_user_id
-      - resolved_user_ids
-      - team_ids
-      title: SCIMPlaceholder
-      type: object
     SCIMUser-Input:
       properties:
         active:
@@ -1139,43 +881,160 @@ components:
       - schemas
       title: SCIMUser
       type: object
-    SCIMUserManager:
+    SCIMServiceProviderConfig:
       properties:
-        $ref:
+        authenticationSchemes:
           anyOf:
-          - type: string
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
           - type: 'null'
-          title: $Ref
-        displayName:
+          title: Authenticationschemes
+        bulk:
+          $ref: '#/components/schemas/SCIMFeature'
+          default:
+            supported: false
+        changePassword:
+          $ref: '#/components/schemas/SCIMFeature'
+          default:
+            supported: false
+        etag:
+          $ref: '#/components/schemas/SCIMFeature'
+          default:
+            supported: false
+        filter:
+          $ref: '#/components/schemas/SCIMFeature'
+          default:
+            supported: false
+        meta:
           anyOf:
-          - type: string
+          - additionalProperties: true
+            type: object
           - type: 'null'
-          title: Displayname
-        value:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Value
-      title: SCIMUserManager
+          title: Meta
+        patch:
+          $ref: '#/components/schemas/SCIMFeature'
+          default:
+            supported: true
+        schemas:
+          default:
+          - urn:ietf:params:scim:schemas:core:2.0:ServiceProviderConfig
+          items:
+            type: string
+          title: Schemas
+          type: array
+        sort:
+          $ref: '#/components/schemas/SCIMFeature'
+          default:
+            supported: false
+      title: SCIMServiceProviderConfig
       type: object
-    SCIMPatchOperation:
+    SCIMEnterpriseUser:
       properties:
-        op:
-          title: Op
-          type: string
-        path:
+        costCenter:
           anyOf:
           - type: string
           - type: 'null'
-          title: Path
-        value:
+          title: Costcenter
+        department:
           anyOf:
-          - {}
+          - type: string
           - type: 'null'
-          title: Value
+          title: Department
+        division:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Division
+        employeeNumber:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Employeenumber
+        manager:
+          anyOf:
+          - $ref: '#/components/schemas/SCIMUserManager'
+          - type: 'null'
+        organization:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Organization
+      title: SCIMEnterpriseUser
+      type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SCIMUser-Output:
+      additionalProperties: true
+      type: object
+    SCIMPlaceholder:
+      description: A user row keyed by a value that names another account by SSO identity or email.
+      properties:
+        placeholder_user_id:
+          title: Placeholder User Id
+          type: string
+        resolved_user_ids:
+          items:
+            type: string
+          title: Resolved User Ids
+          type: array
+        team_ids:
+          items:
+            type: string
+          title: Team Ids
+          type: array
       required:
-      - op
-      title: SCIMPatchOperation
+      - placeholder_user_id
+      - resolved_user_ids
+      - team_ids
+      title: SCIMPlaceholder
+      type: object
+    SCIMUserEmail:
+      properties:
+        primary:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Primary
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Type
+        value:
+          format: email
+          title: Value
+          type: string
+      required:
+      - value
+      title: SCIMUserEmail
+      type: object
+    SCIMPlaceholderMergeResult:
+      properties:
+        merged_into_user_id:
+          title: Merged Into User Id
+          type: string
+        placeholder_user_id:
+          title: Placeholder User Id
+          type: string
+        team_ids:
+          items:
+            type: string
+          title: Team Ids
+          type: array
+      required:
+      - placeholder_user_id
+      - merged_into_user_id
+      - team_ids
+      title: SCIMPlaceholderMergeResult
       type: object
     SCIMMember:
       properties:
@@ -1195,6 +1054,100 @@ components:
       required:
       - value
       title: SCIMMember
+      type: object
+    SCIMMultiValuedAttribute:
+      properties:
+        display:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display
+        primary:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Primary
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Type
+        value:
+          title: Value
+          type: string
+      required:
+      - value
+      title: SCIMMultiValuedAttribute
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    SCIMUserGroup:
+      properties:
+        display:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: direct
+          title: Type
+        value:
+          title: Value
+          type: string
+      required:
+      - value
+      title: SCIMUserGroup
+      type: object
+    SCIMFeature:
+      properties:
+        maxOperations:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Maxoperations
+        maxPayloadSize:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Maxpayloadsize
+        maxResults:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Maxresults
+        supported:
+          title: Supported
+          type: boolean
+      required:
+      - supported
+      title: SCIMFeature
       type: object
     SCIMGroup:
       properties:
@@ -1234,53 +1187,6 @@ components:
       - displayName
       title: SCIMGroup
       type: object
-    SCIMUser-Output:
-      additionalProperties: true
-      type: object
-    SCIMUserEmail:
-      properties:
-        primary:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Primary
-        type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Type
-        value:
-          format: email
-          title: Value
-          type: string
-      required:
-      - value
-      title: SCIMUserEmail
-      type: object
-    SCIMFeature:
-      properties:
-        maxOperations:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Maxoperations
-        maxPayloadSize:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Maxpayloadsize
-        maxResults:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Maxresults
-        supported:
-          title: Supported
-          type: boolean
-      required:
-      - supported
-      title: SCIMFeature
-      type: object
     SCIMUserName:
       properties:
         familyName:
@@ -1314,6 +1220,100 @@ components:
           - type: 'null'
           title: Middlename
       title: SCIMUserName
+      type: object
+    SCIMUserManager:
+      properties:
+        $ref:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: $Ref
+        displayName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Displayname
+        value:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Value
+      title: SCIMUserManager
+      type: object
+    SCIMListResponse:
+      properties:
+        Resources:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/SCIMUser-Output'
+            type: array
+          - items:
+              $ref: '#/components/schemas/SCIMGroup'
+            type: array
+          title: Resources
+        itemsPerPage:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: 10
+          title: Itemsperpage
+        schemas:
+          default:
+          - urn:ietf:params:scim:api:messages:2.0:ListResponse
+          items:
+            type: string
+          title: Schemas
+          type: array
+        startIndex:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: 1
+          title: Startindex
+        totalResults:
+          title: Totalresults
+          type: integer
+      required:
+      - totalResults
+      - Resources
+      title: SCIMListResponse
+      type: object
+    SCIMPatchOp:
+      properties:
+        Operations:
+          items:
+            $ref: '#/components/schemas/SCIMPatchOperation'
+          title: Operations
+          type: array
+        schemas:
+          default:
+          - urn:ietf:params:scim:api:messages:2.0:PatchOp
+          items:
+            type: string
+          title: Schemas
+          type: array
+      required:
+      - Operations
+      title: SCIMPatchOp
+      type: object
+    SCIMPatchOperation:
+      properties:
+        op:
+          title: Op
+          type: string
+        path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Path
+        value:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Value
+      required:
+      - op
+      title: SCIMPatchOperation
       type: object
   securitySchemes:
     APIKeyHeader:

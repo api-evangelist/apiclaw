@@ -50,43 +50,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    CallbackLogFailure:
-      properties:
-        index:
-          type: integer
-          title: Index
-        error:
-          type: string
-          title: Error
-      type: object
-      required:
-      - index
-      - error
-      title: CallbackLogFailure
-      description: A record that failed to replay, identified by its index in the batch.
-    CallbackLogRecord:
-      properties:
-        status:
-          type: string
-          enum:
-          - success
-          - failure
-          title: Status
-        standard_logging_payload:
-          additionalProperties: true
-          type: object
-          title: Standard Logging Payload
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
-      type: object
-      required:
-      - status
-      - standard_logging_payload
-      title: CallbackLogRecord
-      description: A single finished logging event to replay through the callbacks.
     ValidationError:
       properties:
         loc:
@@ -134,6 +97,20 @@ components:
       description: 'Per-batch result: counts plus per-record failure detail so the caller can
 
         distinguish a transient callback error from a structurally bad payload.'
+    CallbackLogFailure:
+      properties:
+        index:
+          type: integer
+          title: Index
+        error:
+          type: string
+          title: Error
+      type: object
+      required:
+      - index
+      - error
+      title: CallbackLogFailure
+      description: A record that failed to replay, identified by its index in the batch.
     CallbackLogsRequest:
       properties:
         records:
@@ -147,6 +124,29 @@ components:
       - records
       title: CallbackLogsRequest
       description: A batch of logging events posted by an external producer.
+    CallbackLogRecord:
+      properties:
+        status:
+          type: string
+          enum:
+          - success
+          - failure
+          title: Status
+        standard_logging_payload:
+          additionalProperties: true
+          type: object
+          title: Standard Logging Payload
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+      type: object
+      required:
+      - status
+      - standard_logging_payload
+      title: CallbackLogRecord
+      description: A single finished logging event to replay through the callbacks.
     HTTPValidationError:
       properties:
         detail:

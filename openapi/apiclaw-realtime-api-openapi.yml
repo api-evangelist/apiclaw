@@ -117,23 +117,6 @@ paths:
       - Realtime
 components:
   schemas:
-    RealtimeTranscriptionSessionResponse:
-      additionalProperties: true
-      description: 'Response from POST /v1/realtime/transcription_sessions.
-
-
-        `client_secret.value` contains the encrypted token instead of the raw
-
-        ephemeral key. Unknown fields pass through unchanged.'
-      properties:
-        client_secret:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Client Secret
-      title: RealtimeTranscriptionSessionResponse
-      type: object
     RealtimeClientSecretResponse:
       description: 'Response from POST /v1/realtime/client_secrets.
 
@@ -161,6 +144,23 @@ components:
       required:
       - value
       title: RealtimeClientSecretResponse
+      type: object
+    RealtimeTranscriptionSessionResponse:
+      additionalProperties: true
+      description: 'Response from POST /v1/realtime/transcription_sessions.
+
+
+        `client_secret.value` contains the encrypted token instead of the raw
+
+        ephemeral key. Unknown fields pass through unchanged.'
+      properties:
+        client_secret:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Client Secret
+      title: RealtimeTranscriptionSessionResponse
       type: object
   securitySchemes:
     APIKeyHeader:

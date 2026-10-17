@@ -579,54 +579,6 @@ paths:
       - search_tools
 components:
   schemas:
-    TestSearchToolConnectionRequest:
-      properties:
-        litellm_params:
-          additionalProperties: true
-          title: Litellm Params
-          type: object
-      required:
-      - litellm_params
-      title: TestSearchToolConnectionRequest
-      type: object
-    UpdateSearchToolRequest:
-      properties:
-        search_tool:
-          $ref: '#/components/schemas/SearchTool'
-      required:
-      - search_tool
-      title: UpdateSearchToolRequest
-      type: object
-    SearchToolLiteLLMParams:
-      description: LiteLLM params for search tools configuration.
-      properties:
-        api_base:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Api Base
-        api_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Api Key
-        max_retries:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Max Retries
-        search_provider:
-          title: Search Provider
-          type: string
-        timeout:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Timeout
-      required:
-      - search_provider
-      title: SearchToolLiteLLMParams
-      type: object
     SearchTool:
       description: "Search tool configuration.\n\nExample:\n    {\n        \"search_tool_id\": \"123e4567-e89b-12d3-a456-426614174000\",\n        \"search_tool_name\": \"litellm-search\",\n        \"litellm_params\": {\n            \"search_provider\": \"perplexity\",\n            \"api_key\": \"sk-...\"\n        },\n        \"search_tool_info\": {\n            \"description\": \"Perplexity search tool\"\n        }\n    }"
       properties:
@@ -660,18 +612,6 @@ components:
       - search_tool_name
       - litellm_params
       title: SearchTool
-      type: object
-    ListSearchToolsResponse:
-      description: Response model for listing search tools.
-      properties:
-        search_tools:
-          items:
-            $ref: '#/components/schemas/SearchToolInfoResponse'
-          title: Search Tools
-          type: array
-      required:
-      - search_tools
-      title: ListSearchToolsResponse
       type: object
     SearchToolInfoResponse:
       description: Response model for search tool information.
@@ -711,13 +651,15 @@ components:
           title: Updated At
       title: SearchToolInfoResponse
       type: object
-    CreateSearchToolRequest:
+    TestSearchToolConnectionRequest:
       properties:
-        search_tool:
-          $ref: '#/components/schemas/SearchTool'
+        litellm_params:
+          additionalProperties: true
+          title: Litellm Params
+          type: object
       required:
-      - search_tool
-      title: CreateSearchToolRequest
+      - litellm_params
+      title: TestSearchToolConnectionRequest
       type: object
     ValidationError:
       properties:
@@ -745,6 +687,56 @@ components:
       - msg
       - type
       title: ValidationError
+    ListSearchToolsResponse:
+      description: Response model for listing search tools.
+      properties:
+        search_tools:
+          items:
+            $ref: '#/components/schemas/SearchToolInfoResponse'
+          title: Search Tools
+          type: array
+      required:
+      - search_tools
+      title: ListSearchToolsResponse
+      type: object
+    SearchToolLiteLLMParams:
+      description: LiteLLM params for search tools configuration.
+      properties:
+        api_base:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Base
+        api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key
+        max_retries:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Retries
+        search_provider:
+          title: Search Provider
+          type: string
+        timeout:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Timeout
+      required:
+      - search_provider
+      title: SearchToolLiteLLMParams
+      type: object
+    CreateSearchToolRequest:
+      properties:
+        search_tool:
+          $ref: '#/components/schemas/SearchTool'
+      required:
+      - search_tool
+      title: CreateSearchToolRequest
+      type: object
     HTTPValidationError:
       properties:
         detail:
@@ -754,6 +746,14 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    UpdateSearchToolRequest:
+      properties:
+        search_tool:
+          $ref: '#/components/schemas/SearchTool'
+      required:
+      - search_tool
+      title: UpdateSearchToolRequest
+      type: object
   securitySchemes:
     APIKeyHeader:
       type: apiKey

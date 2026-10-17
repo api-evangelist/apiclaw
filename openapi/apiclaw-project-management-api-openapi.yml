@@ -508,94 +508,32 @@ components:
       - object_permission_id
       title: LiteLLM_ObjectPermissionTable
       description: Represents a LiteLLM_ObjectPermissionTable record
-    LiteLLM_ObjectPermissionBase:
+    ValidationError:
       properties:
-        mcp_servers:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Mcp Servers
-        mcp_access_groups:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Mcp Access Groups
-        mcp_tool_permissions:
-          anyOf:
-          - additionalProperties:
-              items:
-                type: string
-              type: array
-            type: object
-          - type: 'null'
-          title: Mcp Tool Permissions
-        mcp_toolsets:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Mcp Toolsets
-        blocked_tools:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Blocked Tools
-        vector_stores:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Vector Stores
-        agents:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Agents
-        agent_access_groups:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Agent Access Groups
-        models:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Models
-        search_tools:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Search Tools
-        mcp_tool_search_enabled:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Mcp Tool Search Enabled
-        skills:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Skills
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
-      title: LiteLLM_ObjectPermissionBase
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     NewProjectRequest:
       properties:
         budget_id:
@@ -890,133 +828,6 @@ components:
       - project_id
       title: UpdateProjectRequest
       description: Request model for POST /project/update
-    NewProjectResponse:
-      properties:
-        project_id:
-          type: string
-          title: Project Id
-        project_alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Project Alias
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        team_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Team Id
-        budget_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Budget Id
-        metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Metadata
-        models:
-          items:
-            type: string
-          type: array
-          title: Models
-          default: []
-        spend:
-          type: number
-          title: Spend
-          default: 0.0
-        model_spend:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Model Spend
-        model_rpm_limit:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Model Rpm Limit
-        model_tpm_limit:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Model Tpm Limit
-        blocked:
-          type: boolean
-          title: Blocked
-          default: false
-        object_permission_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Object Permission Id
-        created_by:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created By
-        updated_by:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Updated By
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-        litellm_budget_table:
-          anyOf:
-          - $ref: '#/components/schemas/LiteLLM_BudgetTable'
-          - type: 'null'
-        object_permission:
-          anyOf:
-          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionTable'
-          - type: 'null'
-      type: object
-      required:
-      - project_id
-      - created_at
-      - updated_at
-      title: NewProjectResponse
-      description: Response model for POST /project/new
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     LiteLLM_ProjectTable:
       properties:
         project_id:
@@ -1189,6 +1000,195 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    LiteLLM_ObjectPermissionBase:
+      properties:
+        mcp_servers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Servers
+        mcp_access_groups:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Access Groups
+        mcp_tool_permissions:
+          anyOf:
+          - additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+          - type: 'null'
+          title: Mcp Tool Permissions
+        mcp_toolsets:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Toolsets
+        blocked_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Blocked Tools
+        vector_stores:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Vector Stores
+        agents:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Agents
+        agent_access_groups:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Agent Access Groups
+        models:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Models
+        search_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Search Tools
+        mcp_tool_search_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Mcp Tool Search Enabled
+        skills:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Skills
+      type: object
+      title: LiteLLM_ObjectPermissionBase
+    NewProjectResponse:
+      properties:
+        project_id:
+          type: string
+          title: Project Id
+        project_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Project Alias
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        budget_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Id
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+        models:
+          items:
+            type: string
+          type: array
+          title: Models
+          default: []
+        spend:
+          type: number
+          title: Spend
+          default: 0.0
+        model_spend:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Spend
+        model_rpm_limit:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Rpm Limit
+        model_tpm_limit:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Tpm Limit
+        blocked:
+          type: boolean
+          title: Blocked
+          default: false
+        object_permission_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Object Permission Id
+        created_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By
+        updated_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated By
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        litellm_budget_table:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_BudgetTable'
+          - type: 'null'
+        object_permission:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionTable'
+          - type: 'null'
+      type: object
+      required:
+      - project_id
+      - created_at
+      - updated_at
+      title: NewProjectResponse
+      description: Response model for POST /project/new
   securitySchemes:
     APIKeyHeader:
       type: apiKey

@@ -46,6 +46,40 @@ paths:
       - usage_ai
 components:
   schemas:
+    UsageAIChatRequest:
+      properties:
+        messages:
+          description: Chat messages (user/assistant history)
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          title: Messages
+          type: array
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Model to use for AI chat
+          title: Model
+      required:
+      - messages
+      title: UsageAIChatRequest
+      type: object
+    ChatMessage:
+      properties:
+        content:
+          title: Content
+          type: string
+        role:
+          enum:
+          - user
+          - assistant
+          title: Role
+          type: string
+      required:
+      - role
+      - content
+      title: ChatMessage
+      type: object
     ValidationError:
       properties:
         loc:
@@ -81,40 +115,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    ChatMessage:
-      properties:
-        content:
-          title: Content
-          type: string
-        role:
-          enum:
-          - user
-          - assistant
-          title: Role
-          type: string
-      required:
-      - role
-      - content
-      title: ChatMessage
-      type: object
-    UsageAIChatRequest:
-      properties:
-        messages:
-          description: Chat messages (user/assistant history)
-          items:
-            $ref: '#/components/schemas/ChatMessage'
-          title: Messages
-          type: array
-        model:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Model to use for AI chat
-          title: Model
-      required:
-      - messages
-      title: UsageAIChatRequest
-      type: object
   securitySchemes:
     APIKeyHeader:
       type: apiKey

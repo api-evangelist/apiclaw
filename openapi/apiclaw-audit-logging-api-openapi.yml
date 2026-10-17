@@ -232,53 +232,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    AuditLogResponse:
-      properties:
-        id:
-          type: string
-          title: Id
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-        changed_by:
-          type: string
-          title: Changed By
-        changed_by_api_key:
-          type: string
-          title: Changed By Api Key
-        action:
-          type: string
-          title: Action
-        table_name:
-          type: string
-          title: Table Name
-        object_id:
-          type: string
-          title: Object Id
-        before_value:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Before Value
-        updated_values:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Updated Values
-      type: object
-      required:
-      - id
-      - updated_at
-      - changed_by
-      - changed_by_api_key
-      - action
-      - table_name
-      - object_id
-      title: AuditLogResponse
-      description: Response model for a single audit log entry
     PaginatedAuditLogResponse:
       properties:
         audit_logs:
@@ -337,6 +290,53 @@ components:
       - msg
       - type
       title: ValidationError
+    AuditLogResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        changed_by:
+          type: string
+          title: Changed By
+        changed_by_api_key:
+          type: string
+          title: Changed By Api Key
+        action:
+          type: string
+          title: Action
+        table_name:
+          type: string
+          title: Table Name
+        object_id:
+          type: string
+          title: Object Id
+        before_value:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Before Value
+        updated_values:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Updated Values
+      type: object
+      required:
+      - id
+      - updated_at
+      - changed_by
+      - changed_by_api_key
+      - action
+      - table_name
+      - object_id
+      title: AuditLogResponse
+      description: Response model for a single audit log entry
     HTTPValidationError:
       properties:
         detail:

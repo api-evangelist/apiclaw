@@ -112,6 +112,22 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
+    UISettingsResponse:
+      properties:
+        values:
+          additionalProperties: true
+          type: object
+          title: Values
+        field_schema:
+          additionalProperties: true
+          type: object
+          title: Field Schema
+      type: object
+      required:
+      - values
+      - field_schema
+      title: UISettingsResponse
+      description: Response model for UI settings
     UserBanner:
       properties:
         enabled:
@@ -141,46 +157,6 @@ components:
           default: ''
       type: object
       title: UserBanner
-    UserBannerUpdate:
-      properties:
-        enabled:
-          type: boolean
-          title: Enabled
-          description: If true, the banner is shown to all authenticated dashboard users.
-          default: false
-        message:
-          type: string
-          maxLength: 4000
-          title: Message
-          description: Banner text shown to dashboard users. Markdown is supported.
-          default: ''
-        severity:
-          type: string
-          enum:
-          - info
-          - warning
-          - error
-          title: Severity
-          description: Visual style of the banner.
-          default: info
-      type: object
-      title: UserBannerUpdate
-    UISettingsResponse:
-      properties:
-        values:
-          additionalProperties: true
-          type: object
-          title: Values
-        field_schema:
-          additionalProperties: true
-          type: object
-          title: Field Schema
-      type: object
-      required:
-      - values
-      - field_schema
-      title: UISettingsResponse
-      description: Response model for UI settings
     ValidationError:
       properties:
         loc:
@@ -207,6 +183,39 @@ components:
       - msg
       - type
       title: ValidationError
+    UserBannerUpdate:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+          description: If true, the banner is shown to all authenticated dashboard users.
+          default: false
+        message:
+          type: string
+          maxLength: 4000
+          title: Message
+          description: Banner text shown to dashboard users. Markdown is supported.
+          default: ''
+        severity:
+          type: string
+          enum:
+          - info
+          - warning
+          - error
+          title: Severity
+          description: Visual style of the banner.
+          default: info
+      type: object
+      title: UserBannerUpdate
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     UpdateUserBannerResponse:
       properties:
         message:
@@ -219,15 +228,6 @@ components:
       - message
       - banner
       title: UpdateUserBannerResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

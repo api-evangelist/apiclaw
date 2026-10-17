@@ -187,27 +187,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    FallbackDeleteResponse:
-      properties:
-        model:
-          type: string
-          title: Model
-          description: The model name
-        fallback_type:
-          type: string
-          title: Fallback Type
-          description: Type of fallback
-        message:
-          type: string
-          title: Message
-          description: Success message
-      type: object
-      required:
-      - model
-      - fallback_type
-      - message
-      title: FallbackDeleteResponse
-      description: Response model for deleting fallbacks
     FallbackGetResponse:
       properties:
         model:
@@ -285,6 +264,36 @@ components:
       - msg
       - type
       title: ValidationError
+    FallbackDeleteResponse:
+      properties:
+        model:
+          type: string
+          title: Model
+          description: The model name
+        fallback_type:
+          type: string
+          title: Fallback Type
+          description: Type of fallback
+        message:
+          type: string
+          title: Message
+          description: Success message
+      type: object
+      required:
+      - model
+      - fallback_type
+      - message
+      title: FallbackDeleteResponse
+      description: Response model for deleting fallbacks
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     FallbackCreateRequest:
       properties:
         model:
@@ -313,15 +322,6 @@ components:
       - fallback_models
       title: FallbackCreateRequest
       description: Request model for creating/updating fallbacks
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

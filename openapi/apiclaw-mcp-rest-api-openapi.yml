@@ -318,6 +318,79 @@ components:
           title: Token Exchange Profile
       type: object
       title: MCPCredentials
+    MCPEnvVar:
+      properties:
+        name:
+          type: string
+          title: Name
+        value:
+          type: string
+          title: Value
+          default: ''
+        scope:
+          $ref: '#/components/schemas/MCPEnvVarScope'
+          default: global
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+      type: object
+      required:
+      - name
+      title: MCPEnvVar
+      description: 'One environment variable for an MCP server.
+
+
+        Variables can be interpolated into ``static_headers`` using ``${NAME}``
+
+        syntax. ``scope=global`` values are stored on the server. ``scope=user``
+
+        values are stored per-user in ``LiteLLM_MCPUserEnvVars`` and supplied by
+
+        each user.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    MCPEnvVarScope:
+      type: string
+      enum:
+      - global
+      - user
+      title: MCPEnvVarScope
+      description: "Scope for an MCP server environment variable.\n\n- ``global``: value is provided by the admin and used for all users.\n- ``user``: each user must provide their own value via the per-user\n  env-var endpoint. The admin-supplied ``value`` is treated as a\n  placeholder/hint and is not used at request time."
     NewMCPServerRequest:
       properties:
         server_id:
@@ -576,79 +649,6 @@ components:
           description: 'Server-managed: set by the endpoint; caller values are overridden.'
       type: object
       title: NewMCPServerRequest
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    MCPEnvVarScope:
-      type: string
-      enum:
-      - global
-      - user
-      title: MCPEnvVarScope
-      description: "Scope for an MCP server environment variable.\n\n- ``global``: value is provided by the admin and used for all users.\n- ``user``: each user must provide their own value via the per-user\n  env-var endpoint. The admin-supplied ``value`` is treated as a\n  placeholder/hint and is not used at request time."
-    MCPEnvVar:
-      properties:
-        name:
-          type: string
-          title: Name
-        value:
-          type: string
-          title: Value
-          default: ''
-        scope:
-          $ref: '#/components/schemas/MCPEnvVarScope'
-          default: global
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-      type: object
-      required:
-      - name
-      title: MCPEnvVar
-      description: 'One environment variable for an MCP server.
-
-
-        Variables can be interpolated into ``static_headers`` using ``${NAME}``
-
-        syntax. ``scope=global`` values are stored on the server. ``scope=user``
-
-        values are stored per-user in ``LiteLLM_MCPUserEnvVars`` and supplied by
-
-        each user.'
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

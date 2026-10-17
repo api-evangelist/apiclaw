@@ -3194,23 +3194,6 @@ paths:
       - llm_passthrough
 components:
   schemas:
-    RealtimeTranscriptionSessionResponse:
-      additionalProperties: true
-      description: 'Response from POST /v1/realtime/transcription_sessions.
-
-
-        `client_secret.value` contains the encrypted token instead of the raw
-
-        ephemeral key. Unknown fields pass through unchanged.'
-      properties:
-        client_secret:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Client Secret
-      title: RealtimeTranscriptionSessionResponse
-      type: object
     RealtimeClientSecretResponse:
       description: 'Response from POST /v1/realtime/client_secrets.
 
@@ -3265,6 +3248,23 @@ components:
       - msg
       - type
       title: ValidationError
+    RealtimeTranscriptionSessionResponse:
+      additionalProperties: true
+      description: 'Response from POST /v1/realtime/transcription_sessions.
+
+
+        `client_secret.value` contains the encrypted token instead of the raw
+
+        ephemeral key. Unknown fields pass through unchanged.'
+      properties:
+        client_secret:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Client Secret
+      title: RealtimeTranscriptionSessionResponse
+      type: object
     HTTPValidationError:
       properties:
         detail:

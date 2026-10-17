@@ -58,7 +58,7 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    _MaintenanceOut:
+    _UpdateMaintenanceRequest:
       properties:
         enabled:
           type: boolean
@@ -66,17 +66,11 @@ components:
         message:
           type: string
           title: Message
-        updated_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Updated At
+          default: ''
       type: object
       required:
       - enabled
-      - message
-      - updated_at
-      title: _MaintenanceOut
+      title: _UpdateMaintenanceRequest
     ValidationError:
       properties:
         loc:
@@ -103,7 +97,7 @@ components:
       - msg
       - type
       title: ValidationError
-    _UpdateMaintenanceRequest:
+    _MaintenanceOut:
       properties:
         enabled:
           type: boolean
@@ -111,11 +105,17 @@ components:
         message:
           type: string
           title: Message
-          default: ''
+        updated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated At
       type: object
       required:
       - enabled
-      title: _UpdateMaintenanceRequest
+      - message
+      - updated_at
+      title: _MaintenanceOut
     HTTPValidationError:
       properties:
         detail:

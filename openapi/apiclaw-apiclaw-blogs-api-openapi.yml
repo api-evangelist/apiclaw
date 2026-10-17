@@ -257,6 +257,175 @@ components:
           title: Status
       type: object
       title: _UpdateBlogPostRequest
+    PaginatedResult:
+      properties:
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+      type: object
+      required:
+      - total
+      - page
+      - page_size
+      - total_pages
+      title: PaginatedResult
+    _PublicBlogPostOut:
+      properties:
+        slug:
+          type: string
+          title: Slug
+        title:
+          type: string
+          title: Title
+        description:
+          type: string
+          title: Description
+        body:
+          type: string
+          title: Body
+        cover_image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cover Image Url
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+        published_at:
+          type: string
+          title: Published At
+      type: object
+      required:
+      - slug
+      - title
+      - description
+      - body
+      - cover_image_url
+      - tags
+      - published_at
+      title: _PublicBlogPostOut
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    _PublicBlogPostListOut:
+      properties:
+        posts:
+          items:
+            $ref: '#/components/schemas/_PublicBlogPostOut'
+          type: array
+          title: Posts
+        pagination:
+          $ref: '#/components/schemas/PaginatedResult'
+      type: object
+      required:
+      - posts
+      - pagination
+      title: _PublicBlogPostListOut
+    _CreateBlogPostRequest:
+      properties:
+        title:
+          type: string
+          title: Title
+        slug:
+          type: string
+          title: Slug
+        description:
+          type: string
+          title: Description
+        body:
+          type: string
+          title: Body
+        cover_image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cover Image Url
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+          default: []
+        status:
+          type: string
+          enum:
+          - draft
+          - published
+          title: Status
+          default: draft
+      type: object
+      required:
+      - title
+      - slug
+      - description
+      - body
+      title: _CreateBlogPostRequest
+    _BlogPostListOut:
+      properties:
+        posts:
+          items:
+            $ref: '#/components/schemas/_BlogPostOut'
+          type: array
+          title: Posts
+        pagination:
+          $ref: '#/components/schemas/PaginatedResult'
+      type: object
+      required:
+      - posts
+      - pagination
+      title: _BlogPostListOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    _OkOut:
+      properties:
+        ok:
+          type: boolean
+          title: Ok
+      type: object
+      required:
+      - ok
+      title: _OkOut
     _BlogPostOut:
       properties:
         id:
@@ -319,175 +488,6 @@ components:
       - updated_at
       - published_at
       title: _BlogPostOut
-    _CreateBlogPostRequest:
-      properties:
-        title:
-          type: string
-          title: Title
-        slug:
-          type: string
-          title: Slug
-        description:
-          type: string
-          title: Description
-        body:
-          type: string
-          title: Body
-        cover_image_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Cover Image Url
-        tags:
-          items:
-            type: string
-          type: array
-          title: Tags
-          default: []
-        status:
-          type: string
-          enum:
-          - draft
-          - published
-          title: Status
-          default: draft
-      type: object
-      required:
-      - title
-      - slug
-      - description
-      - body
-      title: _CreateBlogPostRequest
-    _BlogPostListOut:
-      properties:
-        posts:
-          items:
-            $ref: '#/components/schemas/_BlogPostOut'
-          type: array
-          title: Posts
-        pagination:
-          $ref: '#/components/schemas/PaginatedResult'
-      type: object
-      required:
-      - posts
-      - pagination
-      title: _BlogPostListOut
-    PaginatedResult:
-      properties:
-        total:
-          type: integer
-          title: Total
-        page:
-          type: integer
-          title: Page
-        page_size:
-          type: integer
-          title: Page Size
-        total_pages:
-          type: integer
-          title: Total Pages
-      type: object
-      required:
-      - total
-      - page
-      - page_size
-      - total_pages
-      title: PaginatedResult
-    _PublicBlogPostListOut:
-      properties:
-        posts:
-          items:
-            $ref: '#/components/schemas/_PublicBlogPostOut'
-          type: array
-          title: Posts
-        pagination:
-          $ref: '#/components/schemas/PaginatedResult'
-      type: object
-      required:
-      - posts
-      - pagination
-      title: _PublicBlogPostListOut
-    _PublicBlogPostOut:
-      properties:
-        slug:
-          type: string
-          title: Slug
-        title:
-          type: string
-          title: Title
-        description:
-          type: string
-          title: Description
-        body:
-          type: string
-          title: Body
-        cover_image_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Cover Image Url
-        tags:
-          items:
-            type: string
-          type: array
-          title: Tags
-        published_at:
-          type: string
-          title: Published At
-      type: object
-      required:
-      - slug
-      - title
-      - description
-      - body
-      - cover_image_url
-      - tags
-      - published_at
-      title: _PublicBlogPostOut
-    _OkOut:
-      properties:
-        ok:
-          type: boolean
-          title: Ok
-      type: object
-      required:
-      - ok
-      title: _OkOut
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

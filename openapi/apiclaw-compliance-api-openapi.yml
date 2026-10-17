@@ -91,28 +91,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    ComplianceCheckResult:
-      properties:
-        check_name:
-          type: string
-          title: Check Name
-        article:
-          type: string
-          title: Article
-        passed:
-          type: boolean
-          title: Passed
-        detail:
-          type: string
-          title: Detail
-      type: object
-      required:
-      - check_name
-      - article
-      - passed
-      - detail
-      title: ComplianceCheckResult
-      description: Result of a single compliance check.
     ComplianceResponse:
       properties:
         compliant:
@@ -133,6 +111,32 @@ components:
       - checks
       title: ComplianceResponse
       description: Response from a compliance check endpoint.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     ComplianceCheckRequest:
       properties:
         request_id:
@@ -169,32 +173,6 @@ components:
 
 
         Mirrors the spend log fields needed for compliance evaluation.'
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     HTTPValidationError:
       properties:
         detail:
@@ -204,6 +182,28 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    ComplianceCheckResult:
+      properties:
+        check_name:
+          type: string
+          title: Check Name
+        article:
+          type: string
+          title: Article
+        passed:
+          type: boolean
+          title: Passed
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - check_name
+      - article
+      - passed
+      - detail
+      title: ComplianceCheckResult
+      description: Result of a single compliance check.
   securitySchemes:
     APIKeyHeader:
       type: apiKey

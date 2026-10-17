@@ -119,6 +119,68 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
+    CacheSettingsUpdateRequest:
+      properties:
+        cache_settings:
+          additionalProperties: true
+          type: object
+          title: Cache Settings
+          description: Cache settings to save
+      type: object
+      required:
+      - cache_settings
+      title: CacheSettingsUpdateRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CacheSettingsResponse:
+      properties:
+        fields:
+          items:
+            $ref: '#/components/schemas/CacheSettingsField'
+          type: array
+          title: Fields
+          description: List of all configurable cache settings with metadata
+        current_values:
+          additionalProperties: true
+          type: object
+          title: Current Values
+          description: Current values of cache settings
+        redis_type_descriptions:
+          additionalProperties:
+            type: string
+          type: object
+          title: Redis Type Descriptions
+          description: Descriptions for each Redis type option
+      type: object
+      required:
+      - fields
+      - current_values
+      - redis_type_descriptions
+      title: CacheSettingsResponse
     CacheSettingsField:
       properties:
         field_name:
@@ -162,6 +224,26 @@ components:
       - field_description
       - ui_field_name
       title: CacheSettingsField
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CacheTestRequest:
+      properties:
+        cache_settings:
+          additionalProperties: true
+          type: object
+          title: Cache Settings
+          description: Cache settings to test connection with
+      type: object
+      required:
+      - cache_settings
+      title: CacheTestRequest
     CacheTestResponse:
       properties:
         status:
@@ -183,88 +265,6 @@ components:
       - status
       - message
       title: CacheTestResponse
-    CacheSettingsUpdateRequest:
-      properties:
-        cache_settings:
-          additionalProperties: true
-          type: object
-          title: Cache Settings
-          description: Cache settings to save
-      type: object
-      required:
-      - cache_settings
-      title: CacheSettingsUpdateRequest
-    CacheSettingsResponse:
-      properties:
-        fields:
-          items:
-            $ref: '#/components/schemas/CacheSettingsField'
-          type: array
-          title: Fields
-          description: List of all configurable cache settings with metadata
-        current_values:
-          additionalProperties: true
-          type: object
-          title: Current Values
-          description: Current values of cache settings
-        redis_type_descriptions:
-          additionalProperties:
-            type: string
-          type: object
-          title: Redis Type Descriptions
-          description: Descriptions for each Redis type option
-      type: object
-      required:
-      - fields
-      - current_values
-      - redis_type_descriptions
-      title: CacheSettingsResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    CacheTestRequest:
-      properties:
-        cache_settings:
-          additionalProperties: true
-          type: object
-          title: Cache Settings
-          description: Cache settings to test connection with
-      type: object
-      required:
-      - cache_settings
-      title: CacheTestRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey

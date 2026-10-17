@@ -32,6 +32,140 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
+    CapacityOut:
+      properties:
+        sanctioned_daily_requests:
+          type: integer
+          title: Sanctioned Daily Requests
+        sanctioned_monthly_requests:
+          type: integer
+          title: Sanctioned Monthly Requests
+        active_subscriptions:
+          type: integer
+          title: Active Subscriptions
+        expired_subscriptions:
+          type: integer
+          title: Expired Subscriptions
+        expiring_within_7d:
+          type: integer
+          title: Expiring Within 7D
+      type: object
+      required:
+      - sanctioned_daily_requests
+      - sanctioned_monthly_requests
+      - active_subscriptions
+      - expired_subscriptions
+      - expiring_within_7d
+      title: CapacityOut
+    UsersOut:
+      properties:
+        total:
+          type: integer
+          title: Total
+        paying:
+          type: integer
+          title: Paying
+        trial:
+          type: integer
+          title: Trial
+        signups_today:
+          type: integer
+          title: Signups Today
+        signups_7d:
+          type: integer
+          title: Signups 7D
+        signups_30d:
+          type: integer
+          title: Signups 30D
+        blocked:
+          type: integer
+          title: Blocked
+        virtual_keys:
+          type: integer
+          title: Virtual Keys
+      type: object
+      required:
+      - total
+      - paying
+      - trial
+      - signups_today
+      - signups_7d
+      - signups_30d
+      - blocked
+      - virtual_keys
+      title: UsersOut
+    PlatformOut:
+      properties:
+        maintenance_enabled:
+          type: boolean
+          title: Maintenance Enabled
+        paused_deployments:
+          type: integer
+          title: Paused Deployments
+        cooling_api_keys:
+          type: integer
+          title: Cooling Api Keys
+        referrers:
+          type: integer
+          title: Referrers
+        referrals:
+          type: integer
+          title: Referrals
+        pending_commissions:
+          type: integer
+          title: Pending Commissions
+        commissions_paid_usd:
+          type: number
+          title: Commissions Paid Usd
+      type: object
+      required:
+      - maintenance_enabled
+      - paused_deployments
+      - cooling_api_keys
+      - referrers
+      - referrals
+      - pending_commissions
+      - commissions_paid_usd
+      title: PlatformOut
+    PlanRowOut:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        price_usd:
+          type: integer
+          title: Price Usd
+        daily_request_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Daily Request Limit
+        active:
+          type: integer
+          title: Active
+        expired:
+          type: integer
+          title: Expired
+        sanctioned_daily_requests:
+          type: integer
+          title: Sanctioned Daily Requests
+        monthly_value_usd:
+          type: integer
+          title: Monthly Value Usd
+      type: object
+      required:
+      - id
+      - name
+      - price_usd
+      - daily_request_limit
+      - active
+      - expired
+      - sanctioned_daily_requests
+      - monthly_value_usd
+      title: PlanRowOut
     RevenueOut:
       properties:
         total_usd:
@@ -87,132 +221,6 @@ components:
       - checkout_conversion_percent
       - estimated_mrr_usd
       title: RevenueOut
-    UsersOut:
-      properties:
-        total:
-          type: integer
-          title: Total
-        paying:
-          type: integer
-          title: Paying
-        trial:
-          type: integer
-          title: Trial
-        signups_today:
-          type: integer
-          title: Signups Today
-        signups_7d:
-          type: integer
-          title: Signups 7D
-        signups_30d:
-          type: integer
-          title: Signups 30D
-        blocked:
-          type: integer
-          title: Blocked
-        virtual_keys:
-          type: integer
-          title: Virtual Keys
-      type: object
-      required:
-      - total
-      - paying
-      - trial
-      - signups_today
-      - signups_7d
-      - signups_30d
-      - blocked
-      - virtual_keys
-      title: UsersOut
-    PlanRowOut:
-      properties:
-        id:
-          type: string
-          title: Id
-        name:
-          type: string
-          title: Name
-        price_usd:
-          type: integer
-          title: Price Usd
-        daily_request_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Daily Request Limit
-        active:
-          type: integer
-          title: Active
-        expired:
-          type: integer
-          title: Expired
-        sanctioned_daily_requests:
-          type: integer
-          title: Sanctioned Daily Requests
-        monthly_value_usd:
-          type: integer
-          title: Monthly Value Usd
-      type: object
-      required:
-      - id
-      - name
-      - price_usd
-      - daily_request_limit
-      - active
-      - expired
-      - sanctioned_daily_requests
-      - monthly_value_usd
-      title: PlanRowOut
-    DailyOut:
-      properties:
-        day:
-          type: string
-          title: Day
-        signups:
-          type: integer
-          title: Signups
-        purchases:
-          type: integer
-          title: Purchases
-      type: object
-      required:
-      - day
-      - signups
-      - purchases
-      title: DailyOut
-    PlatformOut:
-      properties:
-        maintenance_enabled:
-          type: boolean
-          title: Maintenance Enabled
-        paused_deployments:
-          type: integer
-          title: Paused Deployments
-        cooling_api_keys:
-          type: integer
-          title: Cooling Api Keys
-        referrers:
-          type: integer
-          title: Referrers
-        referrals:
-          type: integer
-          title: Referrals
-        pending_commissions:
-          type: integer
-          title: Pending Commissions
-        commissions_paid_usd:
-          type: number
-          title: Commissions Paid Usd
-      type: object
-      required:
-      - maintenance_enabled
-      - paused_deployments
-      - cooling_api_keys
-      - referrers
-      - referrals
-      - pending_commissions
-      - commissions_paid_usd
-      title: PlatformOut
     AdminOverviewOut:
       properties:
         generated_at:
@@ -250,31 +258,23 @@ components:
       - daily
       - platform
       title: AdminOverviewOut
-    CapacityOut:
+    DailyOut:
       properties:
-        sanctioned_daily_requests:
+        day:
+          type: string
+          title: Day
+        signups:
           type: integer
-          title: Sanctioned Daily Requests
-        sanctioned_monthly_requests:
+          title: Signups
+        purchases:
           type: integer
-          title: Sanctioned Monthly Requests
-        active_subscriptions:
-          type: integer
-          title: Active Subscriptions
-        expired_subscriptions:
-          type: integer
-          title: Expired Subscriptions
-        expiring_within_7d:
-          type: integer
-          title: Expiring Within 7D
+          title: Purchases
       type: object
       required:
-      - sanctioned_daily_requests
-      - sanctioned_monthly_requests
-      - active_subscriptions
-      - expired_subscriptions
-      - expiring_within_7d
-      title: CapacityOut
+      - day
+      - signups
+      - purchases
+      title: DailyOut
   securitySchemes:
     APIKeyHeader:
       type: apiKey

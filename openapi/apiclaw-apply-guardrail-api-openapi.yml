@@ -48,6 +48,32 @@ paths:
       - Apply Guardrail
 components:
   schemas:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     ApplyGuardrailResponse:
       properties:
         response_text:
@@ -57,49 +83,6 @@ components:
       required:
       - response_text
       title: ApplyGuardrailResponse
-    ApplyGuardrailRequest:
-      properties:
-        guardrail_name:
-          type: string
-          title: Guardrail Name
-        text:
-          type: string
-          title: Text
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-        entities:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/PiiEntityType'
-            type: array
-          - type: 'null'
-          title: Entities
-        input_type:
-          type: string
-          title: Input Type
-          default: request
-        messages:
-          anyOf:
-          - items:
-              additionalProperties: true
-              type: object
-            type: array
-          - type: 'null'
-          title: Messages
-        metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Metadata
-      type: object
-      required:
-      - guardrail_name
-      - text
-      title: ApplyGuardrailRequest
     PiiEntityType:
       type: string
       enum:
@@ -146,32 +129,6 @@ components:
       - IN_PASSPORT
       - FI_PERSONAL_IDENTITY_CODE
       title: PiiEntityType
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     HTTPValidationError:
       properties:
         detail:
@@ -181,6 +138,49 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    ApplyGuardrailRequest:
+      properties:
+        guardrail_name:
+          type: string
+          title: Guardrail Name
+        text:
+          type: string
+          title: Text
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
+        entities:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/PiiEntityType'
+            type: array
+          - type: 'null'
+          title: Entities
+        input_type:
+          type: string
+          title: Input Type
+          default: request
+        messages:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Messages
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+      type: object
+      required:
+      - guardrail_name
+      - text
+      title: ApplyGuardrailRequest
   securitySchemes:
     APIKeyHeader:
       type: apiKey

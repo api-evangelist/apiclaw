@@ -77,6 +77,20 @@ components:
       - langgraph_platform
       title: DiscoveryMode
       type: string
+    DiscoverAgentResponse:
+      properties:
+        agent_card:
+          additionalProperties: true
+          title: Agent Card
+          type: object
+        url:
+          title: Url
+          type: string
+      required:
+      - url
+      - agent_card
+      title: DiscoverAgentResponse
+      type: object
     DiscoverAgentRequest:
       properties:
         discovery_mode:
@@ -124,20 +138,6 @@ components:
       - msg
       - type
       title: ValidationError
-    DiscoverAgentResponse:
-      properties:
-        agent_card:
-          additionalProperties: true
-          title: Agent Card
-          type: object
-        url:
-          title: Url
-          type: string
-      required:
-      - url
-      - agent_card
-      title: DiscoverAgentResponse
-      type: object
     HTTPValidationError:
       properties:
         detail:

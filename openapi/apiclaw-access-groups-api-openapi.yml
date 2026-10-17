@@ -273,55 +273,6 @@ paths:
       - access_groups
 components:
   schemas:
-    AccessGroupCreateRequest:
-      properties:
-        access_agent_ids:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Access Agent Ids
-        access_group_name:
-          title: Access Group Name
-          type: string
-        access_mcp_server_ids:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Access Mcp Server Ids
-        access_model_names:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Access Model Names
-        assigned_key_ids:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Assigned Key Ids
-        assigned_team_ids:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Assigned Team Ids
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-      required:
-      - access_group_name
-      title: AccessGroupCreateRequest
-      type: object
     AccessGroupUpdateRequest:
       properties:
         access_agent_ids:
@@ -371,6 +322,81 @@ components:
           title: Description
       title: AccessGroupUpdateRequest
       type: object
+    AccessGroupCreateRequest:
+      properties:
+        access_agent_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Access Agent Ids
+        access_group_name:
+          title: Access Group Name
+          type: string
+        access_mcp_server_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Access Mcp Server Ids
+        access_model_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Access Model Names
+        assigned_key_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Assigned Key Ids
+        assigned_team_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Assigned Team Ids
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+      required:
+      - access_group_name
+      title: AccessGroupCreateRequest
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     AccessGroupResponse:
       properties:
         access_agent_ids:
@@ -463,32 +489,6 @@ components:
       - updated_at
       title: AccessGroupResponse
       type: object
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     AccessGroupResource:
       description: A resource referenced by an access group. `name` is null when the id no longer resolves or has no alias.
       properties:

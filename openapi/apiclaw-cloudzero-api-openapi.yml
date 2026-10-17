@@ -249,27 +249,98 @@ paths:
       - cloudzero
 components:
   schemas:
-    CloudZeroInitRequest:
-      description: Request model for initializing CloudZero settings
+    CloudZeroInitResponse:
+      description: Response model for CloudZero initialization
       properties:
-        api_key:
-          description: CloudZero API key for authentication
-          title: Api Key
+        message:
+          title: Message
           type: string
-        connection_id:
-          description: CloudZero connection ID for data submission
-          title: Connection Id
-          type: string
-        timezone:
-          default: UTC
-          description: 'Timezone for date handling (default: UTC)'
-          title: Timezone
+        status:
+          title: Status
           type: string
       required:
-      - api_key
-      - connection_id
-      title: CloudZeroInitRequest
+      - message
+      - status
+      title: CloudZeroInitResponse
       type: object
+    CloudZeroSettingsUpdate:
+      description: Request model for updating CloudZero settings
+      properties:
+        api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New CloudZero API key for authentication
+          title: Api Key
+        connection_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New CloudZero connection ID for data submission
+          title: Connection Id
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New timezone for date handling
+          title: Timezone
+      title: CloudZeroSettingsUpdate
+      type: object
+    CloudZeroSettingsView:
+      description: Response model for viewing CloudZero settings with masked API key
+      properties:
+        api_key_masked:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Masked API key showing only first 4 and last 4 characters
+          title: Api Key Masked
+        connection_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: CloudZero connection ID for data submission
+          title: Connection Id
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Configuration status
+          title: Status
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Timezone for date handling
+          title: Timezone
+      title: CloudZeroSettingsView
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     CloudZeroExportRequest:
       description: Request model for CloudZero export operations
       properties:
@@ -299,43 +370,6 @@ components:
           description: Start time for data export in UTC
           title: Start Time Utc
       title: CloudZeroExportRequest
-      type: object
-    CloudZeroSettingsUpdate:
-      description: Request model for updating CloudZero settings
-      properties:
-        api_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: New CloudZero API key for authentication
-          title: Api Key
-        connection_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: New CloudZero connection ID for data submission
-          title: Connection Id
-        timezone:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: New timezone for date handling
-          title: Timezone
-      title: CloudZeroSettingsUpdate
-      type: object
-    CloudZeroInitResponse:
-      description: Response model for CloudZero initialization
-      properties:
-        message:
-          title: Message
-          type: string
-        status:
-          title: Status
-          type: string
-      required:
-      - message
-      - status
-      title: CloudZeroInitResponse
       type: object
     CloudZeroExportResponse:
       description: Response model for CloudZero export operations
@@ -370,61 +404,6 @@ components:
       - status
       title: CloudZeroExportResponse
       type: object
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    CloudZeroSettingsView:
-      description: Response model for viewing CloudZero settings with masked API key
-      properties:
-        api_key_masked:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Masked API key showing only first 4 and last 4 characters
-          title: Api Key Masked
-        connection_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: CloudZero connection ID for data submission
-          title: Connection Id
-        status:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Configuration status
-          title: Status
-        timezone:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Timezone for date handling
-          title: Timezone
-      title: CloudZeroSettingsView
-      type: object
     HTTPValidationError:
       properties:
         detail:
@@ -434,6 +413,27 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    CloudZeroInitRequest:
+      description: Request model for initializing CloudZero settings
+      properties:
+        api_key:
+          description: CloudZero API key for authentication
+          title: Api Key
+          type: string
+        connection_id:
+          description: CloudZero connection ID for data submission
+          title: Connection Id
+          type: string
+        timezone:
+          default: UTC
+          description: 'Timezone for date handling (default: UTC)'
+          title: Timezone
+          type: string
+      required:
+      - api_key
+      - connection_id
+      title: CloudZeroInitRequest
+      type: object
   securitySchemes:
     APIKeyHeader:
       type: apiKey

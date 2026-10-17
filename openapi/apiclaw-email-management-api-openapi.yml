@@ -74,38 +74,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    EmailEventSettings:
-      properties:
-        event:
-          $ref: '#/components/schemas/EmailEvent'
-        enabled:
-          type: boolean
-          title: Enabled
-      type: object
-      required:
-      - event
-      - enabled
-      title: EmailEventSettings
-    EmailEvent:
-      type: string
-      enum:
-      - Virtual Key Created
-      - New User Invitation
-      - Virtual Key Rotated
-      - Soft Budget Crossed
-      - Max Budget Alert
-      title: EmailEvent
-    EmailEventSettingsUpdateRequest:
-      properties:
-        settings:
-          items:
-            $ref: '#/components/schemas/EmailEventSettings'
-          type: array
-          title: Settings
-      type: object
-      required:
-      - settings
-      title: EmailEventSettingsUpdateRequest
     EmailEventSettingsResponse:
       properties:
         settings:
@@ -143,6 +111,27 @@ components:
       - msg
       - type
       title: ValidationError
+    EmailEventSettings:
+      properties:
+        event:
+          $ref: '#/components/schemas/EmailEvent'
+        enabled:
+          type: boolean
+          title: Enabled
+      type: object
+      required:
+      - event
+      - enabled
+      title: EmailEventSettings
+    EmailEvent:
+      type: string
+      enum:
+      - Virtual Key Created
+      - New User Invitation
+      - Virtual Key Rotated
+      - Soft Budget Crossed
+      - Max Budget Alert
+      title: EmailEvent
     HTTPValidationError:
       properties:
         detail:
@@ -152,6 +141,17 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    EmailEventSettingsUpdateRequest:
+      properties:
+        settings:
+          items:
+            $ref: '#/components/schemas/EmailEventSettings'
+          type: array
+          title: Settings
+      type: object
+      required:
+      - settings
+      title: EmailEventSettingsUpdateRequest
   securitySchemes:
     APIKeyHeader:
       type: apiKey

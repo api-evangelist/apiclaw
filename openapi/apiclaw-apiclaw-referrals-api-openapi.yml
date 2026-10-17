@@ -323,43 +323,27 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    _ReferralMeOut:
+    _AdminSummaryOut:
       properties:
-        referral_link:
-          type: string
-          title: Referral Link
-        referral_code:
-          type: string
-          title: Referral Code
-        balance_usd:
-          type: number
-          title: Balance Usd
-        lifetime_earned_usd:
-          type: number
-          title: Lifetime Earned Usd
-        total_referred:
+        referrer_count:
           type: integer
-          title: Total Referred
-        total_settled:
+          title: Referrer Count
+        total_referrals:
           type: integer
-          title: Total Settled
-        withdraw_eligible:
-          type: boolean
-          title: Withdraw Eligible
-        withdrawal_minimum_usd:
+          title: Total Referrals
+        total_paid_usd:
           type: number
-          title: Withdrawal Minimum Usd
+          title: Total Paid Usd
+        pending_count:
+          type: integer
+          title: Pending Count
       type: object
       required:
-      - referral_link
-      - referral_code
-      - balance_usd
-      - lifetime_earned_usd
-      - total_referred
-      - total_settled
-      - withdraw_eligible
-      - withdrawal_minimum_usd
-      title: _ReferralMeOut
+      - referrer_count
+      - total_referrals
+      - total_paid_usd
+      - pending_count
+      title: _AdminSummaryOut
     _AdminUserLookupOut:
       properties:
         user_id:
@@ -398,11 +382,114 @@ components:
       - page_size
       - total_pages
       title: _AdminUserLookupOut
-    _ReferredListOut:
+    _WalletAdjustOut:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        balance_usd:
+          type: number
+          title: Balance Usd
+      type: object
+      required:
+      - user_id
+      - balance_usd
+      title: _WalletAdjustOut
+    _ReferrerStatsOut:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+        referral_count:
+          type: integer
+          title: Referral Count
+        settled_count:
+          type: integer
+          title: Settled Count
+        pending_count:
+          type: integer
+          title: Pending Count
+        lifetime_earned_usd:
+          type: number
+          title: Lifetime Earned Usd
+        balance_usd:
+          type: number
+          title: Balance Usd
+      type: object
+      required:
+      - user_id
+      - user_email
+      - referral_count
+      - settled_count
+      - pending_count
+      - lifetime_earned_usd
+      - balance_usd
+      title: _ReferrerStatsOut
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    _ReferredUserOut:
+      properties:
+        referee_user_id:
+          type: string
+          title: Referee User Id
+        referred_at:
+          type: string
+          title: Referred At
+        plan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Plan Id
+        commission_amount_usd:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Commission Amount Usd
+        commission_status:
+          type: string
+          title: Commission Status
+      type: object
+      required:
+      - referee_user_id
+      - referred_at
+      - plan_id
+      - commission_amount_usd
+      - commission_status
+      title: _ReferredUserOut
+    _ReferrerListOut:
       properties:
         results:
           items:
-            $ref: '#/components/schemas/_ReferredUserOut'
+            $ref: '#/components/schemas/_ReferrerStatsOut'
           type: array
           title: Results
         total:
@@ -424,7 +511,7 @@ components:
       - page
       - page_size
       - total_pages
-      title: _ReferredListOut
+      title: _ReferrerListOut
     _RecentReferralOut:
       properties:
         referee_user_id:
@@ -470,27 +557,6 @@ components:
       - commission_amount_usd
       - plan_id
       title: _RecentReferralOut
-    _AdminSummaryOut:
-      properties:
-        referrer_count:
-          type: integer
-          title: Referrer Count
-        total_referrals:
-          type: integer
-          title: Total Referrals
-        total_paid_usd:
-          type: number
-          title: Total Paid Usd
-        pending_count:
-          type: integer
-          title: Pending Count
-      type: object
-      required:
-      - referrer_count
-      - total_referrals
-      - total_paid_usd
-      - pending_count
-      title: _AdminSummaryOut
     _WalletAdjustRequest:
       properties:
         user_email:
@@ -514,163 +580,6 @@ components:
       - delta_usd
       - note
       title: _WalletAdjustRequest
-    _RecentListOut:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/_RecentReferralOut'
-          type: array
-          title: Results
-        total:
-          type: integer
-          title: Total
-        page:
-          type: integer
-          title: Page
-        page_size:
-          type: integer
-          title: Page Size
-        total_pages:
-          type: integer
-          title: Total Pages
-      type: object
-      required:
-      - results
-      - total
-      - page
-      - page_size
-      - total_pages
-      title: _RecentListOut
-    _LedgerListOut:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/_LedgerEntryOut'
-          type: array
-          title: Results
-        total:
-          type: integer
-          title: Total
-        page:
-          type: integer
-          title: Page
-        page_size:
-          type: integer
-          title: Page Size
-        total_pages:
-          type: integer
-          title: Total Pages
-      type: object
-      required:
-      - results
-      - total
-      - page
-      - page_size
-      - total_pages
-      title: _LedgerListOut
-    _ReferredUserOut:
-      properties:
-        referee_user_id:
-          type: string
-          title: Referee User Id
-        referred_at:
-          type: string
-          title: Referred At
-        plan_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Plan Id
-        commission_amount_usd:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Commission Amount Usd
-        commission_status:
-          type: string
-          title: Commission Status
-      type: object
-      required:
-      - referee_user_id
-      - referred_at
-      - plan_id
-      - commission_amount_usd
-      - commission_status
-      title: _ReferredUserOut
-    _WalletAdjustOut:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-        balance_usd:
-          type: number
-          title: Balance Usd
-      type: object
-      required:
-      - user_id
-      - balance_usd
-      title: _WalletAdjustOut
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    _ReferrerStatsOut:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-        user_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Email
-        referral_count:
-          type: integer
-          title: Referral Count
-        settled_count:
-          type: integer
-          title: Settled Count
-        pending_count:
-          type: integer
-          title: Pending Count
-        lifetime_earned_usd:
-          type: number
-          title: Lifetime Earned Usd
-        balance_usd:
-          type: number
-          title: Balance Usd
-      type: object
-      required:
-      - user_id
-      - user_email
-      - referral_count
-      - settled_count
-      - pending_count
-      - lifetime_earned_usd
-      - balance_usd
-      title: _ReferrerStatsOut
     _LedgerEntryOut:
       properties:
         ledger_id:
@@ -702,11 +611,57 @@ components:
       - note
       - created_at
       title: _LedgerEntryOut
-    _ReferrerListOut:
+    _ReferralMeOut:
+      properties:
+        referral_link:
+          type: string
+          title: Referral Link
+        referral_code:
+          type: string
+          title: Referral Code
+        balance_usd:
+          type: number
+          title: Balance Usd
+        lifetime_earned_usd:
+          type: number
+          title: Lifetime Earned Usd
+        total_referred:
+          type: integer
+          title: Total Referred
+        total_settled:
+          type: integer
+          title: Total Settled
+        withdraw_eligible:
+          type: boolean
+          title: Withdraw Eligible
+        withdrawal_minimum_usd:
+          type: number
+          title: Withdrawal Minimum Usd
+      type: object
+      required:
+      - referral_link
+      - referral_code
+      - balance_usd
+      - lifetime_earned_usd
+      - total_referred
+      - total_settled
+      - withdraw_eligible
+      - withdrawal_minimum_usd
+      title: _ReferralMeOut
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    _LedgerListOut:
       properties:
         results:
           items:
-            $ref: '#/components/schemas/_ReferrerStatsOut'
+            $ref: '#/components/schemas/_LedgerEntryOut'
           type: array
           title: Results
         total:
@@ -728,16 +683,61 @@ components:
       - page
       - page_size
       - total_pages
-      title: _ReferrerListOut
-    HTTPValidationError:
+      title: _LedgerListOut
+    _RecentListOut:
       properties:
-        detail:
+        results:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/_RecentReferralOut'
           type: array
-          title: Detail
+          title: Results
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
       type: object
-      title: HTTPValidationError
+      required:
+      - results
+      - total
+      - page
+      - page_size
+      - total_pages
+      title: _RecentListOut
+    _ReferredListOut:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/_ReferredUserOut'
+          type: array
+          title: Results
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+      type: object
+      required:
+      - results
+      - total
+      - page
+      - page_size
+      - total_pages
+      title: _ReferredListOut
   securitySchemes:
     APIKeyHeader:
       type: apiKey

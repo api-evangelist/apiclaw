@@ -176,52 +176,6 @@ components:
       - id
       title: DeleteJWTKeyMappingRequest
       type: object
-    JWTKeyMappingResponse:
-      properties:
-        created_at:
-          format: date-time
-          title: Created At
-          type: string
-        created_by:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created By
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        id:
-          title: Id
-          type: string
-        is_active:
-          title: Is Active
-          type: boolean
-        jwt_claim_name:
-          title: Jwt Claim Name
-          type: string
-        jwt_claim_value:
-          title: Jwt Claim Value
-          type: string
-        updated_at:
-          format: date-time
-          title: Updated At
-          type: string
-        updated_by:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Updated By
-      required:
-      - id
-      - jwt_claim_name
-      - jwt_claim_value
-      - is_active
-      - created_at
-      - updated_at
-      title: JWTKeyMappingResponse
-      type: object
     ValidationError:
       properties:
         loc:
@@ -303,6 +257,52 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    JWTKeyMappingResponse:
+      properties:
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        created_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        id:
+          title: Id
+          type: string
+        is_active:
+          title: Is Active
+          type: boolean
+        jwt_claim_name:
+          title: Jwt Claim Name
+          type: string
+        jwt_claim_value:
+          title: Jwt Claim Value
+          type: string
+        updated_at:
+          format: date-time
+          title: Updated At
+          type: string
+        updated_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated By
+      required:
+      - id
+      - jwt_claim_name
+      - jwt_claim_value
+      - is_active
+      - created_at
+      - updated_at
+      title: JWTKeyMappingResponse
+      type: object
   securitySchemes:
     APIKeyHeader:
       type: apiKey
