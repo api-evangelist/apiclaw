@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Files
 paths:
@@ -857,37 +857,15 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    Body_create_file__provider__v1_files_post:
+    HTTPValidationError:
       properties:
-        purpose:
-          type: string
-          title: Purpose
-        target_model_names:
-          type: string
-          title: Target Model Names
-          default: ''
-        target_storage:
-          type: string
-          title: Target Storage
-          default: default
-        custom_llm_provider:
-          type: string
-          title: Custom Llm Provider
-          default: openai
-        file:
-          type: string
-          contentMediaType: application/octet-stream
-          title: File
-        litellm_metadata:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Litellm Metadata
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - purpose
-      - file
-      title: Body_create_file__provider__v1_files_post
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -914,7 +892,7 @@ components:
       - msg
       - type
       title: ValidationError
-    Body_create_file_v1_files_post:
+    Body_create_file__provider__v1_files_post:
       properties:
         purpose:
           type: string
@@ -940,20 +918,15 @@ components:
           - type: string
           - type: 'null'
           title: Litellm Metadata
+        passthrough:
+          type: boolean
+          title: Passthrough
+          default: false
       type: object
       required:
       - purpose
       - file
-      title: Body_create_file_v1_files_post
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+      title: Body_create_file__provider__v1_files_post
     Body_create_file_files_post:
       properties:
         purpose:
@@ -980,14 +953,56 @@ components:
           - type: string
           - type: 'null'
           title: Litellm Metadata
+        passthrough:
+          type: boolean
+          title: Passthrough
+          default: false
       type: object
       required:
       - purpose
       - file
       title: Body_create_file_files_post
+    Body_create_file_v1_files_post:
+      properties:
+        purpose:
+          type: string
+          title: Purpose
+        target_model_names:
+          type: string
+          title: Target Model Names
+          default: ''
+        target_storage:
+          type: string
+          title: Target Storage
+          default: default
+        custom_llm_provider:
+          type: string
+          title: Custom Llm Provider
+          default: openai
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+        litellm_metadata:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Litellm Metadata
+        passthrough:
+          type: boolean
+          title: Passthrough
+          default: false
+      type: object
+      required:
+      - purpose
+      - file
+      title: Body_create_file_v1_files_post
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

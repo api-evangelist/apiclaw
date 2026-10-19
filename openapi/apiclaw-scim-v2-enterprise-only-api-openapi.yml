@@ -1,0 +1,1325 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM ✨ SCIM v2 (Enterprise Only) API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.105.1
+tags:
+- name: ✨ SCIM v2 (Enterprise Only)
+paths:
+  /scim/v2:
+    get:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Get Scim Base
+      description: 'Base SCIM v2 endpoint for resource discovery per RFC 7644 Section 4.
+
+
+        Returns a ListResponse of ResourceTypes supported by this SCIM service provider.
+
+        Identity providers (Okta, Azure AD, etc.) use this endpoint for resource discovery.'
+      operationId: get_scim_base_scim_v2_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /scim/v2/ResourceTypes:
+    get:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Get Resource Types
+      description: 'SCIM ResourceTypes endpoint per RFC 7644 Section 4.
+
+
+        Returns a ListResponse of all resource types supported by this service provider.'
+      operationId: get_resource_types_scim_v2_ResourceTypes_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /scim/v2/ResourceTypes/{resource_type_id}:
+    get:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Get Resource Type
+      description: Get a single ResourceType by ID per RFC 7644.
+      operationId: get_resource_type_scim_v2_ResourceTypes__resource_type_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: resource_type_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: ResourceType ID
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /scim/v2/Schemas:
+    get:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Get Schemas
+      description: 'SCIM Schemas endpoint per RFC 7643 Section 7.
+
+
+        Returns a ListResponse of all schemas supported by this service provider.'
+      operationId: get_schemas_scim_v2_Schemas_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /scim/v2/Schemas/{schema_id}:
+    get:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Get Schema
+      description: Get a single Schema by its URI per RFC 7643 Section 7.
+      operationId: get_schema_scim_v2_Schemas__schema_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: schema_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Schema URI
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /scim/v2/ServiceProviderConfig:
+    get:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Get Service Provider Config
+      description: Return SCIM Service Provider Configuration.
+      operationId: get_service_provider_config_scim_v2_ServiceProviderConfig_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMServiceProviderConfig'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /scim/v2/Users:
+    get:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Get Users
+      description: Get a list of users according to SCIM v2 protocol
+      operationId: get_users_scim_v2_Users_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: startIndex
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Startindex
+      - name: count
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 10
+          title: Count
+      - name: filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Filter
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Create User
+      description: Create a user according to SCIM v2 protocol
+      operationId: create_user_scim_v2_Users_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCIMUser-Input'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMUser-Output'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /scim/v2/Users/{user_id}:
+    get:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Get User
+      description: Get a single user by ID according to SCIM v2 protocol
+      operationId: get_user_scim_v2_Users__user_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: User ID
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMUser-Output'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Update User
+      description: Update a user according to SCIM v2 protocol (full replacement)
+      operationId: update_user_scim_v2_Users__user_id__put
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: User ID
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCIMUser-Input'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMUser-Output'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Delete User
+      description: Delete a user according to SCIM v2 protocol
+      operationId: delete_user_scim_v2_Users__user_id__delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: User ID
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Patch User
+      description: Patch a user according to SCIM v2 protocol
+      operationId: patch_user_scim_v2_Users__user_id__patch
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: User ID
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCIMPatchOp'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMUser-Output'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /scim/v2/placeholders:
+    get:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: List Placeholders
+      description: 'List user rows whose id is another account''s SSO identity or email.
+
+
+        An earlier release provisioned a group member it could not match as a user keyed
+
+        by the raw member value, and that row now shadows the account the value really
+
+        names, so every push of that member is refused. This lists those rows so an
+
+        operator can fold each one into the account it shadows with
+
+        ``POST /scim/v2/placeholders/{user_id}/merge``. A row that has an SSO identity of
+
+        its own or owns virtual keys is left out: someone uses that account.'
+      operationId: list_placeholders_scim_v2_placeholders_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SCIMPlaceholder'
+                title: Response List Placeholders Scim V2 Placeholders Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /scim/v2/placeholders/{user_id}/merge:
+    post:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Merge Placeholder
+      description: 'Fold a placeholder user into the one account its id names by SSO identity or email.
+
+
+        The account is added to every team the placeholder is on, then the placeholder is
+
+        deleted the way ``DELETE /scim/v2/Users/{id}`` deletes a user, so the next group
+
+        push resolves the member value to the real account. Refused with 409 when the row
+
+        has an SSO identity of its own, owns virtual keys, or names no account or several.'
+      operationId: merge_placeholder_scim_v2_placeholders__user_id__merge_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: User ID
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMPlaceholderMergeResult'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /scim/v2/Groups:
+    get:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Get Groups
+      description: Get a list of groups according to SCIM v2 protocol
+      operationId: get_groups_scim_v2_Groups_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: startIndex
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Startindex
+      - name: count
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 10
+          title: Count
+      - name: filter
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Filter
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMListResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Create Group
+      description: Create a group according to SCIM v2 protocol
+      operationId: create_group_scim_v2_Groups_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCIMGroup'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMGroup'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /scim/v2/Groups/{group_id}:
+    get:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Get Group
+      description: Get a single group by ID according to SCIM v2 protocol
+      operationId: get_group_scim_v2_Groups__group_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Group ID
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMGroup'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Update Group
+      description: Update a group according to SCIM v2 protocol
+      operationId: update_group_scim_v2_Groups__group_id__put
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Group ID
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCIMGroup'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMGroup'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Delete Group
+      description: Delete a group according to SCIM v2 protocol
+      operationId: delete_group_scim_v2_Groups__group_id__delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Group ID
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - ✨ SCIM v2 (Enterprise Only)
+      summary: Patch Group
+      description: Patch a group according to SCIM v2 protocol
+      operationId: patch_group_scim_v2_Groups__group_id__patch
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Group ID
+      - name: feature
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feature
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SCIMPatchOp'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SCIMGroup'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    SCIMUserGroup:
+      properties:
+        value:
+          type: string
+          title: Value
+        display:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Type
+          default: direct
+      type: object
+      required:
+      - value
+      title: SCIMUserGroup
+    SCIMUserEmail:
+      properties:
+        value:
+          type: string
+          format: email
+          title: Value
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Type
+        primary:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Primary
+      type: object
+      required:
+      - value
+      title: SCIMUserEmail
+    SCIMPatchOp:
+      properties:
+        schemas:
+          items:
+            type: string
+          type: array
+          title: Schemas
+          default:
+          - urn:ietf:params:scim:api:messages:2.0:PatchOp
+        Operations:
+          items:
+            $ref: '#/components/schemas/SCIMPatchOperation'
+          type: array
+          title: Operations
+      type: object
+      required:
+      - Operations
+      title: SCIMPatchOp
+    SCIMEnterpriseUser:
+      properties:
+        employeeNumber:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Employeenumber
+        costCenter:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Costcenter
+        organization:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Organization
+        division:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Division
+        department:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Department
+        manager:
+          anyOf:
+          - $ref: '#/components/schemas/SCIMUserManager'
+          - type: 'null'
+      type: object
+      title: SCIMEnterpriseUser
+    SCIMUserManager:
+      properties:
+        value:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Value
+        displayName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Displayname
+        $ref:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: $Ref
+      type: object
+      title: SCIMUserManager
+    SCIMUserName:
+      properties:
+        familyName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Familyname
+        givenName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Givenname
+        formatted:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Formatted
+        middleName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Middlename
+        honorificPrefix:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Honorificprefix
+        honorificSuffix:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Honorificsuffix
+      type: object
+      title: SCIMUserName
+    SCIMMember:
+      properties:
+        value:
+          type: string
+          title: Value
+        display:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Type
+      type: object
+      required:
+      - value
+      title: SCIMMember
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    SCIMUser-Input:
+      properties:
+        schemas:
+          items:
+            type: string
+          type: array
+          title: Schemas
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        externalId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Externalid
+        meta:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Meta
+        userName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Username
+        name:
+          anyOf:
+          - $ref: '#/components/schemas/SCIMUserName'
+          - type: 'null'
+        displayName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Displayname
+        active:
+          type: boolean
+          title: Active
+          default: true
+        emails:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/SCIMUserEmail'
+            type: array
+          - type: 'null'
+          title: Emails
+        groups:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/SCIMUserGroup'
+            type: array
+          - type: 'null'
+          title: Groups
+        entitlements:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/SCIMMultiValuedAttribute'
+            type: array
+          - type: 'null'
+          title: Entitlements
+        roles:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/SCIMMultiValuedAttribute'
+            type: array
+          - type: 'null'
+          title: Roles
+        urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:
+          anyOf:
+          - $ref: '#/components/schemas/SCIMEnterpriseUser'
+          - type: 'null'
+      type: object
+      required:
+      - schemas
+      title: SCIMUser
+    SCIMGroup:
+      properties:
+        schemas:
+          items:
+            type: string
+          type: array
+          title: Schemas
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        externalId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Externalid
+        meta:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Meta
+        displayName:
+          type: string
+          title: Displayname
+        members:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/SCIMMember'
+            type: array
+          - type: 'null'
+          title: Members
+      type: object
+      required:
+      - schemas
+      - displayName
+      title: SCIMGroup
+    SCIMPatchOperation:
+      properties:
+        op:
+          type: string
+          title: Op
+        path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Path
+        value:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: Value
+      type: object
+      required:
+      - op
+      title: SCIMPatchOperation
+    SCIMPlaceholder:
+      properties:
+        placeholder_user_id:
+          type: string
+          title: Placeholder User Id
+        resolved_user_ids:
+          items:
+            type: string
+          type: array
+          title: Resolved User Ids
+        team_ids:
+          items:
+            type: string
+          type: array
+          title: Team Ids
+      type: object
+      required:
+      - placeholder_user_id
+      - resolved_user_ids
+      - team_ids
+      title: SCIMPlaceholder
+      description: A user row keyed by a value that names another account by SSO identity or email.
+    SCIMUser-Output:
+      additionalProperties: true
+      type: object
+    SCIMServiceProviderConfig:
+      properties:
+        schemas:
+          items:
+            type: string
+          type: array
+          title: Schemas
+          default:
+          - urn:ietf:params:scim:schemas:core:2.0:ServiceProviderConfig
+        patch:
+          $ref: '#/components/schemas/SCIMFeature'
+          default:
+            supported: true
+        bulk:
+          $ref: '#/components/schemas/SCIMFeature'
+          default:
+            supported: false
+        filter:
+          $ref: '#/components/schemas/SCIMFeature'
+          default:
+            supported: false
+        changePassword:
+          $ref: '#/components/schemas/SCIMFeature'
+          default:
+            supported: false
+        sort:
+          $ref: '#/components/schemas/SCIMFeature'
+          default:
+            supported: false
+        etag:
+          $ref: '#/components/schemas/SCIMFeature'
+          default:
+            supported: false
+        authenticationSchemes:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Authenticationschemes
+        meta:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Meta
+      type: object
+      title: SCIMServiceProviderConfig
+    SCIMPlaceholderMergeResult:
+      properties:
+        placeholder_user_id:
+          type: string
+          title: Placeholder User Id
+        merged_into_user_id:
+          type: string
+          title: Merged Into User Id
+        team_ids:
+          items:
+            type: string
+          type: array
+          title: Team Ids
+      type: object
+      required:
+      - placeholder_user_id
+      - merged_into_user_id
+      - team_ids
+      title: SCIMPlaceholderMergeResult
+    SCIMFeature:
+      properties:
+        supported:
+          type: boolean
+          title: Supported
+        maxOperations:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Maxoperations
+        maxPayloadSize:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Maxpayloadsize
+        maxResults:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Maxresults
+      type: object
+      required:
+      - supported
+      title: SCIMFeature
+    SCIMMultiValuedAttribute:
+      properties:
+        value:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Value
+        display:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Display
+        type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Type
+        primary:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Primary
+      additionalProperties: true
+      type: object
+      title: SCIMMultiValuedAttribute
+    SCIMListResponse:
+      properties:
+        schemas:
+          items:
+            type: string
+          type: array
+          title: Schemas
+          default:
+          - urn:ietf:params:scim:api:messages:2.0:ListResponse
+        totalResults:
+          type: integer
+          title: Totalresults
+        startIndex:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Startindex
+          default: 1
+        itemsPerPage:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Itemsperpage
+          default: 10
+        Resources:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/SCIMUser-Output'
+            type: array
+          - items:
+              $ref: '#/components/schemas/SCIMGroup'
+            type: array
+          title: Resources
+      type: object
+      required:
+      - totalResults
+      - Resources
+      title: SCIMListResponse
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

@@ -1,0 +1,429 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Vector Store Files API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.105.1
+tags:
+- name: vector_store_files
+paths:
+  /vector_stores/{vector_store_id}/files:
+    post:
+      tags:
+      - vector_store_files
+      summary: Vector Store File Create
+      operationId: vector_store_file_create_vector_stores__vector_store_id__files_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: vector_store_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Vector Store Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - vector_store_files
+      summary: Vector Store File List
+      operationId: vector_store_file_list_vector_stores__vector_store_id__files_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: vector_store_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Vector Store Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/vector_stores/{vector_store_id}/files:
+    post:
+      tags:
+      - vector_store_files
+      summary: Vector Store File Create
+      operationId: vector_store_file_create_v1_vector_stores__vector_store_id__files_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: vector_store_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Vector Store Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - vector_store_files
+      summary: Vector Store File List
+      operationId: vector_store_file_list_v1_vector_stores__vector_store_id__files_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: vector_store_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Vector Store Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /vector_stores/{vector_store_id}/files/{file_id}:
+    get:
+      tags:
+      - vector_store_files
+      summary: Vector Store File Retrieve
+      operationId: vector_store_file_retrieve_vector_stores__vector_store_id__files__file_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: vector_store_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Vector Store Id
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: File Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - vector_store_files
+      summary: Vector Store File Update
+      operationId: vector_store_file_update_vector_stores__vector_store_id__files__file_id__post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: vector_store_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Vector Store Id
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: File Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - vector_store_files
+      summary: Vector Store File Delete
+      operationId: vector_store_file_delete_vector_stores__vector_store_id__files__file_id__delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: vector_store_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Vector Store Id
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: File Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/vector_stores/{vector_store_id}/files/{file_id}:
+    get:
+      tags:
+      - vector_store_files
+      summary: Vector Store File Retrieve
+      operationId: vector_store_file_retrieve_v1_vector_stores__vector_store_id__files__file_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: vector_store_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Vector Store Id
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: File Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - vector_store_files
+      summary: Vector Store File Update
+      operationId: vector_store_file_update_v1_vector_stores__vector_store_id__files__file_id__post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: vector_store_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Vector Store Id
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: File Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - vector_store_files
+      summary: Vector Store File Delete
+      operationId: vector_store_file_delete_v1_vector_stores__vector_store_id__files__file_id__delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: vector_store_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Vector Store Id
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: File Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /vector_stores/{vector_store_id}/files/{file_id}/content:
+    get:
+      tags:
+      - vector_store_files
+      summary: Vector Store File Content
+      operationId: vector_store_file_content_vector_stores__vector_store_id__files__file_id__content_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: vector_store_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Vector Store Id
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: File Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/vector_stores/{vector_store_id}/files/{file_id}/content:
+    get:
+      tags:
+      - vector_store_files
+      summary: Vector Store File Content
+      operationId: vector_store_file_content_v1_vector_stores__vector_store_id__files__file_id__content_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: vector_store_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Vector Store Id
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: File Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: MCP
 paths:
@@ -214,7 +214,7 @@ paths:
       tags:
       - MCP
   /{mcp_server_name}/mcp:
-    put:
+    get:
       summary: Dynamic Mcp Route
       description: 'Handle /{name}/mcp for MCP server aliases, toolsets, MCP access group tags, and comma-separated lists.
 
@@ -228,7 +228,7 @@ paths:
         3. Toolset name (DB lookup, cached)
 
         4. MCP access group tag (DB lookup, cached)'
-      operationId: dynamic_mcp_route__mcp_server_name__mcp_put
+      operationId: dynamic_mcp_route__mcp_server_name__mcp_get
       parameters:
       - name: mcp_server_name
         in: path
@@ -286,7 +286,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
       tags:
       - MCP
-    options:
+    post:
       summary: Dynamic Mcp Route
       description: 'Handle /{name}/mcp for MCP server aliases, toolsets, MCP access group tags, and comma-separated lists.
 
@@ -300,43 +300,7 @@ paths:
         3. Toolset name (DB lookup, cached)
 
         4. MCP access group tag (DB lookup, cached)'
-      operationId: dynamic_mcp_route__mcp_server_name__mcp_options
-      parameters:
-      - name: mcp_server_name
-        in: path
-        required: true
-        schema:
-          type: string
-          title: Mcp Server Name
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-      tags:
-      - MCP
-    get:
-      summary: Dynamic Mcp Route
-      description: 'Handle /{name}/mcp for MCP server aliases, toolsets, MCP access group tags, and comma-separated lists.
-
-
-        Resolution order:
-
-        1. Registered MCP server alias / name
-
-        2. Comma-separated list (short-circuits before any DB call)
-
-        3. Toolset name (DB lookup, cached)
-
-        4. MCP access group tag (DB lookup, cached)'
-      operationId: dynamic_mcp_route__mcp_server_name__mcp_get
+      operationId: dynamic_mcp_route__mcp_server_name__mcp_post
       parameters:
       - name: mcp_server_name
         in: path
@@ -394,7 +358,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
       tags:
       - MCP
-    post:
+    options:
       summary: Dynamic Mcp Route
       description: 'Handle /{name}/mcp for MCP server aliases, toolsets, MCP access group tags, and comma-separated lists.
 
@@ -408,7 +372,7 @@ paths:
         3. Toolset name (DB lookup, cached)
 
         4. MCP access group tag (DB lookup, cached)'
-      operationId: dynamic_mcp_route__mcp_server_name__mcp_post
+      operationId: dynamic_mcp_route__mcp_server_name__mcp_options
       parameters:
       - name: mcp_server_name
         in: path
@@ -445,6 +409,42 @@ paths:
 
         4. MCP access group tag (DB lookup, cached)'
       operationId: dynamic_mcp_route__mcp_server_name__mcp_delete
+      parameters:
+      - name: mcp_server_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Mcp Server Name
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - MCP
+    put:
+      summary: Dynamic Mcp Route
+      description: 'Handle /{name}/mcp for MCP server aliases, toolsets, MCP access group tags, and comma-separated lists.
+
+
+        Resolution order:
+
+        1. Registered MCP server alias / name
+
+        2. Comma-separated list (short-circuits before any DB call)
+
+        3. Toolset name (DB lookup, cached)
+
+        4. MCP access group tag (DB lookup, cached)'
+      operationId: dynamic_mcp_route__mcp_server_name__mcp_put
       parameters:
       - name: mcp_server_name
         in: path
@@ -667,6 +667,15 @@ paths:
           description: Server IDs to check. If not provided, checks all accessible servers.
           title: Server Ids
         description: Server IDs to check. If not provided, checks all accessible servers.
+      - name: include_reachability
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Allow the 'reachable' status for responding servers whose authentication is unchecked.
+          default: false
+          title: Include Reachability
+        description: Allow the 'reachable' status for responding servers whose authentication is unchecked.
       responses:
         '200':
           description: Successful Response
@@ -707,6 +716,62 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
       security:
       - APIKeyHeader: []
+  /v1/mcp/sessions:
+    get:
+      tags:
+      - MCP
+      summary: Get Mcp Gateway Sessions
+      description: Live stateful MCP gateway sessions on this proxy worker, grouped by AI client and by user.
+      operationId: get_mcp_gateway_sessions_v1_mcp_sessions_get
+      security:
+      - APIKeyHeader: []
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPGatewaySessionsResponse'
+    delete:
+      tags:
+      - MCP
+      summary: Delete Mcp Gateway Sessions
+      description: Force-close live stateful MCP gateway sessions on this proxy worker, selected by session id prefix and/or by the LiteLLM user that opened them (proxy admin only).
+      operationId: delete_mcp_gateway_sessions_v1_mcp_sessions_delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: session_id_prefix
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            minLength: 8
+          - type: 'null'
+          title: Session Id Prefix
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            minLength: 1
+          - type: 'null'
+          title: User Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MCPGatewaySessionsTerminateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /v1/mcp/server/submissions:
     get:
       tags:
@@ -723,6 +788,69 @@ paths:
                 $ref: '#/components/schemas/MCPSubmissionsSummary'
       security:
       - APIKeyHeader: []
+  /v1/mcp/server/{server_id}/pin:
+    post:
+      tags:
+      - MCP
+      summary: Pin Mcp Server Tools
+      description: Pin the server's current upstream tool list, descriptions and input schemas (admin only). tools/list serves the pinned catalog from now on and an upstream change raises an mcp_pinned_tools_changed alert.
+      operationId: pin_mcp_server_tools_v1_mcp_server__server_id__pin_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: server_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Server Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/PinnedMCPTool'
+                title: Response Pin Mcp Server Tools V1 Mcp Server  Server Id  Pin Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - MCP
+      summary: Unpin Mcp Server Tools
+      description: Unpin the server's tool list (admin only); tools/list serves the live upstream catalog again.
+      operationId: unpin_mcp_server_tools_v1_mcp_server__server_id__pin_delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: server_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Server Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+                title: Response Unpin Mcp Server Tools V1 Mcp Server  Server Id  Pin Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /v1/mcp/server/{server_id}/approve:
     put:
       tags:
@@ -803,6 +931,15 @@ paths:
         schema:
           type: string
           title: Server Id
+      - name: include_reachability
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Allow the 'reachable' status for responding servers whose authentication is unchecked.
+          default: false
+          title: Include Reachability
+        description: Allow the 'reachable' status for responding servers whose authentication is unchecked.
       responses:
         '200':
           description: Successful Response
@@ -958,7 +1095,7 @@ paths:
       tags:
       - MCP
       summary: Delete Mcp User Credential
-      description: Delete the calling user's stored API key for a BYOK MCP server
+      description: Delete the calling user's stored API key for a BYOK MCP server. A proxy admin may pass user_id to revoke another user's stored key.
       operationId: delete_mcp_user_credential_v1_mcp_server__server_id__user_credential_delete
       security:
       - APIKeyHeader: []
@@ -969,6 +1106,15 @@ paths:
         schema:
           type: string
           title: Server Id
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            minLength: 1
+          - type: 'null'
+          title: User Id
       responses:
         '200':
           description: Successful Response
@@ -1021,7 +1167,7 @@ paths:
       tags:
       - MCP
       summary: Delete Mcp Oauth User Credential
-      description: Revoke the calling user's stored OAuth2 token for an MCP server
+      description: Revoke the calling user's stored OAuth2 token for an MCP server. A proxy admin may pass user_id to revoke another user's stored token.
       operationId: delete_mcp_oauth_user_credential_v1_mcp_server__server_id__oauth_user_credential_delete
       security:
       - APIKeyHeader: []
@@ -1032,6 +1178,15 @@ paths:
         schema:
           type: string
           title: Server Id
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            minLength: 1
+          - type: 'null'
+          title: User Id
       responses:
         '200':
           description: Successful Response
@@ -1093,6 +1248,38 @@ paths:
                 title: Response List Mcp User Credentials V1 Mcp User Credentials Get
       security:
       - APIKeyHeader: []
+  /v1/mcp/server/{server_id}/user-credentials:
+    get:
+      tags:
+      - MCP
+      summary: List Mcp Server User Credentials
+      description: List every user's stored BYOK or OAuth2 credential for an MCP server (admin only, no secrets)
+      operationId: list_mcp_server_user_credentials_v1_mcp_server__server_id__user_credentials_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: server_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Server Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MCPServerUserCredentialListItem'
+                title: Response List Mcp Server User Credentials V1 Mcp Server  Server Id  User Credentials Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /v1/mcp/server/{server_id}/user-env-vars:
     get:
       tags:
@@ -2340,8 +2527,187 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /mcp-rest/tools/list:
+    get:
+      tags:
+      - MCP
+      summary: List Tool Rest Api
+      description: 'List all available tools with information about the server they belong to.
+
+
+        Example response:
+
+        {
+
+        "tools": [
+
+        {
+
+        "name": "create_zap",
+
+        "description": "Create a new zap",
+
+        "inputSchema": "tool_input_schema",
+
+        "mcp_info": {
+
+        "server_name": "zapier",
+
+        "logo_url": "https://www.zapier.com/logo.png",
+
+        "server_id": "a1b2c3d4-...",
+
+        "alias": "zapier_prod",
+
+        }
+
+        }
+
+        ],
+
+        "error": null,
+
+        "message": "Successfully retrieved tools"
+
+        }'
+      operationId: list_tool_rest_api_mcp_rest_tools_list_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: server_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The server id to list tools for
+          title: Server Id
+        description: The server id to list tools for
+      - name: mcp_server_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter tools to a single MCP server by name or alias
+          title: Mcp Server Name
+        description: Filter tools to a single MCP server by name or alias
+      - name: toolset_name
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter tools to a single toolset by name
+          title: Toolset Name
+        description: Filter tools to a single toolset by name
+      - name: include_disabled_tools
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: Admin only. Return the full server tool catalog without the allowed_tools filter or per-key tool permissions, so the MCP settings UI can configure the allowlist. Ignored for non-admins.
+          default: false
+          title: Include Disabled Tools
+        description: Admin only. Return the full server tool catalog without the allowed_tools filter or per-key tool permissions, so the MCP settings UI can configure the allowlist. Ignored for non-admins.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response List Tool Rest Api Mcp Rest Tools List Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /mcp-rest/tools/call:
+    post:
+      tags:
+      - MCP
+      summary: Call Tool Rest Api
+      description: REST API to call a specific MCP tool with the provided arguments
+      operationId: call_tool_rest_api_mcp_rest_tools_call_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+  /mcp-rest/test/connection:
+    post:
+      tags:
+      - MCP
+      summary: Test Connection
+      description: Test if we can connect to the provided MCP server before adding it
+      operationId: test_connection_mcp_rest_test_connection_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMCPServerRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /mcp-rest/test/tools/list:
+    post:
+      tags:
+      - MCP
+      summary: Test Tools List
+      description: Preview tools available from MCP server before adding it
+      operationId: test_tools_list_mcp_rest_test_tools_list_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMCPServerRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -2368,24 +2734,84 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
+    MCPOAuthUserCredentialStatus:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    Body_introspect_endpoint_introspect_post:
-      properties:
-        token:
+        server_id:
           type: string
-          title: Token
+          title: Server Id
+        has_credential:
+          type: boolean
+          title: Has Credential
+        expires_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Expires At
+        is_expired:
+          type: boolean
+          title: Is Expired
+          default: false
+        connected_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Connected At
       type: object
       required:
-      - token
-      title: Body_introspect_endpoint_introspect_post
+      - server_id
+      - has_credential
+      title: MCPOAuthUserCredentialStatus
+      description: Describes whether the calling user has a stored OAuth credential.
+    RejectMCPServerRequest:
+      properties:
+        review_notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Review Notes
+      type: object
+      title: RejectMCPServerRequest
+    MCPConnectorImportResult:
+      properties:
+        name:
+          type: string
+          title: Name
+        server_id:
+          type: string
+          title: Server Id
+        alias:
+          type: string
+          title: Alias
+      type: object
+      required:
+      - name
+      - server_id
+      - alias
+      title: MCPConnectorImportResult
+    MCPUserEnvVarSpec:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        is_set:
+          type: boolean
+          title: Is Set
+          default: false
+      type: object
+      required:
+      - name
+      title: MCPUserEnvVarSpec
+      description: 'Describes one per-user env var slot for the calling user.
+
+
+        Stored values are write-only: the status only reports whether a value
+
+        ``is_set`` and never echoes the decrypted secret back to the client.'
     MCPCredentials:
       properties:
         auth_value:
@@ -2517,20 +2943,7 @@ components:
           title: Token Exchange Profile
       type: object
       title: MCPCredentials
-    MCPUserCredentialRequest:
-      properties:
-        credential:
-          type: string
-          title: Credential
-        save:
-          type: boolean
-          title: Save
-          default: true
-      type: object
-      required:
-      - credential
-      title: MCPUserCredentialRequest
-    MCPUserCredentialListItem:
+    MCPUserEnvVarsStatus:
       properties:
         server_id:
           type: string
@@ -2545,106 +2958,501 @@ components:
           - type: string
           - type: 'null'
           title: Alias
-        credential_type:
-          type: string
-          title: Credential Type
-        has_credential:
-          type: boolean
-          title: Has Credential
-        expires_at:
+        required:
+          items:
+            $ref: '#/components/schemas/MCPUserEnvVarSpec'
+          type: array
+          title: Required
+        missing_count:
+          type: integer
+          title: Missing Count
+          default: 0
+        setup_url:
           anyOf:
           - type: string
           - type: 'null'
-          title: Expires At
-        connected_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Connected At
+          title: Setup Url
       type: object
       required:
       - server_id
-      - credential_type
-      - has_credential
-      title: MCPUserCredentialListItem
-      description: One entry in the /user-credentials list.
-    MakeMCPServersPublicRequest:
+      title: MCPUserEnvVarsStatus
+      description: Per-user env var status for a single MCP server.
+    MCPGatewaySessionsResponse:
       properties:
-        mcp_server_ids:
+        worker_pid:
+          type: integer
+          title: Worker Pid
+        total_sessions:
+          type: integer
+          title: Total Sessions
+        by_client:
           items:
-            type: string
+            $ref: '#/components/schemas/MCPGatewaySessionGroupCount'
           type: array
-          title: Mcp Server Ids
+          title: By Client
+        by_user:
+          items:
+            $ref: '#/components/schemas/MCPGatewaySessionGroupCount'
+          type: array
+          title: By User
+        sessions:
+          items:
+            $ref: '#/components/schemas/MCPGatewaySession'
+          type: array
+          title: Sessions
       type: object
       required:
-      - mcp_server_ids
-      title: MakeMCPServersPublicRequest
-    MCPUserEnvVarSpec:
+      - worker_pid
+      - total_sessions
+      title: MCPGatewaySessionsResponse
+    PinnedMCPTool:
+      properties:
+        description:
+          type: string
+          title: Description
+          default: ''
+        input_schema:
+          additionalProperties: true
+          type: object
+          title: Input Schema
+      additionalProperties: false
+      type: object
+      title: PinnedMCPTool
+      description: 'One tool of an admin-pinned catalog: the description and input schema tools/list keeps serving.'
+    MCPConnectorImportFailure:
       properties:
         name:
           type: string
           title: Name
+        error:
+          type: string
+          title: Error
+      type: object
+      required:
+      - name
+      - error
+      title: MCPConnectorImportFailure
+    LiteLLM_MCPServerTable:
+      properties:
+        server_id:
+          type: string
+          title: Server Id
+        is_config:
+          type: boolean
+          title: Is Config
+          description: Whether this server is defined in config and is read-only.
+          default: false
+        server_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Server Name
+        alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Alias
         description:
           anyOf:
           - type: string
           - type: 'null'
           title: Description
-        is_set:
-          type: boolean
-          title: Is Set
-          default: false
-      type: object
-      required:
-      - name
-      title: MCPUserEnvVarSpec
-      description: 'Describes one per-user env var slot for the calling user.
-
-
-        Stored values are write-only: the status only reports whether a value
-
-        ``is_set`` and never echoes the decrypted secret back to the client.'
-    Body_token_endpoint_token_post:
-      properties:
-        grant_type:
-          type: string
-          title: Grant Type
-        code:
-          type: string
-          title: Code
-        redirect_uri:
-          type: string
-          title: Redirect Uri
-        client_id:
-          type: string
-          title: Client Id
-        client_secret:
+        url:
           anyOf:
           - type: string
           - type: 'null'
-          title: Client Secret
-        code_verifier:
+          title: Url
+        spec_path:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Spec Path
+        transport:
           type: string
-          title: Code Verifier
+          enum:
+          - sse
+          - http
+          - stdio
+          title: Transport
+        auth_type:
+          anyOf:
+          - type: string
+            enum:
+            - none
+            - api_key
+            - bearer_token
+            - basic
+            - authorization
+            - oauth2
+            - aws_sigv4
+            - token
+            - oauth2_token_exchange
+            - oauth2_id_jag
+            - true_passthrough
+            - oauth_delegate
+          - type: 'null'
+          title: Auth Type
+        credentials:
+          anyOf:
+          - $ref: '#/components/schemas/MCPCredentials'
+          - type: 'null'
+        instructions:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instructions
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+        created_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+        updated_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated By
+        teams:
+          items:
+            additionalProperties:
+              anyOf:
+              - type: string
+              - type: 'null'
+            type: object
+          type: array
+          title: Teams
+        mcp_access_groups:
+          items:
+            type: string
+          type: array
+          title: Mcp Access Groups
+        allowed_tools:
+          items:
+            type: string
+          type: array
+          title: Allowed Tools
+        tool_name_to_display_name:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Tool Name To Display Name
+        tool_name_to_description:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Tool Name To Description
+        pinned_tools:
+          anyOf:
+          - additionalProperties:
+              $ref: '#/components/schemas/PinnedMCPTool'
+            type: object
+          - type: 'null'
+          title: Pinned Tools
+        extra_headers:
+          items:
+            type: string
+          type: array
+          title: Extra Headers
+        mcp_info:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Mcp Info
+        static_headers:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Static Headers
+        env_vars:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/MCPEnvVar'
+            type: array
+          - type: 'null'
+          title: Env Vars
+        status:
+          anyOf:
+          - type: string
+            enum:
+            - healthy
+            - reachable
+            - unhealthy
+            - unknown
+          - type: 'null'
+          title: Status
+          description: 'Health status: ''healthy'', ''unhealthy'', ''unknown'', or ''reachable'' (requires include_reachability=true; authentication and tools unchecked)'
+          default: unknown
+        last_health_check:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Health Check
+        health_check_error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Health Check Error
+        command:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Command
+        args:
+          items:
+            type: string
+          type: array
+          title: Args
+        env:
+          additionalProperties:
+            type: string
+          type: object
+          title: Env
+        issuer:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Issuer
+        authorization_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Authorization Url
+        token_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Token Url
+        registration_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Registration Url
+        oauth2_flow:
+          anyOf:
+          - type: string
+            enum:
+            - client_credentials
+            - authorization_code
+          - type: 'null'
+          title: Oauth2 Flow
+        token_exchange_endpoint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Token Exchange Endpoint
+        audience:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Audience
+        subject_token_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject Token Type
+        token_exchange_profile:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Token Exchange Profile
+        allow_all_keys:
+          type: boolean
+          title: Allow All Keys
+          default: false
+        available_on_public_internet:
+          type: boolean
+          title: Available On Public Internet
+          default: true
+        delegate_auth_to_upstream:
+          type: boolean
+          title: Delegate Auth To Upstream
+          default: false
+        oauth_passthrough:
+          type: boolean
+          title: Oauth Passthrough
+          default: false
+        dcr_bridge:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Dcr Bridge
+        per_server_oauth_discovery:
+          type: boolean
+          title: Per Server Oauth Discovery
+          default: false
+        is_byok:
+          type: boolean
+          title: Is Byok
+          default: false
+        byok_description:
+          items:
+            type: string
+          type: array
+          title: Byok Description
+        byok_api_key_help_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Byok Api Key Help Url
+        has_user_credential:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Has User Credential
+        connected_app_reachable:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Connected App Reachable
+        source_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source Url
+        timeout:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Timeout
+        max_concurrent_requests:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Concurrent Requests
+        approval_status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Approval Status
+          description: 'Approval status: ''pending_review'', ''active'', ''rejected'''
+          default: active
+        submitted_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Submitted By
+        submitted_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Submitted At
+        reviewed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Reviewed At
+        review_notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Review Notes
+      type: object
+      required:
+      - server_id
+      - transport
+      title: LiteLLM_MCPServerTable
+      description: Represents a LiteLLM_MCPServerTable record
+    MCPSubmissionsSummary:
+      properties:
+        total:
+          type: integer
+          title: Total
+        pending_review:
+          type: integer
+          title: Pending Review
+        active:
+          type: integer
+          title: Active
+        rejected:
+          type: integer
+          title: Rejected
+        items:
+          items:
+            $ref: '#/components/schemas/LiteLLM_MCPServerTable'
+          type: array
+          title: Items
+      type: object
+      required:
+      - total
+      - pending_review
+      - active
+      - rejected
+      - items
+      title: MCPSubmissionsSummary
+    MCPOAuthUserCredentialRequest:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
         refresh_token:
           anyOf:
           - type: string
           - type: 'null'
           title: Refresh Token
-        scope:
+        expires_in:
           anyOf:
-          - type: string
+          - type: integer
           - type: 'null'
-          title: Scope
-        resource:
+          title: Expires In
+        scopes:
           anyOf:
-          - type: string
+          - items:
+              type: string
+            type: array
           - type: 'null'
-          title: Resource
+          title: Scopes
       type: object
       required:
-      - grant_type
+      - access_token
+      title: MCPOAuthUserCredentialRequest
+      description: Stores a user's OAuth2 token for an OpenAPI MCP server.
+    Body_revoke_endpoint_revoke_post:
+      properties:
+        token:
+          type: string
+          title: Token
+        client_id:
+          type: string
+          title: Client Id
+      type: object
+      required:
+      - token
       - client_id
-      title: Body_token_endpoint_token_post
+      title: Body_revoke_endpoint_revoke_post
+    MCPConnectorImportSkipped:
+      properties:
+        name:
+          type: string
+          title: Name
+        reason:
+          type: string
+          title: Reason
+      type: object
+      required:
+      - name
+      - reason
+      title: MCPConnectorImportSkipped
     NewMCPServerRequest:
       properties:
         server_id:
@@ -2903,258 +3711,19 @@ components:
           description: 'Server-managed: set by the endpoint; caller values are overridden.'
       type: object
       title: NewMCPServerRequest
-    MCPToolsetTool:
+    MCPUserCredentialRequest:
       properties:
-        server_id:
+        credential:
           type: string
-          title: Server Id
-        tool_name:
-          type: string
-          title: Tool Name
+          title: Credential
+        save:
+          type: boolean
+          title: Save
+          default: true
       type: object
       required:
-      - server_id
-      - tool_name
-      title: MCPToolsetTool
-    NewMCPToolsetRequest:
-      properties:
-        toolset_name:
-          type: string
-          title: Toolset Name
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        tools:
-          items:
-            $ref: '#/components/schemas/MCPToolsetTool'
-          type: array
-          title: Tools
-          default: []
-      type: object
-      required:
-      - toolset_name
-      title: NewMCPToolsetRequest
-    MCPEnvVar:
-      properties:
-        name:
-          type: string
-          title: Name
-        value:
-          type: string
-          title: Value
-          default: ''
-        scope:
-          $ref: '#/components/schemas/MCPEnvVarScope'
-          default: global
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-      type: object
-      required:
-      - name
-      title: MCPEnvVar
-      description: 'One environment variable for an MCP server.
-
-
-        Variables can be interpolated into ``static_headers`` using ``${NAME}``
-
-        syntax. ``scope=global`` values are stored on the server. ``scope=user``
-
-        values are stored per-user in ``LiteLLM_MCPUserEnvVars`` and supplied by
-
-        each user.'
-    MCPConnectorImportSkipped:
-      properties:
-        name:
-          type: string
-          title: Name
-        reason:
-          type: string
-          title: Reason
-      type: object
-      required:
-      - name
-      - reason
-      title: MCPConnectorImportSkipped
-    MCPEnvVarScope:
-      type: string
-      enum:
-      - global
-      - user
-      title: MCPEnvVarScope
-      description: "Scope for an MCP server environment variable.\n\n- ``global``: value is provided by the admin and used for all users.\n- ``user``: each user must provide their own value via the per-user\n  env-var endpoint. The admin-supplied ``value`` is treated as a\n  placeholder/hint and is not used at request time."
-    Body_revoke_endpoint_revoke_post:
-      properties:
-        token:
-          type: string
-          title: Token
-        client_id:
-          type: string
-          title: Client Id
-      type: object
-      required:
-      - token
-      - client_id
-      title: Body_revoke_endpoint_revoke_post
-    MCPUserEnvVarsStatus:
-      properties:
-        server_id:
-          type: string
-          title: Server Id
-        server_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Server Name
-        alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Alias
-        required:
-          items:
-            $ref: '#/components/schemas/MCPUserEnvVarSpec'
-          type: array
-          title: Required
-        missing_count:
-          type: integer
-          title: Missing Count
-          default: 0
-        setup_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Setup Url
-      type: object
-      required:
-      - server_id
-      title: MCPUserEnvVarsStatus
-      description: Per-user env var status for a single MCP server.
-    Body_token_endpoint__mcp_server_name__token_post:
-      properties:
-        grant_type:
-          type: string
-          title: Grant Type
-        code:
-          type: string
-          title: Code
-        redirect_uri:
-          type: string
-          title: Redirect Uri
-        client_id:
-          type: string
-          title: Client Id
-        client_secret:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Client Secret
-        code_verifier:
-          type: string
-          title: Code Verifier
-        refresh_token:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Refresh Token
-        scope:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Scope
-        resource:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Resource
-      type: object
-      required:
-      - grant_type
-      - client_id
-      title: Body_token_endpoint__mcp_server_name__token_post
-    MCPConnectorImportResponse:
-      properties:
-        imported:
-          items:
-            $ref: '#/components/schemas/MCPConnectorImportResult'
-          type: array
-          title: Imported
-        skipped:
-          items:
-            $ref: '#/components/schemas/MCPConnectorImportSkipped'
-          type: array
-          title: Skipped
-        errors:
-          items:
-            $ref: '#/components/schemas/MCPConnectorImportFailure'
-          type: array
-          title: Errors
-      type: object
-      required:
-      - imported
-      - skipped
-      - errors
-      title: MCPConnectorImportResponse
-    UpdateMCPToolsetRequest:
-      properties:
-        toolset_id:
-          type: string
-          title: Toolset Id
-        toolset_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Toolset Name
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        tools:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/MCPToolsetTool'
-            type: array
-          - type: 'null'
-          title: Tools
-      type: object
-      required:
-      - toolset_id
-      title: UpdateMCPToolsetRequest
-    MCPConnectorImportResult:
-      properties:
-        name:
-          type: string
-          title: Name
-        server_id:
-          type: string
-          title: Server Id
-        alias:
-          type: string
-          title: Alias
-      type: object
-      required:
-      - name
-      - server_id
-      - alias
-      title: MCPConnectorImportResult
-    MCPConnectorImportFailure:
-      properties:
-        name:
-          type: string
-          title: Name
-        error:
-          type: string
-          title: Error
-      type: object
-      required:
-      - name
-      - error
-      title: MCPConnectorImportFailure
+      - credential
+      title: MCPUserCredentialRequest
     UpdateMCPServerRequest:
       properties:
         server_id:
@@ -3394,57 +3963,128 @@ components:
       required:
       - server_id
       title: UpdateMCPServerRequest
-    MCPConnectorImportRequest:
+    Body_token_endpoint_token_post:
       properties:
-        mcp_servers:
-          anyOf:
-          - additionalProperties:
-              $ref: '#/components/schemas/MCPConnectorEntry'
-            type: object
-          - items:
-              $ref: '#/components/schemas/MCPConnectorEntry'
-            type: array
-          title: Mcp Servers
-      type: object
-      required:
-      - mcp_servers
-      title: MCPConnectorImportRequest
-    RejectMCPServerRequest:
-      properties:
-        review_notes:
+        grant_type:
+          type: string
+          title: Grant Type
+        code:
+          type: string
+          title: Code
+        redirect_uri:
+          type: string
+          title: Redirect Uri
+        client_id:
+          type: string
+          title: Client Id
+        client_secret:
           anyOf:
           - type: string
           - type: 'null'
-          title: Review Notes
-      type: object
-      title: RejectMCPServerRequest
-    MCPSubmissionsSummary:
-      properties:
-        total:
-          type: integer
-          title: Total
-        pending_review:
-          type: integer
-          title: Pending Review
-        active:
-          type: integer
-          title: Active
-        rejected:
-          type: integer
-          title: Rejected
-        items:
-          items:
-            $ref: '#/components/schemas/LiteLLM_MCPServerTable'
-          type: array
-          title: Items
+          title: Client Secret
+        code_verifier:
+          type: string
+          title: Code Verifier
+        refresh_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Refresh Token
+        scope:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scope
+        resource:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Resource
+        subject_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject Token
+        subject_token_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject Token Type
+        requested_token_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Requested Token Type
       type: object
       required:
-      - total
-      - pending_review
-      - active
-      - rejected
-      - items
-      title: MCPSubmissionsSummary
+      - grant_type
+      - client_id
+      title: Body_token_endpoint_token_post
+    MCPEnvVar:
+      properties:
+        name:
+          type: string
+          title: Name
+        value:
+          type: string
+          title: Value
+          default: ''
+        scope:
+          $ref: '#/components/schemas/MCPEnvVarScope'
+          default: global
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+      type: object
+      required:
+      - name
+      title: MCPEnvVar
+      description: 'One environment variable for an MCP server.
+
+
+        Variables can be interpolated into ``static_headers`` using ``${NAME}``
+
+        syntax. ``scope=global`` values are stored on the server. ``scope=user``
+
+        values are stored per-user in ``LiteLLM_MCPUserEnvVars`` and supplied by
+
+        each user.'
+    MakeMCPServersPublicRequest:
+      properties:
+        mcp_server_ids:
+          items:
+            type: string
+          type: array
+          title: Mcp Server Ids
+      type: object
+      required:
+      - mcp_server_ids
+      title: MakeMCPServersPublicRequest
+    MCPConnectorImportResponse:
+      properties:
+        imported:
+          items:
+            $ref: '#/components/schemas/MCPConnectorImportResult'
+          type: array
+          title: Imported
+        skipped:
+          items:
+            $ref: '#/components/schemas/MCPConnectorImportSkipped'
+          type: array
+          title: Skipped
+        errors:
+          items:
+            $ref: '#/components/schemas/MCPConnectorImportFailure'
+          type: array
+          title: Errors
+      type: object
+      required:
+      - imported
+      - skipped
+      - errors
+      title: MCPConnectorImportResponse
     MCPUserCredentialResponse:
       properties:
         server_id:
@@ -3458,74 +4098,20 @@ components:
       - server_id
       - has_credential
       title: MCPUserCredentialResponse
-    MCPOAuthUserCredentialRequest:
-      properties:
-        access_token:
-          type: string
-          title: Access Token
-        refresh_token:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Refresh Token
-        expires_in:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Expires In
-        scopes:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Scopes
-      type: object
-      required:
-      - access_token
-      title: MCPOAuthUserCredentialRequest
-      description: Stores a user's OAuth2 token for an OpenAPI MCP server.
-    MCPOAuthUserCredentialStatus:
+    MCPToolsetTool:
       properties:
         server_id:
           type: string
           title: Server Id
-        has_credential:
-          type: boolean
-          title: Has Credential
-        expires_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Expires At
-        is_expired:
-          type: boolean
-          title: Is Expired
-          default: false
-        connected_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Connected At
+        tool_name:
+          type: string
+          title: Tool Name
       type: object
       required:
       - server_id
-      - has_credential
-      title: MCPOAuthUserCredentialStatus
-      description: Describes whether the calling user has a stored OAuth credential.
-    MCPUserEnvVarsRequest:
-      properties:
-        values:
-          additionalProperties:
-            type: string
-          type: object
-          title: Values
-      type: object
-      required:
-      - values
-      title: MCPUserEnvVarsRequest
-      description: Payload for storing the calling user's per-user env var values.
-    LiteLLM_MCPServerTable:
+      - tool_name
+      title: MCPToolsetTool
+    MCPUserCredentialListItem:
       properties:
         server_id:
           type: string
@@ -3540,319 +4126,49 @@ components:
           - type: string
           - type: 'null'
           title: Alias
+        credential_type:
+          type: string
+          title: Credential Type
+        has_credential:
+          type: boolean
+          title: Has Credential
+        expires_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Expires At
+        connected_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Connected At
+      type: object
+      required:
+      - server_id
+      - credential_type
+      - has_credential
+      title: MCPUserCredentialListItem
+      description: One entry in the /user-credentials list.
+    NewMCPToolsetRequest:
+      properties:
+        toolset_name:
+          type: string
+          title: Toolset Name
         description:
           anyOf:
           - type: string
           - type: 'null'
           title: Description
-        url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Url
-        spec_path:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Spec Path
-        transport:
-          type: string
-          enum:
-          - sse
-          - http
-          - stdio
-          title: Transport
-        auth_type:
-          anyOf:
-          - type: string
-            enum:
-            - none
-            - api_key
-            - bearer_token
-            - basic
-            - authorization
-            - oauth2
-            - aws_sigv4
-            - token
-            - oauth2_token_exchange
-            - oauth2_id_jag
-            - true_passthrough
-            - oauth_delegate
-          - type: 'null'
-          title: Auth Type
-        credentials:
-          anyOf:
-          - $ref: '#/components/schemas/MCPCredentials'
-          - type: 'null'
-        instructions:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Instructions
-        created_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Created At
-        created_by:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created By
-        updated_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Updated At
-        updated_by:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Updated By
-        teams:
+        tools:
           items:
-            additionalProperties:
-              anyOf:
-              - type: string
-              - type: 'null'
-            type: object
+            $ref: '#/components/schemas/MCPToolsetTool'
           type: array
-          title: Teams
-        mcp_access_groups:
-          items:
-            type: string
-          type: array
-          title: Mcp Access Groups
-        allowed_tools:
-          items:
-            type: string
-          type: array
-          title: Allowed Tools
-        tool_name_to_display_name:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - type: 'null'
-          title: Tool Name To Display Name
-        tool_name_to_description:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - type: 'null'
-          title: Tool Name To Description
-        extra_headers:
-          items:
-            type: string
-          type: array
-          title: Extra Headers
-        mcp_info:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Mcp Info
-        static_headers:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - type: 'null'
-          title: Static Headers
-        env_vars:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/MCPEnvVar'
-            type: array
-          - type: 'null'
-          title: Env Vars
-        status:
-          anyOf:
-          - type: string
-            enum:
-            - healthy
-            - unhealthy
-            - unknown
-          - type: 'null'
-          title: Status
-          description: 'Health status: ''healthy'', ''unhealthy'', ''unknown'''
-          default: unknown
-        last_health_check:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Health Check
-        health_check_error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Health Check Error
-        command:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Command
-        args:
-          items:
-            type: string
-          type: array
-          title: Args
-        env:
-          additionalProperties:
-            type: string
-          type: object
-          title: Env
-        issuer:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Issuer
-        authorization_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Authorization Url
-        token_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Token Url
-        registration_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Registration Url
-        oauth2_flow:
-          anyOf:
-          - type: string
-            enum:
-            - client_credentials
-            - authorization_code
-          - type: 'null'
-          title: Oauth2 Flow
-        token_exchange_endpoint:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Token Exchange Endpoint
-        audience:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Audience
-        subject_token_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Subject Token Type
-        token_exchange_profile:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Token Exchange Profile
-        allow_all_keys:
-          type: boolean
-          title: Allow All Keys
-          default: false
-        available_on_public_internet:
-          type: boolean
-          title: Available On Public Internet
-          default: true
-        delegate_auth_to_upstream:
-          type: boolean
-          title: Delegate Auth To Upstream
-          default: false
-        oauth_passthrough:
-          type: boolean
-          title: Oauth Passthrough
-          default: false
-        dcr_bridge:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Dcr Bridge
-        per_server_oauth_discovery:
-          type: boolean
-          title: Per Server Oauth Discovery
-          default: false
-        is_byok:
-          type: boolean
-          title: Is Byok
-          default: false
-        byok_description:
-          items:
-            type: string
-          type: array
-          title: Byok Description
-        byok_api_key_help_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Byok Api Key Help Url
-        has_user_credential:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Has User Credential
-        connected_app_reachable:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Connected App Reachable
-        source_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Source Url
-        timeout:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Timeout
-        max_concurrent_requests:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Max Concurrent Requests
-        approval_status:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Approval Status
-          description: 'Approval status: ''pending_review'', ''active'', ''rejected'''
-          default: active
-        submitted_by:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Submitted By
-        submitted_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Submitted At
-        reviewed_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Reviewed At
-        review_notes:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Review Notes
+          title: Tools
+          default: []
       type: object
       required:
-      - server_id
-      - transport
-      title: LiteLLM_MCPServerTable
-      description: Represents a LiteLLM_MCPServerTable record
+      - toolset_name
+      title: NewMCPToolsetRequest
     Body_authorize_complete_authorize_complete_post:
       properties:
         flow:
@@ -3877,6 +4193,140 @@ components:
       required:
       - flow
       title: Body_authorize_complete_authorize_complete_post
+    MCPGatewaySession:
+      properties:
+        session_id_prefix:
+          type: string
+          title: Session Id Prefix
+        client_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Name
+        client_version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Version
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        team_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Alias
+        client_ip:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Ip
+        idle_seconds:
+          type: number
+          title: Idle Seconds
+        in_flight_requests:
+          type: integer
+          title: In Flight Requests
+      type: object
+      required:
+      - session_id_prefix
+      - idle_seconds
+      - in_flight_requests
+      title: MCPGatewaySession
+      description: One live stateful Streamable HTTP session held by this proxy worker.
+    MCPEnvVarScope:
+      type: string
+      enum:
+      - global
+      - user
+      title: MCPEnvVarScope
+      description: "Scope for an MCP server environment variable.\n\n- ``global``: value is provided by the admin and used for all users.\n- ``user``: each user must provide their own value via the per-user\n  env-var endpoint. The admin-supplied ``value`` is treated as a\n  placeholder/hint and is not used at request time."
+    UpdateMCPToolsetRequest:
+      properties:
+        toolset_id:
+          type: string
+          title: Toolset Id
+        toolset_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Toolset Name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        tools:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/MCPToolsetTool'
+            type: array
+          - type: 'null'
+          title: Tools
+      type: object
+      required:
+      - toolset_id
+      title: UpdateMCPToolsetRequest
+    MCPGatewaySessionsTerminateResponse:
+      properties:
+        worker_pid:
+          type: integer
+          title: Worker Pid
+        terminated_sessions:
+          type: integer
+          title: Terminated Sessions
+        sessions:
+          items:
+            $ref: '#/components/schemas/MCPGatewaySession'
+          type: array
+          title: Sessions
+      type: object
+      required:
+      - worker_pid
+      - terminated_sessions
+      title: MCPGatewaySessionsTerminateResponse
+      description: Stateful sessions an administrator force-closed on this proxy worker.
+    Body_introspect_endpoint_introspect_post:
+      properties:
+        token:
+          type: string
+          title: Token
+      type: object
+      required:
+      - token
+      title: Body_introspect_endpoint_introspect_post
+    MCPConnectorImportRequest:
+      properties:
+        mcp_servers:
+          anyOf:
+          - additionalProperties:
+              $ref: '#/components/schemas/MCPConnectorEntry'
+            type: object
+          - items:
+              $ref: '#/components/schemas/MCPConnectorEntry'
+            type: array
+          title: Mcp Servers
+      type: object
+      required:
+      - mcp_servers
+      title: MCPConnectorImportRequest
     MCPConnectorEntry:
       properties:
         name:
@@ -3928,9 +4378,126 @@ components:
           title: Description
       type: object
       title: MCPConnectorEntry
+    MCPUserEnvVarsRequest:
+      properties:
+        values:
+          additionalProperties:
+            type: string
+          type: object
+          title: Values
+      type: object
+      required:
+      - values
+      title: MCPUserEnvVarsRequest
+      description: Payload for storing the calling user's per-user env var values.
+    MCPServerUserCredentialListItem:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        credential_type:
+          type: string
+          enum:
+          - oauth2
+          - byok
+          title: Credential Type
+        expires_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Expires At
+        connected_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Connected At
+        updated_at:
+          type: string
+          title: Updated At
+      type: object
+      required:
+      - user_id
+      - credential_type
+      - updated_at
+      title: MCPServerUserCredentialListItem
+      description: One user's stored credential for an MCP server, as an admin sees it. Never carries the secret.
+    MCPGatewaySessionGroupCount:
+      properties:
+        label:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Label
+        count:
+          type: integer
+          title: Count
+      type: object
+      required:
+      - count
+      title: MCPGatewaySessionGroupCount
+    Body_token_endpoint__mcp_server_name__token_post:
+      properties:
+        grant_type:
+          type: string
+          title: Grant Type
+        code:
+          type: string
+          title: Code
+        redirect_uri:
+          type: string
+          title: Redirect Uri
+        client_id:
+          type: string
+          title: Client Id
+        client_secret:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Client Secret
+        code_verifier:
+          type: string
+          title: Code Verifier
+        refresh_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Refresh Token
+        scope:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scope
+        resource:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Resource
+        subject_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject Token
+        subject_token_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject Token Type
+        requested_token_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Requested Token Type
+      type: object
+      required:
+      - grant_type
+      - client_id
+      title: Body_token_endpoint__mcp_server_name__token_post
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Settings
 paths:
@@ -47,6 +47,55 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/MCPSemanticFilterSettings'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /get/websearch_interception_settings:
+    get:
+      tags:
+      - Settings
+      summary: Get Websearch Interception Settings
+      description: 'Get web search interception configuration.
+
+
+        Returns the current settings plus their schema, for the Admin UI to render.'
+      operationId: get_websearch_interception_settings_get_websearch_interception_settings_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebSearchInterceptionSettingsResponse'
+      security:
+      - APIKeyHeader: []
+  /update/websearch_interception_settings:
+    patch:
+      tags:
+      - Settings
+      summary: Update Websearch Interception Settings
+      description: 'Update web search interception settings in database.
+
+
+        Settings will be picked up by all pods within approximately 10 seconds via background polling.'
+      operationId: update_websearch_interception_settings_update_websearch_interception_settings_patch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebSearchInterceptionSettings'
         required: true
       responses:
         '200':
@@ -112,6 +161,15 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     MCPSemanticFilterSettingsResponse:
       properties:
         values:
@@ -154,6 +212,22 @@ components:
       - msg
       - type
       title: ValidationError
+    MCPToolSearchSettingsResponse:
+      properties:
+        values:
+          additionalProperties: true
+          type: object
+          title: Values
+        field_schema:
+          additionalProperties: true
+          type: object
+          title: Field Schema
+      type: object
+      required:
+      - values
+      - field_schema
+      title: MCPToolSearchSettingsResponse
+      description: Response model for native MCP tool search settings
     MCPSemanticFilterSettings:
       properties:
         enabled:
@@ -183,15 +257,6 @@ components:
       type: object
       title: MCPSemanticFilterSettings
       description: Configuration for MCP Semantic Tool Filter
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     MCPToolSearchSettings:
       properties:
         embedding_model:
@@ -224,7 +289,7 @@ components:
       type: object
       title: MCPToolSearchSettings
       description: '`litellm_settings.mcp_tool_search`: how the native `mcp_tool_search` virtual tool ranks the caller''s tools.'
-    MCPToolSearchSettingsResponse:
+    WebSearchInterceptionSettingsResponse:
       properties:
         values:
           additionalProperties: true
@@ -234,15 +299,52 @@ components:
           additionalProperties: true
           type: object
           title: Field Schema
+        active_on_this_pod:
+          type: boolean
+          title: Active On This Pod
+          description: 'Whether the process answering this request has the interception callback registered. Read-only: it reports what is running here, while values.enabled is the cluster-wide setting, and the two disagree while a pod is still applying a change or failed to apply it.'
+          default: false
       type: object
       required:
       - values
       - field_schema
-      title: MCPToolSearchSettingsResponse
-      description: Response model for native MCP tool search settings
+      title: WebSearchInterceptionSettingsResponse
+      description: Response model for web search interception settings
+    WebSearchInterceptionSettings:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+          description: Serve web search tool calls from a configured search tool instead of passing them upstream
+          default: false
+        enabled_providers:
+          items:
+            type: string
+          type: array
+          title: Enabled Providers
+          description: LLM providers to intercept for (e.g. 'bedrock', 'vertex_ai'). Empty intercepts Bedrock only.
+        search_tool_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Search Tool Name
+          description: Name of the configured search tool to run searches through. Empty uses the first one available.
+        max_agentic_loops:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Max Agentic Loops
+          description: How many follow-up model calls one intercepted request may chain. Empty applies the default of 3.
+      type: object
+      title: WebSearchInterceptionSettings
+      description: Configuration for server-side web search interception
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

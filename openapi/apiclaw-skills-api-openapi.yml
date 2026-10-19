@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Skills
 paths:
@@ -58,6 +58,30 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    AgentSkillsIndex:
+      properties:
+        $schema:
+          type: string
+          title: $Schema
+          default: https://schemas.agentskills.io/discovery/0.2.0/schema.json
+        skills:
+          items:
+            $ref: '#/components/schemas/AgentSkillsIndexEntry'
+          type: array
+          title: Skills
+      type: object
+      required:
+      - skills
+      title: AgentSkillsIndex
     ValidationError:
       properties:
         loc:
@@ -110,33 +134,12 @@ components:
       - url
       - digest
       title: AgentSkillsIndexEntry
-    AgentSkillsIndex:
-      properties:
-        $schema:
-          type: string
-          title: $Schema
-          default: https://schemas.agentskills.io/discovery/0.2.0/schema.json
-        skills:
-          items:
-            $ref: '#/components/schemas/AgentSkillsIndexEntry'
-          type: array
-          title: Skills
-      type: object
-      required:
-      - skills
-      title: AgentSkillsIndex
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

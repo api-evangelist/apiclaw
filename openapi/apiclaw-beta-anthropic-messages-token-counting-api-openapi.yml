@@ -1,0 +1,67 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM [beta] Anthropic Messages Token Counting API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.105.1
+tags:
+- name: '[beta] Anthropic Messages Token Counting'
+paths:
+  /v1/messages/count_tokens:
+    post:
+      tags:
+      - '[beta] Anthropic Messages Token Counting'
+      summary: Count Tokens
+      description: 'Count tokens for Anthropic Messages API format.
+
+
+        This endpoint follows the Anthropic Messages API token counting specification.
+
+        It accepts the same parameters as the /v1/messages endpoint but returns
+
+        token counts instead of generating a response.
+
+
+        Example usage:
+
+        ```
+
+        curl -X POST "http://localhost:4000/v1/messages/count_tokens?beta=true" -H "Content-Type: application/json" -H "Authorization: Bearer your-key" -d ''{
+
+        "model": "claude-3-sonnet-20240229",
+
+        "messages": [{"role": "user", "content": "Hello Claude!"}]
+
+        }''
+
+        ```
+
+
+        Returns: {"input_tokens": }'
+      operationId: count_tokens_v1_messages_count_tokens_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+components:
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

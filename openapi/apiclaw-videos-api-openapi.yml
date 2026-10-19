@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Videos
 paths:
@@ -701,16 +701,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    Body_video_generation_v1_videos_post:
-      properties:
-        input_reference:
-          anyOf:
-          - type: string
-            contentMediaType: application/octet-stream
-          - type: 'null'
-          title: Input Reference
-      type: object
-      title: Body_video_generation_v1_videos_post
     Body_video_create_character_videos_characters_post:
       properties:
         video:
@@ -725,20 +715,15 @@ components:
       - video
       - name
       title: Body_video_create_character_videos_characters_post
-    Body_video_create_character_v1_videos_characters_post:
+    HTTPValidationError:
       properties:
-        video:
-          type: string
-          contentMediaType: application/octet-stream
-          title: Video
-        name:
-          type: string
-          title: Name
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - video
-      - name
-      title: Body_video_create_character_v1_videos_characters_post
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -765,15 +750,20 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
+    Body_video_create_character_v1_videos_characters_post:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        video:
+          type: string
+          contentMediaType: application/octet-stream
+          title: Video
+        name:
+          type: string
+          title: Name
       type: object
-      title: HTTPValidationError
+      required:
+      - video
+      - name
+      title: Body_video_create_character_v1_videos_characters_post
     Body_video_generation_videos_post:
       properties:
         input_reference:
@@ -784,9 +774,22 @@ components:
           title: Input Reference
       type: object
       title: Body_video_generation_videos_post
+    Body_video_generation_v1_videos_post:
+      properties:
+        input_reference:
+          anyOf:
+          - type: string
+            contentMediaType: application/octet-stream
+          - type: 'null'
+          title: Input Reference
+      type: object
+      title: Body_video_generation_v1_videos_post
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

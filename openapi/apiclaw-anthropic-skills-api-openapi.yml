@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: anthropic_skills
 paths:
@@ -340,6 +340,15 @@ paths:
       - anthropic_skills
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ListSkillsResponse:
       description: Response from listing skills
       properties:
@@ -360,20 +369,6 @@ components:
       required:
       - data
       title: ListSkillsResponse
-      type: object
-    DeleteSkillResponse:
-      description: Response from deleting a skill
-      properties:
-        id:
-          title: Id
-          type: string
-        type:
-          default: skill_deleted
-          title: Type
-          type: string
-      required:
-      - id
-      title: DeleteSkillResponse
       type: object
     ValidationError:
       properties:
@@ -447,18 +442,26 @@ components:
       - updated_at
       title: Skill
       type: object
-    HTTPValidationError:
+    DeleteSkillResponse:
+      description: Response from deleting a skill
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        id:
+          title: Id
+          type: string
+        type:
+          default: skill_deleted
+          title: Type
+          type: string
+      required:
+      - id
+      title: DeleteSkillResponse
       type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

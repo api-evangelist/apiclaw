@@ -1,0 +1,215 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Cost Optimization API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.105.1
+tags:
+- name: Cost Optimization
+paths:
+  /cost_optimization/prompt_caching/requests:
+    get:
+      tags:
+      - Cost Optimization
+      summary: Get Prompt Caching Requests
+      operationId: get_prompt_caching_requests_cost_optimization_prompt_caching_requests_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+          title: Start Date
+      - name: end_date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+          title: End Date
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 50
+          title: Page Size
+      - name: filter
+        in: query
+        required: false
+        schema:
+          enum:
+          - all
+          - injected
+          - hits
+          type: string
+          default: all
+          title: Filter
+      - name: cursor_start_time
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Cursor Start Time
+      - name: cursor_request_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            minLength: 1
+          - type: 'null'
+          title: Cursor Request Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromptCachingRequestsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PromptCachingRequest:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+        model:
+          type: string
+          title: Model
+        gateway_injected:
+          type: boolean
+          title: Gateway Injected
+        cache_read_tokens:
+          type: integer
+          title: Cache Read Tokens
+        cache_creation_tokens:
+          type: integer
+          title: Cache Creation Tokens
+        spend:
+          type: number
+          title: Spend
+        net_savings:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Net Savings
+      type: object
+      required:
+      - request_id
+      - start_time
+      - model
+      - gateway_injected
+      - cache_read_tokens
+      - cache_creation_tokens
+      - spend
+      - net_savings
+      title: PromptCachingRequest
+    PromptCachingRequestsResponse:
+      properties:
+        requests:
+          items:
+            $ref: '#/components/schemas/PromptCachingRequest'
+          type: array
+          title: Requests
+        page_size:
+          type: integer
+          title: Page Size
+        has_more:
+          type: boolean
+          title: Has More
+        next_cursor:
+          anyOf:
+          - $ref: '#/components/schemas/PromptCachingRequestCursor'
+          - type: 'null'
+      type: object
+      required:
+      - requests
+      - page_size
+      - has_more
+      - next_cursor
+      title: PromptCachingRequestsResponse
+    PromptCachingRequestCursor:
+      properties:
+        start_time:
+          type: string
+          format: date-time
+          title: Start Time
+        request_id:
+          type: string
+          title: Request Id
+      type: object
+      required:
+      - start_time
+      - request_id
+      title: PromptCachingRequestCursor
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

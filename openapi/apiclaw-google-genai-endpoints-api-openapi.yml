@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: google genai endpoints
 paths:
@@ -491,6 +491,22 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    TokenCountDetailsResponse:
+      properties:
+        totalTokens:
+          type: integer
+          title: Totaltokens
+        promptTokensDetails:
+          items:
+            $ref: '#/components/schemas/PromptTokensDetails'
+          type: array
+          title: Prompttokensdetails
+      type: object
+      required:
+      - totalTokens
+      - promptTokensDetails
+      title: TokenCountDetailsResponse
+      description: "Response structure for token count details with modality breakdown.\n\nExample:\n    {'totalTokens': 12, 'promptTokensDetails': [{'modality': 'TEXT', 'tokenCount': 12}]}"
     PromptTokensDetails:
       properties:
         modality:
@@ -509,6 +525,15 @@ components:
       - modality
       - tokenCount
       title: PromptTokensDetails
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -535,34 +560,12 @@ components:
       - msg
       - type
       title: ValidationError
-    TokenCountDetailsResponse:
-      properties:
-        totalTokens:
-          type: integer
-          title: Totaltokens
-        promptTokensDetails:
-          items:
-            $ref: '#/components/schemas/PromptTokensDetails'
-          type: array
-          title: Prompttokensdetails
-      type: object
-      required:
-      - totalTokens
-      - promptTokensDetails
-      title: TokenCountDetailsResponse
-      description: "Response structure for token count details with modality breakdown.\n\nExample:\n    {'totalTokens': 12, 'promptTokensDetails': [{'modality': 'TEXT', 'tokenCount': 12}]}"
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

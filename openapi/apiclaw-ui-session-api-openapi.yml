@@ -1,0 +1,62 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM UI Session API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.105.1
+tags:
+- name: UI Session
+paths:
+  /session/logout:
+    post:
+      tags:
+      - UI Session
+      summary: Session Logout
+      description: 'Revoke the UI session key this request authenticated with.
+
+
+        Only accepts UI session keys (minted by dashboard login); any other
+
+        credential is refused, so this can never be used to delete arbitrary keys.
+
+        Revokes only the presented session, not the user''s other sessions.
+
+        Idempotent: logging out an already-revoked session succeeds.'
+      operationId: session_logout_session_logout_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionLogoutResponse'
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    SessionLogoutResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - message
+      title: SessionLogoutResponse
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

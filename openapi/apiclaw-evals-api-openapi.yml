@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Evals
 paths:
@@ -748,6 +748,60 @@ paths:
       - Evals
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CancelEvalResponse:
+      description: Response from cancelling an evaluation
+      properties:
+        id:
+          title: Id
+          type: string
+        object:
+          default: eval
+          title: Object
+          type: string
+        status:
+          const: cancelled
+          title: Status
+          type: string
+      required:
+      - id
+      - status
+      title: CancelEvalResponse
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     Eval:
       description: Represents an evaluation from the OpenAI Evals API
       properties:
@@ -793,58 +847,6 @@ components:
       - data_source_config
       - testing_criteria
       title: Eval
-      type: object
-    ListEvalsResponse:
-      description: Response from listing evaluations
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/Eval'
-          title: Data
-          type: array
-        first_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Id
-        has_more:
-          default: false
-          title: Has More
-          type: boolean
-        last_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Id
-        object:
-          default: list
-          title: Object
-          type: string
-      required:
-      - data
-      title: ListEvalsResponse
-      type: object
-    RunDeleteResponse:
-      description: Response from deleting a run
-      properties:
-        deleted:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          default: true
-          title: Deleted
-        object:
-          anyOf:
-          - type: string
-          - type: 'null'
-          default: eval.run.deleted
-          title: Object
-        run_id:
-          title: Run Id
-          type: string
-      required:
-      - run_id
-      title: RunDeleteResponse
       type: object
     ListRunsResponse:
       description: Response from listing runs
@@ -895,81 +897,36 @@ components:
       - status
       title: CancelRunResponse
       type: object
-    ValidationError:
+    ListEvalsResponse:
+      description: Response from listing evaluations
       properties:
-        loc:
+        data:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/Eval'
+          title: Data
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    DeleteEvalResponse:
-      description: Response from deleting an evaluation
-      properties:
-        deleted:
-          title: Deleted
+        first_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Id
+        has_more:
+          default: false
+          title: Has More
           type: boolean
-        eval_id:
-          title: Eval Id
-          type: string
+        last_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Id
         object:
-          default: eval.deleted
+          default: list
           title: Object
           type: string
       required:
-      - eval_id
-      - deleted
-      title: DeleteEvalResponse
+      - data
+      title: ListEvalsResponse
       type: object
-    ResultCounts:
-      description: Result counts for a run
-      properties:
-        error:
-          default: 0
-          title: Error
-          type: integer
-        failed:
-          default: 0
-          title: Failed
-          type: integer
-        passed:
-          default: 0
-          title: Passed
-          type: integer
-        total:
-          title: Total
-          type: integer
-      required:
-      - total
-      title: ResultCounts
-      type: object
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     Run:
       description: Represents a run from the OpenAI Evals API
       properties:
@@ -1068,24 +1025,67 @@ components:
       - eval_id
       title: Run
       type: object
-    CancelEvalResponse:
-      description: Response from cancelling an evaluation
+    ResultCounts:
+      description: Result counts for a run
       properties:
-        id:
-          title: Id
-          type: string
+        error:
+          default: 0
+          title: Error
+          type: integer
+        failed:
+          default: 0
+          title: Failed
+          type: integer
+        passed:
+          default: 0
+          title: Passed
+          type: integer
+        total:
+          title: Total
+          type: integer
+      required:
+      - total
+      title: ResultCounts
+      type: object
+    RunDeleteResponse:
+      description: Response from deleting a run
+      properties:
+        deleted:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: true
+          title: Deleted
         object:
-          default: eval
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: eval.run.deleted
           title: Object
-          type: string
-        status:
-          const: cancelled
-          title: Status
+        run_id:
+          title: Run Id
           type: string
       required:
-      - id
-      - status
-      title: CancelEvalResponse
+      - run_id
+      title: RunDeleteResponse
+      type: object
+    DeleteEvalResponse:
+      description: Response from deleting an evaluation
+      properties:
+        deleted:
+          title: Deleted
+          type: boolean
+        eval_id:
+          title: Eval Id
+          type: string
+        object:
+          default: eval.deleted
+          title: Object
+          type: string
+      required:
+      - eval_id
+      - deleted
+      title: DeleteEvalResponse
       type: object
     PerTestingCriteriaResult:
       description: Results for a specific testing criteria
@@ -1111,3 +1111,6 @@ components:
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

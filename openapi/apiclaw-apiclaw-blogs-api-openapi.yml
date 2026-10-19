@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: APIClaw Blogs
 paths:
@@ -209,112 +209,29 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    _UpdateBlogPostRequest:
+    HTTPValidationError:
       properties:
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-        slug:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Slug
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        body:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Body
-        cover_image_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Cover Image Url
-        cover_image_url_set:
-          type: boolean
-          title: Cover Image Url Set
-          default: false
-        tags:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Tags
-        status:
-          anyOf:
-          - type: string
-            enum:
-            - draft
-            - published
-          - type: 'null'
-          title: Status
-      type: object
-      title: _UpdateBlogPostRequest
-    PaginatedResult:
-      properties:
-        total:
-          type: integer
-          title: Total
-        page:
-          type: integer
-          title: Page
-        page_size:
-          type: integer
-          title: Page Size
-        total_pages:
-          type: integer
-          title: Total Pages
-      type: object
-      required:
-      - total
-      - page
-      - page_size
-      - total_pages
-      title: PaginatedResult
-    _PublicBlogPostOut:
-      properties:
-        slug:
-          type: string
-          title: Slug
-        title:
-          type: string
-          title: Title
-        description:
-          type: string
-          title: Description
-        body:
-          type: string
-          title: Body
-        cover_image_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Cover Image Url
-        tags:
+        detail:
           items:
-            type: string
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Tags
-        published_at:
-          type: string
-          title: Published At
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    _BlogPostListOut:
+      properties:
+        posts:
+          items:
+            $ref: '#/components/schemas/_BlogPostOut'
+          type: array
+          title: Posts
+        pagination:
+          $ref: '#/components/schemas/PaginatedResult'
       type: object
       required:
-      - slug
-      - title
-      - description
-      - body
-      - cover_image_url
-      - tags
-      - published_at
-      title: _PublicBlogPostOut
+      - posts
+      - pagination
+      title: _BlogPostListOut
     ValidationError:
       properties:
         loc:
@@ -341,20 +258,15 @@ components:
       - msg
       - type
       title: ValidationError
-    _PublicBlogPostListOut:
+    _OkOut:
       properties:
-        posts:
-          items:
-            $ref: '#/components/schemas/_PublicBlogPostOut'
-          type: array
-          title: Posts
-        pagination:
-          $ref: '#/components/schemas/PaginatedResult'
+        ok:
+          type: boolean
+          title: Ok
       type: object
       required:
-      - posts
-      - pagination
-      title: _PublicBlogPostListOut
+      - ok
+      title: _OkOut
     _CreateBlogPostRequest:
       properties:
         title:
@@ -394,38 +306,43 @@ components:
       - description
       - body
       title: _CreateBlogPostRequest
-    _BlogPostListOut:
+    _PublicBlogPostOut:
       properties:
-        posts:
+        slug:
+          type: string
+          title: Slug
+        title:
+          type: string
+          title: Title
+        description:
+          type: string
+          title: Description
+        body:
+          type: string
+          title: Body
+        cover_image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cover Image Url
+        tags:
           items:
-            $ref: '#/components/schemas/_BlogPostOut'
+            type: string
           type: array
-          title: Posts
-        pagination:
-          $ref: '#/components/schemas/PaginatedResult'
+          title: Tags
+        published_at:
+          type: string
+          title: Published At
       type: object
       required:
-      - posts
-      - pagination
-      title: _BlogPostListOut
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    _OkOut:
-      properties:
-        ok:
-          type: boolean
-          title: Ok
-      type: object
-      required:
-      - ok
-      title: _OkOut
+      - slug
+      - title
+      - description
+      - body
+      - cover_image_url
+      - tags
+      - published_at
+      title: _PublicBlogPostOut
     _BlogPostOut:
       properties:
         id:
@@ -488,9 +405,95 @@ components:
       - updated_at
       - published_at
       title: _BlogPostOut
+    _PublicBlogPostListOut:
+      properties:
+        posts:
+          items:
+            $ref: '#/components/schemas/_PublicBlogPostOut'
+          type: array
+          title: Posts
+        pagination:
+          $ref: '#/components/schemas/PaginatedResult'
+      type: object
+      required:
+      - posts
+      - pagination
+      title: _PublicBlogPostListOut
+    PaginatedResult:
+      properties:
+        total:
+          type: integer
+          title: Total
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        total_pages:
+          type: integer
+          title: Total Pages
+      type: object
+      required:
+      - total
+      - page
+      - page_size
+      - total_pages
+      title: PaginatedResult
+    _UpdateBlogPostRequest:
+      properties:
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        slug:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Slug
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        body:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Body
+        cover_image_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cover Image Url
+        cover_image_url_set:
+          type: boolean
+          title: Cover Image Url Set
+          default: false
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+        status:
+          anyOf:
+          - type: string
+            enum:
+            - draft
+            - published
+          - type: 'null'
+          title: Status
+      type: object
+      title: _UpdateBlogPostRequest
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: config_overrides
 paths:
@@ -120,7 +120,7 @@ paths:
       description: 'Test the connection to the currently configured CyberArk Conjur server.
 
         Uses the already-initialized secret manager client. Does not modify any state.'
-      operationId: test_cyberark_connection_config_overrides_cyberaREDACTED_STRIPE_KEY_post
+      operationId: test_cyberark_connection_config_overrides_cyberark_test_connection_post
       responses:
         '200':
           content:
@@ -245,32 +245,6 @@ paths:
       - config_overrides
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     ConfigOverrideSettingsResponse:
       description: Response model for config override settings GET endpoints.
       properties:
@@ -294,15 +268,6 @@ components:
       - field_schema
       title: ConfigOverrideSettingsResponse
       type: object
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     HashicorpVaultConfig:
       description: Configuration for Hashicorp Vault secret manager integration.
       properties:
@@ -348,6 +313,12 @@ components:
           - type: 'null'
           description: Certificate role name for TLS cert authentication
           title: Vault Cert Role
+        vault_login_namespace:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Namespace for AppRole and TLS cert login (X-Vault-Namespace header); falls back to vault_namespace
+          title: Vault Login Namespace
         vault_mount_name:
           anyOf:
           - type: string
@@ -358,7 +329,7 @@ components:
           anyOf:
           - type: string
           - type: 'null'
-          description: Vault namespace (for multi-tenant Vault, sent as X-Vault-Namespace header)
+          description: Vault namespace used for both login and secret operations unless overridden below
           title: Vault Namespace
         vault_path_prefix:
           anyOf:
@@ -366,6 +337,12 @@ components:
           - type: 'null'
           description: Optional path prefix for secrets (e.g., myapp -> secret/data/myapp/{secret_name})
           title: Vault Path Prefix
+        vault_secret_namespace:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Namespace for secret reads and writes (URL path segment); falls back to vault_namespace
+          title: Vault Secret Namespace
         vault_token:
           anyOf:
           - type: string
@@ -374,6 +351,41 @@ components:
           title: Vault Token
       title: HashicorpVaultConfig
       type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     CyberArkConfig:
       description: Configuration for CyberArk Conjur secret manager integration.
       properties:
@@ -433,3 +445,6 @@ components:
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

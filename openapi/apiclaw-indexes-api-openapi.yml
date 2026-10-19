@@ -1,0 +1,223 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Indexes API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.105.1
+tags:
+- name: Indexes
+paths:
+  /v1/indexes:
+    get:
+      summary: Index List
+      description: 'List all vector store indexes. Proxy admin only.
+
+
+        ```bash
+
+        curl -L -X GET ''http://0.0.0.0:4000/v1/indexes'' -H ''Authorization: Bearer sk-1234''
+
+        ```'
+      operationId: index_list_v1_indexes_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexListResponse'
+      security:
+      - APIKeyHeader: []
+      tags:
+      - Indexes
+    post:
+      summary: Index Create
+      description: 'Create an index. Just writes the index to the database.
+
+
+        ```bash
+
+        curl -L -X POST ''http://0.0.0.0:4000/v1/indexes'' -H ''Content-Type: application/json'' -H ''Authorization: Bearer sk-1234'' -d ''{
+
+        "index_name": "dall-e-3",
+
+        "litellm_params": {
+
+        "vector_store_index": "real-index-name",
+
+        "vector_store_name": "azure-ai-search"
+
+        }
+
+        }''
+
+        ```'
+      operationId: index_create_v1_indexes_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IndexCreateRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+      tags:
+      - Indexes
+components:
+  schemas:
+    IndexListResponse:
+      properties:
+        object:
+          type: string
+          const: list
+          title: Object
+          default: list
+        data:
+          items:
+            $ref: '#/components/schemas/LiteLLM_ManagedVectorStoreIndex'
+          type: array
+          title: Data
+      type: object
+      required:
+      - data
+      title: IndexListResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    IndexCreateLiteLLMParams:
+      properties:
+        vector_store_index:
+          type: string
+          title: Vector Store Index
+        vector_store_name:
+          type: string
+          title: Vector Store Name
+      type: object
+      required:
+      - vector_store_index
+      - vector_store_name
+      title: IndexCreateLiteLLMParams
+    IndexCreateRequest:
+      properties:
+        index_name:
+          type: string
+          title: Index Name
+        litellm_params:
+          $ref: '#/components/schemas/IndexCreateLiteLLMParams'
+        index_info:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Index Info
+      type: object
+      required:
+      - index_name
+      - litellm_params
+      title: IndexCreateRequest
+    LiteLLM_ManagedVectorStoreIndex:
+      properties:
+        id:
+          type: string
+          title: Id
+        index_name:
+          type: string
+          title: Index Name
+        litellm_params:
+          $ref: '#/components/schemas/IndexCreateLiteLLMParams'
+        index_info:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Index Info
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+        created_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+        updated_by:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated By
+      type: object
+      required:
+      - id
+      - index_name
+      - litellm_params
+      title: LiteLLM_ManagedVectorStoreIndex
+      description: LiteLLM managed vector store index object - this is is the object stored in the database
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

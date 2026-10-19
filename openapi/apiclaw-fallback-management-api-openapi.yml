@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Fallback Management
 paths:
@@ -187,57 +187,15 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    FallbackGetResponse:
+    HTTPValidationError:
       properties:
-        model:
-          type: string
-          title: Model
-          description: The model name
-        fallback_models:
+        detail:
           items:
-            type: string
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Fallback Models
-          description: List of fallback model names
-        fallback_type:
-          type: string
-          title: Fallback Type
-          description: Type of fallback
+          title: Detail
       type: object
-      required:
-      - model
-      - fallback_models
-      - fallback_type
-      title: FallbackGetResponse
-      description: Response model for getting fallbacks
-    FallbackResponse:
-      properties:
-        model:
-          type: string
-          title: Model
-          description: The model name
-        fallback_models:
-          items:
-            type: string
-          type: array
-          title: Fallback Models
-          description: List of fallback model names
-        fallback_type:
-          type: string
-          title: Fallback Type
-          description: Type of fallback
-        message:
-          type: string
-          title: Message
-          description: Success message
-      type: object
-      required:
-      - model
-      - fallback_models
-      - fallback_type
-      - message
-      title: FallbackResponse
-      description: Response model for fallback operations
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -285,15 +243,34 @@ components:
       - message
       title: FallbackDeleteResponse
       description: Response model for deleting fallbacks
-    HTTPValidationError:
+    FallbackResponse:
       properties:
-        detail:
+        model:
+          type: string
+          title: Model
+          description: The model name
+        fallback_models:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            type: string
           type: array
-          title: Detail
+          title: Fallback Models
+          description: List of fallback model names
+        fallback_type:
+          type: string
+          title: Fallback Type
+          description: Type of fallback
+        message:
+          type: string
+          title: Message
+          description: Success message
       type: object
-      title: HTTPValidationError
+      required:
+      - model
+      - fallback_models
+      - fallback_type
+      - message
+      title: FallbackResponse
+      description: Response model for fallback operations
     FallbackCreateRequest:
       properties:
         model:
@@ -322,9 +299,35 @@ components:
       - fallback_models
       title: FallbackCreateRequest
       description: Request model for creating/updating fallbacks
+    FallbackGetResponse:
+      properties:
+        model:
+          type: string
+          title: Model
+          description: The model name
+        fallback_models:
+          items:
+            type: string
+          type: array
+          title: Fallback Models
+          description: List of fallback model names
+        fallback_type:
+          type: string
+          title: Fallback Type
+          description: Type of fallback
+      type: object
+      required:
+      - model
+      - fallback_models
+      - fallback_type
+      title: FallbackGetResponse
+      description: Response model for getting fallbacks
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Tools
 paths:
@@ -355,144 +355,6 @@ paths:
       - Tools
 components:
   schemas:
-    ToolUsageLogsResponse:
-      properties:
-        logs:
-          items:
-            $ref: '#/components/schemas/ToolUsageLogEntry'
-          title: Logs
-          type: array
-        page:
-          title: Page
-          type: integer
-        page_size:
-          title: Page Size
-          type: integer
-        total:
-          title: Total
-          type: integer
-      required:
-      - logs
-      - total
-      - page
-      - page_size
-      title: ToolUsageLogsResponse
-      type: object
-    ToolListResponse:
-      properties:
-        tools:
-          items:
-            $ref: '#/components/schemas/LiteLLM_ToolTableRow'
-          title: Tools
-          type: array
-        total:
-          title: Total
-          type: integer
-      required:
-      - tools
-      - total
-      title: ToolListResponse
-      type: object
-    ToolUsageLogEntry:
-      description: One spend log row for a tool call (for UI "recent logs" table).
-      properties:
-        id:
-          title: Id
-          type: string
-        input_snippet:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Input Snippet
-        model:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Model
-        spend:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Spend
-        timestamp:
-          title: Timestamp
-          type: string
-        total_tokens:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Total Tokens
-      required:
-      - id
-      - timestamp
-      title: ToolUsageLogEntry
-      type: object
-    ToolSpendEntry:
-      description: Total spend attributed to one tool over the requested window.
-      properties:
-        call_count:
-          default: 0
-          title: Call Count
-          type: integer
-        spend:
-          default: 0.0
-          description: 'Attributed spend: a request that used several tools counts its full spend toward each of them'
-          title: Spend
-          type: number
-        tool_name:
-          title: Tool Name
-          type: string
-        total_tokens:
-          default: 0
-          title: Total Tokens
-          type: integer
-      required:
-      - tool_name
-      title: ToolSpendEntry
-      type: object
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    ToolPolicyOption:
-      properties:
-        description:
-          title: Description
-          type: string
-        label:
-          title: Label
-          type: string
-        value:
-          title: Value
-          type: string
-      required:
-      - value
-      - label
-      - description
-      title: ToolPolicyOption
-      type: object
     ToolDetailResponse:
       properties:
         overrides:
@@ -505,6 +367,34 @@ components:
       required:
       - tool
       title: ToolDetailResponse
+      type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ToolDiscoveryUser:
+      properties:
+        user_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Alias
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+        user_id:
+          title: User Id
+          type: string
+      required:
+      - user_id
+      title: ToolDiscoveryUser
       type: object
     LiteLLM_ToolTableRow:
       properties:
@@ -587,6 +477,10 @@ components:
           - type: string
           - type: 'null'
           title: Updated By
+        user:
+          anyOf:
+          - $ref: '#/components/schemas/ToolDiscoveryUser'
+          - type: 'null'
         user_agent:
           anyOf:
           - type: string
@@ -597,71 +491,46 @@ components:
       - tool_name
       title: LiteLLM_ToolTableRow
       type: object
-    HTTPValidationError:
+    ValidationError:
       properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ToolPolicyOptionsResponse:
-      properties:
-        input_policies:
-          items:
-            $ref: '#/components/schemas/ToolPolicyOption'
-          title: Input Policies
-          type: array
-        output_policies:
-          items:
-            $ref: '#/components/schemas/ToolPolicyOption'
-          title: Output Policies
-          type: array
-      required:
-      - input_policies
-      - output_policies
-      title: ToolPolicyOptionsResponse
-      type: object
-    ToolPolicyUpdateResponse:
-      properties:
-        input_policy:
-          anyOf:
-          - enum:
-            - trusted
-            - untrusted
-            - blocked
-            type: string
-          - type: 'null'
-          title: Input Policy
-        key_hash:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Key Hash
-        output_policy:
-          anyOf:
-          - enum:
-            - trusted
-            - untrusted
-            type: string
-          - type: 'null'
-          title: Output Policy
-        team_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Team Id
-        tool_name:
-          title: Tool Name
+          title: Location
+        msg:
           type: string
-        updated:
-          title: Updated
-          type: boolean
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
       required:
-      - tool_name
-      - updated
-      title: ToolPolicyUpdateResponse
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ToolListResponse:
+      properties:
+        tools:
+          items:
+            $ref: '#/components/schemas/LiteLLM_ToolTableRow'
+          title: Tools
+          type: array
+        total:
+          title: Total
+          type: integer
+      required:
+      - tools
+      - total
+      title: ToolListResponse
       type: object
     ToolPolicyUpdateRequest:
       properties:
@@ -703,6 +572,68 @@ components:
       required:
       - tool_name
       title: ToolPolicyUpdateRequest
+      type: object
+    ToolSpendDailyEntry:
+      description: Spend attributed to one tool on one UTC day.
+      properties:
+        call_count:
+          default: 0
+          title: Call Count
+          type: integer
+        date:
+          title: Date
+          type: string
+        spend:
+          default: 0.0
+          title: Spend
+          type: number
+        tool_name:
+          title: Tool Name
+          type: string
+      required:
+      - date
+      - tool_name
+      title: ToolSpendDailyEntry
+      type: object
+    ToolSpendEntry:
+      description: Total spend attributed to one tool over the requested window.
+      properties:
+        call_count:
+          default: 0
+          title: Call Count
+          type: integer
+        spend:
+          default: 0.0
+          description: 'Attributed spend: a request that used several tools counts its full spend toward each of them'
+          title: Spend
+          type: number
+        tool_name:
+          title: Tool Name
+          type: string
+        total_tokens:
+          default: 0
+          title: Total Tokens
+          type: integer
+      required:
+      - tool_name
+      title: ToolSpendEntry
+      type: object
+    ToolPolicyOption:
+      properties:
+        description:
+          title: Description
+          type: string
+        label:
+          title: Label
+          type: string
+        value:
+          title: Value
+          type: string
+      required:
+      - value
+      - label
+      - description
+      title: ToolPolicyOption
       type: object
     ToolSpendResponse:
       properties:
@@ -776,27 +707,119 @@ components:
       - tool_name
       title: ToolPolicyOverrideRow
       type: object
-    ToolSpendDailyEntry:
-      description: Spend attributed to one tool on one UTC day.
+    ToolUsageLogsResponse:
       properties:
-        call_count:
-          default: 0
-          title: Call Count
+        logs:
+          items:
+            $ref: '#/components/schemas/ToolUsageLogEntry'
+          title: Logs
+          type: array
+        page:
+          title: Page
           type: integer
-        date:
-          title: Date
+        page_size:
+          title: Page Size
+          type: integer
+        total:
+          title: Total
+          type: integer
+      required:
+      - logs
+      - total
+      - page
+      - page_size
+      title: ToolUsageLogsResponse
+      type: object
+    ToolPolicyOptionsResponse:
+      properties:
+        input_policies:
+          items:
+            $ref: '#/components/schemas/ToolPolicyOption'
+          title: Input Policies
+          type: array
+        output_policies:
+          items:
+            $ref: '#/components/schemas/ToolPolicyOption'
+          title: Output Policies
+          type: array
+      required:
+      - input_policies
+      - output_policies
+      title: ToolPolicyOptionsResponse
+      type: object
+    ToolUsageLogEntry:
+      description: One spend log row for a tool call (for UI "recent logs" table).
+      properties:
+        id:
+          title: Id
           type: string
+        input_snippet:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Input Snippet
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
         spend:
-          default: 0.0
+          anyOf:
+          - type: number
+          - type: 'null'
           title: Spend
-          type: number
+        timestamp:
+          title: Timestamp
+          type: string
+        total_tokens:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Tokens
+      required:
+      - id
+      - timestamp
+      title: ToolUsageLogEntry
+      type: object
+    ToolPolicyUpdateResponse:
+      properties:
+        input_policy:
+          anyOf:
+          - enum:
+            - trusted
+            - untrusted
+            - blocked
+            type: string
+          - type: 'null'
+          title: Input Policy
+        key_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Hash
+        output_policy:
+          anyOf:
+          - enum:
+            - trusted
+            - untrusted
+            type: string
+          - type: 'null'
+          title: Output Policy
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
         tool_name:
           title: Tool Name
           type: string
+        updated:
+          title: Updated
+          type: boolean
       required:
-      - date
       - tool_name
-      title: ToolSpendDailyEntry
+      - updated
+      title: ToolPolicyUpdateResponse
       type: object
   securitySchemes:
     APIKeyHeader:
@@ -804,3 +827,6 @@ components:
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Websocket
 paths:
@@ -81,6 +81,50 @@ paths:
           description: WebSocket Protocol Switched
       tags:
       - Websocket
+  /openai/:
+    get:
+      summary: 'WebSocket: openai_websocket_proxy_route'
+      description: WebSocket connection endpoint
+      operationId: websocket_openai_websocket_proxy_route_get
+      parameters: []
+      responses:
+        '101':
+          description: WebSocket Protocol Switched
+      tags:
+      - Websocket
+  /openai_passthrough/:
+    get:
+      summary: 'WebSocket: openai_websocket_proxy_route'
+      description: WebSocket connection endpoint
+      operationId: websocket_openai_websocket_proxy_route_get_2
+      parameters: []
+      responses:
+        '101':
+          description: WebSocket Protocol Switched
+      tags:
+      - Websocket
+  /deepgram/listen:
+    get:
+      summary: 'WebSocket: deepgram_listen_websocket_route'
+      description: WebSocket connection endpoint
+      operationId: websocket_deepgram_listen_websocket_route_get
+      parameters: []
+      responses:
+        '101':
+          description: WebSocket Protocol Switched
+      tags:
+      - Websocket
+  /deepgram/v1/listen:
+    get:
+      summary: 'WebSocket: deepgram_listen_websocket_route'
+      description: WebSocket connection endpoint
+      operationId: websocket_deepgram_listen_websocket_route_get_2
+      parameters: []
+      responses:
+        '101':
+          description: WebSocket Protocol Switched
+      tags:
+      - Websocket
 components:
   securitySchemes:
     APIKeyHeader:
@@ -88,3 +132,6 @@ components:
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

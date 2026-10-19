@@ -1,0 +1,90 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM WebSocket API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.102.1
+tags:
+- name: Websocket
+paths:
+  /responses:
+    get:
+      summary: 'WebSocket: responses_websocket_endpoint'
+      description: WebSocket connection endpoint
+      operationId: websocket_responses_websocket_endpoint_get
+      parameters: []
+      responses:
+        '101':
+          description: WebSocket Protocol Switched
+      tags:
+      - Websocket
+  /v1/responses:
+    get:
+      summary: 'WebSocket: responses_websocket_endpoint'
+      description: WebSocket connection endpoint
+      operationId: websocket_responses_websocket_endpoint_get_2
+      parameters: []
+      responses:
+        '101':
+          description: WebSocket Protocol Switched
+      tags:
+      - Websocket
+  /vertex_ai/live:
+    get:
+      summary: 'WebSocket: vertex_ai_live_passthrough_endpoint'
+      description: WebSocket connection endpoint
+      operationId: websocket_vertex_ai_live_passthrough_endpoint
+      parameters: []
+      responses:
+        '101':
+          description: WebSocket Protocol Switched
+      tags:
+      - Websocket
+  /realtime:
+    get:
+      summary: 'WebSocket: realtime_websocket_endpoint'
+      description: WebSocket connection endpoint
+      operationId: websocket_realtime_websocket_endpoint_get
+      parameters: []
+      responses:
+        '101':
+          description: WebSocket Protocol Switched
+      tags:
+      - Websocket
+  /v1/realtime:
+    get:
+      summary: 'WebSocket: realtime_websocket_endpoint'
+      description: WebSocket connection endpoint
+      operationId: websocket_realtime_websocket_endpoint_get_2
+      parameters: []
+      responses:
+        '101':
+          description: WebSocket Protocol Switched
+      tags:
+      - Websocket
+  /openai/v1/realtime:
+    get:
+      summary: 'WebSocket: realtime_websocket_endpoint'
+      description: WebSocket connection endpoint
+      operationId: websocket_realtime_websocket_endpoint_get_3
+      parameters: []
+      responses:
+        '101':
+          description: WebSocket Protocol Switched
+      tags:
+      - Websocket
+components:
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key

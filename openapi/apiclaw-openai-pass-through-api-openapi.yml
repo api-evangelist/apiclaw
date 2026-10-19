@@ -11,12 +11,12 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: OpenAI Pass-through
 paths:
   /openai_passthrough/{endpoint}:
-    put:
+    get:
       tags:
       - OpenAI Pass-through
       summary: Openai Passthrough Route
@@ -35,7 +35,7 @@ paths:
 
 
         Docs'
-      operationId: openai_passthrough_route_openai_passthrough__endpoint__put
+      operationId: openai_passthrough_route_openai_passthrough__endpoint__get
       security:
       - APIKeyHeader: []
       parameters:
@@ -77,47 +77,6 @@ paths:
 
         Docs'
       operationId: openai_passthrough_route_openai_passthrough__endpoint__patch
-      security:
-      - APIKeyHeader: []
-      parameters:
-      - name: endpoint
-        in: path
-        required: true
-        schema:
-          type: string
-          title: Endpoint
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-    get:
-      tags:
-      - OpenAI Pass-through
-      summary: Openai Passthrough Route
-      description: 'Dedicated pass-through to the OpenAI API with no overlap with LiteLLM''s native
-
-        implementations (e.g. the Responses API at /v1/responses).
-
-
-        Examples:
-
-        - /openai_passthrough/v1/responses
-
-        - /openai_passthrough/v1/responses/{response_id}
-
-        - /openai_passthrough/v1/responses/{response_id}/input_items
-
-
-        Docs'
-      operationId: openai_passthrough_route_openai_passthrough__endpoint__get
       security:
       - APIKeyHeader: []
       parameters:
@@ -221,8 +180,369 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - OpenAI Pass-through
+      summary: Openai Passthrough Route
+      description: 'Dedicated pass-through to the OpenAI API with no overlap with LiteLLM''s native
+
+        implementations (e.g. the Responses API at /v1/responses).
+
+
+        Examples:
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_passthrough_route_openai_passthrough__endpoint__put
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /openai/{endpoint}:
+    get:
+      tags:
+      - OpenAI Pass-through
+      summary: Openai Proxy Route
+      description: 'Pass-through endpoint for OpenAI API calls.
+
+
+        Available on both routes:
+
+        - /openai/{endpoint:path} - Standard OpenAI passthrough route
+
+        - /openai_passthrough/{endpoint:path} - Dedicated passthrough route (recommended for Responses API)
+
+
+        Use /openai_passthrough/* when you need guaranteed passthrough to OpenAI without conflicts
+
+        with LiteLLM''s native implementations (e.g., for the Responses API at /v1/responses).
+
+
+        Examples:
+
+        Standard route:
+
+        - /openai/v1/chat/completions
+
+        - /openai/v1/assistants
+
+        - /openai/v1/threads
+
+
+        Dedicated passthrough (for Responses API):
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_proxy_route_openai__endpoint__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - OpenAI Pass-through
+      summary: Openai Proxy Route
+      description: 'Pass-through endpoint for OpenAI API calls.
+
+
+        Available on both routes:
+
+        - /openai/{endpoint:path} - Standard OpenAI passthrough route
+
+        - /openai_passthrough/{endpoint:path} - Dedicated passthrough route (recommended for Responses API)
+
+
+        Use /openai_passthrough/* when you need guaranteed passthrough to OpenAI without conflicts
+
+        with LiteLLM''s native implementations (e.g., for the Responses API at /v1/responses).
+
+
+        Examples:
+
+        Standard route:
+
+        - /openai/v1/chat/completions
+
+        - /openai/v1/assistants
+
+        - /openai/v1/threads
+
+
+        Dedicated passthrough (for Responses API):
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_proxy_route_openai__endpoint__patch
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - OpenAI Pass-through
+      summary: Openai Proxy Route
+      description: 'Pass-through endpoint for OpenAI API calls.
+
+
+        Available on both routes:
+
+        - /openai/{endpoint:path} - Standard OpenAI passthrough route
+
+        - /openai_passthrough/{endpoint:path} - Dedicated passthrough route (recommended for Responses API)
+
+
+        Use /openai_passthrough/* when you need guaranteed passthrough to OpenAI without conflicts
+
+        with LiteLLM''s native implementations (e.g., for the Responses API at /v1/responses).
+
+
+        Examples:
+
+        Standard route:
+
+        - /openai/v1/chat/completions
+
+        - /openai/v1/assistants
+
+        - /openai/v1/threads
+
+
+        Dedicated passthrough (for Responses API):
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_proxy_route_openai__endpoint__post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - OpenAI Pass-through
+      summary: Openai Proxy Route
+      description: 'Pass-through endpoint for OpenAI API calls.
+
+
+        Available on both routes:
+
+        - /openai/{endpoint:path} - Standard OpenAI passthrough route
+
+        - /openai_passthrough/{endpoint:path} - Dedicated passthrough route (recommended for Responses API)
+
+
+        Use /openai_passthrough/* when you need guaranteed passthrough to OpenAI without conflicts
+
+        with LiteLLM''s native implementations (e.g., for the Responses API at /v1/responses).
+
+
+        Examples:
+
+        Standard route:
+
+        - /openai/v1/chat/completions
+
+        - /openai/v1/assistants
+
+        - /openai/v1/threads
+
+
+        Dedicated passthrough (for Responses API):
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_proxy_route_openai__endpoint__delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - OpenAI Pass-through
+      summary: Openai Proxy Route
+      description: 'Pass-through endpoint for OpenAI API calls.
+
+
+        Available on both routes:
+
+        - /openai/{endpoint:path} - Standard OpenAI passthrough route
+
+        - /openai_passthrough/{endpoint:path} - Dedicated passthrough route (recommended for Responses API)
+
+
+        Use /openai_passthrough/* when you need guaranteed passthrough to OpenAI without conflicts
+
+        with LiteLLM''s native implementations (e.g., for the Responses API at /v1/responses).
+
+
+        Examples:
+
+        Standard route:
+
+        - /openai/v1/chat/completions
+
+        - /openai/v1/assistants
+
+        - /openai/v1/threads
+
+
+        Dedicated passthrough (for Responses API):
+
+        - /openai_passthrough/v1/responses
+
+        - /openai_passthrough/v1/responses/{response_id}
+
+        - /openai_passthrough/v1/responses/{response_id}/input_items
+
+
+        Docs'
+      operationId: openai_proxy_route_openai__endpoint__put
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -249,18 +569,12 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

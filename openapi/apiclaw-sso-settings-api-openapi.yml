@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: SSO Settings
 paths:
@@ -158,6 +158,41 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     DefaultInternalUserParams:
       properties:
         user_role:
@@ -206,22 +241,79 @@ components:
       type: object
       title: DefaultInternalUserParams
       description: Default parameters to apply when a new user signs in via SSO or is created on the /user/new API endpoint
-    InternalUserSettingsResponse:
+    RoleMappings:
       properties:
-        values:
-          additionalProperties: true
+        provider:
+          type: string
+          title: Provider
+          description: SSO Provider name (e.g., 'google', 'microsoft', 'generic')
+        group_claim:
+          type: string
+          title: Group Claim
+          description: The field name in the SSO token that contains the groups array (e.g., 'groups', 'roles')
+        default_role:
+          anyOf:
+          - $ref: '#/components/schemas/LitellmUserRoles'
+          - type: 'null'
+          description: Default role to assign if user's groups don't match any role mappings. Must be a valid LitellmUserRoles value (e.g., 'proxy_admin', 'internal_user', 'proxy_admin_viewer')
+        roles:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+          propertyNames:
+            $ref: '#/components/schemas/LitellmUserRoles'
           type: object
-          title: Values
-        field_schema:
-          additionalProperties: true
-          type: object
-          title: Field Schema
+          title: Roles
+          description: 'Mapping of LiteLLM role names to arrays of SSO group names. Example: {''proxy_admin'': [''group-1'', ''group-2''], ''proxy_admin_viewer'': [''group-3'']}'
       type: object
       required:
-      - values
-      - field_schema
-      title: InternalUserSettingsResponse
-      description: Response model for internal user settings
+      - provider
+      - group_claim
+      title: RoleMappings
+      description: 'Configuration for mapping SSO groups to LiteLLM roles.
+
+
+        The system will look at the group_claim field in the SSO token to determine
+
+        which role to assign the user based on the roles mapping.'
+    LitellmUserRoles:
+      type: string
+      enum:
+      - proxy_admin
+      - proxy_admin_viewer
+      - org_admin
+      - internal_user
+      - internal_user_viewer
+      - team
+      - customer
+      title: LitellmUserRoles
+      description: 'Admin Roles:
+
+        PROXY_ADMIN: admin over the platform
+
+        PROXY_ADMIN_VIEW_ONLY: can login, view all own keys, view all spend
+
+        ORG_ADMIN: admin over a specific organization, can create teams, users only within their organization
+
+
+        Internal User Roles:
+
+        INTERNAL_USER: can login, view/create/delete their own keys, view their spend
+
+        INTERNAL_USER_VIEW_ONLY: can login, view their own keys, view their own spend
+
+
+
+        Team Roles:
+
+        TEAM: used for JWT auth
+
+
+
+        Customer Roles:
+
+        CUSTOMER: External users -> these are customers'
     AccessControl_UI_AccessMode:
       properties:
         type:
@@ -241,115 +333,6 @@ components:
       - sso_group_jwt_field
       title: AccessControl_UI_AccessMode
       description: Model for Controlling UI Access Mode via SSO Groups
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    SSOSettingsResponse:
-      properties:
-        values:
-          additionalProperties: true
-          type: object
-          title: Values
-        field_schema:
-          additionalProperties: true
-          type: object
-          title: Field Schema
-        provenance:
-          additionalProperties:
-            type: string
-          type: object
-          title: Provenance
-      type: object
-      required:
-      - values
-      - field_schema
-      title: SSOSettingsResponse
-      description: Response model for SSO settings
-    TeamMappings:
-      properties:
-        team_ids_jwt_field:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Team Ids Jwt Field
-          description: The field name in the SSO/JWT token that contains the team IDs array (e.g., 'groups', 'teams'). Supports dot notation for nested fields.
-      type: object
-      title: TeamMappings
-      description: 'Configuration for mapping SSO JWT fields to team IDs.
-
-
-        This allows configuring team_ids_jwt_field via the database instead of
-
-        requiring config file changes and restarts.'
-    NewUserRequestTeam:
-      properties:
-        team_id:
-          type: string
-          title: Team Id
-        max_budget_in_team:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Max Budget In Team
-        user_role:
-          type: string
-          enum:
-          - user
-          - admin
-          title: User Role
-          default: user
-      type: object
-      required:
-      - team_id
-      title: NewUserRequestTeam
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    DefaultTeamSettingsResponse:
-      properties:
-        values:
-          additionalProperties: true
-          type: object
-          title: Values
-        field_schema:
-          additionalProperties: true
-          type: object
-          title: Field Schema
-      type: object
-      required:
-      - values
-      - field_schema
-      title: DefaultTeamSettingsResponse
-      description: Response model for default team settings
     SSOConfig:
       properties:
         google_client_id:
@@ -474,69 +457,6 @@ components:
       type: object
       title: SSOConfig
       description: Configuration for SSO environment variables and settings
-    KeyManagementRoutes:
-      type: string
-      enum:
-      - /key/generate
-      - /key/update
-      - /key/delete
-      - /key/regenerate
-      - /key/service-account/generate
-      - /key/{key_id}/regenerate
-      - /key/block
-      - /key/unblock
-      - /key/bulk_update
-      - /team/key/bulk_update
-      - /key/{key_id}/reset_spend
-      - /key/access_group_assignment
-      - /auto_router/manage
-      - /key/info
-      - /key/health
-      - /key/list
-      - /key/aliases
-      - /team/daily/activity
-      - /team/daily/activity/aggregated
-      - /spend/logs
-      - /spend/logs/v2
-      title: KeyManagementRoutes
-      description: Enum for key management routes
-    LitellmUserRoles:
-      type: string
-      enum:
-      - proxy_admin
-      - proxy_admin_viewer
-      - org_admin
-      - internal_user
-      - internal_user_viewer
-      - team
-      - customer
-      title: LitellmUserRoles
-      description: 'Admin Roles:
-
-        PROXY_ADMIN: admin over the platform
-
-        PROXY_ADMIN_VIEW_ONLY: can login, view all own keys, view all spend
-
-        ORG_ADMIN: admin over a specific organization, can create teams, users only within their organization
-
-
-        Internal User Roles:
-
-        INTERNAL_USER: can login, view/create/delete their own keys, view their spend
-
-        INTERNAL_USER_VIEW_ONLY: can login, view their own keys, view their own spend
-
-
-
-        Team Roles:
-
-        TEAM: used for JWT auth
-
-
-
-        Customer Roles:
-
-        CUSTOMER: External users -> these are customers'
     DefaultTeamSSOParams:
       properties:
         models:
@@ -589,45 +509,128 @@ components:
       description: 'Default parameters applied to every /team/new call for fields not explicitly provided in the request.
 
         `models` is the exception: it only applies to teams automatically created by LiteLLM via SSO Groups.'
-    RoleMappings:
+    KeyManagementRoutes:
+      type: string
+      enum:
+      - /key/generate
+      - /key/update
+      - /key/delete
+      - /key/regenerate
+      - /key/service-account/generate
+      - /key/{key_id}/regenerate
+      - /key/block
+      - /key/unblock
+      - /key/bulk_update
+      - /team/key/bulk_update
+      - /key/{key_id}/reset_spend
+      - /key/access_group_assignment
+      - /auto_router/manage
+      - /key/info
+      - /key/health
+      - /key/list
+      - /key/aliases
+      - /team/daily/activity
+      - /team/daily/activity/aggregated
+      - /spend/logs
+      - /spend/logs/v2
+      title: KeyManagementRoutes
+      description: Enum for key management routes
+    TeamMappings:
       properties:
-        provider:
-          type: string
-          title: Provider
-          description: SSO Provider name (e.g., 'google', 'microsoft', 'generic')
-        group_claim:
-          type: string
-          title: Group Claim
-          description: The field name in the SSO token that contains the groups array (e.g., 'groups', 'roles')
-        default_role:
+        team_ids_jwt_field:
           anyOf:
-          - $ref: '#/components/schemas/LitellmUserRoles'
+          - type: string
           - type: 'null'
-          description: Default role to assign if user's groups don't match any role mappings. Must be a valid LitellmUserRoles value (e.g., 'proxy_admin', 'internal_user', 'proxy_admin_viewer')
-        roles:
-          additionalProperties:
-            items:
-              type: string
-            type: array
-          propertyNames:
-            $ref: '#/components/schemas/LitellmUserRoles'
+          title: Team Ids Jwt Field
+          description: The field name in the SSO/JWT token that contains the team IDs array (e.g., 'groups', 'teams'). Supports dot notation for nested fields.
+      type: object
+      title: TeamMappings
+      description: 'Configuration for mapping SSO JWT fields to team IDs.
+
+
+        This allows configuring team_ids_jwt_field via the database instead of
+
+        requiring config file changes and restarts.'
+    SSOSettingsResponse:
+      properties:
+        values:
+          additionalProperties: true
           type: object
-          title: Roles
-          description: 'Mapping of LiteLLM role names to arrays of SSO group names. Example: {''proxy_admin'': [''group-1'', ''group-2''], ''proxy_admin_viewer'': [''group-3'']}'
+          title: Values
+        field_schema:
+          additionalProperties: true
+          type: object
+          title: Field Schema
+        provenance:
+          additionalProperties:
+            type: string
+          type: object
+          title: Provenance
       type: object
       required:
-      - provider
-      - group_claim
-      title: RoleMappings
-      description: 'Configuration for mapping SSO groups to LiteLLM roles.
-
-
-        The system will look at the group_claim field in the SSO token to determine
-
-        which role to assign the user based on the roles mapping.'
+      - values
+      - field_schema
+      title: SSOSettingsResponse
+      description: Response model for SSO settings
+    NewUserRequestTeam:
+      properties:
+        team_id:
+          type: string
+          title: Team Id
+        max_budget_in_team:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget In Team
+        user_role:
+          type: string
+          enum:
+          - user
+          - admin
+          title: User Role
+          default: user
+      type: object
+      required:
+      - team_id
+      title: NewUserRequestTeam
+    InternalUserSettingsResponse:
+      properties:
+        values:
+          additionalProperties: true
+          type: object
+          title: Values
+        field_schema:
+          additionalProperties: true
+          type: object
+          title: Field Schema
+      type: object
+      required:
+      - values
+      - field_schema
+      title: InternalUserSettingsResponse
+      description: Response model for internal user settings
+    DefaultTeamSettingsResponse:
+      properties:
+        values:
+          additionalProperties: true
+          type: object
+          title: Values
+        field_schema:
+          additionalProperties: true
+          type: object
+          title: Field Schema
+      type: object
+      required:
+      - values
+      - field_schema
+      title: DefaultTeamSettingsResponse
+      description: Response model for default team settings
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

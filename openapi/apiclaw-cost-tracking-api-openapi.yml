@@ -11,10 +11,55 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Cost Tracking
 paths:
+  /cost/predict-cache:
+    post:
+      tags:
+      - Cost Tracking
+      summary: Predict Cache Cost
+      description: 'Compare the next native Anthropic request on two configured deployment IDs.
+
+
+        Estimates use provider token counting and recent successful cache telemetry for this key.
+
+        Unknown cache state uses the cold scenario when prices/counts are available. Cache observations
+
+        do not guarantee retention. v0 supports one message-content breakpoint, text and client tools;
+
+        system/tool-only breakpoints, thinking, images, nondefault Anthropic versions, beta headers and
+
+        request transforms are unknown.
+
+        Each provider count consumes one RPM unit and holds concurrency capacity; a comparison uses
+
+        up to four counts. The legacy rate limiter returns unknown without contacting the provider.
+
+        This endpoint does not generate tokens, prewarm caches, choose a model or alter routing.'
+      operationId: predict_cache_cost_cost_predict_cache_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CachePredictionRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CachePredictionResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
   /config/cost_discount_config:
     get:
       tags:
@@ -296,7 +341,8 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    BlockUnpricedModelsResponse:
+    JsonValue: {}
+    BlockUnpricedModelsRequest:
       properties:
         enabled:
           type: boolean
@@ -304,7 +350,40 @@ components:
       type: object
       required:
       - enabled
-      title: BlockUnpricedModelsResponse
+      title: BlockUnpricedModelsRequest
+    CachePredictionRequest:
+      properties:
+        current_deployment_id:
+          type: string
+          maxLength: 256
+          minLength: 1
+          title: Current Deployment Id
+        candidate_deployment_id:
+          type: string
+          maxLength: 256
+          minLength: 1
+          title: Candidate Deployment Id
+        request:
+          additionalProperties:
+            $ref: '#/components/schemas/JsonValue'
+          type: object
+          title: Request
+      additionalProperties: false
+      type: object
+      required:
+      - current_deployment_id
+      - candidate_deployment_id
+      - request
+      title: CachePredictionRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -331,24 +410,90 @@ components:
       - msg
       - type
       title: ValidationError
-    BlockUnpricedModelsRequest:
+    CachePredictionResponse:
       properties:
-        enabled:
+        stay:
+          $ref: '#/components/schemas/CachePredictionArm'
+        switch:
+          $ref: '#/components/schemas/CachePredictionArm'
+        switch_delta:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Switch Delta
+        cache_rebuild_penalty:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Cache Rebuild Penalty
+        pricing_basis:
+          type: string
+          const: input_before_discounts_and_margins
+          title: Pricing Basis
+          default: input_before_discounts_and_margins
+        cache_guarantee:
           type: boolean
-          title: Enabled
+          const: false
+          title: Cache Guarantee
+          default: false
       type: object
       required:
-      - enabled
-      title: BlockUnpricedModelsRequest
-    HTTPValidationError:
+      - stay
+      - switch
+      - switch_delta
+      - cache_rebuild_penalty
+      title: CachePredictionResponse
+    CachePredictionArm:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        deployment_id:
+          type: string
+          title: Deployment Id
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+        cache_state:
+          type: string
+          enum:
+          - warm
+          - partial
+          - stale
+          - unknown
+          - disabled
+          title: Cache State
+          default: unknown
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+        estimate:
+          anyOf:
+          - $ref: '#/components/schemas/CacheCostScenario'
+          - type: 'null'
+        cold:
+          anyOf:
+          - $ref: '#/components/schemas/CacheCostScenario'
+          - type: 'null'
+        warm:
+          anyOf:
+          - $ref: '#/components/schemas/CacheCostScenario'
+          - type: 'null'
+        evidence:
+          anyOf:
+          - $ref: '#/components/schemas/CacheEvidence'
+          - type: 'null'
+        token_count_source:
+          anyOf:
+          - type: string
+            const: anthropic_count_tokens
+          - type: 'null'
+          title: Token Count Source
       type: object
-      title: HTTPValidationError
+      required:
+      - deployment_id
+      title: CachePredictionArm
     CostEstimateRequest:
       properties:
         model:
@@ -404,6 +549,75 @@ components:
       - output_tokens
       title: CostEstimateRequest
       description: Request body for /cost/estimate endpoint.
+    CacheCostScenario:
+      properties:
+        tokens:
+          $ref: '#/components/schemas/CacheTokenBuckets'
+        input_cost:
+          type: number
+          title: Input Cost
+      type: object
+      required:
+      - tokens
+      - input_cost
+      title: CacheCostScenario
+    CacheTokenBuckets:
+      properties:
+        uncached_input_tokens:
+          type: integer
+          minimum: 0.0
+          title: Uncached Input Tokens
+          default: 0
+        cache_read_input_tokens:
+          type: integer
+          minimum: 0.0
+          title: Cache Read Input Tokens
+          default: 0
+        cache_creation_5m_input_tokens:
+          type: integer
+          minimum: 0.0
+          title: Cache Creation 5M Input Tokens
+          default: 0
+        cache_creation_1h_input_tokens:
+          type: integer
+          minimum: 0.0
+          title: Cache Creation 1H Input Tokens
+          default: 0
+      additionalProperties: false
+      type: object
+      title: CacheTokenBuckets
+    BlockUnpricedModelsResponse:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+      type: object
+      required:
+      - enabled
+      title: BlockUnpricedModelsResponse
+    CacheEvidence:
+      properties:
+        observed_at:
+          type: number
+          title: Observed At
+        expires_at:
+          type: number
+          title: Expires At
+        source:
+          type: string
+          const: provider_usage
+          title: Source
+          default: provider_usage
+        confidence:
+          type: string
+          const: observed
+          title: Confidence
+          default: observed
+      type: object
+      required:
+      - observed_at
+      - expires_at
+      title: CacheEvidence
     CostEstimateResponse:
       properties:
         model:
@@ -604,3 +818,6 @@ components:
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

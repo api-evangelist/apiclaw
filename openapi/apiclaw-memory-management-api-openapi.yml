@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: memory management
 paths:
@@ -210,6 +210,15 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -275,19 +284,6 @@ components:
       - memories
       - total
       title: MemoryListResponse
-    MemoryDeleteResponse:
-      properties:
-        key:
-          type: string
-          title: Key
-        deleted:
-          type: boolean
-          title: Deleted
-      type: object
-      required:
-      - key
-      - deleted
-      title: MemoryDeleteResponse
     MemoryCreateRequest:
       properties:
         key:
@@ -321,15 +317,19 @@ components:
       - key
       - value
       title: MemoryCreateRequest
-    HTTPValidationError:
+    MemoryDeleteResponse:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        key:
+          type: string
+          title: Key
+        deleted:
+          type: boolean
+          title: Deleted
       type: object
-      title: HTTPValidationError
+      required:
+      - key
+      - deleted
+      title: MemoryDeleteResponse
     LiteLLM_MemoryRow:
       properties:
         memory_id:
@@ -390,3 +390,6 @@ components:
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

@@ -11,10 +11,486 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Organization Management
 paths:
+  /organization/daily/activity/aggregated:
+    get:
+      tags:
+      - Organization Management
+      summary: Get Organization Daily Activity Aggregated
+      operationId: get_organization_daily_activity_aggregated_organization_daily_activity_aggregated_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: api_key_limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          default: 100
+          title: Api Key Limit
+      - name: organization_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Organization Ids
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Start Date
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: End Date
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key
+      - name: exclude_organization_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exclude Organization Ids
+      - name: timezone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Timezone
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpendAnalyticsPaginatedResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /organization/daily/activity/aggregated/keys:
+    get:
+      tags:
+      - Organization Management
+      summary: Get Organization Daily Activity Aggregated Keys
+      operationId: get_organization_daily_activity_aggregated_keys_organization_daily_activity_aggregated_keys_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: organization_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Organization Ids
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Start Date
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: End Date
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key
+      - name: exclude_organization_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exclude Organization Ids
+      - name: timezone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Timezone
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyActivityKeyPageResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /organization/daily/activity/aggregated/search:
+    get:
+      tags:
+      - Organization Management
+      summary: Get Organization Daily Activity Aggregated Search
+      operationId: get_organization_daily_activity_aggregated_search_organization_daily_activity_aggregated_search_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: search
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Search
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 100
+          title: Limit
+      - name: organization_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Organization Ids
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Start Date
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: End Date
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key
+      - name: exclude_organization_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exclude Organization Ids
+      - name: timezone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Timezone
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyActivityKeySearchResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /organization/daily/activity/aggregated/model_top_keys:
+    get:
+      tags:
+      - Organization Management
+      summary: Get Organization Daily Activity Model Top Keys
+      operationId: get_organization_daily_activity_model_top_keys_organization_daily_activity_aggregated_model_top_keys_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: model_group
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Model Group
+      - name: by_model_group
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+          title: By Model Group
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 5
+          title: Limit
+      - name: organization_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Organization Ids
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Start Date
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: End Date
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key
+      - name: exclude_organization_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exclude Organization Ids
+      - name: timezone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Timezone
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelTopKeysResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /organization/daily/activity/export:
+    get:
+      tags:
+      - Organization Management
+      summary: Get Organization Daily Activity Export
+      operationId: get_organization_daily_activity_export_organization_daily_activity_export_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: export_type
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ExportType'
+          default: daily
+      - name: format
+        in: query
+        required: false
+        schema:
+          enum:
+          - csv
+          - json
+          type: string
+          default: csv
+          title: Format
+      - name: organization_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Organization Ids
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Start Date
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: End Date
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Api Key
+      - name: exclude_organization_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Exclude Organization Ids
+      - name: timezone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Timezone
+      responses:
+        '200':
+          description: Streamed daily activity export
+          content:
+            text/csv:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /organization/new:
     post:
       tags:
@@ -46,6 +522,8 @@ paths:
 
         - rpm_limit: *Optional[int]* - Max rpm limit for org
 
+        - tpd_limit: *Optional[int]* - Max tokens per day stored on the org budget. Batch submissions enforce tpd_limit at the key, team and end user scopes only.
+
         - model_rpm_limit: *Optional[Dict[str, int]]* - The RPM (Requests Per Minute) limit per model for this organization.
 
         - model_tpm_limit: *Optional[Dict[str, int]]* - The TPM (Tokens Per Minute) limit per model for this organization.
@@ -71,6 +549,10 @@ paths:
         - object_permission: Optional[LiteLLM_ObjectPermissionBase] - organization-specific object permission. Example - {"vector_stores": ["vector_store_1", "vector_store_2"]}. IF null or {} then no object permission.
 
         - allowed_models: Optional[List[str]] - List of models the organization is allowed to access. If not set, defaults to the models field.
+
+        - temp_budget_increase: *Optional[float]* - Stored on the org budget row but only enforced for team member budgets today.
+
+        - temp_budget_expiry: *Optional[str]* - Stored on the org budget row but only enforced for team member budgets today.
 
         Case 1: Create new org **without** a budget_id
 
@@ -601,289 +1083,46 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    BudgetLimitEntry:
+    KeySpendMetrics:
       properties:
-        budget_duration:
-          type: string
-          title: Budget Duration
-        max_budget:
+        spend:
           type: number
-          title: Max Budget
-        reset_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Reset At
+          title: Spend
+          default: 0.0
+        prompt_tokens:
+          type: integer
+          title: Prompt Tokens
+          default: 0
+        completion_tokens:
+          type: integer
+          title: Completion Tokens
+          default: 0
+        total_tokens:
+          type: integer
+          title: Total Tokens
+          default: 0
+        api_requests:
+          type: integer
+          title: Api Requests
+          default: 0
+        successful_requests:
+          type: integer
+          title: Successful Requests
+          default: 0
+        failed_requests:
+          type: integer
+          title: Failed Requests
+          default: 0
+        cache_read_input_tokens:
+          type: integer
+          title: Cache Read Input Tokens
+          default: 0
+        cache_creation_input_tokens:
+          type: integer
+          title: Cache Creation Input Tokens
+          default: 0
       type: object
-      required:
-      - budget_duration
-      - max_budget
-      title: BudgetLimitEntry
-      description: A single budget window with its own limit and independent reset schedule.
-    LiteLLM_ObjectPermissionTable:
-      properties:
-        object_permission_id:
-          type: string
-          title: Object Permission Id
-        mcp_servers:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Mcp Servers
-          default: []
-        mcp_access_groups:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Mcp Access Groups
-          default: []
-        mcp_tool_permissions:
-          anyOf:
-          - additionalProperties:
-              items:
-                type: string
-              type: array
-            type: object
-          - type: 'null'
-          title: Mcp Tool Permissions
-        vector_stores:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Vector Stores
-          default: []
-        agents:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Agents
-          default: []
-        agent_access_groups:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Agent Access Groups
-          default: []
-        models:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Models
-          default: []
-        mcp_toolsets:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Mcp Toolsets
-        blocked_tools:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Blocked Tools
-          default: []
-        search_tools:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Search Tools
-          default: []
-        mcp_tool_search_enabled:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Mcp Tool Search Enabled
-        skills:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Skills
-      type: object
-      required:
-      - object_permission_id
-      title: LiteLLM_ObjectPermissionTable
-      description: Represents a LiteLLM_ObjectPermissionTable record
-    OrganizationMemberDeleteRequest:
-      properties:
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-        user_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Email
-        organization_id:
-          type: string
-          title: Organization Id
-      type: object
-      required:
-      - organization_id
-      title: OrganizationMemberDeleteRequest
-    LiteLLM_ObjectPermissionBase:
-      properties:
-        mcp_servers:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Mcp Servers
-        mcp_access_groups:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Mcp Access Groups
-        mcp_tool_permissions:
-          anyOf:
-          - additionalProperties:
-              items:
-                type: string
-              type: array
-            type: object
-          - type: 'null'
-          title: Mcp Tool Permissions
-        mcp_toolsets:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Mcp Toolsets
-        blocked_tools:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Blocked Tools
-        vector_stores:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Vector Stores
-        agents:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Agents
-        agent_access_groups:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Agent Access Groups
-        models:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Models
-        search_tools:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Search Tools
-        mcp_tool_search_enabled:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Mcp Tool Search Enabled
-        skills:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Skills
-      type: object
-      title: LiteLLM_ObjectPermissionBase
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    OrganizationMemberUpdateRequest:
-      properties:
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-        user_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Email
-        organization_id:
-          type: string
-          title: Organization Id
-        max_budget_in_organization:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Max Budget In Organization
-        role:
-          anyOf:
-          - $ref: '#/components/schemas/LitellmUserRoles'
-          - type: 'null'
-      type: object
-      required:
-      - organization_id
-      title: OrganizationMemberUpdateRequest
-    MetricWithMetadata:
-      properties:
-        metrics:
-          $ref: '#/components/schemas/SpendMetrics'
-        metadata:
-          additionalProperties: true
-          type: object
-          title: Metadata
-        api_key_breakdown:
-          additionalProperties:
-            $ref: '#/components/schemas/KeyMetricWithMetadata'
-          type: object
-          title: Api Key Breakdown
-      type: object
-      required:
-      - metrics
-      title: MetricWithMetadata
+      title: KeySpendMetrics
     OrganizationMemberAddRequest:
       properties:
         member:
@@ -906,166 +1145,88 @@ components:
       - member
       - organization_id
       title: OrganizationMemberAddRequest
-    SpendMetrics:
+    LiteLLM_UserTable:
       properties:
+        user_id:
+          type: string
+          title: User Id
+        user_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Alias
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        sso_user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sso User Id
+        organization_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Organization Id
+        object_permission_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Object Permission Id
+        password_reset_required:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Password Reset Required
+        last_breach_check_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Breach Check At
+        teams:
+          items:
+            type: string
+          type: array
+          title: Teams
+          default: []
+        user_role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Role
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
         spend:
           type: number
           title: Spend
           default: 0.0
-        flat_cost:
-          type: number
-          title: Flat Cost
-          default: 0.0
-        prompt_tokens:
-          type: integer
-          title: Prompt Tokens
-          default: 0
-        completion_tokens:
-          type: integer
-          title: Completion Tokens
-          default: 0
-        cache_read_input_tokens:
-          type: integer
-          title: Cache Read Input Tokens
-          default: 0
-        cache_creation_input_tokens:
-          type: integer
-          title: Cache Creation Input Tokens
-          default: 0
-        compression_saved_tokens:
-          type: integer
-          title: Compression Saved Tokens
-          default: 0
-        compression_savings_spend:
-          type: number
-          title: Compression Savings Spend
-          default: 0.0
-        prompt_caching_savings_spend:
-          type: number
-          title: Prompt Caching Savings Spend
-          default: 0.0
-        gateway_injected_caching_savings_spend:
-          type: number
-          title: Gateway Injected Caching Savings Spend
-          default: 0.0
-        autorouter_savings_spend:
-          type: number
-          title: Autorouter Savings Spend
-          default: 0.0
-        total_tokens:
-          type: integer
-          title: Total Tokens
-          default: 0
-        successful_requests:
-          type: integer
-          title: Successful Requests
-          default: 0
-        failed_requests:
-          type: integer
-          title: Failed Requests
-          default: 0
-        api_requests:
-          type: integer
-          title: Api Requests
-          default: 0
-      type: object
-      title: SpendMetrics
-    Member:
-      properties:
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-          description: The unique ID of the user to add. Either user_id or user_email must be provided
         user_email:
           anyOf:
           - type: string
           - type: 'null'
           title: User Email
-          description: The email address of the user to add. Either user_id or user_email must be provided
-        role:
-          type: string
-          enum:
-          - admin
-          - user
-          title: Role
-          description: The role of the user within the team. 'admin' users can manage team settings and members, 'user' is a regular team member
-      type: object
-      required:
-      - role
-      title: Member
-    OrganizationRequest:
-      properties:
-        organizations:
-          items:
-            type: string
+        models:
+          items: {}
           type: array
-          title: Organizations
-      type: object
-      required:
-      - organizations
-      title: OrganizationRequest
-    BreakdownMetrics:
-      properties:
-        mcp_servers:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Mcp Servers
-        models:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
           title: Models
-        model_groups:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Model Groups
-        providers:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Providers
-        endpoints:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Endpoints
-        api_keys:
-          additionalProperties:
-            $ref: '#/components/schemas/KeyMetricWithMetadata'
-          type: object
-          title: Api Keys
-        entities:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Entities
-      type: object
-      title: BreakdownMetrics
-      description: Breakdown of spend by different dimensions
-    OrganizationUpdateRequestV2:
-      properties:
-        organization_alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Organization Alias
-        models:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Models
+          default: []
         metadata:
           anyOf:
           - additionalProperties: true
             type: object
           - type: 'null'
           title: Metadata
+        max_parallel_requests:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Parallel Requests
         tpm_limit:
           anyOf:
           - type: integer
@@ -1076,110 +1237,70 @@ components:
           - type: integer
           - type: 'null'
           title: Rpm Limit
-        max_budget:
+        budget_duration:
           anyOf:
-          - type: number
+          - type: string
           - type: 'null'
-          title: Max Budget
-        soft_budget:
+          title: Budget Duration
+        budget_reset_at:
           anyOf:
-          - type: number
+          - type: string
+            format: date-time
           - type: 'null'
-          title: Soft Budget
-        max_parallel_requests:
+          title: Budget Reset At
+        allowed_cache_controls:
+          items:
+            type: string
+          type: array
+          title: Allowed Cache Controls
+          default: []
+        policies:
+          items:
+            type: string
+          type: array
+          title: Policies
+          default: []
+        model_spend:
           anyOf:
-          - type: integer
+          - additionalProperties: true
+            type: object
           - type: 'null'
-          title: Max Parallel Requests
+          title: Model Spend
+          default: {}
         model_max_budget:
           anyOf:
           - additionalProperties: true
             type: object
           - type: 'null'
           title: Model Max Budget
-        budget_duration:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Budget Duration
-        object_permission:
-          anyOf:
-          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionBase'
-          - type: 'null'
-      additionalProperties: false
-      type: object
-      title: OrganizationUpdateRequestV2
-      description: 'Typed PATCH body for ``/v2/organization/{organization_id}`` (RFC 7396 merge-patch).
-
-
-        Presence is read from ``model_fields_set``, so a sent field is written and an omitted one is
-
-        left untouched. ``extra="forbid"`` makes an unknown key a 422 rather than a silent no-op, since
-
-        the contract hinges on which keys are present. See the endpoint for the per-field clear tokens.'
-    KeyMetricWithMetadata:
-      properties:
-        metrics:
-          $ref: '#/components/schemas/SpendMetrics'
-        metadata:
-          $ref: '#/components/schemas/KeyMetadata'
-      type: object
-      required:
-      - metrics
-      title: KeyMetricWithMetadata
-      description: Base class for metrics with additional metadata
-    LiteLLM_OrganizationMembershipTable:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-        organization_id:
-          type: string
-          title: Organization Id
-        user_role:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Role
-        spend:
-          type: number
-          title: Spend
-          default: 0.0
-        budget_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Budget Id
+          default: {}
         created_at:
-          type: string
-          format: date-time
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
           title: Created At
         updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-        user:
-          anyOf:
-          - {}
-          - type: 'null'
-          title: User
-        litellm_budget_table:
-          anyOf:
-          - $ref: '#/components/schemas/LiteLLM_BudgetTable'
-          - type: 'null'
-        user_email:
           anyOf:
           - type: string
+            format: date-time
           - type: 'null'
-          title: User Email
+          title: Updated At
+        organization_memberships:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/LiteLLM_OrganizationMembershipTable'
+            type: array
+          - type: 'null'
+          title: Organization Memberships
+        object_permission:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionTable'
+          - type: 'null'
       type: object
       required:
       - user_id
-      - organization_id
-      - created_at
-      - updated_at
-      title: LiteLLM_OrganizationMembershipTable
-      description: Tracks which organizations a user belongs to and their spend within it.
+      title: LiteLLM_UserTable
     LiteLLM_TeamTable:
       properties:
         team_alias:
@@ -1236,6 +1357,11 @@ components:
           - type: integer
           - type: 'null'
           title: Rpm Limit
+        tpd_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpd Limit
         max_budget:
           anyOf:
           - type: number
@@ -1365,122 +1491,6 @@ components:
       required:
       - team_id
       title: LiteLLM_TeamTable
-    OrganizationAddMemberResponse:
-      properties:
-        organization_id:
-          type: string
-          title: Organization Id
-        updated_users:
-          items:
-            $ref: '#/components/schemas/LiteLLM_UserTable'
-          type: array
-          title: Updated Users
-        updated_organization_memberships:
-          items:
-            $ref: '#/components/schemas/LiteLLM_OrganizationMembershipTable'
-          type: array
-          title: Updated Organization Memberships
-      type: object
-      required:
-      - organization_id
-      - updated_users
-      - updated_organization_memberships
-      title: OrganizationAddMemberResponse
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    DailySpendData:
-      properties:
-        date:
-          type: string
-          format: date
-          title: Date
-        metrics:
-          $ref: '#/components/schemas/SpendMetrics'
-        breakdown:
-          $ref: '#/components/schemas/BreakdownMetrics'
-      type: object
-      required:
-      - date
-      - metrics
-      title: DailySpendData
-    OrgMember:
-      properties:
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-          description: The unique ID of the user to add. Either user_id or user_email must be provided
-        user_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Email
-          description: The email address of the user to add. Either user_id or user_email must be provided
-        role:
-          type: string
-          enum:
-          - org_admin
-          - internal_user
-          - internal_user_viewer
-          title: Role
-      type: object
-      required:
-      - role
-      title: OrgMember
-    LiteLLM_ModelTable:
-      properties:
-        id:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Id
-        model_aliases:
-          anyOf:
-          - type: string
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Model Aliases
-        created_by:
-          type: string
-          title: Created By
-        updated_by:
-          type: string
-          title: Updated By
-        team:
-          anyOf:
-          - $ref: '#/components/schemas/LiteLLM_TeamTable'
-          - type: 'null'
-      type: object
-      required:
-      - created_by
-      - updated_by
-      title: LiteLLM_ModelTable
     DailySpendMetadata:
       properties:
         total_spend:
@@ -1543,6 +1553,14 @@ components:
           type: number
           title: Total Autorouter Savings Spend
           default: 0.0
+        total_response_time_ms:
+          type: integer
+          title: Total Response Time Ms
+          default: 0
+        total_timed_requests:
+          type: integer
+          title: Total Timed Requests
+          default: 0
         page:
           type: integer
           title: Page
@@ -1555,79 +1573,296 @@ components:
           type: boolean
           title: Has More
           default: false
-      type: object
-      title: DailySpendMetadata
-    DeleteOrganizationRequest:
-      properties:
-        organization_ids:
-          items:
-            type: string
-          type: array
-          title: Organization Ids
-      type: object
-      required:
-      - organization_ids
-      title: DeleteOrganizationRequest
-    LiteLLM_BudgetTable:
-      properties:
-        budget_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Budget Id
-        soft_budget:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Soft Budget
-        max_budget:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Max Budget
-        max_parallel_requests:
+        api_key_limit:
           anyOf:
           - type: integer
           - type: 'null'
-          title: Max Parallel Requests
-        tpm_limit:
+          title: Api Key Limit
+          description: When set, api_keys and every api_key_breakdown list at most this many keys, ranked by spend. Totals and the model, provider, mcp and endpoint rollups still cover every key.
+        total_api_keys:
           anyOf:
           - type: integer
           - type: 'null'
-          title: Tpm Limit
-        rpm_limit:
+          title: Total Api Keys
+          description: Distinct API keys matching the filters. When this exceeds api_key_limit, the per-key lists are truncated to the highest-spend keys.
+        entity_total_api_keys:
           anyOf:
-          - type: integer
-          - type: 'null'
-          title: Rpm Limit
-        model_max_budget:
-          anyOf:
-          - additionalProperties: true
+          - additionalProperties:
+              type: integer
             type: object
           - type: 'null'
-          title: Model Max Budget
-        budget_duration:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Budget Duration
-        allowed_models:
+          title: Entity Total Api Keys
+          description: Distinct API keys per entity over the requested range, set when the entity breakdown is included. When an entity's count exceeds api_key_limit, its api_key_breakdown lists only its keys among the top api_key_limit keys overall.
+      type: object
+      title: DailySpendMetadata
+    LiteLLM_ObjectPermissionBase:
+      properties:
+        mcp_servers:
           anyOf:
           - items:
               type: string
             type: array
           - type: 'null'
-          title: Allowed Models
+          title: Mcp Servers
+        mcp_access_groups:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Access Groups
+        mcp_tool_permissions:
+          anyOf:
+          - additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+          - type: 'null'
+          title: Mcp Tool Permissions
+        mcp_toolsets:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Toolsets
+        blocked_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Blocked Tools
+        vector_stores:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Vector Stores
+        agents:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Agents
+        agent_access_groups:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Agent Access Groups
+        models:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Models
+        search_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Search Tools
+        mcp_tool_search_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Mcp Tool Search Enabled
+        skills:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Skills
       type: object
-      title: LiteLLM_BudgetTable
-      description: 'Represents user-controllable params for a LiteLLM_BudgetTable record.
+      title: LiteLLM_ObjectPermissionBase
+    DailyActivityKeyPageResponse:
+      properties:
+        api_keys:
+          items:
+            $ref: '#/components/schemas/KeySpendActivityRow'
+          type: array
+          title: Api Keys
+        total_api_keys:
+          type: integer
+          title: Total Api Keys
+        offset:
+          type: integer
+          title: Offset
+        limit:
+          type: integer
+          title: Limit
+      type: object
+      required:
+      - api_keys
+      - total_api_keys
+      - offset
+      - limit
+      title: DailyActivityKeyPageResponse
+    KeyMetadata:
+      properties:
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+        key_exists:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Key Exists
+      type: object
+      title: KeyMetadata
+      description: Metadata for a key
+    OrgMember:
+      properties:
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+          description: The unique ID of the user to add. Either user_id or user_email must be provided
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+          description: The email address of the user to add. Either user_id or user_email must be provided
+        role:
+          type: string
+          enum:
+          - org_admin
+          - internal_user
+          - internal_user_viewer
+          title: Role
+      type: object
+      required:
+      - role
+      title: OrgMember
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    OrganizationRequest:
+      properties:
+        organizations:
+          items:
+            type: string
+          type: array
+          title: Organizations
+      type: object
+      required:
+      - organizations
+      title: OrganizationRequest
+    OrganizationMemberDeleteRequest:
+      properties:
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+        organization_id:
+          type: string
+          title: Organization Id
+      type: object
+      required:
+      - organization_id
+      title: OrganizationMemberDeleteRequest
+    LitellmUserRoles:
+      type: string
+      enum:
+      - proxy_admin
+      - proxy_admin_viewer
+      - org_admin
+      - internal_user
+      - internal_user_viewer
+      - team
+      - customer
+      title: LitellmUserRoles
+      description: 'Admin Roles:
+
+        PROXY_ADMIN: admin over the platform
+
+        PROXY_ADMIN_VIEW_ONLY: can login, view all own keys, view all spend
+
+        ORG_ADMIN: admin over a specific organization, can create teams, users only within their organization
 
 
-        Budget-write paths use `model_fields.keys()` on this class as an allowlist
+        Internal User Roles:
 
-        for user input. Keep server-managed fields (e.g. `budget_reset_at`) on
+        INTERNAL_USER: can login, view/create/delete their own keys, view their spend
 
-        `LiteLLM_BudgetTableFull` so they aren''t user-settable.'
+        INTERNAL_USER_VIEW_ONLY: can login, view their own keys, view their own spend
+
+
+
+        Team Roles:
+
+        TEAM: used for JWT auth
+
+
+
+        Customer Roles:
+
+        CUSTOMER: External users -> these are customers'
     NewOrganizationResponse:
       properties:
         organization_id:
@@ -1707,6 +1942,97 @@ components:
       - created_at
       - updated_at
       title: NewOrganizationResponse
+    BudgetLimitEntry:
+      properties:
+        budget_duration:
+          type: string
+          title: Budget Duration
+        max_budget:
+          type: number
+          title: Max Budget
+        reset_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Reset At
+      type: object
+      required:
+      - budget_duration
+      - max_budget
+      title: BudgetLimitEntry
+      description: A single budget window with its own limit and independent reset schedule.
+    OrganizationUpdateRequestV2:
+      properties:
+        organization_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Organization Alias
+        models:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Models
+        metadata:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Metadata
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        soft_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Soft Budget
+        max_parallel_requests:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Parallel Requests
+        model_max_budget:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Max Budget
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        object_permission:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionBase'
+          - type: 'null'
+      additionalProperties: false
+      type: object
+      title: OrganizationUpdateRequestV2
+      description: 'Typed PATCH body for ``/v2/organization/{organization_id}`` (RFC 7396 merge-patch).
+
+
+        Presence is read from ``model_fields_set``, so a sent field is written and an omitted one is
+
+        left untouched. ``extra="forbid"`` makes an unknown key a 422 rather than a silent no-op, since
+
+        the contract hinges on which keys are present. See the endpoint for the per-field clear tokens.'
     LiteLLM_OrganizationTableWithMembers:
       properties:
         organization_id:
@@ -1800,189 +2126,171 @@ components:
       - updated_at
       title: LiteLLM_OrganizationTableWithMembers
       description: Returned by the /organization/info endpoint and /organization/list endpoint
-    SpendAnalyticsPaginatedResponse:
+    SpendMetrics:
       properties:
-        results:
-          items:
-            $ref: '#/components/schemas/DailySpendData'
-          type: array
-          title: Results
-        metadata:
-          $ref: '#/components/schemas/DailySpendMetadata'
-      type: object
-      required:
-      - results
-      title: SpendAnalyticsPaginatedResponse
-    KeyMetadata:
-      properties:
-        key_alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Key Alias
-        team_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Team Id
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-        user_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Email
-      type: object
-      title: KeyMetadata
-      description: Metadata for a key
-    LiteLLM_UserTable:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-        user_alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Alias
-        team_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Team Id
-        sso_user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Sso User Id
-        organization_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Organization Id
-        object_permission_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Object Permission Id
-        teams:
-          items:
-            type: string
-          type: array
-          title: Teams
-          default: []
-        user_role:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Role
-        max_budget:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Max Budget
         spend:
           type: number
           title: Spend
           default: 0.0
-        user_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Email
-        models:
-          items: {}
+        flat_cost:
+          type: number
+          title: Flat Cost
+          default: 0.0
+        prompt_tokens:
+          type: integer
+          title: Prompt Tokens
+          default: 0
+        completion_tokens:
+          type: integer
+          title: Completion Tokens
+          default: 0
+        cache_read_input_tokens:
+          type: integer
+          title: Cache Read Input Tokens
+          default: 0
+        cache_creation_input_tokens:
+          type: integer
+          title: Cache Creation Input Tokens
+          default: 0
+        compression_saved_tokens:
+          type: integer
+          title: Compression Saved Tokens
+          default: 0
+        compression_savings_spend:
+          type: number
+          title: Compression Savings Spend
+          default: 0.0
+        prompt_caching_savings_spend:
+          type: number
+          title: Prompt Caching Savings Spend
+          default: 0.0
+        gateway_injected_caching_savings_spend:
+          type: number
+          title: Gateway Injected Caching Savings Spend
+          default: 0.0
+        autorouter_savings_spend:
+          type: number
+          title: Autorouter Savings Spend
+          default: 0.0
+        total_tokens:
+          type: integer
+          title: Total Tokens
+          default: 0
+        successful_requests:
+          type: integer
+          title: Successful Requests
+          default: 0
+        failed_requests:
+          type: integer
+          title: Failed Requests
+          default: 0
+        api_requests:
+          type: integer
+          title: Api Requests
+          default: 0
+        total_response_time_ms:
+          type: integer
+          title: Total Response Time Ms
+          default: 0
+        timed_requests:
+          type: integer
+          title: Timed Requests
+          default: 0
+      type: object
+      title: SpendMetrics
+    OrganizationAddMemberResponse:
+      properties:
+        organization_id:
+          type: string
+          title: Organization Id
+        updated_users:
+          items:
+            $ref: '#/components/schemas/LiteLLM_UserTable'
           type: array
-          title: Models
-          default: []
-        metadata:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Metadata
-        max_parallel_requests:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Max Parallel Requests
-        tpm_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Tpm Limit
-        rpm_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Rpm Limit
-        budget_duration:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Budget Duration
-        budget_reset_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Budget Reset At
-        allowed_cache_controls:
+          title: Updated Users
+        updated_organization_memberships:
+          items:
+            $ref: '#/components/schemas/LiteLLM_OrganizationMembershipTable'
+          type: array
+          title: Updated Organization Memberships
+      type: object
+      required:
+      - organization_id
+      - updated_users
+      - updated_organization_memberships
+      title: OrganizationAddMemberResponse
+    DeleteOrganizationRequest:
+      properties:
+        organization_ids:
           items:
             type: string
           type: array
-          title: Allowed Cache Controls
-          default: []
-        policies:
-          items:
-            type: string
-          type: array
-          title: Policies
-          default: []
-        model_spend:
+          title: Organization Ids
+      type: object
+      required:
+      - organization_ids
+      title: DeleteOrganizationRequest
+    LiteLLM_ModelTable:
+      properties:
+        id:
           anyOf:
+          - type: integer
+          - type: 'null'
+          title: Id
+        model_aliases:
+          anyOf:
+          - type: string
           - additionalProperties: true
             type: object
           - type: 'null'
-          title: Model Spend
-          default: {}
-        model_max_budget:
+          title: Model Aliases
+        created_by:
+          type: string
+          title: Created By
+        updated_by:
+          type: string
+          title: Updated By
+        team:
           anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Model Max Budget
-          default: {}
-        created_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Created At
-        updated_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Updated At
-        organization_memberships:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/LiteLLM_OrganizationMembershipTable'
-            type: array
-          - type: 'null'
-          title: Organization Memberships
-        object_permission:
-          anyOf:
-          - $ref: '#/components/schemas/LiteLLM_ObjectPermissionTable'
+          - $ref: '#/components/schemas/LiteLLM_TeamTable'
           - type: 'null'
       type: object
       required:
-      - user_id
-      title: LiteLLM_UserTable
+      - created_by
+      - updated_by
+      title: LiteLLM_ModelTable
+    MetricWithMetadata:
+      properties:
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+        api_key_breakdown:
+          additionalProperties:
+            $ref: '#/components/schemas/KeyMetricWithMetadata'
+          type: object
+          title: Api Key Breakdown
+      type: object
+      required:
+      - metrics
+      title: MetricWithMetadata
+    DailySpendData:
+      properties:
+        date:
+          type: string
+          format: date
+          title: Date
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        breakdown:
+          $ref: '#/components/schemas/BreakdownMetrics'
+      type: object
+      required:
+      - date
+      - metrics
+      title: DailySpendData
     NewOrganizationRequest:
       properties:
         budget_id:
@@ -2015,6 +2323,11 @@ components:
           - type: integer
           - type: 'null'
           title: Rpm Limit
+        tpd_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpd Limit
         model_max_budget:
           anyOf:
           - additionalProperties: true
@@ -2033,6 +2346,17 @@ components:
             type: array
           - type: 'null'
           title: Allowed Models
+        temp_budget_increase:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Temp Budget Increase
+        temp_budget_expiry:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Temp Budget Expiry
         organization_id:
           anyOf:
           - type: string
@@ -2074,46 +2398,427 @@ components:
       required:
       - organization_alias
       title: NewOrganizationRequest
-    LitellmUserRoles:
+    DailyActivityKeySearchResponse:
+      properties:
+        api_keys:
+          items:
+            $ref: '#/components/schemas/KeyActivityRow'
+          type: array
+          title: Api Keys
+      type: object
+      required:
+      - api_keys
+      title: DailyActivityKeySearchResponse
+    ExportType:
       type: string
       enum:
-      - proxy_admin
-      - proxy_admin_viewer
-      - org_admin
-      - internal_user
-      - internal_user_viewer
-      - team
-      - customer
-      title: LitellmUserRoles
-      description: 'Admin Roles:
+      - daily
+      - daily_with_keys
+      - daily_with_models
+      - daily_with_users
+      title: ExportType
+    OrganizationMemberUpdateRequest:
+      properties:
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+        organization_id:
+          type: string
+          title: Organization Id
+        max_budget_in_organization:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget In Organization
+        role:
+          anyOf:
+          - $ref: '#/components/schemas/LitellmUserRoles'
+          - type: 'null'
+      type: object
+      required:
+      - organization_id
+      title: OrganizationMemberUpdateRequest
+    Member:
+      properties:
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+          description: The unique ID of the user to add. Either user_id or user_email must be provided
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+          description: The email address of the user to add. Either user_id or user_email must be provided
+        role:
+          type: string
+          enum:
+          - admin
+          - user
+          title: Role
+          description: The role of the user within the team. 'admin' users can manage team settings and members, 'user' is a regular team member
+      type: object
+      required:
+      - role
+      title: Member
+    KeyMetricWithMetadata:
+      properties:
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        metadata:
+          $ref: '#/components/schemas/KeyMetadata'
+      type: object
+      required:
+      - metrics
+      title: KeyMetricWithMetadata
+      description: Base class for metrics with additional metadata
+    BreakdownMetrics:
+      properties:
+        mcp_servers:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Mcp Servers
+        models:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Models
+        model_groups:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Model Groups
+        providers:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Providers
+        endpoints:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Endpoints
+        api_keys:
+          additionalProperties:
+            $ref: '#/components/schemas/KeyMetricWithMetadata'
+          type: object
+          title: Api Keys
+        entities:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Entities
+      type: object
+      title: BreakdownMetrics
+      description: Breakdown of spend by different dimensions
+    KeySpendActivityRow:
+      properties:
+        api_key:
+          type: string
+          title: Api Key
+        metrics:
+          $ref: '#/components/schemas/KeySpendMetrics'
+        metadata:
+          $ref: '#/components/schemas/KeyMetadata'
+      type: object
+      required:
+      - api_key
+      - metrics
+      - metadata
+      title: KeySpendActivityRow
+    SpendAnalyticsPaginatedResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/DailySpendData'
+          type: array
+          title: Results
+        metadata:
+          $ref: '#/components/schemas/DailySpendMetadata'
+      type: object
+      required:
+      - results
+      title: SpendAnalyticsPaginatedResponse
+    LiteLLM_ObjectPermissionTable:
+      properties:
+        object_permission_id:
+          type: string
+          title: Object Permission Id
+        mcp_servers:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Servers
+          default: []
+        mcp_access_groups:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Access Groups
+          default: []
+        mcp_tool_permissions:
+          anyOf:
+          - additionalProperties:
+              items:
+                type: string
+              type: array
+            type: object
+          - type: 'null'
+          title: Mcp Tool Permissions
+        vector_stores:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Vector Stores
+          default: []
+        agents:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Agents
+          default: []
+        agent_access_groups:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Agent Access Groups
+          default: []
+        models:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Models
+          default: []
+        mcp_toolsets:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Mcp Toolsets
+        blocked_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Blocked Tools
+          default: []
+        search_tools:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Search Tools
+          default: []
+        mcp_tool_search_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Mcp Tool Search Enabled
+        skills:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Skills
+      type: object
+      required:
+      - object_permission_id
+      title: LiteLLM_ObjectPermissionTable
+      description: Represents a LiteLLM_ObjectPermissionTable record
+    KeyActivityRow:
+      properties:
+        api_key:
+          type: string
+          title: Api Key
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        metadata:
+          $ref: '#/components/schemas/KeyMetadata'
+      type: object
+      required:
+      - api_key
+      - metrics
+      - metadata
+      title: KeyActivityRow
+    ModelTopKeysResponse:
+      properties:
+        model:
+          type: string
+          title: Model
+        by_model_group:
+          type: boolean
+          title: By Model Group
+        api_keys:
+          items:
+            $ref: '#/components/schemas/KeySpendActivityRow'
+          type: array
+          title: Api Keys
+      type: object
+      required:
+      - model
+      - by_model_group
+      - api_keys
+      title: ModelTopKeysResponse
+    LiteLLM_OrganizationMembershipTable:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        organization_id:
+          type: string
+          title: Organization Id
+        user_role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Role
+        spend:
+          type: number
+          title: Spend
+          default: 0.0
+        budget_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Id
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        user:
+          anyOf:
+          - {}
+          - type: 'null'
+          title: User
+        litellm_budget_table:
+          anyOf:
+          - $ref: '#/components/schemas/LiteLLM_BudgetTable'
+          - type: 'null'
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+      type: object
+      required:
+      - user_id
+      - organization_id
+      - created_at
+      - updated_at
+      title: LiteLLM_OrganizationMembershipTable
+      description: Tracks which organizations a user belongs to and their spend within it.
+    LiteLLM_BudgetTable:
+      properties:
+        budget_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Id
+        soft_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Soft Budget
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        max_parallel_requests:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Parallel Requests
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
+        tpd_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpd Limit
+        model_max_budget:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Model Max Budget
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        allowed_models:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Allowed Models
+        temp_budget_increase:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Temp Budget Increase
+        temp_budget_expiry:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Temp Budget Expiry
+      type: object
+      title: LiteLLM_BudgetTable
+      description: 'Represents user-controllable params for a LiteLLM_BudgetTable record.
 
-        PROXY_ADMIN: admin over the platform
 
-        PROXY_ADMIN_VIEW_ONLY: can login, view all own keys, view all spend
+        Budget-write paths use `model_fields.keys()` on this class as an allowlist
 
-        ORG_ADMIN: admin over a specific organization, can create teams, users only within their organization
+        for user input. Keep server-managed fields (e.g. `budget_reset_at`) on
 
-
-        Internal User Roles:
-
-        INTERNAL_USER: can login, view/create/delete their own keys, view their spend
-
-        INTERNAL_USER_VIEW_ONLY: can login, view their own keys, view their own spend
-
-
-
-        Team Roles:
-
-        TEAM: used for JWT auth
-
-
-
-        Customer Roles:
-
-        CUSTOMER: External users -> these are customers'
+        `LiteLLM_BudgetTableFull` so they aren''t user-settable.'
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

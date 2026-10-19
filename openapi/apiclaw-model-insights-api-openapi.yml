@@ -1,0 +1,367 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM model insights API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.105.1
+tags:
+- name: model insights
+paths:
+  /model-insights:
+    get:
+      tags:
+      - model insights
+      summary: Get Model Insights
+      operationId: get_model_insights_model_insights_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: YYYY-MM-DD, defaults to 365 days ago
+          title: Start Date
+        description: YYYY-MM-DD, defaults to 365 days ago
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: YYYY-MM-DD, defaults to today
+          title: End Date
+        description: YYYY-MM-DD, defaults to today
+      - name: metric
+        in: query
+        required: false
+        schema:
+          enum:
+          - requests
+          - spend
+          - tokens
+          type: string
+          description: Metric the top models are ranked by
+          default: tokens
+          title: Metric
+        description: Metric the top models are ranked by
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelInsightsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /model-insights/tasks:
+    get:
+      tags:
+      - model insights
+      summary: Get Model Insight Tasks
+      operationId: get_model_insight_tasks_model_insights_tasks_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: YYYY-MM-DD, defaults to 365 days ago
+          title: Start Date
+        description: YYYY-MM-DD, defaults to 365 days ago
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: YYYY-MM-DD, defaults to today
+          title: End Date
+        description: YYYY-MM-DD, defaults to today
+      - name: metric
+        in: query
+        required: false
+        schema:
+          enum:
+          - requests
+          - spend
+          - tokens
+          type: string
+          description: Metric task shares are computed from
+          default: spend
+          title: Metric
+        description: Metric task shares are computed from
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelInsightTasksResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    ModelInsightDailyMetric:
+      properties:
+        model_group:
+          type: string
+          title: Model Group
+        model:
+          type: string
+          title: Model
+        provider:
+          type: string
+          title: Provider
+        spend:
+          type: number
+          title: Spend
+        prompt_tokens:
+          type: integer
+          title: Prompt Tokens
+        completion_tokens:
+          type: integer
+          title: Completion Tokens
+        requests:
+          type: integer
+          title: Requests
+        successful_requests:
+          type: integer
+          title: Successful Requests
+        failed_requests:
+          type: integer
+          title: Failed Requests
+        date:
+          type: string
+          title: Date
+      type: object
+      required:
+      - model_group
+      - model
+      - provider
+      - spend
+      - prompt_tokens
+      - completion_tokens
+      - requests
+      - successful_requests
+      - failed_requests
+      - date
+      title: ModelInsightDailyMetric
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ModelInsightsResponse:
+      properties:
+        start_date:
+          type: string
+          title: Start Date
+        end_date:
+          type: string
+          title: End Date
+        daily:
+          items:
+            $ref: '#/components/schemas/ModelInsightDailyMetric'
+          type: array
+          title: Daily
+        daily_totals:
+          items:
+            $ref: '#/components/schemas/ModelInsightDailyTotal'
+          type: array
+          title: Daily Totals
+        top_models:
+          items:
+            $ref: '#/components/schemas/ModelInsightMetric'
+          type: array
+          title: Top Models
+      type: object
+      required:
+      - start_date
+      - end_date
+      - daily
+      - daily_totals
+      - top_models
+      title: ModelInsightsResponse
+    ModelInsightMetric:
+      properties:
+        model_group:
+          type: string
+          title: Model Group
+        model:
+          type: string
+          title: Model
+        provider:
+          type: string
+          title: Provider
+        spend:
+          type: number
+          title: Spend
+        prompt_tokens:
+          type: integer
+          title: Prompt Tokens
+        completion_tokens:
+          type: integer
+          title: Completion Tokens
+        requests:
+          type: integer
+          title: Requests
+        successful_requests:
+          type: integer
+          title: Successful Requests
+        failed_requests:
+          type: integer
+          title: Failed Requests
+      type: object
+      required:
+      - model_group
+      - model
+      - provider
+      - spend
+      - prompt_tokens
+      - completion_tokens
+      - requests
+      - successful_requests
+      - failed_requests
+      title: ModelInsightMetric
+    ModelInsightTaskSummary:
+      properties:
+        task_type:
+          type: string
+          title: Task Type
+        label:
+          type: string
+          title: Label
+        category:
+          type: string
+          title: Category
+        value:
+          type: number
+          title: Value
+        share:
+          type: number
+          title: Share
+        leader:
+          type: string
+          title: Leader
+        provider:
+          type: string
+          title: Provider
+      type: object
+      required:
+      - task_type
+      - label
+      - category
+      - value
+      - share
+      - leader
+      - provider
+      title: ModelInsightTaskSummary
+    ModelInsightTasksResponse:
+      properties:
+        start_date:
+          type: string
+          title: Start Date
+        end_date:
+          type: string
+          title: End Date
+        tasks:
+          items:
+            $ref: '#/components/schemas/ModelInsightTaskSummary'
+          type: array
+          title: Tasks
+      type: object
+      required:
+      - start_date
+      - end_date
+      - tasks
+      title: ModelInsightTasksResponse
+    ModelInsightDailyTotal:
+      properties:
+        date:
+          type: string
+          title: Date
+        spend:
+          type: number
+          title: Spend
+        prompt_tokens:
+          type: integer
+          title: Prompt Tokens
+        completion_tokens:
+          type: integer
+          title: Completion Tokens
+        requests:
+          type: integer
+          title: Requests
+      type: object
+      required:
+      - date
+      - spend
+      - prompt_tokens
+      - completion_tokens
+      - requests
+      title: ModelInsightDailyTotal
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

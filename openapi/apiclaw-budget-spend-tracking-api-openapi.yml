@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Budget & Spend Tracking
 paths:
@@ -182,6 +182,15 @@ paths:
       security:
       - APIKeyHeader: []
       parameters:
+      - name: api_key_limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          default: 100
+          title: Api Key Limit
       - name: start_date
         in: query
         required: false
@@ -258,6 +267,547 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SpendAnalyticsPaginatedResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user/daily/activity/aggregated/keys:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Get User Daily Activity Aggregated Keys
+      operationId: get_user_daily_activity_aggregated_keys_user_daily_activity_aggregated_keys_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Start date in YYYY-MM-DD format
+          title: Start Date
+        description: Start date in YYYY-MM-DD format
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: End date in YYYY-MM-DD format
+          title: End Date
+        description: End date in YYYY-MM-DD format
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific model
+          title: Model
+        description: Filter by specific model
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific API key
+          title: Api Key
+        description: Filter by specific API key
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+          title: User Id
+        description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+      - name: timezone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+          title: Timezone
+        description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+      - name: include_current_utc_day
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+          default: false
+          title: Include Current Utc Day
+        description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyActivityKeyPageResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user/daily/activity/aggregated/search:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Get User Daily Activity Aggregated Search
+      operationId: get_user_daily_activity_aggregated_search_user_daily_activity_aggregated_search_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: search
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Search
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 100
+          title: Limit
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Start date in YYYY-MM-DD format
+          title: Start Date
+        description: Start date in YYYY-MM-DD format
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: End date in YYYY-MM-DD format
+          title: End Date
+        description: End date in YYYY-MM-DD format
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific model
+          title: Model
+        description: Filter by specific model
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific API key
+          title: Api Key
+        description: Filter by specific API key
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+          title: User Id
+        description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+      - name: timezone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+          title: Timezone
+        description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+      - name: include_current_utc_day
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+          default: false
+          title: Include Current Utc Day
+        description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyActivityKeySearchResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user/daily/activity/aggregated/model_top_keys:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Get User Daily Activity Model Top Keys
+      operationId: get_user_daily_activity_model_top_keys_user_daily_activity_aggregated_model_top_keys_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: model_group
+        in: query
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          title: Model Group
+      - name: by_model_group
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+          title: By Model Group
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 5
+          title: Limit
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Start date in YYYY-MM-DD format
+          title: Start Date
+        description: Start date in YYYY-MM-DD format
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: End date in YYYY-MM-DD format
+          title: End Date
+        description: End date in YYYY-MM-DD format
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific model
+          title: Model
+        description: Filter by specific model
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific API key
+          title: Api Key
+        description: Filter by specific API key
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+          title: User Id
+        description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+      - name: timezone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+          title: Timezone
+        description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+      - name: include_current_utc_day
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+          default: false
+          title: Include Current Utc Day
+        description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelTopKeysResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user/daily/activity/export:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Get User Daily Activity Export
+      operationId: get_user_daily_activity_export_user_daily_activity_export_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: export_type
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/ExportType'
+          default: daily
+      - name: format
+        in: query
+        required: false
+        schema:
+          enum:
+          - csv
+          - json
+          type: string
+          default: csv
+          title: Format
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Start date in YYYY-MM-DD format
+          title: Start Date
+        description: Start date in YYYY-MM-DD format
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: End date in YYYY-MM-DD format
+          title: End Date
+        description: End date in YYYY-MM-DD format
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific model
+          title: Model
+        description: Filter by specific model
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific API key
+          title: Api Key
+        description: Filter by specific API key
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+          title: User Id
+        description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+      - name: timezone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+          title: Timezone
+        description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+      - name: include_current_utc_day
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+          default: false
+          title: Include Current Utc Day
+        description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+      responses:
+        '200':
+          description: Streamed daily activity export
+          content:
+            text/csv:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /user/daily/activity/aggregated/cache_leakage_keys:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Get User Daily Activity Cache Leakage Keys
+      operationId: get_user_daily_activity_cache_leakage_keys_user_daily_activity_aggregated_cache_leakage_keys_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 20
+          title: Limit
+      - name: start_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Start date in YYYY-MM-DD format
+          title: Start Date
+        description: Start date in YYYY-MM-DD format
+      - name: end_date
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: End date in YYYY-MM-DD format
+          title: End Date
+        description: End date in YYYY-MM-DD format
+      - name: model
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific model
+          title: Model
+        description: Filter by specific model
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific API key
+          title: Api Key
+        description: Filter by specific API key
+      - name: user_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+          title: User Id
+        description: Filter by specific user ID. Admins can filter by any user or omit for global view. Non-admins must provide their own user_id.
+      - name: timezone
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+          title: Timezone
+        description: Timezone offset in minutes from UTC (e.g., 480 for PST). Matches JavaScript's Date.getTimezoneOffset() convention.
+      - name: include_current_utc_day
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+          default: false
+          title: Include Current Utc Day
+        description: When the range ends on the caller's current local day, extend it to today's UTC bucket so spend written after the caller's local midnight (in UTC terms) is included. Requires the timezone parameter. Historical ranges are never extended.
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CacheLeakageKeysResponse'
         '422':
           description: Validation Error
           content:
@@ -491,6 +1041,94 @@ paths:
                 items:
                   $ref: '#/components/schemas/LiteLLM_SpendLogs'
                 title: Response 200 View Spend Tags Spend Tags Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /spend/capture_rate:
+    get:
+      tags:
+      - Budget & Spend Tracking
+      summary: Get Spend Capture Rate
+      description: 'Compare the spend LiteLLM captured for a provider against that provider''s own bill, per UTC day.
+
+
+        Admin only. Reads the provider''s billing API with the billing credential set on the proxy
+
+        (OpenAI: `OPENAI_ADMIN_KEY`) and sums `LiteLLM_DailyUserSpend` for the same days.
+
+
+        Example:
+
+        ```
+
+        curl -H "Authorization: Bearer sk-1234" "http://localhost:4000/spend/capture_rate?provider=openai&start_date=2026-09-17&end_date=2026-09-23"
+
+        ```'
+      operationId: get_spend_capture_rate_spend_capture_rate_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: start_date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+          description: First UTC day of the range, YYYY-MM-DD
+          title: Start Date
+        description: First UTC day of the range, YYYY-MM-DD
+      - name: end_date
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+          description: Last UTC day of the range, YYYY-MM-DD, inclusive
+          title: End Date
+        description: Last UTC day of the range, YYYY-MM-DD, inclusive
+      - name: provider
+        in: query
+        required: false
+        schema:
+          const: openai
+          type: string
+          description: Provider whose bill to compare against; needs OPENAI_ADMIN_KEY set on the proxy
+          default: openai
+          title: Provider
+        description: Provider whose bill to compare against; needs OPENAI_ADMIN_KEY set on the proxy
+      - name: threshold
+        in: query
+        required: false
+        schema:
+          type: number
+          maximum: 1
+          exclusiveMinimum: 0
+          description: Ratio under which the report flags below_threshold
+          default: 0.9
+          title: Threshold
+        description: Ratio under which the report flags below_threshold
+      - name: project_ids
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+          - type: 'null'
+          description: Scope the OpenAI bill to these project ids; omit to compare against the whole organization. Captured spend is never scoped, so pass every project LiteLLM's OpenAI keys belong to
+          title: Project Ids
+        description: Scope the OpenAI bill to these project ids; omit to compare against the whole organization. Captured spend is never scoped, so pass every project LiteLLM's OpenAI keys belong to
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaptureRateReport'
         '422':
           description: Validation Error
           content:
@@ -1255,6 +1893,26 @@ paths:
           description: 'Filter logs by cache state: ''hit'' or ''miss''. Miss includes legacy rows with a null/unknown cache state'
           title: Cache Hit Filter
         description: 'Filter logs by cache state: ''hit'' or ''miss''. Miss includes legacy rows with a null/unknown cache state'
+      - name: used_client_oauth_token
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: 'Filter logs by the credential the upstream call used: true for a client-forwarded Anthropic OAuth token, false for the deployment''s configured key. Rows written before this flag existed match neither'
+          title: Used Client Oauth Token
+        description: 'Filter logs by the credential the upstream call used: true for a client-forwarded Anthropic OAuth token, false for the deployment''s configured key. Rows written before this flag existed match neither'
+      - name: span_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: 'Filter logs by span type: llm, agent, mcp, or batch'
+          title: Span Type
+        description: 'Filter logs by span type: llm, agent, mcp, or batch'
       - name: model
         in: query
         required: false
@@ -1380,9 +2038,9 @@ paths:
           anyOf:
           - type: string
           - type: 'null'
-          description: Match a log whose request_id, api_key (hash), team_id, user, end_user, session_id, or model_id equals this value. request_id matches across all time; the other columns match inside start_date/end_date, which stay required
+          description: Match a log whose request_id, litellm_call_id, api_key (hash), team_id, user, end_user, session_id, or model_id equals this value. request_id matches across all time; the other columns match inside start_date/end_date, which stay required
           title: Search
-        description: Match a log whose request_id, api_key (hash), team_id, user, end_user, session_id, or model_id equals this value. request_id matches across all time; the other columns match inside start_date/end_date, which stay required
+        description: Match a log whose request_id, litellm_call_id, api_key (hash), team_id, user, end_user, session_id, or model_id equals this value. request_id matches across all time; the other columns match inside start_date/end_date, which stay required
       responses:
         '200':
           description: Successful Response
@@ -1668,61 +2326,63 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /usage/ai/chat:
+    post:
+      tags:
+      - Budget & Spend Tracking
+      summary: Usage Ai Chat
+      description: 'AI chat about usage data. Streams SSE events with the AI response.
+
+        The AI agent has access to tools that query aggregated daily activity data.'
+      operationId: usage_ai_chat_usage_ai_chat_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsageAIChatRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
 components:
   schemas:
-    PageMeta:
+    GatewayRequestBreakdownEntry:
       properties:
-        page:
+        category:
+          type: string
+          title: Category
+        route:
+          type: string
+          title: Route
+        successful_requests:
           type: integer
-          title: Page
-        page_size:
+          title: Successful Requests
+          default: 0
+        failed_requests:
           type: integer
-          title: Page Size
-        has_more:
-          type: boolean
-          title: Has More
+          title: Failed Requests
+          default: 0
       type: object
       required:
-      - page
-      - page_size
-      - has_more
-      title: PageMeta
-      description: '`has_more` rather than `total_count`, which would need a COUNT(*) over the whole match set per keystroke.'
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    MetricWithMetadata:
-      properties:
-        metrics:
-          $ref: '#/components/schemas/SpendMetrics'
-        metadata:
-          additionalProperties: true
-          type: object
-          title: Metadata
-        api_key_breakdown:
-          additionalProperties:
-            $ref: '#/components/schemas/KeyMetricWithMetadata'
-          type: object
-          title: Api Key Breakdown
-      type: object
-      required:
-      - metrics
-      title: MetricWithMetadata
-    SpendMetrics:
+      - category
+      - route
+      title: GatewayRequestBreakdownEntry
+    KeySpendMetrics:
       properties:
         spend:
           type: number
           title: Spend
-          default: 0.0
-        flat_cost:
-          type: number
-          title: Flat Cost
           default: 0.0
         prompt_tokens:
           type: integer
@@ -1732,37 +2392,13 @@ components:
           type: integer
           title: Completion Tokens
           default: 0
-        cache_read_input_tokens:
-          type: integer
-          title: Cache Read Input Tokens
-          default: 0
-        cache_creation_input_tokens:
-          type: integer
-          title: Cache Creation Input Tokens
-          default: 0
-        compression_saved_tokens:
-          type: integer
-          title: Compression Saved Tokens
-          default: 0
-        compression_savings_spend:
-          type: number
-          title: Compression Savings Spend
-          default: 0.0
-        prompt_caching_savings_spend:
-          type: number
-          title: Prompt Caching Savings Spend
-          default: 0.0
-        gateway_injected_caching_savings_spend:
-          type: number
-          title: Gateway Injected Caching Savings Spend
-          default: 0.0
-        autorouter_savings_spend:
-          type: number
-          title: Autorouter Savings Spend
-          default: 0.0
         total_tokens:
           type: integer
           title: Total Tokens
+          default: 0
+        api_requests:
+          type: integer
+          title: Api Requests
           default: 0
         successful_requests:
           type: integer
@@ -1772,63 +2408,313 @@ components:
           type: integer
           title: Failed Requests
           default: 0
-        api_requests:
+        cache_read_input_tokens:
           type: integer
-          title: Api Requests
+          title: Cache Read Input Tokens
+          default: 0
+        cache_creation_input_tokens:
+          type: integer
+          title: Cache Creation Input Tokens
           default: 0
       type: object
-      title: SpendMetrics
-    BreakdownMetrics:
+      title: KeySpendMetrics
+    CaptureRateDay:
       properties:
-        mcp_servers:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Mcp Servers
-        models:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Models
-        model_groups:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Model Groups
-        providers:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Providers
-        endpoints:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Endpoints
-        api_keys:
-          additionalProperties:
-            $ref: '#/components/schemas/KeyMetricWithMetadata'
-          type: object
-          title: Api Keys
-        entities:
-          additionalProperties:
-            $ref: '#/components/schemas/MetricWithMetadata'
-          type: object
-          title: Entities
-      type: object
-      title: BreakdownMetrics
-      description: Breakdown of spend by different dimensions
-    KeyMetricWithMetadata:
-      properties:
-        metrics:
-          $ref: '#/components/schemas/SpendMetrics'
-        metadata:
-          $ref: '#/components/schemas/KeyMetadata'
+        date:
+          type: string
+          title: Date
+        captured_spend:
+          type: number
+          title: Captured Spend
+        provider_spend:
+          type: number
+          title: Provider Spend
+        capture_rate:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Capture Rate
       type: object
       required:
-      - metrics
-      title: KeyMetricWithMetadata
-      description: Base class for metrics with additional metadata
+      - date
+      - captured_spend
+      - provider_spend
+      - capture_rate
+      title: CaptureRateDay
+    FacetListResponse:
+      properties:
+        data:
+          items:
+            type: string
+          type: array
+          title: Data
+        meta:
+          $ref: '#/components/schemas/PageMeta'
+        links:
+          $ref: '#/components/schemas/PageLinks'
+      type: object
+      required:
+      - data
+      - meta
+      - links
+      title: FacetListResponse
+      description: The distinct values one column takes over a filtered query. `data` holds bare values, not entity rows.
+    DailySpendMetadata:
+      properties:
+        total_spend:
+          type: number
+          title: Total Spend
+          default: 0.0
+        total_flat_cost:
+          type: number
+          title: Total Flat Cost
+          default: 0.0
+        total_prompt_tokens:
+          type: integer
+          title: Total Prompt Tokens
+          default: 0
+        total_completion_tokens:
+          type: integer
+          title: Total Completion Tokens
+          default: 0
+        total_tokens:
+          type: integer
+          title: Total Tokens
+          default: 0
+        total_api_requests:
+          type: integer
+          title: Total Api Requests
+          default: 0
+        total_successful_requests:
+          type: integer
+          title: Total Successful Requests
+          default: 0
+        total_failed_requests:
+          type: integer
+          title: Total Failed Requests
+          default: 0
+        total_cache_read_input_tokens:
+          type: integer
+          title: Total Cache Read Input Tokens
+          default: 0
+        total_cache_creation_input_tokens:
+          type: integer
+          title: Total Cache Creation Input Tokens
+          default: 0
+        total_compression_saved_tokens:
+          type: integer
+          title: Total Compression Saved Tokens
+          default: 0
+        total_compression_savings_spend:
+          type: number
+          title: Total Compression Savings Spend
+          default: 0.0
+        total_prompt_caching_savings_spend:
+          type: number
+          title: Total Prompt Caching Savings Spend
+          default: 0.0
+        total_gateway_injected_caching_savings_spend:
+          type: number
+          title: Total Gateway Injected Caching Savings Spend
+          default: 0.0
+        total_autorouter_savings_spend:
+          type: number
+          title: Total Autorouter Savings Spend
+          default: 0.0
+        total_response_time_ms:
+          type: integer
+          title: Total Response Time Ms
+          default: 0
+        total_timed_requests:
+          type: integer
+          title: Total Timed Requests
+          default: 0
+        page:
+          type: integer
+          title: Page
+          default: 1
+        total_pages:
+          type: integer
+          title: Total Pages
+          default: 1
+        has_more:
+          type: boolean
+          title: Has More
+          default: false
+        api_key_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Api Key Limit
+          description: When set, api_keys and every api_key_breakdown list at most this many keys, ranked by spend. Totals and the model, provider, mcp and endpoint rollups still cover every key.
+        total_api_keys:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Api Keys
+          description: Distinct API keys matching the filters. When this exceeds api_key_limit, the per-key lists are truncated to the highest-spend keys.
+        entity_total_api_keys:
+          anyOf:
+          - additionalProperties:
+              type: integer
+            type: object
+          - type: 'null'
+          title: Entity Total Api Keys
+          description: Distinct API keys per entity over the requested range, set when the entity breakdown is included. When an entity's count exceeds api_key_limit, its api_key_breakdown lists only its keys among the top api_key_limit keys overall.
+      type: object
+      title: DailySpendMetadata
+    DailyActivityKeyPageResponse:
+      properties:
+        api_keys:
+          items:
+            $ref: '#/components/schemas/KeySpendActivityRow'
+          type: array
+          title: Api Keys
+        total_api_keys:
+          type: integer
+          title: Total Api Keys
+        offset:
+          type: integer
+          title: Offset
+        limit:
+          type: integer
+          title: Limit
+      type: object
+      required:
+      - api_keys
+      - total_api_keys
+      - offset
+      - limit
+      title: DailyActivityKeyPageResponse
+    KeyMetadata:
+      properties:
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+        team_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Id
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+        key_exists:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Key Exists
+      type: object
+      title: KeyMetadata
+      description: Metadata for a key
+    UsageAIChatRequest:
+      properties:
+        messages:
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          type: array
+          title: Messages
+          description: Chat messages (user/assistant history)
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+          description: Model to use for AI chat
+      type: object
+      required:
+      - messages
+      title: UsageAIChatRequest
+    CaptureRateReport:
+      properties:
+        provider:
+          type: string
+          const: openai
+          title: Provider
+        start_date:
+          type: string
+          title: Start Date
+        end_date:
+          type: string
+          title: End Date
+        captured_spend:
+          type: number
+          title: Captured Spend
+        provider_spend:
+          type: number
+          title: Provider Spend
+        capture_rate:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Capture Rate
+        threshold:
+          type: number
+          title: Threshold
+        below_threshold:
+          type: boolean
+          title: Below Threshold
+        days:
+          items:
+            $ref: '#/components/schemas/CaptureRateDay'
+          type: array
+          title: Days
+      type: object
+      required:
+      - provider
+      - start_date
+      - end_date
+      - captured_spend
+      - provider_spend
+      - capture_rate
+      - threshold
+      - below_threshold
+      - days
+      title: CaptureRateReport
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     LiteLLM_SpendLogs:
       properties:
         request_id:
@@ -1963,82 +2849,6 @@ components:
       - messages
       - response
       title: LiteLLM_SpendLogs
-    GatewayRequestDailyEntry:
-      properties:
-        date:
-          type: string
-          title: Date
-        successful_requests:
-          type: integer
-          title: Successful Requests
-          default: 0
-        failed_requests:
-          type: integer
-          title: Failed Requests
-          default: 0
-      type: object
-      required:
-      - date
-      title: GatewayRequestDailyEntry
-    FacetListResponse:
-      properties:
-        data:
-          items:
-            type: string
-          type: array
-          title: Data
-        meta:
-          $ref: '#/components/schemas/PageMeta'
-        links:
-          $ref: '#/components/schemas/PageLinks'
-      type: object
-      required:
-      - data
-      - meta
-      - links
-      title: FacetListResponse
-      description: The distinct values one column takes over a filtered query. `data` holds bare values, not entity rows.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    DailySpendData:
-      properties:
-        date:
-          type: string
-          format: date
-          title: Date
-        metrics:
-          $ref: '#/components/schemas/SpendMetrics'
-        breakdown:
-          $ref: '#/components/schemas/BreakdownMetrics'
-      type: object
-      required:
-      - date
-      - metrics
-      title: DailySpendData
     GatewayRequestActivityResponse:
       properties:
         total_successful_requests:
@@ -2064,82 +2874,290 @@ components:
       type: object
       title: GatewayRequestActivityResponse
       description: Response for GET /gateway/daily/activity.
-    DailySpendMetadata:
+    CacheLeakageKeysResponse:
       properties:
-        total_spend:
-          type: number
-          title: Total Spend
-          default: 0.0
-        total_flat_cost:
-          type: number
-          title: Total Flat Cost
-          default: 0.0
-        total_prompt_tokens:
+        api_keys:
+          items:
+            $ref: '#/components/schemas/KeySpendActivityRow'
+          type: array
+          title: Api Keys
+      type: object
+      required:
+      - api_keys
+      title: CacheLeakageKeysResponse
+    GatewayRequestDailyEntry:
+      properties:
+        date:
+          type: string
+          title: Date
+        successful_requests:
           type: integer
-          title: Total Prompt Tokens
+          title: Successful Requests
           default: 0
-        total_completion_tokens:
+        failed_requests:
           type: integer
-          title: Total Completion Tokens
+          title: Failed Requests
           default: 0
+      type: object
+      required:
+      - date
+      title: GatewayRequestDailyEntry
+    SpendMetrics:
+      properties:
+        spend:
+          type: number
+          title: Spend
+          default: 0.0
+        flat_cost:
+          type: number
+          title: Flat Cost
+          default: 0.0
+        prompt_tokens:
+          type: integer
+          title: Prompt Tokens
+          default: 0
+        completion_tokens:
+          type: integer
+          title: Completion Tokens
+          default: 0
+        cache_read_input_tokens:
+          type: integer
+          title: Cache Read Input Tokens
+          default: 0
+        cache_creation_input_tokens:
+          type: integer
+          title: Cache Creation Input Tokens
+          default: 0
+        compression_saved_tokens:
+          type: integer
+          title: Compression Saved Tokens
+          default: 0
+        compression_savings_spend:
+          type: number
+          title: Compression Savings Spend
+          default: 0.0
+        prompt_caching_savings_spend:
+          type: number
+          title: Prompt Caching Savings Spend
+          default: 0.0
+        gateway_injected_caching_savings_spend:
+          type: number
+          title: Gateway Injected Caching Savings Spend
+          default: 0.0
+        autorouter_savings_spend:
+          type: number
+          title: Autorouter Savings Spend
+          default: 0.0
         total_tokens:
           type: integer
           title: Total Tokens
           default: 0
-        total_api_requests:
+        successful_requests:
           type: integer
-          title: Total Api Requests
+          title: Successful Requests
           default: 0
-        total_successful_requests:
+        failed_requests:
           type: integer
-          title: Total Successful Requests
+          title: Failed Requests
           default: 0
-        total_failed_requests:
+        api_requests:
           type: integer
-          title: Total Failed Requests
+          title: Api Requests
           default: 0
-        total_cache_read_input_tokens:
+        total_response_time_ms:
           type: integer
-          title: Total Cache Read Input Tokens
+          title: Total Response Time Ms
           default: 0
-        total_cache_creation_input_tokens:
+        timed_requests:
           type: integer
-          title: Total Cache Creation Input Tokens
+          title: Timed Requests
           default: 0
-        total_compression_saved_tokens:
-          type: integer
-          title: Total Compression Saved Tokens
-          default: 0
-        total_compression_savings_spend:
-          type: number
-          title: Total Compression Savings Spend
-          default: 0.0
-        total_prompt_caching_savings_spend:
-          type: number
-          title: Total Prompt Caching Savings Spend
-          default: 0.0
-        total_gateway_injected_caching_savings_spend:
-          type: number
-          title: Total Gateway Injected Caching Savings Spend
-          default: 0.0
-        total_autorouter_savings_spend:
-          type: number
-          title: Total Autorouter Savings Spend
-          default: 0.0
+      type: object
+      title: SpendMetrics
+    MetricWithMetadata:
+      properties:
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+        api_key_breakdown:
+          additionalProperties:
+            $ref: '#/components/schemas/KeyMetricWithMetadata'
+          type: object
+          title: Api Key Breakdown
+      type: object
+      required:
+      - metrics
+      title: MetricWithMetadata
+    ChatMessage:
+      properties:
+        role:
+          type: string
+          enum:
+          - user
+          - assistant
+          title: Role
+        content:
+          type: string
+          title: Content
+      type: object
+      required:
+      - role
+      - content
+      title: ChatMessage
+    DailySpendData:
+      properties:
+        date:
+          type: string
+          format: date
+          title: Date
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        breakdown:
+          $ref: '#/components/schemas/BreakdownMetrics'
+      type: object
+      required:
+      - date
+      - metrics
+      title: DailySpendData
+    PageMeta:
+      properties:
         page:
           type: integer
           title: Page
-          default: 1
-        total_pages:
+        page_size:
           type: integer
-          title: Total Pages
-          default: 1
+          title: Page Size
         has_more:
           type: boolean
           title: Has More
-          default: false
       type: object
-      title: DailySpendMetadata
+      required:
+      - page
+      - page_size
+      - has_more
+      title: PageMeta
+      description: '`has_more` rather than `total_count`, which would need a COUNT(*) over the whole match set per keystroke.'
+    DailyActivityKeySearchResponse:
+      properties:
+        api_keys:
+          items:
+            $ref: '#/components/schemas/KeyActivityRow'
+          type: array
+          title: Api Keys
+      type: object
+      required:
+      - api_keys
+      title: DailyActivityKeySearchResponse
+    PageLinks:
+      properties:
+        self:
+          type: string
+          title: Self
+        prev:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev
+        next:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next
+      type: object
+      required:
+      - self
+      title: PageLinks
+      description: 'Hypermedia for a paginated list. No `first`/`last`: without a total count the last page is unknown.'
+    ExportType:
+      type: string
+      enum:
+      - daily
+      - daily_with_keys
+      - daily_with_models
+      - daily_with_users
+      title: ExportType
+    KeyMetricWithMetadata:
+      properties:
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        metadata:
+          $ref: '#/components/schemas/KeyMetadata'
+      type: object
+      required:
+      - metrics
+      title: KeyMetricWithMetadata
+      description: Base class for metrics with additional metadata
+    BreakdownMetrics:
+      properties:
+        mcp_servers:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Mcp Servers
+        models:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Models
+        model_groups:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Model Groups
+        providers:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Providers
+        endpoints:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Endpoints
+        api_keys:
+          additionalProperties:
+            $ref: '#/components/schemas/KeyMetricWithMetadata'
+          type: object
+          title: Api Keys
+        entities:
+          additionalProperties:
+            $ref: '#/components/schemas/MetricWithMetadata'
+          type: object
+          title: Entities
+      type: object
+      title: BreakdownMetrics
+      description: Breakdown of spend by different dimensions
+    KeySpendActivityRow:
+      properties:
+        api_key:
+          type: string
+          title: Api Key
+        metrics:
+          $ref: '#/components/schemas/KeySpendMetrics'
+        metadata:
+          $ref: '#/components/schemas/KeyMetadata'
+      type: object
+      required:
+      - api_key
+      - metrics
+      - metadata
+      title: KeySpendActivityRow
+    SpendAnalyticsPaginatedResponse:
+      properties:
+        results:
+          items:
+            $ref: '#/components/schemas/DailySpendData'
+          type: array
+          title: Results
+        metadata:
+          $ref: '#/components/schemas/DailySpendMetadata'
+      type: object
+      required:
+      - results
+      title: SpendAnalyticsPaginatedResponse
     IPAddress:
       properties:
         ip:
@@ -2149,6 +3167,40 @@ components:
       required:
       - ip
       title: IPAddress
+    KeyActivityRow:
+      properties:
+        api_key:
+          type: string
+          title: Api Key
+        metrics:
+          $ref: '#/components/schemas/SpendMetrics'
+        metadata:
+          $ref: '#/components/schemas/KeyMetadata'
+      type: object
+      required:
+      - api_key
+      - metrics
+      - metadata
+      title: KeyActivityRow
+    ModelTopKeysResponse:
+      properties:
+        model:
+          type: string
+          title: Model
+        by_model_group:
+          type: boolean
+          title: By Model Group
+        api_keys:
+          items:
+            $ref: '#/components/schemas/KeySpendActivityRow'
+          type: array
+          title: Api Keys
+      type: object
+      required:
+      - model
+      - by_model_group
+      - api_keys
+      title: ModelTopKeysResponse
     SpendCalculateRequest:
       properties:
         model:
@@ -2170,88 +3222,12 @@ components:
           title: Completion Response
       type: object
       title: SpendCalculateRequest
-    PageLinks:
-      properties:
-        self:
-          type: string
-          title: Self
-        prev:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Prev
-        next:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next
-      type: object
-      required:
-      - self
-      title: PageLinks
-      description: 'Hypermedia for a paginated list. No `first`/`last`: without a total count the last page is unknown.'
-    SpendAnalyticsPaginatedResponse:
-      properties:
-        results:
-          items:
-            $ref: '#/components/schemas/DailySpendData'
-          type: array
-          title: Results
-        metadata:
-          $ref: '#/components/schemas/DailySpendMetadata'
-      type: object
-      required:
-      - results
-      title: SpendAnalyticsPaginatedResponse
-    KeyMetadata:
-      properties:
-        key_alias:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Key Alias
-        team_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Team Id
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-        user_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Email
-      type: object
-      title: KeyMetadata
-      description: Metadata for a key
-    GatewayRequestBreakdownEntry:
-      properties:
-        category:
-          type: string
-          title: Category
-        route:
-          type: string
-          title: Route
-        successful_requests:
-          type: integer
-          title: Successful Requests
-          default: 0
-        failed_requests:
-          type: integer
-          title: Failed Requests
-          default: 0
-      type: object
-      required:
-      - category
-      - route
-      title: GatewayRequestBreakdownEntry
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

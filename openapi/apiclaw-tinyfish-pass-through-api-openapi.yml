@@ -1,0 +1,178 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM TinyFish Pass-through API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.105.1
+tags:
+- name: TinyFish Pass-through
+paths:
+  /tinyfish/{endpoint}:
+    post:
+      tags:
+      - TinyFish Pass-through
+      summary: Tinyfish Proxy Route
+      description: 'Pass-through for the TinyFish Agent API (goal-based web automation).
+
+
+        Forwarded endpoints:
+
+        - POST /v1/automation/run — run to completion (blocking)
+
+        - POST /v1/automation/run-async — submit a run, poll GET /v1/runs/{id} for the result
+
+        - POST /v1/automation/run-sse — run with SSE progress events
+
+        - GET /v1/runs/{id} — run status / result
+
+        - POST /v1/runs/{id}/cancel — cancel a run
+
+
+        Every other Agent API endpoint (vault, wallet, browser profiles, and the GET /v1/runs
+
+        listing, which would let any caller discover other callers'' run ids) returns 403: all
+
+        proxy callers share one upstream key.
+
+
+        Credential lookup order:
+
+        1. passthrough_endpoint_router (config.yaml deployments with use_in_pass_through)
+
+        2. TINYFISH_API_KEY environment variable
+
+
+        Docs'
+      operationId: tinyfish_proxy_route_tinyfish__endpoint__post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - TinyFish Pass-through
+      summary: Tinyfish Proxy Route
+      description: 'Pass-through for the TinyFish Agent API (goal-based web automation).
+
+
+        Forwarded endpoints:
+
+        - POST /v1/automation/run — run to completion (blocking)
+
+        - POST /v1/automation/run-async — submit a run, poll GET /v1/runs/{id} for the result
+
+        - POST /v1/automation/run-sse — run with SSE progress events
+
+        - GET /v1/runs/{id} — run status / result
+
+        - POST /v1/runs/{id}/cancel — cancel a run
+
+
+        Every other Agent API endpoint (vault, wallet, browser profiles, and the GET /v1/runs
+
+        listing, which would let any caller discover other callers'' run ids) returns 403: all
+
+        proxy callers share one upstream key.
+
+
+        Credential lookup order:
+
+        1. passthrough_endpoint_router (config.yaml deployments with use_in_pass_through)
+
+        2. TINYFISH_API_KEY environment variable
+
+
+        Docs'
+      operationId: tinyfish_proxy_route_tinyfish__endpoint__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

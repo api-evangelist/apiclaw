@@ -11,12 +11,12 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Toolset
 paths:
   /toolset/{toolset_name}/mcp:
-    put:
+    get:
       summary: Toolset Mcp Route
       description: 'Namespace a toolset as its own MCP endpoint.
 
@@ -28,7 +28,7 @@ paths:
         listed in their object_permission.mcp_toolsets grant list, or the request
 
         will be rejected with a 403.'
-      operationId: toolset_mcp_route_toolset__toolset_name__mcp_put
+      operationId: toolset_mcp_route_toolset__toolset_name__mcp_get
       parameters:
       - name: toolset_name
         in: path
@@ -84,7 +84,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
       tags:
       - Toolset
-    options:
+    post:
       summary: Toolset Mcp Route
       description: 'Namespace a toolset as its own MCP endpoint.
 
@@ -96,41 +96,7 @@ paths:
         listed in their object_permission.mcp_toolsets grant list, or the request
 
         will be rejected with a 403.'
-      operationId: toolset_mcp_route_toolset__toolset_name__mcp_options
-      parameters:
-      - name: toolset_name
-        in: path
-        required: true
-        schema:
-          type: string
-          title: Toolset Name
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-      tags:
-      - Toolset
-    get:
-      summary: Toolset Mcp Route
-      description: 'Namespace a toolset as its own MCP endpoint.
-
-
-        Connecting to /toolset//mcp exposes exactly the tools defined in
-
-        the toolset. Access is enforced: non-admin API keys must have the toolset
-
-        listed in their object_permission.mcp_toolsets grant list, or the request
-
-        will be rejected with a 403.'
-      operationId: toolset_mcp_route_toolset__toolset_name__mcp_get
+      operationId: toolset_mcp_route_toolset__toolset_name__mcp_post
       parameters:
       - name: toolset_name
         in: path
@@ -186,7 +152,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
       tags:
       - Toolset
-    post:
+    options:
       summary: Toolset Mcp Route
       description: 'Namespace a toolset as its own MCP endpoint.
 
@@ -198,7 +164,7 @@ paths:
         listed in their object_permission.mcp_toolsets grant list, or the request
 
         will be rejected with a 403.'
-      operationId: toolset_mcp_route_toolset__toolset_name__mcp_post
+      operationId: toolset_mcp_route_toolset__toolset_name__mcp_options
       parameters:
       - name: toolset_name
         in: path
@@ -254,8 +220,51 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
       tags:
       - Toolset
+    put:
+      summary: Toolset Mcp Route
+      description: 'Namespace a toolset as its own MCP endpoint.
+
+
+        Connecting to /toolset//mcp exposes exactly the tools defined in
+
+        the toolset. Access is enforced: non-admin API keys must have the toolset
+
+        listed in their object_permission.mcp_toolsets grant list, or the request
+
+        will be rejected with a 403.'
+      operationId: toolset_mcp_route_toolset__toolset_name__mcp_put
+      parameters:
+      - name: toolset_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Toolset Name
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      tags:
+      - Toolset
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -282,18 +291,12 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Workflow Management
 paths:
@@ -330,6 +330,15 @@ components:
       required:
       - workflow_type
       title: WorkflowRunCreateRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -356,6 +365,25 @@ components:
       - msg
       - type
       title: ValidationError
+    WorkflowEventCreateRequest:
+      properties:
+        event_type:
+          type: string
+          title: Event Type
+        step_name:
+          type: string
+          title: Step Name
+        data:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Data
+      type: object
+      required:
+      - event_type
+      - step_name
+      title: WorkflowEventCreateRequest
     WorkflowMessageCreateRequest:
       properties:
         role:
@@ -401,37 +429,12 @@ components:
           title: Metadata
       type: object
       title: WorkflowRunUpdateRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    WorkflowEventCreateRequest:
-      properties:
-        event_type:
-          type: string
-          title: Event Type
-        step_name:
-          type: string
-          title: Step Name
-        data:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Data
-      type: object
-      required:
-      - event_type
-      - step_name
-      title: WorkflowEventCreateRequest
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

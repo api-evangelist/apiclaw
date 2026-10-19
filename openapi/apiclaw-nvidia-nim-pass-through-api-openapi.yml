@@ -1,0 +1,234 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM NVIDIA NIM Pass-through API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.105.1
+tags:
+- name: NVIDIA NIM Pass-through
+paths:
+  /nvidia_nim/{endpoint}:
+    get:
+      tags:
+      - NVIDIA NIM Pass-through
+      summary: Nvidia Nim Proxy Route
+      description: 'Relay a native NVIDIA NIM request through a LiteLLM model group.
+
+
+        `{PROXY_BASE_URL}/nvidia_nim/{model_group}/v1/infer` forwards the body unchanged to the deployment''s
+
+        `api_base`, so object detection and OCR NIMs whose payload carries no `model` field still go through
+
+        virtual key auth, model access checks, and spend logging.'
+      operationId: nvidia_nim_proxy_route_nvidia_nim__endpoint__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - NVIDIA NIM Pass-through
+      summary: Nvidia Nim Proxy Route
+      description: 'Relay a native NVIDIA NIM request through a LiteLLM model group.
+
+
+        `{PROXY_BASE_URL}/nvidia_nim/{model_group}/v1/infer` forwards the body unchanged to the deployment''s
+
+        `api_base`, so object detection and OCR NIMs whose payload carries no `model` field still go through
+
+        virtual key auth, model access checks, and spend logging.'
+      operationId: nvidia_nim_proxy_route_nvidia_nim__endpoint__patch
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - NVIDIA NIM Pass-through
+      summary: Nvidia Nim Proxy Route
+      description: 'Relay a native NVIDIA NIM request through a LiteLLM model group.
+
+
+        `{PROXY_BASE_URL}/nvidia_nim/{model_group}/v1/infer` forwards the body unchanged to the deployment''s
+
+        `api_base`, so object detection and OCR NIMs whose payload carries no `model` field still go through
+
+        virtual key auth, model access checks, and spend logging.'
+      operationId: nvidia_nim_proxy_route_nvidia_nim__endpoint__post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - NVIDIA NIM Pass-through
+      summary: Nvidia Nim Proxy Route
+      description: 'Relay a native NVIDIA NIM request through a LiteLLM model group.
+
+
+        `{PROXY_BASE_URL}/nvidia_nim/{model_group}/v1/infer` forwards the body unchanged to the deployment''s
+
+        `api_base`, so object detection and OCR NIMs whose payload carries no `model` field still go through
+
+        virtual key auth, model access checks, and spend logging.'
+      operationId: nvidia_nim_proxy_route_nvidia_nim__endpoint__delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - NVIDIA NIM Pass-through
+      summary: Nvidia Nim Proxy Route
+      description: 'Relay a native NVIDIA NIM request through a LiteLLM model group.
+
+
+        `{PROXY_BASE_URL}/nvidia_nim/{model_group}/v1/infer` forwards the body unchanged to the deployment''s
+
+        `api_base`, so object detection and OCR NIMs whose payload carries no `model` field still go through
+
+        virtual key auth, model access checks, and spend logging.'
+      operationId: nvidia_nim_proxy_route_nvidia_nim__endpoint__put
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: endpoint
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Endpoint
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

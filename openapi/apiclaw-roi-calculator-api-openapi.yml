@@ -1,0 +1,875 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM roi calculator API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.105.1
+tags:
+- name: roi calculator
+paths:
+  /roi-calculator/settings:
+    get:
+      tags:
+      - roi calculator
+      summary: Get Roi Calculator Settings
+      operationId: get_roi_calculator_settings_roi_calculator_settings_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ROISettingsResponse'
+      security:
+      - APIKeyHeader: []
+    put:
+      tags:
+      - roi calculator
+      summary: Update Roi Calculator Settings
+      operationId: update_roi_calculator_settings_roi_calculator_settings_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ROISettingsUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ROISettingsResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /roi-calculator/repositories:
+    get:
+      tags:
+      - roi calculator
+      summary: Get Roi Calculator Repositories
+      operationId: get_roi_calculator_repositories_roi_calculator_repositories_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: query
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 200
+          default: ''
+          title: Query
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 1000
+          minimum: 1
+          default: 1
+          title: Page
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ROIRepositoriesResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /roi-calculator/sync:
+    get:
+      tags:
+      - roi calculator
+      summary: Get Roi Calculator Sync Status
+      operationId: get_roi_calculator_sync_status_roi_calculator_sync_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ROISyncStatus'
+      security:
+      - APIKeyHeader: []
+    post:
+      tags:
+      - roi calculator
+      summary: Start Roi Calculator Sync
+      operationId: start_roi_calculator_sync_roi_calculator_sync_post
+      responses:
+        '202':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ROISyncStatus'
+      security:
+      - APIKeyHeader: []
+    delete:
+      tags:
+      - roi calculator
+      summary: Cancel Roi Calculator Sync
+      operationId: cancel_roi_calculator_sync_roi_calculator_sync_delete
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ROISyncStatus'
+      security:
+      - APIKeyHeader: []
+  /roi-calculator/report:
+    get:
+      tags:
+      - roi calculator
+      summary: Get Roi Calculator Report
+      operationId: get_roi_calculator_report_roi_calculator_report_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: mode
+        in: query
+        required: false
+        schema:
+          enum:
+          - live
+          - demo
+          type: string
+          default: live
+          title: Mode
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ROIReportResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /roi-calculator/identity-map:
+    put:
+      tags:
+      - roi calculator
+      summary: Update Roi Calculator Identity Map
+      operationId: update_roi_calculator_identity_map_roi_calculator_identity_map_put
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ROIIdentityMapUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ROIIdentityMapResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /roi-calculator/connections/test:
+    post:
+      tags:
+      - roi calculator
+      summary: Test Roi Calculator Connections
+      operationId: test_roi_calculator_connections_roi_calculator_connections_test_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ROISettingsResponse'
+      security:
+      - APIKeyHeader: []
+  /roi-calculator/setup/reset:
+    post:
+      tags:
+      - roi calculator
+      summary: Reset Roi Calculator Setup
+      operationId: reset_roi_calculator_setup_roi_calculator_setup_reset_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ROISettingsResponse'
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    ROIMetricsResponse:
+      properties:
+        matched_spend:
+          type: number
+          title: Matched Spend
+        output_hours:
+          type: number
+          title: Output Hours
+        total_spend:
+          type: number
+          title: Total Spend
+        total_output_hours:
+          type: number
+          title: Total Output Hours
+        excluded_spend:
+          type: number
+          title: Excluded Spend
+        cost_per_hour:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Cost Per Hour
+        hours_per_dollar:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Hours Per Dollar
+        merged_prs:
+          type: integer
+          title: Merged Prs
+        estimated_prs:
+          type: integer
+          title: Estimated Prs
+        matched_prs:
+          type: integer
+          title: Matched Prs
+        cohort_people:
+          type: integer
+          title: Cohort People
+        people_with_prs:
+          type: integer
+          title: People With Prs
+        pending_prs:
+          type: integer
+          title: Pending Prs
+      type: object
+      required:
+      - matched_spend
+      - output_hours
+      - total_spend
+      - total_output_hours
+      - excluded_spend
+      - cost_per_hour
+      - hours_per_dollar
+      - merged_prs
+      - estimated_prs
+      - matched_prs
+      - cohort_people
+      - people_with_prs
+      - pending_prs
+      title: ROIMetricsResponse
+    ROIRepository:
+      properties:
+        name:
+          type: string
+          title: Name
+        visibility:
+          type: string
+          title: Visibility
+        archived:
+          type: boolean
+          title: Archived
+      type: object
+      required:
+      - name
+      - visibility
+      - archived
+      title: ROIRepository
+    ROIPullResponse:
+      properties:
+        repo:
+          type: string
+          title: Repo
+        number:
+          type: integer
+          title: Number
+        title:
+          type: string
+          title: Title
+        url:
+          type: string
+          title: Url
+        login:
+          type: string
+          title: Login
+        emails:
+          items:
+            type: string
+          type: array
+          title: Emails
+        profile_email:
+          type: string
+          title: Profile Email
+        merged_at:
+          type: string
+          title: Merged At
+        head_sha:
+          type: string
+          title: Head Sha
+        additions:
+          type: integer
+          title: Additions
+        deletions:
+          type: integer
+          title: Deletions
+        changed_files:
+          type: integer
+          title: Changed Files
+        commit_count:
+          type: integer
+          title: Commit Count
+        incomplete_metadata:
+          type: boolean
+          title: Incomplete Metadata
+        estimate:
+          $ref: '#/components/schemas/ROIEstimateResponse'
+        cache_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cache Key
+        email:
+          type: string
+          title: Email
+        match_method:
+          type: string
+          title: Match Method
+        matched:
+          type: boolean
+          title: Matched
+      type: object
+      required:
+      - repo
+      - number
+      - title
+      - url
+      - login
+      - emails
+      - profile_email
+      - merged_at
+      - head_sha
+      - additions
+      - deletions
+      - changed_files
+      - commit_count
+      - incomplete_metadata
+      - estimate
+      - email
+      - match_method
+      - matched
+      title: ROIPullResponse
+    ROISettingsResponse:
+      properties:
+        github_api_url:
+          type: string
+          title: Github Api Url
+        repos:
+          items:
+            type: string
+          type: array
+          title: Repos
+        estimator_model:
+          type: string
+          title: Estimator Model
+        estimator_prompt:
+          type: string
+          title: Estimator Prompt
+        backfill_days:
+          type: integer
+          title: Backfill Days
+        update_interval_minutes:
+          type: number
+          title: Update Interval Minutes
+        has_estimator_key:
+          type: boolean
+          title: Has Estimator Key
+        identity_map:
+          additionalProperties:
+            type: string
+          type: object
+          title: Identity Map
+        has_github_token:
+          type: boolean
+          title: Has Github Token
+        default_prompt:
+          type: string
+          title: Default Prompt
+        available_models:
+          items:
+            type: string
+          type: array
+          title: Available Models
+        ready:
+          type: boolean
+          title: Ready
+      type: object
+      required:
+      - github_api_url
+      - repos
+      - estimator_model
+      - estimator_prompt
+      - backfill_days
+      - update_interval_minutes
+      - has_estimator_key
+      - identity_map
+      - has_github_token
+      - default_prompt
+      - available_models
+      - ready
+      title: ROISettingsResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ROIIdentityMapResponse:
+      properties:
+        report:
+          anyOf:
+          - $ref: '#/components/schemas/ROISummaryResponse'
+          - type: 'null'
+        identity_map:
+          additionalProperties:
+            type: string
+          type: object
+          title: Identity Map
+      type: object
+      required:
+      - report
+      - identity_map
+      title: ROIIdentityMapResponse
+    ROIIdentityMapUpdate:
+      properties:
+        github_login:
+          type: string
+          title: Github Login
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+      type: object
+      required:
+      - github_login
+      - email
+      title: ROIIdentityMapUpdate
+    ROITrendResponse:
+      properties:
+        date:
+          type: string
+          title: Date
+        spend:
+          type: number
+          title: Spend
+        hours:
+          type: number
+          title: Hours
+        prs:
+          type: integer
+          title: Prs
+      type: object
+      required:
+      - date
+      - spend
+      - hours
+      - prs
+      title: ROITrendResponse
+    ROIPersonResponse:
+      properties:
+        id:
+          type: string
+          title: Id
+        email:
+          type: string
+          title: Email
+        logins:
+          items:
+            type: string
+          type: array
+          title: Logins
+        spend:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Spend
+        hours:
+          type: number
+          title: Hours
+        prs:
+          type: integer
+          title: Prs
+        estimated_prs:
+          type: integer
+          title: Estimated Prs
+        pending_prs:
+          type: integer
+          title: Pending Prs
+        match_methods:
+          items:
+            type: string
+          type: array
+          title: Match Methods
+        eligible:
+          type: boolean
+          title: Eligible
+        cost_per_hour:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Cost Per Hour
+      type: object
+      required:
+      - id
+      - email
+      - logins
+      - spend
+      - hours
+      - prs
+      - estimated_prs
+      - pending_prs
+      - match_methods
+      - eligible
+      - cost_per_hour
+      title: ROIPersonResponse
+    ROIReportResponse:
+      properties:
+        report:
+          anyOf:
+          - $ref: '#/components/schemas/ROISummaryResponse'
+          - type: 'null'
+      type: object
+      required:
+      - report
+      title: ROIReportResponse
+    ROISummaryResponse:
+      properties:
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        mode:
+          type: string
+          title: Mode
+        start:
+          type: string
+          title: Start
+        end:
+          type: string
+          title: End
+        synced_at:
+          type: string
+          title: Synced At
+        repos:
+          items:
+            type: string
+          type: array
+          title: Repos
+        estimator_model:
+          type: string
+          title: Estimator Model
+        estimator_prompt:
+          type: string
+          title: Estimator Prompt
+        warnings:
+          items:
+            type: string
+          type: array
+          title: Warnings
+        effort_basis:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Effort Basis
+        metrics:
+          $ref: '#/components/schemas/ROIMetricsResponse'
+        people:
+          items:
+            $ref: '#/components/schemas/ROIPersonResponse'
+          type: array
+          title: People
+        pulls:
+          items:
+            $ref: '#/components/schemas/ROIPullResponse'
+          type: array
+          title: Pulls
+        trend:
+          items:
+            $ref: '#/components/schemas/ROITrendResponse'
+          type: array
+          title: Trend
+      type: object
+      required:
+      - id
+      - mode
+      - start
+      - end
+      - synced_at
+      - repos
+      - estimator_model
+      - estimator_prompt
+      - warnings
+      - effort_basis
+      - metrics
+      - people
+      - pulls
+      - trend
+      title: ROISummaryResponse
+    ROISettingsUpdate:
+      properties:
+        github_api_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Github Api Url
+        github_token:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Github Token
+        estimator_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Estimator Key
+        repos:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Repos
+        estimator_model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Estimator Model
+        estimator_prompt:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Estimator Prompt
+        backfill_days:
+          anyOf:
+          - type: integer
+            maximum: 3650.0
+            minimum: 1.0
+          - type: 'null'
+          title: Backfill Days
+        update_interval_minutes:
+          anyOf:
+          - type: number
+            maximum: 43200.0
+            minimum: 0.0
+          - type: 'null'
+          title: Update Interval Minutes
+      additionalProperties: false
+      type: object
+      title: ROISettingsUpdate
+    ROIRepositoriesResponse:
+      properties:
+        repositories:
+          items:
+            $ref: '#/components/schemas/ROIRepository'
+          type: array
+          title: Repositories
+        page:
+          type: integer
+          title: Page
+        has_more:
+          type: boolean
+          title: Has More
+      type: object
+      required:
+      - repositories
+      - page
+      - has_more
+      title: ROIRepositoriesResponse
+    ROIEstimateResponse:
+      properties:
+        status:
+          type: string
+          enum:
+          - estimated
+          - needs_review
+          - error
+          title: Status
+        hours:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Hours
+        reasoning:
+          type: string
+          title: Reasoning
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+        evidence_source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Evidence Source
+        effort_basis:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Effort Basis
+        cached:
+          type: boolean
+          title: Cached
+          default: false
+      type: object
+      required:
+      - status
+      - hours
+      - reasoning
+      title: ROIEstimateResponse
+    ROISyncStatus:
+      properties:
+        running:
+          type: boolean
+          title: Running
+        phase:
+          type: string
+          enum:
+          - idle
+          - spend
+          - repositories
+          - estimates
+          - complete
+          - cancelled
+          - error
+          title: Phase
+        stage:
+          type: string
+          title: Stage
+        done:
+          type: integer
+          title: Done
+        total:
+          type: integer
+          title: Total
+        estimated:
+          type: integer
+          title: Estimated
+        reused:
+          type: integer
+          title: Reused
+        needs_attention:
+          type: integer
+          title: Needs Attention
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+        started_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Started At
+        finished_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Finished At
+        next_update:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Update
+        elapsed_seconds:
+          type: integer
+          title: Elapsed Seconds
+          default: 0
+        remaining_seconds:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Remaining Seconds
+      type: object
+      required:
+      - running
+      - phase
+      - stage
+      - done
+      - total
+      - estimated
+      - reused
+      - needs_attention
+      - error
+      title: ROISyncStatus
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

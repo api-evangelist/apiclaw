@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: budget management
 paths:
@@ -34,7 +34,7 @@ paths:
 
         `sort` takes a comma-separated list of `budget_id`, `max_budget`, `tpm_limit`,
 
-        `rpm_limit` or `created_at`, each optionally prefixed with `-` for descending,
+        `rpm_limit`, `tpd_limit` or `created_at`, each optionally prefixed with `-` for descending,
 
         and defaults to `-created_at`. `budget_id` is appended to every sort as the
 
@@ -88,6 +88,8 @@ paths:
 
         - rpm_limit: Optional[int] - The requests per minute limit for the budget.
 
+        - tpd_limit: Optional[int] - The tokens per day limit for the budget. Charged by batch submissions instead of tpm_limit/rpm_limit.
+
         - model_max_budget: Optional[dict] - Specify max budget for a given model. Example: {"openai/gpt-4o-mini": {"max_budget": 100.0, "budget_duration": "1d", "tpm_limit": 100000, "rpm_limit": 100000}}
 
         - budget_reset_at: Optional[datetime] - Datetime when the initial budget is reset. Default is now.'
@@ -135,6 +137,8 @@ paths:
         - tpm_limit: Optional[int] - The tokens per minute limit for the budget.
 
         - rpm_limit: Optional[int] - The requests per minute limit for the budget.
+
+        - tpd_limit: Optional[int] - The tokens per day limit for the budget. Charged by batch submissions instead of tpm_limit/rpm_limit.
 
         - model_max_budget: Optional[dict] - Specify max budget for a given model. Example: {"openai/gpt-4o-mini": {"max_budget": 100.0, "budget_duration": "1d", "tpm_limit": 100000, "rpm_limit": 100000}}
 
@@ -277,30 +281,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    BudgetConfig:
-      properties:
-        max_budget:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Max Budget
-        budget_duration:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Budget Duration
-        tpm_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Tpm Limit
-        rpm_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Rpm Limit
-      type: object
-      title: BudgetConfig
     BudgetRequest:
       properties:
         budgets:
@@ -312,6 +292,15 @@ components:
       required:
       - budgets
       title: BudgetRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -338,64 +327,6 @@ components:
       - msg
       - type
       title: ValidationError
-    BudgetListItem:
-      properties:
-        budget_id:
-          type: string
-          title: Budget Id
-        max_budget:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Max Budget
-        soft_budget:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Soft Budget
-        tpm_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Tpm Limit
-        rpm_limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Rpm Limit
-        budget_duration:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Budget Duration
-        budget_reset_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Budget Reset At
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        updated_at:
-          type: string
-          format: date-time
-          title: Updated At
-      type: object
-      required:
-      - budget_id
-      - created_at
-      - updated_at
-      title: BudgetListItem
-      description: 'One budget as the Budgets page reads it, and as it comes back off the table.
-
-
-        Validating the raw row through here is what makes `tpm_limit` / `rpm_limit`
-
-        numbers: they are `BigInt?` in the schema, which the query engine hands back as
-
-        decimal strings, and a quoted "60000" breaks arithmetic in the dashboard.'
     BudgetNewRequest:
       properties:
         budget_id:
@@ -434,6 +365,12 @@ components:
           - type: 'null'
           title: Rpm Limit
           description: Max requests per minute, allowed for this budget id.
+        tpd_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpd Limit
+          description: Max tokens per day, charged by batch submissions, allowed for this budget id.
         budget_duration:
           anyOf:
           - type: string
@@ -457,23 +394,30 @@ components:
           description: Datetime when the budget is reset
       type: object
       title: BudgetNewRequest
-    ListResponse_BudgetListItem_:
+    BudgetConfig:
       properties:
-        data:
-          items:
-            $ref: '#/components/schemas/BudgetListItem'
-          type: array
-          title: Data
-        meta:
-          $ref: '#/components/schemas/ListMeta'
-        links:
-          $ref: '#/components/schemas/ListLinks'
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
       type: object
-      required:
-      - data
-      - meta
-      - links
-      title: ListResponse[BudgetListItem]
+      title: BudgetConfig
     ListMeta:
       properties:
         total_count:
@@ -496,24 +440,69 @@ components:
       - total_pages
       title: ListMeta
       description: 'Page-mode counterpart to `PageMeta`: an entity list pays for the COUNT(*) so the table can show a page count.'
-    BudgetDeleteRequest:
+    BudgetListItem:
       properties:
-        id:
+        budget_id:
           type: string
-          title: Id
+          title: Budget Id
+        max_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Max Budget
+        soft_budget:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Soft Budget
+        tpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpm Limit
+        rpm_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Rpm Limit
+        tpd_limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Tpd Limit
+        budget_duration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Budget Duration
+        budget_reset_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Budget Reset At
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
       type: object
       required:
-      - id
-      title: BudgetDeleteRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+      - budget_id
+      - created_at
+      - updated_at
+      title: BudgetListItem
+      description: 'One budget as the Budgets page reads it, and as it comes back off the table.
+
+
+        Validating the raw row through here is what makes `tpm_limit` / `rpm_limit`
+
+        numbers: they are `BigInt?` in the schema, which the query engine hands back as
+
+        decimal strings, and a quoted "60000" breaks arithmetic in the dashboard.'
     ListLinks:
       properties:
         self:
@@ -542,9 +531,38 @@ components:
       - last
       title: ListLinks
       description: Page-mode counterpart to `PageLinks`. `first`/`last` are knowable here because the total count is.
+    ListResponse_BudgetListItem_:
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/BudgetListItem'
+          type: array
+          title: Data
+        meta:
+          $ref: '#/components/schemas/ListMeta'
+        links:
+          $ref: '#/components/schemas/ListLinks'
+      type: object
+      required:
+      - data
+      - meta
+      - links
+      title: ListResponse[BudgetListItem]
+    BudgetDeleteRequest:
+      properties:
+        id:
+          type: string
+          title: Id
+      type: object
+      required:
+      - id
+      title: BudgetDeleteRequest
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

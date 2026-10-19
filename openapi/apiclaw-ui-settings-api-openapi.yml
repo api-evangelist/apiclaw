@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: UI Settings
 paths:
@@ -110,24 +110,64 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
       security:
       - APIKeyHeader: []
+  /get/latest_release_info:
+    get:
+      tags:
+      - UI Settings
+      summary: Latest Release Info
+      description: 'Latest stable LiteLLM GitHub release with its PR count split into new features, bug fixes and other updates.
+
+        Returns null when GitHub can''t be reached so the dashboard upgrade banner simply doesn''t render.'
+      operationId: latest_release_info_get_latest_release_info_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/LatestReleaseInfo'
+                - type: 'null'
+                title: Response Latest Release Info Get Latest Release Info Get
+      security:
+      - APIKeyHeader: []
 components:
   schemas:
-    UISettingsResponse:
+    HTTPValidationError:
       properties:
-        values:
-          additionalProperties: true
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
           type: object
-          title: Values
-        field_schema:
-          additionalProperties: true
-          type: object
-          title: Field Schema
+          title: Context
       type: object
       required:
-      - values
-      - field_schema
-      title: UISettingsResponse
-      description: Response model for UI settings
+      - loc
+      - msg
+      - type
+      title: ValidationError
     UserBanner:
       properties:
         enabled:
@@ -157,32 +197,34 @@ components:
           default: ''
       type: object
       title: UserBanner
-    ValidationError:
+    UISettingsResponse:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
+        values:
+          additionalProperties: true
           type: object
-          title: Context
+          title: Values
+        field_schema:
+          additionalProperties: true
+          type: object
+          title: Field Schema
+        source:
+          additionalProperties:
+            type: string
+            enum:
+            - config
+            - db
+            - env
+            - default
+            - unset
+          type: object
+          title: Source
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - values
+      - field_schema
+      - source
+      title: UISettingsResponse
+      description: Response model for UI settings
     UserBannerUpdate:
       properties:
         enabled:
@@ -207,15 +249,31 @@ components:
           default: info
       type: object
       title: UserBannerUpdate
-    HTTPValidationError:
+    LatestReleaseInfo:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        version:
+          type: string
+          title: Version
+        new_features:
+          type: integer
+          title: New Features
+        bug_fixes:
+          type: integer
+          title: Bug Fixes
+        other_updates:
+          type: integer
+          title: Other Updates
+        release_url:
+          type: string
+          title: Release Url
       type: object
-      title: HTTPValidationError
+      required:
+      - version
+      - new_features
+      - bug_fixes
+      - other_updates
+      - release_url
+      title: LatestReleaseInfo
     UpdateUserBannerResponse:
       properties:
         message:
@@ -234,3 +292,6 @@ components:
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

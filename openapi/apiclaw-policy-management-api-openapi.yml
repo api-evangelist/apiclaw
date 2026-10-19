@@ -1,0 +1,823 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM policy management API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.105.1
+tags:
+- name: policy management
+paths:
+  /policy/validate:
+    post:
+      tags:
+      - policy management
+      summary: Validate Policy
+      description: 'Validate a policy configuration before applying it.
+
+
+        Checks:
+
+        - All referenced guardrails exist in the guardrail registry
+
+        - All non-wildcard team aliases exist in the database
+
+        - All non-wildcard key aliases exist in the database
+
+        - Inheritance chains are valid (no cycles, parents exist)
+
+        - Scope patterns are syntactically valid
+
+
+        Returns:
+
+        - valid: True if the policy configuration is valid (no blocking errors)
+
+        - errors: List of blocking validation errors
+
+        - warnings: List of non-blocking validation warnings
+
+
+        Example request:
+
+        ```json
+
+        {
+
+        "policies": {
+
+        "global-baseline": {
+
+        "guardrails": {
+
+        "add": ["pii_blocker", "phi_blocker"]
+
+        },
+
+        "scope": {
+
+        "teams": ["*"],
+
+        "keys": ["*"],
+
+        "models": ["*"]
+
+        }
+
+        },
+
+        "healthcare-compliance": {
+
+        "inherit": "global-baseline",
+
+        "guardrails": {
+
+        "add": ["hipaa_audit"]
+
+        },
+
+        "scope": {
+
+        "teams": ["healthcare-team"]
+
+        }
+
+        }
+
+        }
+
+        }
+
+        ```'
+      operationId: validate_policy_policy_validate_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyValidateRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyValidationResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /policy/list:
+    get:
+      tags:
+      - policy management
+      summary: List Policies
+      description: 'List all loaded policies with their resolved guardrails.
+
+
+        Returns information about each policy including:
+
+        - Inheritance configuration
+
+        - Scope (teams, keys, models)
+
+        - Guardrails to add/remove
+
+        - Resolved guardrails (after inheritance)
+
+        - Inheritance chain'
+      operationId: list_policies_policy_list_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyListResponse'
+      security:
+      - APIKeyHeader: []
+  /policy/info/{policy_name}:
+    get:
+      tags:
+      - policy management
+      summary: Get Policy Info
+      description: 'Get detailed information about a specific policy.
+
+
+        Returns:
+
+        - Policy configuration
+
+        - Resolved guardrails (after inheritance)
+
+        - Inheritance chain'
+      operationId: get_policy_info_policy_info__policy_name__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: policy_name
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Policy Name
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyInfoResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /policy/test:
+    post:
+      tags:
+      - policy management
+      summary: Test Policy Matching
+      description: 'Test which policies would match a given request context.
+
+
+        This is useful for debugging and understanding policy behavior.
+
+
+        Request body:
+
+        ```json
+
+        {
+
+        "team_alias": "healthcare-team",
+
+        "key_alias": "my-api-key",
+
+        "model": "gpt-4"
+
+        }
+
+        ```
+
+
+        Returns:
+
+        - matching_policies: List of policy names that match
+
+        - resolved_guardrails: Final list of guardrails that would be applied'
+      operationId: test_policy_matching_policy_test_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyMatchContext'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyTestResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /policy/templates:
+    get:
+      tags:
+      - policy management
+      summary: Get Policy Templates
+      description: 'Get policy templates for the UI (pre-configured guardrail combinations).
+
+
+        Fetches from GitHub with automatic fallback to local backup on failure.
+
+        Set LITELLM_LOCAL_POLICY_TEMPLATES=true to skip GitHub and use local backup only.'
+      operationId: get_policy_templates_policy_templates_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items: {}
+                type: array
+                title: Response Get Policy Templates Policy Templates Get
+      security:
+      - APIKeyHeader: []
+  /policy/templates/enrich:
+    post:
+      tags:
+      - policy management
+      summary: Enrich Policy Template
+      description: 'Enrich a policy template with LLM-discovered data (e.g. competitor names).
+
+
+        Calls an onboarded LLM to discover competitors for the given brand name,
+
+        then returns enriched guardrailDefinitions with the discovered data populated.'
+      operationId: enrich_policy_template_policy_templates_enrich_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnrichTemplateRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Enrich Policy Template Policy Templates Enrich Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /policy/templates/enrich/stream:
+    post:
+      tags:
+      - policy management
+      summary: Enrich Policy Template Stream
+      description: 'Stream competitor names as SSE events as the LLM generates them.
+
+
+        Events:
+
+        - data: {"type": "competitor", "name": "..."} — each competitor as discovered
+
+        - data: {"type": "done", "competitors": [...], "competitor_variations": {...}, "guardrailDefinitions": [...]}'
+      operationId: enrich_policy_template_stream_policy_templates_enrich_stream_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnrichTemplateRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /policy/templates/suggest:
+    post:
+      tags:
+      - policy management
+      summary: Suggest Policy Templates
+      description: 'Use AI to suggest policy templates based on attack examples and descriptions.
+
+
+        Calls an LLM with tool calling to match user requirements to available templates.'
+      operationId: suggest_policy_templates_policy_templates_suggest_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuggestTemplatesRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Suggest Policy Templates Policy Templates Suggest Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /policy/templates/test:
+    post:
+      tags:
+      - policy management
+      summary: Test Policy Template
+      description: 'Test a policy template''s guardrails against a text input without creating them.
+
+
+        Instantiates temporary guardrails from the template definitions, runs them
+
+        against the provided text, and returns per-guardrail results so users can
+
+        verify the template solves their problem before creating it.'
+      operationId: test_policy_template_policy_templates_test_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestPolicyTemplateRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestPolicyTemplateResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    SuggestTemplatesRequest:
+      properties:
+        attack_examples:
+          items:
+            type: string
+          type: array
+          title: Attack Examples
+        description:
+          type: string
+          title: Description
+          default: ''
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+      type: object
+      title: SuggestTemplatesRequest
+    PolicyValidationErrorType:
+      type: string
+      enum:
+      - invalid_guardrail
+      - invalid_team
+      - invalid_key
+      - invalid_model
+      - invalid_inheritance
+      - circular_inheritance
+      - invalid_scope
+      - invalid_syntax
+      title: PolicyValidationErrorType
+      description: Types of validation errors that can occur.
+    PolicyListResponse:
+      properties:
+        policies:
+          additionalProperties:
+            $ref: '#/components/schemas/PolicySummaryItem'
+          type: object
+          title: Policies
+        total_count:
+          type: integer
+          title: Total Count
+      type: object
+      required:
+      - policies
+      - total_count
+      title: PolicyListResponse
+      description: Response for /policy/list endpoint.
+    PolicyValidationResponse:
+      properties:
+        valid:
+          type: boolean
+          title: Valid
+          description: True if the policy configuration is valid.
+        errors:
+          items:
+            $ref: '#/components/schemas/PolicyValidationError'
+          type: array
+          title: Errors
+          description: List of blocking validation errors.
+        warnings:
+          items:
+            $ref: '#/components/schemas/PolicyValidationError'
+          type: array
+          title: Warnings
+          description: List of non-blocking validation warnings.
+      additionalProperties: false
+      type: object
+      required:
+      - valid
+      title: PolicyValidationResponse
+      description: 'Response from policy validation.
+
+
+        - `valid`: True if no blocking errors were found
+
+        - `errors`: List of blocking errors (prevent policy from being applied)
+
+        - `warnings`: List of non-blocking warnings (policy can still be applied)'
+    TestPolicyTemplateResponse:
+      properties:
+        overall_action:
+          type: string
+          title: Overall Action
+        results:
+          items:
+            $ref: '#/components/schemas/GuardrailTestResultEntry'
+          type: array
+          title: Results
+      type: object
+      required:
+      - overall_action
+      - results
+      title: TestPolicyTemplateResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    GuardrailTestResultEntry:
+      properties:
+        guardrail_name:
+          type: string
+          title: Guardrail Name
+        action:
+          type: string
+          title: Action
+        output_text:
+          type: string
+          title: Output Text
+        details:
+          type: string
+          title: Details
+      type: object
+      required:
+      - guardrail_name
+      - action
+      - output_text
+      - details
+      title: GuardrailTestResultEntry
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    PolicyValidateRequest:
+      properties:
+        policies:
+          additionalProperties: true
+          type: object
+          title: Policies
+          description: Policy configuration to validate. Map of policy names to policy definitions.
+      additionalProperties: false
+      type: object
+      required:
+      - policies
+      title: PolicyValidateRequest
+      description: Request body for the /policy/validate endpoint.
+    PolicyInfoResponse:
+      properties:
+        policy_name:
+          type: string
+          title: Policy Name
+        inherit:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Inherit
+        scope:
+          $ref: '#/components/schemas/PolicyScopeResponse'
+        guardrails:
+          $ref: '#/components/schemas/PolicyGuardrailsResponse'
+        resolved_guardrails:
+          items:
+            type: string
+          type: array
+          title: Resolved Guardrails
+        inheritance_chain:
+          items:
+            type: string
+          type: array
+          title: Inheritance Chain
+      type: object
+      required:
+      - policy_name
+      - scope
+      - guardrails
+      - resolved_guardrails
+      - inheritance_chain
+      title: PolicyInfoResponse
+      description: Response for /policy/info/{policy_name} endpoint.
+    TestPolicyTemplateRequest:
+      properties:
+        guardrail_definitions:
+          items:
+            additionalProperties: true
+            type: object
+          type: array
+          title: Guardrail Definitions
+          description: All guardrailDefinitions from the policy template
+        text:
+          type: string
+          title: Text
+          description: Test input text to run guardrails against
+      type: object
+      required:
+      - guardrail_definitions
+      - text
+      title: TestPolicyTemplateRequest
+    PolicyTestResponse:
+      properties:
+        context:
+          $ref: '#/components/schemas/PolicyMatchContext'
+        matching_policies:
+          items:
+            type: string
+          type: array
+          title: Matching Policies
+        resolved_guardrails:
+          items:
+            type: string
+          type: array
+          title: Resolved Guardrails
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      required:
+      - context
+      - matching_policies
+      - resolved_guardrails
+      title: PolicyTestResponse
+      description: Response for /policy/test endpoint.
+    PolicyGuardrailsResponse:
+      properties:
+        add:
+          items:
+            type: string
+          type: array
+          title: Add
+        remove:
+          items:
+            type: string
+          type: array
+          title: Remove
+      type: object
+      title: PolicyGuardrailsResponse
+      description: Guardrails configuration for a policy.
+    PolicySummaryItem:
+      properties:
+        inherit:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Inherit
+        scope:
+          $ref: '#/components/schemas/PolicyScopeResponse'
+        guardrails:
+          $ref: '#/components/schemas/PolicyGuardrailsResponse'
+        resolved_guardrails:
+          items:
+            type: string
+          type: array
+          title: Resolved Guardrails
+        inheritance_chain:
+          items:
+            type: string
+          type: array
+          title: Inheritance Chain
+      type: object
+      required:
+      - scope
+      - guardrails
+      - resolved_guardrails
+      - inheritance_chain
+      title: PolicySummaryItem
+      description: Summary of a single policy for list endpoint.
+    PolicyMatchContext:
+      properties:
+        team_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Team Alias
+          description: Team alias from the request.
+        key_alias:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Key Alias
+          description: API key alias from the request.
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+          description: Model name from the request.
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+          description: Tags from key/team metadata.
+      additionalProperties: false
+      type: object
+      title: PolicyMatchContext
+      description: 'Context used to match a request against policies.
+
+
+        Contains the team alias, key alias, and model from the incoming request.'
+    EnrichTemplateRequest:
+      properties:
+        template_id:
+          type: string
+          title: Template Id
+        parameters:
+          additionalProperties: true
+          type: object
+          title: Parameters
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+        competitors:
+          anyOf:
+          - items:
+              type: string
+            type: array
+            maxItems: 100
+          - type: 'null'
+          title: Competitors
+          description: Optional list of competitor names
+        instruction:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Instruction
+          description: Refinement instruction for modifying the competitor list (e.g. 'add 10 more from Asia')
+      type: object
+      required:
+      - template_id
+      - parameters
+      title: EnrichTemplateRequest
+    PolicyValidationError:
+      properties:
+        policy_name:
+          type: string
+          title: Policy Name
+          description: Name of the policy with the issue.
+        error_type:
+          $ref: '#/components/schemas/PolicyValidationErrorType'
+          description: Type of validation error.
+        message:
+          type: string
+          title: Message
+          description: Human-readable error message.
+        field:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Field
+          description: Specific field that caused the error (e.g., 'guardrails.add', 'scope.teams').
+        value:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Value
+          description: The invalid value that caused the error.
+      additionalProperties: false
+      type: object
+      required:
+      - policy_name
+      - error_type
+      - message
+      title: PolicyValidationError
+      description: Represents a validation error or warning for a policy.
+    PolicyScopeResponse:
+      properties:
+        teams:
+          items:
+            type: string
+          type: array
+          title: Teams
+        keys:
+          items:
+            type: string
+          type: array
+          title: Keys
+        models:
+          items:
+            type: string
+          type: array
+          title: Models
+        tags:
+          items:
+            type: string
+          type: array
+          title: Tags
+      type: object
+      title: PolicyScopeResponse
+      description: Scope configuration for a policy.
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

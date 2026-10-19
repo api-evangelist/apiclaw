@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Audio
 paths:
@@ -113,6 +113,16 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
+    Body_audio_transcriptions_v1_audio_transcriptions_post:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+      type: object
+      required:
+      - file
+      title: Body_audio_transcriptions_v1_audio_transcriptions_post
     Body_audio_transcriptions_audio_transcriptions_post:
       properties:
         file:
@@ -123,6 +133,15 @@ components:
       required:
       - file
       title: Body_audio_transcriptions_audio_transcriptions_post
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -149,28 +168,12 @@ components:
       - msg
       - type
       title: ValidationError
-    Body_audio_transcriptions_v1_audio_transcriptions_post:
-      properties:
-        file:
-          type: string
-          contentMediaType: application/octet-stream
-          title: File
-      type: object
-      required:
-      - file
-      title: Body_audio_transcriptions_v1_audio_transcriptions_post
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

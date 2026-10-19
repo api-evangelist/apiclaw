@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Router Settings
 paths:
@@ -76,25 +76,6 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    RouterFieldsResponse:
-      properties:
-        fields:
-          items:
-            $ref: '#/components/schemas/RouterSettingsField'
-          type: array
-          title: Fields
-          description: List of all configurable router settings with metadata (without field values)
-        routing_strategy_descriptions:
-          additionalProperties:
-            type: string
-          type: object
-          title: Routing Strategy Descriptions
-          description: Descriptions for each routing strategy option
-      type: object
-      required:
-      - fields
-      - routing_strategy_descriptions
-      title: RouterFieldsResponse
     RouterSettingsField:
       properties:
         field_name:
@@ -152,15 +133,64 @@ components:
           type: object
           title: Routing Strategy Descriptions
           description: Descriptions for each routing strategy option
+        routing_group_strategies:
+          items:
+            type: string
+          type: array
+          title: Routing Group Strategies
+          description: Strategies supported when constructing a routing group
+        source:
+          additionalProperties:
+            type: string
+            enum:
+            - config
+            - db
+            - env
+            - default
+            - unset
+          type: object
+          title: Source
+          description: Source of each current router setting
       type: object
       required:
       - fields
       - current_values
       - routing_strategy_descriptions
+      - routing_group_strategies
+      - source
       title: RouterSettingsResponse
+    RouterFieldsResponse:
+      properties:
+        fields:
+          items:
+            $ref: '#/components/schemas/RouterSettingsField'
+          type: array
+          title: Fields
+          description: List of all configurable router settings with metadata (without field values)
+        routing_strategy_descriptions:
+          additionalProperties:
+            type: string
+          type: object
+          title: Routing Strategy Descriptions
+          description: Descriptions for each routing strategy option
+        routing_group_strategies:
+          items:
+            type: string
+          type: array
+          title: Routing Group Strategies
+          description: Strategies supported when constructing a routing group
+      type: object
+      required:
+      - fields
+      - routing_strategy_descriptions
+      - routing_group_strategies
+      title: RouterFieldsResponse
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

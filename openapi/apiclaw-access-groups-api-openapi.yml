@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: access_groups
 paths:
@@ -273,55 +273,6 @@ paths:
       - access_groups
 components:
   schemas:
-    AccessGroupUpdateRequest:
-      properties:
-        access_agent_ids:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Access Agent Ids
-        access_group_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Access Group Name
-        access_mcp_server_ids:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Access Mcp Server Ids
-        access_model_names:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Access Model Names
-        assigned_key_ids:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Assigned Key Ids
-        assigned_team_ids:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: Assigned Team Ids
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-      title: AccessGroupUpdateRequest
-      type: object
     AccessGroupCreateRequest:
       properties:
         access_agent_ids:
@@ -371,6 +322,15 @@ components:
       - access_group_name
       title: AccessGroupCreateRequest
       type: object
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -505,18 +465,61 @@ components:
       - name
       title: AccessGroupResource
       type: object
-    HTTPValidationError:
+    AccessGroupUpdateRequest:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        access_agent_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Access Agent Ids
+        access_group_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Group Name
+        access_mcp_server_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Access Mcp Server Ids
+        access_model_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Access Model Names
+        assigned_key_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Assigned Key Ids
+        assigned_team_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Assigned Team Ids
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+      title: AccessGroupUpdateRequest
       type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

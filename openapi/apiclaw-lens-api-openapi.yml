@@ -1,0 +1,1805 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM Lens API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.105.1
+tags:
+- name: Lens
+paths:
+  /lens:
+    get:
+      tags:
+      - Lens
+      summary: List Lenses
+      operationId: list_lenses_lens_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LensList'
+      security:
+      - APIKeyHeader: []
+    post:
+      tags:
+      - Lens
+      summary: Create Lens
+      operationId: create_lens_lens_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LensSettings'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lens'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /lens/activity/available:
+    get:
+      tags:
+      - Lens
+      summary: Activity Available
+      operationId: activity_available_lens_activity_available_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityAvailability'
+      security:
+      - APIKeyHeader: []
+  /lens/agents:
+    get:
+      tags:
+      - Lens
+      summary: List Agents
+      operationId: list_agents_lens_agents_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  type: string
+                type: array
+                title: Response List Agents Lens Agents Get
+      security:
+      - APIKeyHeader: []
+  /lens/{lens_id}:
+    put:
+      tags:
+      - Lens
+      summary: Update Lens
+      operationId: update_lens_lens__lens_id__put
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: lens_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lens Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LensSettings'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lens'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Lens
+      summary: Read Lens
+      operationId: read_lens_lens__lens_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: lens_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lens Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lens'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /lens/{lens_id}/runs:
+    post:
+      tags:
+      - Lens
+      summary: Run Lens
+      operationId: run_lens_lens__lens_id__runs_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: lens_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lens Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lens'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Lens
+      summary: List Runs
+      operationId: list_runs_lens__lens_id__runs_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: lens_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lens Id
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Job'
+                title: Response List Runs Lens  Lens Id  Runs Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /lens/{lens_id}/runs/{job_id}:
+    get:
+      tags:
+      - Lens
+      summary: Read Run
+      operationId: read_run_lens__lens_id__runs__job_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: lens_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lens Id
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Job Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Job'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /lens/{lens_id}/cancel:
+    post:
+      tags:
+      - Lens
+      summary: Cancel Lens
+      operationId: cancel_lens_lens__lens_id__cancel_post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: lens_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lens Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lens'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /lens/{lens_id}/findings/{finding_id}:
+    patch:
+      tags:
+      - Lens
+      summary: Update Finding
+      operationId: update_finding_lens__lens_id__findings__finding_id__patch
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: lens_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lens Id
+      - name: finding_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Finding Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FindingUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lens'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /lens/preview/sample:
+    post:
+      tags:
+      - Lens
+      summary: Preview Sample
+      operationId: preview_sample_lens_preview_sample_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Preview'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sample'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /lens/workers/register:
+    post:
+      tags:
+      - Lens
+      summary: Register Worker
+      operationId: register_worker_lens_workers_register_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkerName'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkerCreated'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
+  /lens/workers/{worker_id}/billing-key:
+    put:
+      tags:
+      - Lens
+      summary: Set Worker Billing
+      operationId: set_worker_billing_lens_workers__worker_id__billing_key_put
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: worker_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Worker Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkerBilling'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Worker'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /lens/workers/{worker_id}:
+    delete:
+      tags:
+      - Lens
+      summary: Revoke Worker
+      operationId: revoke_worker_lens_workers__worker_id__delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: worker_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Worker Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: boolean
+                title: Response Revoke Worker Lens Workers  Worker Id  Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /lens/worker/claim:
+    post:
+      tags:
+      - Lens
+      summary: Claim
+      operationId: claim_lens_worker_claim_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: protocol_version
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          title: Protocol Version
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                anyOf:
+                - $ref: '#/components/schemas/Claim'
+                - type: 'null'
+                title: Response Claim Lens Worker Claim Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /lens/worker/{lens_id}/{job_id}/progress:
+    post:
+      tags:
+      - Lens
+      summary: Progress
+      operationId: progress_lens_worker__lens_id___job_id__progress_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: lens_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lens Id
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Job Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Progress'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: boolean
+                title: Response Progress Lens Worker  Lens Id   Job Id  Progress Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /lens/worker/{lens_id}/{job_id}/sample:
+    get:
+      tags:
+      - Lens
+      summary: Sample
+      operationId: sample_lens_worker__lens_id___job_id__sample_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: lens_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lens Id
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Job Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Sample'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /lens/worker/{lens_id}/{job_id}/content:
+    get:
+      tags:
+      - Lens
+      summary: Content
+      operationId: content_lens_worker__lens_id___job_id__content_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: lens_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lens Id
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Job Id
+      - name: execution_id
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Execution Id
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Cursor
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionContent'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /lens/worker/{lens_id}/{job_id}/model:
+    post:
+      tags:
+      - Lens
+      summary: Model
+      operationId: model_lens_worker__lens_id___job_id__model_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: lens_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lens Id
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Job Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelResult'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /lens/worker/{lens_id}/{job_id}/result:
+    post:
+      tags:
+      - Lens
+      summary: Result
+      operationId: result_lens_worker__lens_id___job_id__result_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: lens_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lens Id
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Job Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Result-Input'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lens'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /lens/worker/{lens_id}/{job_id}/heartbeat:
+    post:
+      tags:
+      - Lens
+      summary: Heartbeat
+      operationId: heartbeat_lens_worker__lens_id___job_id__heartbeat_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: lens_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lens Id
+      - name: job_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Job Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: boolean
+                title: Response Heartbeat Lens Worker  Lens Id   Job Id  Heartbeat Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /lens/{lens_id}/executions/{execution_id}:
+    get:
+      tags:
+      - Lens
+      summary: Evidence Content
+      operationId: evidence_content_lens__lens_id__executions__execution_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: lens_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Lens Id
+      - name: execution_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Execution Id
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+          default: ''
+          title: Cursor
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionContent'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    Result-Input:
+      properties:
+        assessments:
+          items:
+            $ref: '#/components/schemas/RunAssessment'
+          type: array
+          title: Assessments
+          default: []
+        findings:
+          items:
+            $ref: '#/components/schemas/FindingDraft'
+          type: array
+          title: Findings
+          default: []
+        coverage:
+          $ref: '#/components/schemas/Coverage'
+        error:
+          type: string
+          maxLength: 1000
+          title: Error
+          default: ''
+      additionalProperties: false
+      type: object
+      required:
+      - coverage
+      title: Result
+    LensSettings:
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Name
+        context:
+          type: string
+          maxLength: 6000
+          title: Context
+          default: ''
+        source:
+          type: string
+          enum:
+          - traces
+          - requests
+          - both
+          title: Source
+          default: traces
+        lookback_hours:
+          type: integer
+          maximum: 8760.0
+          minimum: 1.0
+          title: Lookback Hours
+          default: 24
+        service:
+          type: string
+          maxLength: 200
+          title: Service
+          default: ''
+        agent_name:
+          type: string
+          maxLength: 200
+          title: Agent Name
+          default: ''
+        filters:
+          items:
+            $ref: '#/components/schemas/MetadataFilter'
+          type: array
+          maxItems: 8
+          title: Filters
+          default: []
+        checks:
+          items:
+            $ref: '#/components/schemas/Check'
+          type: array
+          title: Checks
+          default: []
+        model:
+          type: string
+          maxLength: 200
+          minLength: 1
+          title: Model
+        enabled:
+          type: boolean
+          title: Enabled
+          default: true
+        interval_minutes:
+          type: integer
+          maximum: 10080.0
+          minimum: 1.0
+          title: Interval Minutes
+          default: 15
+        sample_size:
+          anyOf:
+          - type: integer
+            minimum: 1.0
+          - type: 'null'
+          title: Sample Size
+        sample_percent:
+          type: number
+          maximum: 100.0
+          exclusiveMinimum: 0.0
+          title: Sample Percent
+          default: 100
+        concurrency:
+          type: integer
+          minimum: 1.0
+          title: Concurrency
+          default: 8
+        team_id:
+          type: string
+          title: Team Id
+          default: ''
+        execution_ids:
+          items:
+            type: string
+          type: array
+          title: Execution Ids
+          default: []
+        monthly_budget:
+          type: number
+          maximum: 100000.0
+          exclusiveMinimum: 0.0
+          title: Monthly Budget
+          default: 100
+      additionalProperties: false
+      type: object
+      required:
+      - name
+      - model
+      title: LensSettings
+    Check:
+      properties:
+        id:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: Id
+        instruction:
+          type: string
+          maxLength: 3000
+          minLength: 3
+          title: Instruction
+        enabled:
+          type: boolean
+          title: Enabled
+          default: true
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - instruction
+      title: Check
+    TracePart:
+      properties:
+        execution_id:
+          type: string
+          title: Execution Id
+        span_id:
+          type: string
+          title: Span Id
+        parent_span_id:
+          type: string
+          title: Parent Span Id
+          default: ''
+        name:
+          type: string
+          title: Name
+        kind:
+          type: string
+          title: Kind
+        content:
+          type: string
+          title: Content
+        truncated:
+          type: boolean
+          title: Truncated
+          default: false
+      additionalProperties: false
+      type: object
+      required:
+      - execution_id
+      - span_id
+      - name
+      - kind
+      - content
+      title: TracePart
+    Execution:
+      properties:
+        id:
+          type: string
+          title: Id
+        source:
+          type: string
+          enum:
+          - traces
+          - requests
+          title: Source
+        trace_id:
+          type: string
+          title: Trace Id
+        trace_ref:
+          type: string
+          title: Trace Ref
+          default: ''
+        team_id:
+          type: string
+          title: Team Id
+        name:
+          type: string
+          title: Name
+        start_time:
+          type: string
+          title: Start Time
+        span_count:
+          type: integer
+          title: Span Count
+        root_seen:
+          type: boolean
+          title: Root Seen
+          default: false
+        service:
+          type: string
+          title: Service
+          default: ''
+        metadata:
+          items:
+            $ref: '#/components/schemas/MetadataFilter'
+          type: array
+          title: Metadata
+          default: []
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - source
+      - trace_id
+      - team_id
+      - name
+      - start_time
+      - span_count
+      title: Execution
+    MetadataFilter:
+      properties:
+        key:
+          type: string
+          maxLength: 200
+          minLength: 1
+          title: Key
+        value:
+          type: string
+          maxLength: 500
+          minLength: 1
+          title: Value
+      additionalProperties: false
+      type: object
+      required:
+      - key
+      - value
+      title: MetadataFilter
+    RunRequest:
+      properties:
+        settings:
+          anyOf:
+          - $ref: '#/components/schemas/LensSettings'
+          - type: 'null'
+        lookback_hours:
+          anyOf:
+          - type: integer
+            maximum: 8760.0
+            minimum: 1.0
+          - type: 'null'
+          title: Lookback Hours
+      additionalProperties: false
+      type: object
+      title: RunRequest
+    FindingDraft:
+      properties:
+        title:
+          type: string
+          maxLength: 160
+          minLength: 3
+          title: Title
+        description:
+          type: string
+          maxLength: 4000
+          minLength: 10
+          title: Description
+        check_id:
+          type: string
+          title: Check Id
+        kind:
+          type: string
+          enum:
+          - issue
+          - pattern
+          title: Kind
+          default: issue
+        priority:
+          type: string
+          enum:
+          - high
+          - medium
+          - low
+          title: Priority
+          default: medium
+        suggestion:
+          type: string
+          maxLength: 2000
+          title: Suggestion
+          default: ''
+        limitation:
+          type: string
+          maxLength: 600
+          title: Limitation
+          default: ''
+        evidence:
+          items:
+            $ref: '#/components/schemas/Evidence'
+          type: array
+          maxItems: 20
+          minItems: 1
+          title: Evidence
+        existing_finding_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Existing Finding Id
+      additionalProperties: false
+      type: object
+      required:
+      - title
+      - description
+      - check_id
+      - evidence
+      title: FindingDraft
+    ActivityAvailability:
+      properties:
+        traces:
+          type: boolean
+          title: Traces
+          default: false
+        requests:
+          type: boolean
+          title: Requests
+          default: false
+      type: object
+      title: ActivityAvailability
+    Lens:
+      properties:
+        id:
+          type: string
+          title: Id
+        scope:
+          $ref: '#/components/schemas/Scope'
+        settings:
+          $ref: '#/components/schemas/LensSettings'
+        revision:
+          type: integer
+          title: Revision
+          default: 1
+        version:
+          type: integer
+          title: Version
+          default: 0
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        next_run_at:
+          type: string
+          format: date-time
+          title: Next Run At
+        last_scan_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Scan At
+        jobs:
+          items:
+            $ref: '#/components/schemas/Job'
+          type: array
+          title: Jobs
+          default: []
+        findings:
+          items:
+            $ref: '#/components/schemas/Finding'
+          type: array
+          title: Findings
+          default: []
+        budget_month:
+          type: string
+          title: Budget Month
+        spent:
+          type: number
+          title: Spent
+          default: 0
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - scope
+      - settings
+      - created_at
+      - next_run_at
+      - budget_month
+      title: Lens
+    Coverage:
+      properties:
+        eligible:
+          type: integer
+          title: Eligible
+          default: 0
+        selected:
+          type: integer
+          title: Selected
+          default: 0
+        screened:
+          type: integer
+          title: Screened
+          default: 0
+        investigated:
+          type: integer
+          title: Investigated
+          default: 0
+        inconclusive:
+          type: integer
+          title: Inconclusive
+          default: 0
+        grouping_batches:
+          type: integer
+          title: Grouping Batches
+          default: 0
+        grouped_batches:
+          type: integer
+          title: Grouped Batches
+          default: 0
+        candidates:
+          type: integer
+          title: Candidates
+          default: 0
+        partial:
+          type: integer
+          title: Partial
+          default: 0
+        unassessable:
+          type: integer
+          title: Unassessable
+          default: 0
+      additionalProperties: false
+      type: object
+      title: Coverage
+    Finding:
+      properties:
+        title:
+          type: string
+          maxLength: 160
+          minLength: 3
+          title: Title
+        description:
+          type: string
+          maxLength: 4000
+          minLength: 10
+          title: Description
+        check_id:
+          type: string
+          title: Check Id
+        kind:
+          type: string
+          enum:
+          - issue
+          - pattern
+          title: Kind
+          default: issue
+        priority:
+          type: string
+          enum:
+          - high
+          - medium
+          - low
+          title: Priority
+          default: medium
+        suggestion:
+          type: string
+          maxLength: 2000
+          title: Suggestion
+          default: ''
+        limitation:
+          type: string
+          maxLength: 600
+          title: Limitation
+          default: ''
+        evidence:
+          items:
+            $ref: '#/components/schemas/Evidence'
+          type: array
+          maxItems: 20
+          minItems: 1
+          title: Evidence
+        existing_finding_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Existing Finding Id
+        id:
+          type: string
+          title: Id
+        status:
+          type: string
+          enum:
+          - open
+          - resolved
+          - dismissed
+          title: Status
+          default: open
+        reason:
+          type: string
+          title: Reason
+          default: ''
+        first_seen:
+          type: string
+          format: date-time
+          title: First Seen
+        last_seen:
+          type: string
+          format: date-time
+          title: Last Seen
+        occurrences:
+          items:
+            type: string
+          type: array
+          title: Occurrences
+          default: []
+        revision:
+          type: integer
+          title: Revision
+      additionalProperties: false
+      type: object
+      required:
+      - title
+      - description
+      - check_id
+      - evidence
+      - id
+      - first_seen
+      - last_seen
+      - revision
+      title: Finding
+    LensList:
+      properties:
+        lenses:
+          items:
+            $ref: '#/components/schemas/Lens'
+          type: array
+          title: Lenses
+        workers:
+          items:
+            $ref: '#/components/schemas/Worker'
+          type: array
+          title: Workers
+        tracing_enabled:
+          type: boolean
+          title: Tracing Enabled
+      additionalProperties: false
+      type: object
+      required:
+      - lenses
+      - workers
+      - tracing_enabled
+      title: LensList
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    WorkerName:
+      properties:
+        analysis_key_id:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+          title: Analysis Key Id
+        name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Name
+          default: Lens worker
+      type: object
+      required:
+      - analysis_key_id
+      title: WorkerName
+    WorkerCreated:
+      properties:
+        worker:
+          $ref: '#/components/schemas/Worker'
+        token:
+          type: string
+          title: Token
+      additionalProperties: false
+      type: object
+      required:
+      - worker
+      - token
+      title: WorkerCreated
+    Worker:
+      properties:
+        analysis_key_id:
+          anyOf:
+          - type: string
+            pattern: ^[a-f0-9]{64}$
+          - type: 'null'
+          title: Analysis Key Id
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        scope:
+          $ref: '#/components/schemas/Scope'
+        last_seen:
+          type: string
+          format: date-time
+          title: Last Seen
+        revoked:
+          type: boolean
+          title: Revoked
+          default: false
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - name
+      - scope
+      - last_seen
+      title: Worker
+    RunAssessment:
+      properties:
+        execution_id:
+          type: string
+          title: Execution Id
+        issue_checks:
+          items:
+            type: string
+          type: array
+          title: Issue Checks
+          default: []
+        pattern_checks:
+          items:
+            type: string
+          type: array
+          title: Pattern Checks
+          default: []
+        cannot_assess:
+          type: boolean
+          title: Cannot Assess
+          default: false
+      additionalProperties: false
+      type: object
+      required:
+      - execution_id
+      title: RunAssessment
+    Claim:
+      properties:
+        lens_id:
+          type: string
+          title: Lens Id
+        job:
+          $ref: '#/components/schemas/Job'
+        findings:
+          items:
+            $ref: '#/components/schemas/Finding'
+          type: array
+          title: Findings
+      additionalProperties: false
+      type: object
+      required:
+      - lens_id
+      - job
+      - findings
+      title: Claim
+    FindingUpdate:
+      properties:
+        status:
+          type: string
+          enum:
+          - open
+          - resolved
+          - dismissed
+          title: Status
+        reason:
+          type: string
+          maxLength: 2000
+          title: Reason
+          default: ''
+      additionalProperties: false
+      type: object
+      required:
+      - status
+      title: FindingUpdate
+    ExecutionContent:
+      properties:
+        execution:
+          $ref: '#/components/schemas/Execution'
+        parts:
+          items:
+            $ref: '#/components/schemas/TracePart'
+          type: array
+          title: Parts
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+        partial:
+          type: boolean
+          title: Partial
+          default: false
+      additionalProperties: false
+      type: object
+      required:
+      - execution
+      - parts
+      title: ExecutionContent
+    Job:
+      properties:
+        id:
+          type: string
+          title: Id
+        status:
+          type: string
+          enum:
+          - queued
+          - running
+          - completed
+          - failed
+          - cancelled
+          title: Status
+          default: queued
+        stage:
+          type: string
+          title: Stage
+          default: Queued
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        start:
+          type: string
+          format: date-time
+          title: Start
+        end:
+          type: string
+          format: date-time
+          title: End
+        settings:
+          $ref: '#/components/schemas/LensSettings'
+        revision:
+          type: integer
+          title: Revision
+        worker_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Worker Id
+        lease_until:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Lease Until
+        attempts:
+          type: integer
+          title: Attempts
+          default: 0
+        finished_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Finished At
+        coverage:
+          $ref: '#/components/schemas/Coverage'
+          default:
+            eligible: 0
+            selected: 0
+            screened: 0
+            investigated: 0
+            inconclusive: 0
+            grouping_batches: 0
+            grouped_batches: 0
+            candidates: 0
+            partial: 0
+            unassessable: 0
+        error:
+          type: string
+          title: Error
+          default: ''
+        sample:
+          anyOf:
+          - $ref: '#/components/schemas/Sample'
+          - type: 'null'
+        cost:
+          type: number
+          title: Cost
+          default: 0
+        findings:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Finding'
+            type: array
+          - type: 'null'
+          title: Findings
+        assessments:
+          items:
+            $ref: '#/components/schemas/RunAssessment'
+          type: array
+          title: Assessments
+          default: []
+      additionalProperties: false
+      type: object
+      required:
+      - id
+      - created_at
+      - start
+      - end
+      - settings
+      - revision
+      title: Job
+    Preview:
+      properties:
+        as_of:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: As Of
+        offset:
+          type: integer
+          minimum: 0.0
+          title: Offset
+          default: 0
+        settings:
+          $ref: '#/components/schemas/LensSettings'
+        lookback_hours:
+          type: integer
+          maximum: 8760.0
+          minimum: 1.0
+          title: Lookback Hours
+          default: 24
+      type: object
+      required:
+      - settings
+      title: Preview
+    ModelResult:
+      properties:
+        content:
+          type: string
+          title: Content
+        cost:
+          type: number
+          title: Cost
+      additionalProperties: false
+      type: object
+      required:
+      - content
+      - cost
+      title: ModelResult
+    Sample:
+      properties:
+        executions:
+          items:
+            $ref: '#/components/schemas/Execution'
+          type: array
+          title: Executions
+        eligible:
+          type: integer
+          title: Eligible
+        selected:
+          type: integer
+          title: Selected
+          default: 0
+        next_offset:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Next Offset
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+      additionalProperties: false
+      type: object
+      required:
+      - executions
+      - eligible
+      title: Sample
+    WorkerBilling:
+      properties:
+        analysis_key_id:
+          type: string
+          pattern: ^[a-f0-9]{64}$
+          title: Analysis Key Id
+      type: object
+      required:
+      - analysis_key_id
+      title: WorkerBilling
+    Progress:
+      properties:
+        stage:
+          type: string
+          maxLength: 100
+          title: Stage
+        coverage:
+          $ref: '#/components/schemas/Coverage'
+          default:
+            eligible: 0
+            selected: 0
+            screened: 0
+            investigated: 0
+            inconclusive: 0
+            grouping_batches: 0
+            grouped_batches: 0
+            candidates: 0
+            partial: 0
+            unassessable: 0
+      additionalProperties: false
+      type: object
+      required:
+      - stage
+      title: Progress
+    ModelRequest:
+      properties:
+        prompt:
+          type: string
+          maxLength: 100000
+          minLength: 1
+          title: Prompt
+        purpose:
+          type: string
+          enum:
+          - extract
+          - cluster
+          - investigate
+          title: Purpose
+      additionalProperties: false
+      type: object
+      required:
+      - prompt
+      - purpose
+      title: ModelRequest
+    Evidence:
+      properties:
+        execution_id:
+          type: string
+          title: Execution Id
+        span_id:
+          type: string
+          title: Span Id
+        quote:
+          type: string
+          maxLength: 1000
+          minLength: 1
+          title: Quote
+        role:
+          type: string
+          enum:
+          - support
+          - counterexample
+          title: Role
+          default: support
+      additionalProperties: false
+      type: object
+      required:
+      - execution_id
+      - span_id
+      - quote
+      title: Evidence
+    Scope:
+      properties:
+        team_id:
+          type: string
+          title: Team Id
+          default: ''
+        api_key_hash:
+          type: string
+          title: Api Key Hash
+          default: ''
+        all_teams:
+          type: boolean
+          title: All Teams
+          default: false
+      additionalProperties: false
+      type: object
+      title: Scope
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

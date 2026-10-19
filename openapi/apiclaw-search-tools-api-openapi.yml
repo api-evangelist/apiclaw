@@ -11,12 +11,101 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
-- name: search_tools
+- name: Search Tools
 paths:
+  /search_tools/list:
+    get:
+      tags:
+      - Search Tools
+      summary: List Search Tools
+      description: 'List all search tools that are available in the database and config file.
+
+
+        Example Request:
+
+        ```bash
+
+        curl -X GET "http://localhost:4000/search_tools/list" -H "Authorization: Bearer "
+
+        ```
+
+
+        Example Response:
+
+        ```json
+
+        {
+
+        "search_tools": [
+
+        {
+
+        "search_tool_id": "123e4567-e89b-12d3-a456-426614174000",
+
+        "search_tool_name": "litellm-search",
+
+        "litellm_params": {
+
+        "search_provider": "perplexity",
+
+        "api_key": "sk-***",
+
+        "api_base": "https://api.perplexity.ai"
+
+        },
+
+        "search_tool_info": {
+
+        "description": "Perplexity search tool"
+
+        },
+
+        "created_at": "2023-11-09T12:34:56.789Z",
+
+        "updated_at": "2023-11-09T12:34:56.789Z",
+
+        "is_from_config": false
+
+        },
+
+        {
+
+        "search_tool_name": "config-search-tool",
+
+        "litellm_params": {
+
+        "search_provider": "tavily",
+
+        "api_key": "tvly-***"
+
+        },
+
+        "is_from_config": true
+
+        }
+
+        ]
+
+        }
+
+        ```'
+      operationId: list_search_tools_search_tools_list_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSearchToolsResponse'
+      security:
+      - APIKeyHeader: []
   /search_tools:
     post:
+      tags:
+      - Search Tools
+      summary: Create Search Tool
       description: 'Create a new search tool.
 
 
@@ -97,31 +186,59 @@ paths:
         required: true
       responses:
         '200':
+          description: Successful Response
           content:
             application/json:
               schema: {}
-          description: Successful Response
         '422':
+          description: Validation Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
       security:
       - APIKeyHeader: []
-      summary: Create Search Tool
+  /search_tools/{search_tool_id}:
+    put:
       tags:
-      - search_tools
-  /search_tools/list:
-    get:
-      description: 'List all search tools that are available in the database and config file.
+      - Search Tools
+      summary: Update Search Tool
+      description: 'Update an existing search tool.
 
 
         Example Request:
 
         ```bash
 
-        curl -X GET "http://localhost:4000/search_tools/list" -H "Authorization: Bearer "
+        curl -X PUT "http://localhost:4000/search_tools/123e4567-e89b-12d3-a456-426614174000" \
+
+        -H "Authorization: Bearer " \
+
+        -H "Content-Type: application/json" \
+
+        -d ''{
+
+        "search_tool": {
+
+        "search_tool_name": "updated-search",
+
+        "litellm_params": {
+
+        "search_provider": "perplexity",
+
+        "api_key": "sk-new-key"
+
+        },
+
+        "search_tool_info": {
+
+        "description": "Updated search tool"
+
+        }
+
+        }
+
+        }''
 
         ```
 
@@ -132,7 +249,133 @@ paths:
 
         {
 
-        "search_tools": [
+        "search_tool_id": "123e4567-e89b-12d3-a456-426614174000",
+
+        "search_tool_name": "updated-search",
+
+        "litellm_params": {
+
+        "search_provider": "perplexity",
+
+        "api_key": "sk-new-key"
+
+        },
+
+        "search_tool_info": {
+
+        "description": "Updated search tool"
+
+        },
+
+        "created_at": "2023-11-09T12:34:56.789Z",
+
+        "updated_at": "2023-11-09T13:45:12.345Z"
+
+        }
+
+        ```'
+      operationId: update_search_tool_search_tools__search_tool_id__put
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: search_tool_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Search Tool Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSearchToolRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - Search Tools
+      summary: Delete Search Tool
+      description: 'Delete a search tool.
+
+
+        Example Request:
+
+        ```bash
+
+        curl -X DELETE "http://localhost:4000/search_tools/123e4567-e89b-12d3-a456-426614174000" \
+
+        -H "Authorization: Bearer "
+
+        ```
+
+
+        Example Response:
+
+        ```json
+
+        {
+
+        "message": "Search tool 123e4567-e89b-12d3-a456-426614174000 deleted successfully",
+
+        "search_tool_name": "litellm-search"
+
+        }
+
+        ```'
+      operationId: delete_search_tool_search_tools__search_tool_id__delete
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: search_tool_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Search Tool Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - Search Tools
+      summary: Get Search Tool Info
+      description: 'Get detailed information about a specific search tool by ID.
+
+
+        Example Request:
+
+        ```bash
+
+        curl -X GET "http://localhost:4000/search_tools/123e4567-e89b-12d3-a456-426614174000" \
+
+        -H "Authorization: Bearer "
+
+        ```
+
+
+        Example Response:
+
+        ```json
 
         {
 
@@ -144,9 +387,7 @@ paths:
 
         "search_provider": "perplexity",
 
-        "api_key": "sk-***",
-
-        "api_base": "https://api.perplexity.ai"
+        "api_key": "sk-***"
 
         },
 
@@ -158,48 +399,38 @@ paths:
 
         "created_at": "2023-11-09T12:34:56.789Z",
 
-        "updated_at": "2023-11-09T12:34:56.789Z",
-
-        "is_from_config": false
-
-        },
-
-        {
-
-        "search_tool_name": "config-search-tool",
-
-        "litellm_params": {
-
-        "search_provider": "tavily",
-
-        "api_key": "tvly-***"
-
-        },
-
-        "is_from_config": true
-
-        }
-
-        ]
+        "updated_at": "2023-11-09T12:34:56.789Z"
 
         }
 
         ```'
-      operationId: list_search_tools_search_tools_list_get
+      operationId: get_search_tool_info_search_tools__search_tool_id__get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: search_tool_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Search Tool Id
       responses:
         '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListSearchToolsResponse'
-          description: Successful Response
-      security:
-      - APIKeyHeader: []
-      summary: List Search Tools
-      tags:
-      - search_tools
+                $ref: '#/components/schemas/HTTPValidationError'
   /search_tools/test_connection:
     post:
+      tags:
+      - Search Tools
+      summary: Test Search Tool Connection
       description: 'Test connection to a search provider with the given configuration.
 
 
@@ -274,23 +505,23 @@ paths:
         required: true
       responses:
         '200':
+          description: Successful Response
           content:
             application/json:
               schema: {}
-          description: Successful Response
         '422':
+          description: Validation Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
       security:
       - APIKeyHeader: []
-      summary: Test Search Tool Connection
-      tags:
-      - search_tools
   /search_tools/ui/available_providers:
     get:
+      tags:
+      - Search Tools
+      summary: Get Available Search Providers
       description: 'Get the list of available search providers with their configuration fields.
 
 
@@ -340,327 +571,23 @@ paths:
       operationId: get_available_search_providers_search_tools_ui_available_providers_get
       responses:
         '200':
+          description: Successful Response
           content:
             application/json:
               schema: {}
-          description: Successful Response
       security:
       - APIKeyHeader: []
-      summary: Get Available Search Providers
-      tags:
-      - search_tools
-  /search_tools/{search_tool_id}:
-    delete:
-      description: 'Delete a search tool.
-
-
-        Example Request:
-
-        ```bash
-
-        curl -X DELETE "http://localhost:4000/search_tools/123e4567-e89b-12d3-a456-426614174000" \
-
-        -H "Authorization: Bearer "
-
-        ```
-
-
-        Example Response:
-
-        ```json
-
-        {
-
-        "message": "Search tool 123e4567-e89b-12d3-a456-426614174000 deleted successfully",
-
-        "search_tool_name": "litellm-search"
-
-        }
-
-        ```'
-      operationId: delete_search_tool_search_tools__search_tool_id__delete
-      parameters:
-      - in: path
-        name: search_tool_id
-        required: true
-        schema:
-          title: Search Tool Id
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema: {}
-          description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      security:
-      - APIKeyHeader: []
-      summary: Delete Search Tool
-      tags:
-      - search_tools
-    get:
-      description: 'Get detailed information about a specific search tool by ID.
-
-
-        Example Request:
-
-        ```bash
-
-        curl -X GET "http://localhost:4000/search_tools/123e4567-e89b-12d3-a456-426614174000" \
-
-        -H "Authorization: Bearer "
-
-        ```
-
-
-        Example Response:
-
-        ```json
-
-        {
-
-        "search_tool_id": "123e4567-e89b-12d3-a456-426614174000",
-
-        "search_tool_name": "litellm-search",
-
-        "litellm_params": {
-
-        "search_provider": "perplexity",
-
-        "api_key": "sk-***"
-
-        },
-
-        "search_tool_info": {
-
-        "description": "Perplexity search tool"
-
-        },
-
-        "created_at": "2023-11-09T12:34:56.789Z",
-
-        "updated_at": "2023-11-09T12:34:56.789Z"
-
-        }
-
-        ```'
-      operationId: get_search_tool_info_search_tools__search_tool_id__get
-      parameters:
-      - in: path
-        name: search_tool_id
-        required: true
-        schema:
-          title: Search Tool Id
-          type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema: {}
-          description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      security:
-      - APIKeyHeader: []
-      summary: Get Search Tool Info
-      tags:
-      - search_tools
-    put:
-      description: 'Update an existing search tool.
-
-
-        Example Request:
-
-        ```bash
-
-        curl -X PUT "http://localhost:4000/search_tools/123e4567-e89b-12d3-a456-426614174000" \
-
-        -H "Authorization: Bearer " \
-
-        -H "Content-Type: application/json" \
-
-        -d ''{
-
-        "search_tool": {
-
-        "search_tool_name": "updated-search",
-
-        "litellm_params": {
-
-        "search_provider": "perplexity",
-
-        "api_key": "sk-new-key"
-
-        },
-
-        "search_tool_info": {
-
-        "description": "Updated search tool"
-
-        }
-
-        }
-
-        }''
-
-        ```
-
-
-        Example Response:
-
-        ```json
-
-        {
-
-        "search_tool_id": "123e4567-e89b-12d3-a456-426614174000",
-
-        "search_tool_name": "updated-search",
-
-        "litellm_params": {
-
-        "search_provider": "perplexity",
-
-        "api_key": "sk-new-key"
-
-        },
-
-        "search_tool_info": {
-
-        "description": "Updated search tool"
-
-        },
-
-        "created_at": "2023-11-09T12:34:56.789Z",
-
-        "updated_at": "2023-11-09T13:45:12.345Z"
-
-        }
-
-        ```'
-      operationId: update_search_tool_search_tools__search_tool_id__put
-      parameters:
-      - in: path
-        name: search_tool_id
-        required: true
-        schema:
-          title: Search Tool Id
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateSearchToolRequest'
-        required: true
-      responses:
-        '200':
-          content:
-            application/json:
-              schema: {}
-          description: Successful Response
-        '422':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-          description: Validation Error
-      security:
-      - APIKeyHeader: []
-      summary: Update Search Tool
-      tags:
-      - search_tools
 components:
   schemas:
-    SearchTool:
-      description: "Search tool configuration.\n\nExample:\n    {\n        \"search_tool_id\": \"123e4567-e89b-12d3-a456-426614174000\",\n        \"search_tool_name\": \"litellm-search\",\n        \"litellm_params\": {\n            \"search_provider\": \"perplexity\",\n            \"api_key\": \"sk-...\"\n        },\n        \"search_tool_info\": {\n            \"description\": \"Perplexity search tool\"\n        }\n    }"
+    HTTPValidationError:
       properties:
-        created_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created At
-        litellm_params:
-          $ref: '#/components/schemas/SearchToolLiteLLMParams'
-        search_tool_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Search Tool Id
-        search_tool_info:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Search Tool Info
-        search_tool_name:
-          title: Search Tool Name
-          type: string
-        updated_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Updated At
-      required:
-      - search_tool_name
-      - litellm_params
-      title: SearchTool
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-    SearchToolInfoResponse:
-      description: Response model for search tool information.
-      properties:
-        created_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created At
-        is_from_config:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Is From Config
-        litellm_params:
-          additionalProperties: true
-          title: Litellm Params
-          type: object
-        search_tool_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Search Tool Id
-        search_tool_info:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Search Tool Info
-        search_tool_name:
-          title: Search Tool Name
-          type: string
-        updated_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Updated At
-      title: SearchToolInfoResponse
-      type: object
-    TestSearchToolConnectionRequest:
-      properties:
-        litellm_params:
-          additionalProperties: true
-          title: Litellm Params
-          type: object
-      required:
-      - litellm_params
-      title: TestSearchToolConnectionRequest
-      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -687,76 +614,152 @@ components:
       - msg
       - type
       title: ValidationError
-    ListSearchToolsResponse:
-      description: Response model for listing search tools.
-      properties:
-        search_tools:
-          items:
-            $ref: '#/components/schemas/SearchToolInfoResponse'
-          title: Search Tools
-          type: array
-      required:
-      - search_tools
-      title: ListSearchToolsResponse
-      type: object
     SearchToolLiteLLMParams:
-      description: LiteLLM params for search tools configuration.
       properties:
-        api_base:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Api Base
+        search_provider:
+          type: string
+          title: Search Provider
         api_key:
           anyOf:
           - type: string
           - type: 'null'
           title: Api Key
-        max_retries:
+        api_base:
           anyOf:
-          - type: integer
+          - type: string
           - type: 'null'
-          title: Max Retries
-        search_provider:
-          title: Search Provider
-          type: string
+          title: Api Base
         timeout:
           anyOf:
           - type: number
           - type: 'null'
           title: Timeout
+        max_retries:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Retries
+      type: object
       required:
       - search_provider
       title: SearchToolLiteLLMParams
+      description: LiteLLM params for search tools configuration.
+    SearchToolInfoResponse:
+      properties:
+        search_tool_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Search Tool Id
+        search_tool_name:
+          type: string
+          title: Search Tool Name
+        litellm_params:
+          additionalProperties: true
+          type: object
+          title: Litellm Params
+        search_tool_info:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Search Tool Info
+        created_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created At
+        updated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated At
+        is_from_config:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is From Config
       type: object
+      title: SearchToolInfoResponse
+      description: Response model for search tool information.
+    TestSearchToolConnectionRequest:
+      properties:
+        litellm_params:
+          additionalProperties: true
+          type: object
+          title: Litellm Params
+      type: object
+      required:
+      - litellm_params
+      title: TestSearchToolConnectionRequest
+    SearchTool:
+      properties:
+        search_tool_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Search Tool Id
+        search_tool_name:
+          type: string
+          title: Search Tool Name
+        litellm_params:
+          $ref: '#/components/schemas/SearchToolLiteLLMParams'
+        search_tool_info:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Search Tool Info
+        created_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created At
+        updated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated At
+      type: object
+      required:
+      - search_tool_name
+      - litellm_params
+      title: SearchTool
+      description: "Search tool configuration.\n\nExample:\n    {\n        \"search_tool_id\": \"123e4567-e89b-12d3-a456-426614174000\",\n        \"search_tool_name\": \"litellm-search\",\n        \"litellm_params\": {\n            \"search_provider\": \"perplexity\",\n            \"api_key\": \"sk-...\"\n        },\n        \"search_tool_info\": {\n            \"description\": \"Perplexity search tool\"\n        }\n    }"
     CreateSearchToolRequest:
       properties:
         search_tool:
           $ref: '#/components/schemas/SearchTool'
+      type: object
       required:
       - search_tool
       title: CreateSearchToolRequest
-      type: object
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     UpdateSearchToolRequest:
       properties:
         search_tool:
           $ref: '#/components/schemas/SearchTool'
+      type: object
       required:
       - search_tool
       title: UpdateSearchToolRequest
+    ListSearchToolsResponse:
+      properties:
+        search_tools:
+          items:
+            $ref: '#/components/schemas/SearchToolInfoResponse'
+          type: array
+          title: Search Tools
       type: object
+      required:
+      - search_tools
+      title: ListSearchToolsResponse
+      description: Response model for listing search tools.
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

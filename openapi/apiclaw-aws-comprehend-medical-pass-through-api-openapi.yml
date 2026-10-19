@@ -1,0 +1,121 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM AWS Comprehend Medical Pass-through API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.105.1
+tags:
+- name: AWS Comprehend Medical Pass-through
+paths:
+  /comprehendmedical/{operation}:
+    post:
+      tags:
+      - AWS Comprehend Medical Pass-through
+      summary: Comprehend Medical Proxy Route
+      description: 'Pass-through for Amazon Comprehend Medical, e.g. `POST /comprehendmedical/DetectEntitiesV2`.
+
+
+        The request body is forwarded as-is to the AWS JSON 1.1 API and signed with SigV4
+
+        using the proxy''s AWS credentials.
+
+
+        Docs'
+      operationId: comprehend_medical_proxy_route_comprehendmedical__operation__post
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: operation
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Operation
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /comprehendmedical:
+    post:
+      tags:
+      - AWS Comprehend Medical Pass-through
+      summary: Comprehend Medical Sdk Proxy Route
+      description: 'AWS-SDK-shaped pass-through for Amazon Comprehend Medical: point the SDK''s
+
+        `endpoint_url` at `/comprehendmedical` and the operation is read from the
+
+        `X-Amz-Target` header, per the AWS JSON 1.1 protocol.
+
+
+        Docs'
+      operationId: comprehend_medical_sdk_proxy_route_comprehendmedical_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

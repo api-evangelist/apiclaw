@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: rust control plane
 paths:
@@ -50,6 +50,36 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
+    CallbackLogsResponse:
+      properties:
+        processed:
+          type: integer
+          title: Processed
+        failed:
+          type: integer
+          title: Failed
+        failures:
+          items:
+            $ref: '#/components/schemas/CallbackLogFailure'
+          type: array
+          title: Failures
+      type: object
+      required:
+      - processed
+      - failed
+      title: CallbackLogsResponse
+      description: 'Per-batch result: counts plus per-record failure detail so the caller can
+
+        distinguish a transient callback error from a structurally bad payload.'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -76,27 +106,19 @@ components:
       - msg
       - type
       title: ValidationError
-    CallbackLogsResponse:
+    CallbackLogsRequest:
       properties:
-        processed:
-          type: integer
-          title: Processed
-        failed:
-          type: integer
-          title: Failed
-        failures:
+        records:
           items:
-            $ref: '#/components/schemas/CallbackLogFailure'
+            $ref: '#/components/schemas/CallbackLogRecord'
           type: array
-          title: Failures
+          maxItems: 1000
+          title: Records
       type: object
       required:
-      - processed
-      - failed
-      title: CallbackLogsResponse
-      description: 'Per-batch result: counts plus per-record failure detail so the caller can
-
-        distinguish a transient callback error from a structurally bad payload.'
+      - records
+      title: CallbackLogsRequest
+      description: A batch of logging events posted by an external producer.
     CallbackLogFailure:
       properties:
         index:
@@ -111,19 +133,6 @@ components:
       - error
       title: CallbackLogFailure
       description: A record that failed to replay, identified by its index in the batch.
-    CallbackLogsRequest:
-      properties:
-        records:
-          items:
-            $ref: '#/components/schemas/CallbackLogRecord'
-          type: array
-          maxItems: 1000
-          title: Records
-      type: object
-      required:
-      - records
-      title: CallbackLogsRequest
-      description: A batch of logging events posted by an external producer.
     CallbackLogRecord:
       properties:
         status:
@@ -147,18 +156,12 @@ components:
       - standard_logging_payload
       title: CallbackLogRecord
       description: A single finished logging event to replay through the callbacks.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

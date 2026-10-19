@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Litellm
 paths:
@@ -30,6 +30,23 @@ paths:
       - Litellm
 components:
   schemas:
+    WorkerRegistryEntry:
+      properties:
+        worker_id:
+          type: string
+          title: Worker Id
+        name:
+          type: string
+          title: Name
+        url:
+          type: string
+          title: Url
+      type: object
+      required:
+      - worker_id
+      - name
+      - url
+      title: WorkerRegistryEntry
     UiDiscoveryEndpoints:
       properties:
         server_root_path:
@@ -57,6 +74,10 @@ components:
           type: boolean
           title: Is Control Plane
           default: false
+        mcp_stdio_enabled:
+          type: boolean
+          title: Mcp Stdio Enabled
+          default: false
         workers:
           items:
             $ref: '#/components/schemas/WorkerRegistryEntry'
@@ -71,26 +92,12 @@ components:
       - admin_ui_disabled
       - sso_configured
       title: UiDiscoveryEndpoints
-    WorkerRegistryEntry:
-      properties:
-        worker_id:
-          type: string
-          title: Worker Id
-        name:
-          type: string
-          title: Name
-        url:
-          type: string
-          title: Url
-      type: object
-      required:
-      - worker_id
-      - name
-      - url
-      title: WorkerRegistryEntry
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

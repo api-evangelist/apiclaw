@@ -1,0 +1,45 @@
+openapi: 3.2.0
+info:
+  title: LiteLLM [beta] Anthropic `/v1/messages` API
+  description: 'Proxy Server to call 100+ LLMs in the OpenAI format. **Customize Swagger Docs**
+
+
+    👉 ```LiteLLM Admin Panel on /ui```. Create, Edit Keys with SSO. Having issues? Try ```Fallback Login```
+
+
+    💸 ```LiteLLM Model Cost Map```.
+
+
+    🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
+  version: 1.105.1
+tags:
+- name: '[beta] Anthropic `/v1/messages`'
+paths:
+  /v1/messages:
+    post:
+      tags:
+      - '[beta] Anthropic `/v1/messages`'
+      summary: Anthropic Response
+      description: 'Use `{PROXY_BASE_URL}/anthropic/v1/messages` instead - Docs.
+
+
+        This was a BETA endpoint that calls 100+ LLMs in the anthropic format.'
+      operationId: anthropic_response_v1_messages_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - APIKeyHeader: []
+components:
+  securitySchemes:
+    APIKeyHeader:
+      type: apiKey
+      description: Bearer token
+      in: header
+      name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

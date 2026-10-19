@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: llm utils
 paths:
@@ -100,6 +100,57 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /utils/model_info:
+    get:
+      tags:
+      - llm utils
+      summary: Model Info Lookup
+      description: 'Returns the model cost map entry (token limits, pricing, supports_* capabilities) for any model
+
+        in the cost map, whether or not it is registered on this proxy. `model_info` carries every
+
+        field of the raw cost map entry plus the typed fields `litellm.get_model_info` derives from it
+
+        (`key`, `supported_openai_params`).
+
+
+        Example curl:
+
+        ```
+
+        curl -X GET --location ''http://localhost:4000/utils/model_info?model=gpt-4o&custom_llm_provider=openai'' --header ''Authorization: Bearer sk-1234''
+
+        ```'
+      operationId: model_info_lookup_utils_model_info_get
+      security:
+      - APIKeyHeader: []
+      parameters:
+      - name: model
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Model
+      - name: custom_llm_provider
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Custom Llm Provider
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /utils/transform_request:
     post:
       tags:
@@ -152,6 +203,10 @@ components:
       - arerank
       - search
       - asearch
+      - decisions
+      - adecisions
+      - systemone
+      - asystemone
       - _arealtime
       - _aresponses_websocket
       - create_batch
@@ -195,6 +250,8 @@ components:
       - acreate_fine_tuning_job
       - create_video
       - acreate_video
+      - video_generation
+      - avideo_generation
       - avideo_retrieve
       - video_retrieve
       - avideo_content
@@ -280,19 +337,15 @@ components:
       - send_message
       - acreate_skill
       title: CallTypes
-    TransformRequestBody:
+    HTTPValidationError:
       properties:
-        call_type:
-          $ref: '#/components/schemas/CallTypes'
-        request_body:
-          additionalProperties: true
-          type: object
-          title: Request Body
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - call_type
-      - request_body
-      title: TransformRequestBody
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -319,56 +372,6 @@ components:
       - msg
       - type
       title: ValidationError
-    TokenCountResponse:
-      properties:
-        total_tokens:
-          type: integer
-          title: Total Tokens
-        request_model:
-          type: string
-          title: Request Model
-        model_used:
-          type: string
-          title: Model Used
-        tokenizer_type:
-          type: string
-          title: Tokenizer Type
-        original_response:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Original Response
-        error:
-          type: boolean
-          title: Error
-          default: false
-        error_message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error Message
-        status_code:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Status Code
-      type: object
-      required:
-      - total_tokens
-      - request_model
-      - model_used
-      - tokenizer_type
-      title: TokenCountResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     TokenCountRequest:
       properties:
         model:
@@ -412,6 +415,60 @@ components:
       required:
       - model
       title: TokenCountRequest
+    TransformRequestBody:
+      properties:
+        call_type:
+          $ref: '#/components/schemas/CallTypes'
+        request_body:
+          additionalProperties: true
+          type: object
+          title: Request Body
+      type: object
+      required:
+      - call_type
+      - request_body
+      title: TransformRequestBody
+    TokenCountResponse:
+      properties:
+        total_tokens:
+          type: integer
+          title: Total Tokens
+        request_model:
+          type: string
+          title: Request Model
+        model_used:
+          type: string
+          title: Model Used
+        tokenizer_type:
+          type: string
+          title: Tokenizer Type
+        original_response:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Original Response
+        error:
+          type: boolean
+          title: Error
+          default: false
+        error_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error Message
+        status_code:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Status Code
+      type: object
+      required:
+      - total_tokens
+      - request_model
+      - model_used
+      - tokenizer_type
+      title: TokenCountResponse
     RawRequestTypedDict:
       properties:
         raw_request_api_base:
@@ -444,3 +501,6 @@ components:
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

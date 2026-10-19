@@ -11,39 +11,119 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Realtime
 paths:
-  /realtime/calls:
+  /openai/v1/realtime/client_secrets:
     post:
-      operationId: proxy_realtime_calls_realtime_calls_post
-      responses:
-        '200':
-          content:
-            application/json:
-              schema: {}
-          description: Successful Response
-      summary: Proxy Realtime Calls
       tags:
       - Realtime
-  /realtime/client_secrets:
-    post:
-      operationId: create_realtime_client_secret_realtime_client_secrets_post
+      summary: Create Realtime Client Secret
+      operationId: create_realtime_client_secret_openai_v1_realtime_client_secrets_post
       responses:
         '200':
+          description: Successful Response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RealtimeClientSecretResponse'
-          description: Successful Response
       security:
       - APIKeyHeader: []
-      summary: Create Realtime Client Secret
+  /realtime/client_secrets:
+    post:
       tags:
       - Realtime
+      summary: Create Realtime Client Secret
+      operationId: create_realtime_client_secret_realtime_client_secrets_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RealtimeClientSecretResponse'
+      security:
+      - APIKeyHeader: []
+  /v1/realtime/client_secrets:
+    post:
+      tags:
+      - Realtime
+      summary: Create Realtime Client Secret
+      operationId: create_realtime_client_secret_v1_realtime_client_secrets_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RealtimeClientSecretResponse'
+      security:
+      - APIKeyHeader: []
+  /openai/v1/realtime/calls:
+    post:
+      tags:
+      - Realtime
+      summary: Proxy Realtime Calls
+      operationId: proxy_realtime_calls_openai_v1_realtime_calls_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /realtime/calls:
+    post:
+      tags:
+      - Realtime
+      summary: Proxy Realtime Calls
+      operationId: proxy_realtime_calls_realtime_calls_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /v1/realtime/calls:
+    post:
+      tags:
+      - Realtime
+      summary: Proxy Realtime Calls
+      operationId: proxy_realtime_calls_v1_realtime_calls_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /openai/v1/realtime/transcription_sessions:
+    post:
+      tags:
+      - Realtime
+      summary: Create Realtime Transcription Session
+      description: 'Create an ephemeral Realtime transcription session
+
+        (POST /v1/realtime/transcription_sessions) for the WebRTC/WebSocket flow.
+
+
+        Mirrors the client_secrets route but targets the transcription_sessions
+
+        endpoint and encrypts the ephemeral key returned under `client_secret.value`.'
+      operationId: create_realtime_transcription_session_openai_v1_realtime_transcription_sessions_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RealtimeTranscriptionSessionResponse'
+      security:
+      - APIKeyHeader: []
   /realtime/transcription_sessions:
     post:
+      tags:
+      - Realtime
+      summary: Create Realtime Transcription Session
       description: 'Create an ephemeral Realtime transcription session
 
         (POST /v1/realtime/transcription_sessions) for the WebRTC/WebSocket flow.
@@ -55,45 +135,18 @@ paths:
       operationId: create_realtime_transcription_session_realtime_transcription_sessions_post
       responses:
         '200':
+          description: Successful Response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RealtimeTranscriptionSessionResponse'
-          description: Successful Response
       security:
       - APIKeyHeader: []
-      summary: Create Realtime Transcription Session
-      tags:
-      - Realtime
-  /v1/realtime/calls:
-    post:
-      operationId: proxy_realtime_calls_v1_realtime_calls_post
-      responses:
-        '200':
-          content:
-            application/json:
-              schema: {}
-          description: Successful Response
-      summary: Proxy Realtime Calls
-      tags:
-      - Realtime
-  /v1/realtime/client_secrets:
-    post:
-      operationId: create_realtime_client_secret_v1_realtime_client_secrets_post
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/RealtimeClientSecretResponse'
-          description: Successful Response
-      security:
-      - APIKeyHeader: []
-      summary: Create Realtime Client Secret
-      tags:
-      - Realtime
   /v1/realtime/transcription_sessions:
     post:
+      tags:
+      - Realtime
+      summary: Create Realtime Transcription Session
       description: 'Create an ephemeral Realtime transcription session
 
         (POST /v1/realtime/transcription_sessions) for the WebRTC/WebSocket flow.
@@ -105,19 +158,35 @@ paths:
       operationId: create_realtime_transcription_session_v1_realtime_transcription_sessions_post
       responses:
         '200':
+          description: Successful Response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/RealtimeTranscriptionSessionResponse'
-          description: Successful Response
       security:
       - APIKeyHeader: []
-      summary: Create Realtime Transcription Session
-      tags:
-      - Realtime
 components:
   schemas:
     RealtimeClientSecretResponse:
+      properties:
+        expires_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Expires At
+        value:
+          type: string
+          title: Value
+        session:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Session
+      type: object
+      required:
+      - value
+      title: RealtimeClientSecretResponse
       description: 'Response from POST /v1/realtime/client_secrets.
 
 
@@ -126,33 +195,7 @@ components:
         will contain the encrypted token instead of the raw ephemeral key.
 
         The `session` field is kept as a raw dict so unknown fields pass through.'
-      properties:
-        expires_at:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Expires At
-        session:
-          anyOf:
-          - additionalProperties: true
-            type: object
-          - type: 'null'
-          title: Session
-        value:
-          title: Value
-          type: string
-      required:
-      - value
-      title: RealtimeClientSecretResponse
-      type: object
     RealtimeTranscriptionSessionResponse:
-      additionalProperties: true
-      description: 'Response from POST /v1/realtime/transcription_sessions.
-
-
-        `client_secret.value` contains the encrypted token instead of the raw
-
-        ephemeral key. Unknown fields pass through unchanged.'
       properties:
         client_secret:
           anyOf:
@@ -160,11 +203,21 @@ components:
             type: object
           - type: 'null'
           title: Client Secret
-      title: RealtimeTranscriptionSessionResponse
+      additionalProperties: true
       type: object
+      title: RealtimeTranscriptionSessionResponse
+      description: 'Response from POST /v1/realtime/transcription_sessions.
+
+
+        `client_secret.value` contains the encrypted token instead of the raw
+
+        ephemeral key. Unknown fields pass through unchanged.'
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

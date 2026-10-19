@@ -11,10 +11,45 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Utils
 paths:
+  /utils/test_policies_and_guardrails:
+    post:
+      tags:
+      - Utils
+      summary: Test Policies And Guardrails
+      description: 'Apply policies and/or guardrails to inputs (for compliance UI testing).
+
+
+        Use inputs_list for batch testing: each input is processed as a separate call so
+
+        per-input block/allow and errors are returned.
+
+
+        Use inputs for a single call (legacy).'
+      operationId: test_policies_and_guardrails_utils_test_policies_and_guardrails_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestPoliciesAndGuardrailsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+      - APIKeyHeader: []
   /utils/dotprompt_json_converter:
     post:
       tags:
@@ -55,16 +90,315 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    Body_convert_prompt_file_to_json_utils_dotprompt_json_converter_post:
+    ChatCompletionAssistantToolCall:
       properties:
-        file:
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        type:
           type: string
-          contentMediaType: application/octet-stream
-          title: File
+          const: function
+          title: Type
+        function:
+          $ref: '#/components/schemas/ChatCompletionToolCallFunctionChunk'
       type: object
       required:
+      - id
+      - type
+      - function
+      title: ChatCompletionAssistantToolCall
+    GenericGuardrailAPIInputs:
+      properties:
+        texts:
+          items:
+            type: string
+          type: array
+          title: Texts
+        images:
+          items:
+            type: string
+          type: array
+          title: Images
+        tools:
+          items:
+            $ref: '#/components/schemas/ChatCompletionToolParam'
+          type: array
+          title: Tools
+        tool_calls:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ChatCompletionToolCallChunk'
+            type: array
+          - items:
+              $ref: '#/components/schemas/ChatCompletionMessageToolCall'
+            type: array
+          title: Tool Calls
+        structured_messages:
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/ChatCompletionUserMessage'
+            - $ref: '#/components/schemas/ChatCompletionAssistantMessage'
+            - $ref: '#/components/schemas/ChatCompletionToolMessage'
+            - $ref: '#/components/schemas/ChatCompletionSystemMessage'
+            - $ref: '#/components/schemas/ChatCompletionFunctionMessage'
+            - $ref: '#/components/schemas/ChatCompletionDeveloperMessage'
+          type: array
+          title: Structured Messages
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+        stream_holdback_chars:
+          items:
+            type: integer
+          type: array
+          title: Stream Holdback Chars
+      type: object
+      title: GenericGuardrailAPIInputs
+    ChatCompletionSystemMessage:
+      properties:
+        role:
+          type: string
+          const: system
+          title: Role
+        content:
+          anyOf:
+          - type: string
+          - items: {}
+            type: array
+          title: Content
+        name:
+          type: string
+          title: Name
+        cache_control:
+          $ref: '#/components/schemas/ChatCompletionCachedContent'
+      type: object
+      required:
+      - role
+      - content
+      title: ChatCompletionSystemMessage
+    ChatCompletionToolMessage:
+      properties:
+        role:
+          type: string
+          const: tool
+          title: Role
+        content:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/ChatCompletionTextObject'
+              - $ref: '#/components/schemas/ChatCompletionImageObject'
+              - $ref: '#/components/schemas/ChatCompletionToolReferenceObject'
+            type: array
+          title: Content
+        tool_call_id:
+          type: string
+          title: Tool Call Id
+      type: object
+      required:
+      - role
+      - content
+      - tool_call_id
+      title: ChatCompletionToolMessage
+    ChatCompletionRedactedThinkingBlock:
+      properties:
+        type:
+          type: string
+          const: redacted_thinking
+          title: Type
+        data:
+          type: string
+          title: Data
+        cache_control:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - $ref: '#/components/schemas/ChatCompletionCachedContent'
+          - type: 'null'
+          title: Cache Control
+      additionalProperties: true
+      type: object
+      required:
+      - type
+      title: ChatCompletionRedactedThinkingBlock
+    ChatCompletionImageUrlObject:
+      properties:
+        url:
+          type: string
+          title: Url
+        detail:
+          type: string
+          title: Detail
+        format:
+          type: string
+          title: Format
+      type: object
+      required:
+      - url
+      title: ChatCompletionImageUrlObject
+    ChatCompletionDeveloperMessage:
+      properties:
+        role:
+          type: string
+          const: developer
+          title: Role
+        content:
+          anyOf:
+          - type: string
+          - items: {}
+            type: array
+          title: Content
+        name:
+          type: string
+          title: Name
+        cache_control:
+          $ref: '#/components/schemas/ChatCompletionCachedContent'
+      type: object
+      required:
+      - role
+      - content
+      title: ChatCompletionDeveloperMessage
+    ChatCompletionFileObject:
+      properties:
+        type:
+          type: string
+          const: file
+          title: Type
+        file:
+          $ref: '#/components/schemas/ChatCompletionFileObjectFile'
+      type: object
+      required:
+      - type
       - file
-      title: Body_convert_prompt_file_to_json_utils_dotprompt_json_converter_post
+      title: ChatCompletionFileObject
+    DocumentObject:
+      properties:
+        type:
+          type: string
+          const: text
+          title: Type
+        media_type:
+          type: string
+          title: Media Type
+        data:
+          type: string
+          title: Data
+      type: object
+      required:
+      - type
+      - media_type
+      - data
+      title: DocumentObject
+    ChatCompletionAudioObject:
+      properties:
+        input_audio:
+          $ref: '#/components/schemas/InputAudio'
+        type:
+          type: string
+          const: input_audio
+          title: Type
+      type: object
+      required:
+      - input_audio
+      - type
+      title: ChatCompletionAudioObject
+    ChatCompletionThinkingBlock:
+      properties:
+        type:
+          type: string
+          const: thinking
+          title: Type
+        thinking:
+          type: string
+          title: Thinking
+        signature:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Signature
+        cache_control:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - $ref: '#/components/schemas/ChatCompletionCachedContent'
+          - type: 'null'
+          title: Cache Control
+      additionalProperties: true
+      type: object
+      required:
+      - type
+      title: ChatCompletionThinkingBlock
+    ChatCompletionFunctionMessage:
+      properties:
+        role:
+          type: string
+          const: function
+          title: Role
+        content:
+          anyOf:
+          - type: string
+          - items:
+              $ref: '#/components/schemas/ChatCompletionTextObject'
+            type: array
+          - type: 'null'
+          title: Content
+        name:
+          type: string
+          title: Name
+        tool_call_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Tool Call Id
+      type: object
+      required:
+      - role
+      - content
+      - name
+      - tool_call_id
+      title: ChatCompletionFunctionMessage
+    ChatCompletionVideoUrlObject:
+      properties:
+        url:
+          type: string
+          title: Url
+        detail:
+          type: string
+          title: Detail
+      type: object
+      required:
+      - url
+      title: ChatCompletionVideoUrlObject
+    InputAudio:
+      properties:
+        data:
+          type: string
+          title: Data
+        format:
+          type: string
+          enum:
+          - wav
+          - mp3
+          title: Format
+      type: object
+      required:
+      - data
+      - format
+      title: InputAudio
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -91,18 +425,426 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
+    ChatCompletionFileObjectFile:
       properties:
+        file_data:
+          type: string
+          title: File Data
+        file_id:
+          type: string
+          title: File Id
+        filename:
+          type: string
+          title: Filename
+        format:
+          type: string
+          title: Format
         detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
+          type: string
           title: Detail
+        video_metadata:
+          additionalProperties: true
+          type: object
+          title: Video Metadata
       type: object
-      title: HTTPValidationError
+      title: ChatCompletionFileObjectFile
+    ChatCompletionToolParamFunctionChunk:
+      properties:
+        name:
+          type: string
+          title: Name
+        description:
+          type: string
+          title: Description
+        parameters:
+          additionalProperties: true
+          type: object
+          title: Parameters
+        strict:
+          type: boolean
+          title: Strict
+        eager_input_streaming:
+          type: boolean
+          title: Eager Input Streaming
+      type: object
+      required:
+      - name
+      title: ChatCompletionToolParamFunctionChunk
+    ChatCompletionCachedContent:
+      properties:
+        type:
+          type: string
+          const: ephemeral
+          title: Type
+        ttl:
+          type: string
+          enum:
+          - 5m
+          - 1h
+          title: Ttl
+      additionalProperties: true
+      type: object
+      required:
+      - type
+      title: ChatCompletionCachedContent
+    ChatCompletionReasoningSummaryTextBlock:
+      properties:
+        type:
+          type: string
+          const: summary_text
+          title: Type
+        text:
+          type: string
+          title: Text
+      additionalProperties: true
+      type: object
+      required:
+      - type
+      title: ChatCompletionReasoningSummaryTextBlock
+    ChatCompletionAssistantMessage:
+      properties:
+        role:
+          type: string
+          const: assistant
+          title: Role
+        content:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/ChatCompletionTextObject'
+              - $ref: '#/components/schemas/ChatCompletionThinkingBlock'
+              - $ref: '#/components/schemas/ChatCompletionRedactedThinkingBlock'
+              - $ref: '#/components/schemas/ChatCompletionImageObject'
+            type: array
+          - type: 'null'
+          title: Content
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        tool_calls:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ChatCompletionAssistantToolCall'
+            type: array
+          - type: 'null'
+          title: Tool Calls
+        function_call:
+          anyOf:
+          - $ref: '#/components/schemas/ChatCompletionToolCallFunctionChunk'
+          - type: 'null'
+        reasoning_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reasoning Content
+        cache_control:
+          $ref: '#/components/schemas/ChatCompletionCachedContent'
+        thinking_blocks:
+          anyOf:
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/ChatCompletionThinkingBlock'
+              - $ref: '#/components/schemas/ChatCompletionRedactedThinkingBlock'
+            type: array
+          - type: 'null'
+          title: Thinking Blocks
+        reasoning_items:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ChatCompletionReasoningItem'
+            type: array
+          - type: 'null'
+          title: Reasoning Items
+      type: object
+      required:
+      - role
+      title: ChatCompletionAssistantMessage
+    TestPoliciesAndGuardrailsRequest:
+      properties:
+        policy_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Policy Names
+          description: Policy names to resolve guardrails from
+        guardrail_names:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Guardrail Names
+          description: Guardrail names to apply directly
+        inputs_list:
+          items:
+            $ref: '#/components/schemas/GenericGuardrailAPIInputs'
+          type: array
+          title: Inputs List
+          description: List of GenericGuardrailAPIInputs; each item processed separately (for batch compliance testing).
+          default: []
+        request_data:
+          additionalProperties: true
+          type: object
+          title: Request Data
+          description: Request context (model, user_id, etc.)
+        input_type:
+          type: string
+          enum:
+          - request
+          - response
+          title: Input Type
+          description: Whether inputs are request or response
+          default: request
+        agent_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Agent Id
+          description: When set, call chat completion with this model/agent for each input and include the response in the result.
+      type: object
+      title: TestPoliciesAndGuardrailsRequest
+      description: Request body for POST /utils/test_policies_and_guardrails.
+    ChatCompletionImageObject:
+      properties:
+        type:
+          type: string
+          const: image_url
+          title: Type
+        image_url:
+          anyOf:
+          - type: string
+          - $ref: '#/components/schemas/ChatCompletionImageUrlObject'
+          title: Image Url
+      type: object
+      required:
+      - type
+      - image_url
+      title: ChatCompletionImageObject
+    ChatCompletionVideoObject:
+      properties:
+        type:
+          type: string
+          const: video_url
+          title: Type
+        video_url:
+          anyOf:
+          - type: string
+          - $ref: '#/components/schemas/ChatCompletionVideoUrlObject'
+          title: Video Url
+      type: object
+      required:
+      - type
+      - video_url
+      title: ChatCompletionVideoObject
+    ChatCompletionDocumentObject:
+      properties:
+        type:
+          type: string
+          const: document
+          title: Type
+        source:
+          $ref: '#/components/schemas/DocumentObject'
+        title:
+          type: string
+          title: Title
+        context:
+          type: string
+          title: Context
+        citations:
+          anyOf:
+          - $ref: '#/components/schemas/CitationsObject'
+          - type: 'null'
+      type: object
+      required:
+      - type
+      - source
+      - title
+      - context
+      - citations
+      title: ChatCompletionDocumentObject
+    ChatCompletionToolReferenceObject:
+      properties:
+        type:
+          type: string
+          const: tool_reference
+          title: Type
+        tool_name:
+          type: string
+          title: Tool Name
+      type: object
+      required:
+      - type
+      - tool_name
+      title: ChatCompletionToolReferenceObject
+      description: Anthropic tool-search result block, carried through untouched so it survives a round trip.
+    Body_convert_prompt_file_to_json_utils_dotprompt_json_converter_post:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+      type: object
+      required:
+      - file
+      title: Body_convert_prompt_file_to_json_utils_dotprompt_json_converter_post
+    ChatCompletionToolCallChunk:
+      properties:
+        id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Id
+        type:
+          type: string
+          const: function
+          title: Type
+        function:
+          $ref: '#/components/schemas/ChatCompletionToolCallFunctionChunk'
+        index:
+          type: integer
+          title: Index
+      type: object
+      required:
+      - id
+      - type
+      - function
+      - index
+      title: ChatCompletionToolCallChunk
+    ChatCompletionToolParam:
+      properties:
+        type:
+          anyOf:
+          - type: string
+            const: function
+          - type: string
+          title: Type
+        function:
+          $ref: '#/components/schemas/ChatCompletionToolParamFunctionChunk'
+        cache_control:
+          $ref: '#/components/schemas/ChatCompletionCachedContent'
+        allowed_callers:
+          items:
+            type: string
+          type: array
+          title: Allowed Callers
+        eager_input_streaming:
+          type: boolean
+          title: Eager Input Streaming
+      type: object
+      required:
+      - type
+      - function
+      title: ChatCompletionToolParam
+    ChatCompletionUserMessage:
+      properties:
+        role:
+          type: string
+          const: user
+          title: Role
+        content:
+          anyOf:
+          - type: string
+          - items:
+              anyOf:
+              - $ref: '#/components/schemas/ChatCompletionTextObject'
+              - $ref: '#/components/schemas/ChatCompletionImageObject'
+              - $ref: '#/components/schemas/ChatCompletionAudioObject'
+              - $ref: '#/components/schemas/ChatCompletionDocumentObject'
+              - $ref: '#/components/schemas/ChatCompletionVideoObject'
+              - $ref: '#/components/schemas/ChatCompletionFileObject'
+            type: array
+          title: Content
+        cache_control:
+          $ref: '#/components/schemas/ChatCompletionCachedContent'
+      type: object
+      required:
+      - role
+      - content
+      title: ChatCompletionUserMessage
+    ChatCompletionToolCallFunctionChunk:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        arguments:
+          type: string
+          title: Arguments
+        provider_specific_fields:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Provider Specific Fields
+      type: object
+      title: ChatCompletionToolCallFunctionChunk
+    ChatCompletionReasoningItem:
+      properties:
+        type:
+          type: string
+          const: reasoning
+          title: Type
+        id:
+          type: string
+          title: Id
+        encrypted_content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Encrypted Content
+        summary:
+          items:
+            $ref: '#/components/schemas/ChatCompletionReasoningSummaryTextBlock'
+          type: array
+          title: Summary
+      additionalProperties: true
+      type: object
+      required:
+      - type
+      title: ChatCompletionReasoningItem
+      description: Represents an OpenAI Responses API reasoning item for round-tripping in conversation history.
+    CitationsObject:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+      type: object
+      required:
+      - enabled
+      title: CitationsObject
+    ChatCompletionMessageToolCall:
+      properties: {}
+      additionalProperties: true
+      type: object
+      title: ChatCompletionMessageToolCall
+    ChatCompletionTextObject:
+      properties:
+        type:
+          type: string
+          const: text
+          title: Type
+        text:
+          type: string
+          title: Text
+        cache_control:
+          $ref: '#/components/schemas/ChatCompletionCachedContent'
+      type: object
+      required:
+      - type
+      - text
+      title: ChatCompletionTextObject
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

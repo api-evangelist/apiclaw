@@ -11,15 +11,12 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Compliance
 paths:
   /compliance/eu-ai-act:
     post:
-      tags:
-      - Compliance
-      summary: Check Eu Ai Act Compliance
       description: 'Check EU AI Act compliance for a spend log entry.
 
 
@@ -39,24 +36,24 @@ paths:
         required: true
       responses:
         '200':
-          description: Successful Response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ComplianceResponse'
+          description: Successful Response
         '422':
-          description: Validation Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
       security:
       - APIKeyHeader: []
-  /compliance/gdpr:
-    post:
+      summary: Check Eu Ai Act Compliance
       tags:
       - Compliance
-      summary: Check Gdpr Compliance
+  /compliance/gdpr:
+    post:
       description: 'Check GDPR compliance for a spend log entry.
 
 
@@ -76,41 +73,60 @@ paths:
         required: true
       responses:
         '200':
-          description: Successful Response
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ComplianceResponse'
+          description: Successful Response
         '422':
-          description: Validation Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
       security:
       - APIKeyHeader: []
+      summary: Check Gdpr Compliance
+      tags:
+      - Compliance
 components:
   schemas:
-    ComplianceResponse:
+    ComplianceCheckRequest:
+      description: 'Request payload for compliance check endpoints.
+
+
+        Mirrors the spend log fields needed for compliance evaluation.'
       properties:
-        compliant:
-          type: boolean
-          title: Compliant
-        regulation:
+        guardrail_information:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Guardrail Information
+        model:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Model
+        request_id:
+          title: Request Id
           type: string
-          title: Regulation
-        checks:
-          items:
-            $ref: '#/components/schemas/ComplianceCheckResult'
-          type: array
-          title: Checks
-      type: object
+        timestamp:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Timestamp
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
       required:
-      - compliant
-      - regulation
-      - checks
-      title: ComplianceResponse
-      description: Response from a compliance check endpoint.
+      - request_id
+      title: ComplianceCheckRequest
+      type: object
     ValidationError:
       properties:
         loc:
@@ -137,42 +153,6 @@ components:
       - msg
       - type
       title: ValidationError
-    ComplianceCheckRequest:
-      properties:
-        request_id:
-          type: string
-          title: Request Id
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-        model:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Model
-        timestamp:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Timestamp
-        guardrail_information:
-          anyOf:
-          - items:
-              additionalProperties: true
-              type: object
-            type: array
-          - type: 'null'
-          title: Guardrail Information
-      type: object
-      required:
-      - request_id
-      title: ComplianceCheckRequest
-      description: 'Request payload for compliance check endpoints.
-
-
-        Mirrors the spend log fields needed for compliance evaluation.'
     HTTPValidationError:
       properties:
         detail:
@@ -183,30 +163,53 @@ components:
       type: object
       title: HTTPValidationError
     ComplianceCheckResult:
+      description: Result of a single compliance check.
       properties:
-        check_name:
-          type: string
-          title: Check Name
         article:
-          type: string
           title: Article
-        passed:
-          type: boolean
-          title: Passed
-        detail:
           type: string
+        check_name:
+          title: Check Name
+          type: string
+        detail:
           title: Detail
-      type: object
+          type: string
+        passed:
+          title: Passed
+          type: boolean
       required:
       - check_name
       - article
       - passed
       - detail
       title: ComplianceCheckResult
-      description: Result of a single compliance check.
+      type: object
+    ComplianceResponse:
+      description: Response from a compliance check endpoint.
+      properties:
+        checks:
+          items:
+            $ref: '#/components/schemas/ComplianceCheckResult'
+          title: Checks
+          type: array
+        compliant:
+          title: Compliant
+          type: boolean
+        regulation:
+          title: Regulation
+          type: string
+      required:
+      - compliant
+      - regulation
+      - checks
+      title: ComplianceResponse
+      type: object
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

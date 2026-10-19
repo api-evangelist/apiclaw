@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: Cache Settings
 paths:
@@ -119,17 +119,36 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    CacheSettingsUpdateRequest:
+    CacheTestResponse:
       properties:
-        cache_settings:
-          additionalProperties: true
-          type: object
-          title: Cache Settings
-          description: Cache settings to save
+        status:
+          type: string
+          title: Status
+          description: 'Connection status: ''success'' or ''failed'''
+        message:
+          type: string
+          title: Message
+          description: Connection result message
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+          description: Error message if connection failed
       type: object
       required:
-      - cache_settings
-      title: CacheSettingsUpdateRequest
+      - status
+      - message
+      title: CacheTestResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -156,31 +175,28 @@ components:
       - msg
       - type
       title: ValidationError
-    CacheSettingsResponse:
+    CacheTestRequest:
       properties:
-        fields:
-          items:
-            $ref: '#/components/schemas/CacheSettingsField'
-          type: array
-          title: Fields
-          description: List of all configurable cache settings with metadata
-        current_values:
+        cache_settings:
           additionalProperties: true
           type: object
-          title: Current Values
-          description: Current values of cache settings
-        redis_type_descriptions:
-          additionalProperties:
-            type: string
-          type: object
-          title: Redis Type Descriptions
-          description: Descriptions for each Redis type option
+          title: Cache Settings
+          description: Cache settings to test connection with
       type: object
       required:
-      - fields
-      - current_values
-      - redis_type_descriptions
-      title: CacheSettingsResponse
+      - cache_settings
+      title: CacheTestRequest
+    CacheSettingsUpdateRequest:
+      properties:
+        cache_settings:
+          additionalProperties: true
+          type: object
+          title: Cache Settings
+          description: Cache settings to save
+      type: object
+      required:
+      - cache_settings
+      title: CacheSettingsUpdateRequest
     CacheSettingsField:
       properties:
         field_name:
@@ -224,50 +240,37 @@ components:
       - field_description
       - ui_field_name
       title: CacheSettingsField
-    HTTPValidationError:
+    CacheSettingsResponse:
       properties:
-        detail:
+        fields:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/CacheSettingsField'
           type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    CacheTestRequest:
-      properties:
-        cache_settings:
+          title: Fields
+          description: List of all configurable cache settings with metadata
+        current_values:
           additionalProperties: true
           type: object
-          title: Cache Settings
-          description: Cache settings to test connection with
+          title: Current Values
+          description: Current values of cache settings
+        redis_type_descriptions:
+          additionalProperties:
+            type: string
+          type: object
+          title: Redis Type Descriptions
+          description: Descriptions for each Redis type option
       type: object
       required:
-      - cache_settings
-      title: CacheTestRequest
-    CacheTestResponse:
-      properties:
-        status:
-          type: string
-          title: Status
-          description: 'Connection status: ''success'' or ''failed'''
-        message:
-          type: string
-          title: Message
-          description: Connection result message
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
-          description: Error message if connection failed
-      type: object
-      required:
-      - status
-      - message
-      title: CacheTestResponse
+      - fields
+      - current_values
+      - redis_type_descriptions
+      title: CacheSettingsResponse
   securitySchemes:
     APIKeyHeader:
       type: apiKey
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer

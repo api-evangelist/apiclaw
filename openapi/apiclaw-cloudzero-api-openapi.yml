@@ -11,7 +11,7 @@ info:
 
 
     🔎 ```LiteLLM Model Hub```. See available models on the proxy. **Docs**'
-  version: 1.102.1
+  version: 1.105.1
 tags:
 - name: cloudzero
 paths:
@@ -249,127 +249,26 @@ paths:
       - cloudzero
 components:
   schemas:
-    CloudZeroInitResponse:
-      description: Response model for CloudZero initialization
-      properties:
-        message:
-          title: Message
-          type: string
-        status:
-          title: Status
-          type: string
-      required:
-      - message
-      - status
-      title: CloudZeroInitResponse
-      type: object
-    CloudZeroSettingsUpdate:
-      description: Request model for updating CloudZero settings
+    CloudZeroInitRequest:
+      description: Request model for initializing CloudZero settings
       properties:
         api_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: New CloudZero API key for authentication
+          description: CloudZero API key for authentication
           title: Api Key
+          type: string
         connection_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: New CloudZero connection ID for data submission
-          title: Connection Id
-        timezone:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: New timezone for date handling
-          title: Timezone
-      title: CloudZeroSettingsUpdate
-      type: object
-    CloudZeroSettingsView:
-      description: Response model for viewing CloudZero settings with masked API key
-      properties:
-        api_key_masked:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Masked API key showing only first 4 and last 4 characters
-          title: Api Key Masked
-        connection_id:
-          anyOf:
-          - type: string
-          - type: 'null'
           description: CloudZero connection ID for data submission
           title: Connection Id
-        status:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Configuration status
-          title: Status
+          type: string
         timezone:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Timezone for date handling
+          default: UTC
+          description: 'Timezone for date handling (default: UTC)'
           title: Timezone
-      title: CloudZeroSettingsView
-      type: object
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    CloudZeroExportRequest:
-      description: Request model for CloudZero export operations
-      properties:
-        end_time_utc:
-          anyOf:
-          - format: date-time
-            type: string
-          - type: 'null'
-          description: End time for data export in UTC
-          title: End Time Utc
-        limit:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          description: Optional limit on number of records to export
-          title: Limit
-        operation:
-          default: replace_hourly
-          description: CloudZero operation type (replace_hourly or sum)
-          title: Operation
-          type: string
-        start_time_utc:
-          anyOf:
-          - format: date-time
-            type: string
-          - type: 'null'
-          description: Start time for data export in UTC
-          title: Start Time Utc
-      title: CloudZeroExportRequest
+      - api_key
+      - connection_id
+      title: CloudZeroInitRequest
       type: object
     CloudZeroExportResponse:
       description: Response model for CloudZero export operations
@@ -413,26 +312,127 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    CloudZeroInitRequest:
-      description: Request model for initializing CloudZero settings
+    ValidationError:
       properties:
-        api_key:
-          description: CloudZero API key for authentication
-          title: Api Key
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CloudZeroSettingsView:
+      description: Response model for viewing CloudZero settings with masked API key
+      properties:
+        api_key_masked:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Masked API key showing only first 4 and last 4 characters
+          title: Api Key Masked
         connection_id:
+          anyOf:
+          - type: string
+          - type: 'null'
           description: CloudZero connection ID for data submission
           title: Connection Id
-          type: string
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Configuration status
+          title: Status
         timezone:
-          default: UTC
-          description: 'Timezone for date handling (default: UTC)'
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Timezone for date handling
           title: Timezone
+      title: CloudZeroSettingsView
+      type: object
+    CloudZeroInitResponse:
+      description: Response model for CloudZero initialization
+      properties:
+        message:
+          title: Message
+          type: string
+        status:
+          title: Status
           type: string
       required:
-      - api_key
-      - connection_id
-      title: CloudZeroInitRequest
+      - message
+      - status
+      title: CloudZeroInitResponse
+      type: object
+    CloudZeroExportRequest:
+      description: Request model for CloudZero export operations
+      properties:
+        end_time_utc:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: End time for data export in UTC
+          title: End Time Utc
+        limit:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Optional limit on number of records to export
+          title: Limit
+        operation:
+          default: replace_hourly
+          description: CloudZero operation type (replace_hourly or sum)
+          title: Operation
+          type: string
+        start_time_utc:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: Start time for data export in UTC
+          title: Start Time Utc
+      title: CloudZeroExportRequest
+      type: object
+    CloudZeroSettingsUpdate:
+      description: Request model for updating CloudZero settings
+      properties:
+        api_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New CloudZero API key for authentication
+          title: Api Key
+        connection_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New CloudZero connection ID for data submission
+          title: Connection Id
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: New timezone for date handling
+          title: Timezone
+      title: CloudZeroSettingsUpdate
       type: object
   securitySchemes:
     APIKeyHeader:
@@ -440,3 +440,6 @@ components:
       description: Bearer token
       in: header
       name: x-litellm-api-key
+    HTTPBearer:
+      type: http
+      scheme: bearer
