@@ -9,7 +9,7 @@
   partner_name: OpenAI
   type: contract
   channel: provider-built
-  evidence: https://github.com/api-evangelist/apiclaw/blob/main/openapi/apiclaw-responses-api-openapi.yml#L173
+  evidence: https://github.com/api-evangelist/apiclaw/blob/main/openapi/_superseded/2026-10-19-stale/apiclaw-responses-api-openapi.yml#L173
   source: edge
   relationship: compatible
   contract_reference:
